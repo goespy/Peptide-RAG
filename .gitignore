@@ -1,0 +1,30 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Coverage and build output
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Temporary corpus writes (the completed corpus remains trackable)
+data/.*.tmp
+data/*.tmp
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
