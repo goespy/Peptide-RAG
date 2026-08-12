@@ -1,0 +1,105 @@
+# Peptide-RAG Architecture
+
+## Day 1 objective
+
+The MVP is a measured lexical search baseline over PubMed title and abstract text. The required order is judgment set first, then a from-scratch positional inverted index, Boolean retrieval, and a deliberately red precision/recall harness. BM25 and RAG are later checkpoints, not Day 1 shortcuts.
+
+The production index and metrics code may use the Python standard library, but no pre-built information-retrieval or metrics implementation (including PyTerrier, Elasticsearch, `rank_bm25`, or scikit-learn metrics).
+
+## Frozen corpus input
+
+The Day 1 corpus contains 2,000 unique PubMed records in `data/corpus.jsonl`. All records have a PMID and title; 81 have no abstract and remain valid title-only documents. Its SHA-256 is `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. Qrels version 1 must name this exact hash so later corpus refreshes cannot silently change the evaluation population.
+
+## Analysis pipeline
+
+Corpus text is stored with its original case. Index and query analysis use one shared function with these exact steps:
+
+1. Normalize the input with Unicode NFKC.
+2. Apply `str.casefold()`.
+3. Extract maximal Unicode alphanumeric runs. Every punctuation character, symbol, hyphen, and underscore is a boundary.
+4. Keep tokens in source order and retain duplicates.
+
+Examples:
+
+| Input | Tokens |
+|---|---|
+| `BPC-157 healing` | `bpc`, `157`, `healing` |
+| `GHK-Cu` | `ghk`, `cu` |
+| `MOTS-c–related` | `mots`, `c`, `related` |
+
+The baseline does not stem and does not remove stopwords. Those choices preserve medical names, abbreviations, and positions while providing an intentionally simple baseline. Any later change to analysis must run against the same versioned qrels and be retained only when the recorded metrics improve without breaking robustness tests.
+
+For indexing, analyze `title + " " + text` as a single token stream. Positions are zero-based across that combined stream; the abstract continues immediately after the final title token. Empty titles or abstracts contribute no tokens.
+
+## In-memory index
+
+The implementation will use frozen postings so search cannot accidentally mutate index state:
+
+```python
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Posting:
+    doc_id: str                 # PMID
+    positions: tuple[int, ...]  # sorted, zero-based positions
+
+InvertedIndex = dict[str, tuple[Posting, ...]]
+DocumentFrequency = dict[str, int]
+Documents = dict[str, dict[str, str]]
+DocumentLengths = dict[str, int]
+```
+
+The built index owns four structures:
+
+- `postings: InvertedIndex`: term to immutable postings ordered by numeric PMID; each document appears once per term.
+- `document_frequency: DocumentFrequency`: term to `len(postings[term])`, stored explicitly for later BM25 IDF.
+- `documents: Documents`: PMID to the exact `{"id", "title", "text"}` corpus record used for result display.
+- `document_lengths: DocumentLengths`: PMID to analyzed token count for later BM25 length normalization.
+
+During construction, mutable dictionaries and position lists may be used. The finalized index converts every position list and posting list to tuples and validates that positions increase strictly, PMIDs are unique within each posting list, and `document_frequency[term]` equals the posting count. Numeric PMID ordering means `"9"` precedes `"10"`.
+
+## Day 1 Boolean query contract
+
+Operators are recognized case-insensitively only when a whitespace-delimited token is exactly `AND` or `OR`. `AND` has higher precedence than `OR`; adjacent terms have an implicit `AND`. Therefore `bpc healing OR tendon` means `(bpc AND healing) OR tendon`.
+
+Each analyzed query term resolves to its posting-set of PMIDs. `AND` intersects sets and `OR` unions them. Returned PMIDs are deduplicated and sorted numerically for deterministic results. Day 1 does not support `NOT`, parentheses, quoted phrases, proximity syntax, or ranking. Empty, operator-only, punctuation-only, and out-of-vocabulary queries return an empty result rather than raising an exception.
+
+## Judgment-set protocol
+
+Labels are created before using this engine to search. This prevents the implementation's own rankings from selecting its evaluation examples.
+
+1. Freeze the downloaded `data/corpus.jsonl` snapshot and record its hash in the qrels review notes.
+2. Assign each document to every peptide family whose normalized alias occurs in its title: BPC-157, GHK-Cu, TB-500/Thymosin Beta-4, Ipamorelin, Tesamorelin, Epitalon, MOTS-c, or PT-141. Exclude documents with no title or no abstract.
+3. Walk the peptide families in the query's declared order. For each family, choose the lowest numeric PMID not already selected; repeat round-robin until 15 documents are selected. If a family is exhausted, skip it. If fewer than 15 title matches exist, fill the remainder with the lowest numeric eligible PMIDs.
+4. Without running the search engine, read each selected title and abstract and write one natural information need a researcher might ask. Do not copy the paper title or paste a distinctive sentence.
+5. Give the source PMID an initial positive grade and manually review the corpus for obvious additional relevant documents using PubMed metadata or simple non-engine text filtering. Record every reviewed judgment and a short rationale.
+6. Freeze the first 15 queries as qrels version 1 before measuring retrieval.
+
+This is a provisional known-item set, not exhaustive relevance pooling. The selected source PMID guarantees at least one positive judgment per query, but unjudged relevant papers may be retrieved and counted as non-relevant, depressing measured precision. The README must disclose that limitation beside reported results.
+
+`data/qrels.json` will use this versioned shape:
+
+```json
+{
+  "version": 1,
+  "corpus_sha256": "<sha256 of data/corpus.jsonl>",
+  "queries": [
+    {
+      "id": "q01",
+      "query": "<human-written information need>",
+      "judgments": {"12345678": 2, "23456789": 1, "34567890": 0},
+      "rationale": "<manual explanation of the labels>"
+    }
+  ]
+}
+```
+
+Judgment keys are PMIDs and values are integer grades. For Day 1 binary precision and recall, grades greater than zero are relevant and grade zero is non-relevant. Numeric grades are retained so the same file can later support NDCG.
+
+## Execution sequence
+
+1. Fetch and freeze the corpus.
+2. Construct and freeze the 15-query qrels without engine-assisted selection.
+3. Build and validate the positional inverted index.
+4. Implement deterministic Boolean retrieval.
+5. Run the precision@k/recall@k harness, expect failures or weak scores initially, and record the output before tuning.
