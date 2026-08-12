@@ -1,1 +1,1 @@
-# Scifact-RAG
+# Peptide-RAG
