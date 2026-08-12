@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "review": {
+    "status": "approved_provisional_known_item_set",
+    "approved_on": "2026-08-12",
+    "approval_basis": "Project owner requested an independent Claude Code cross-check and authorized progression after Codex validation.",
+    "limitation": "Source judgments are reviewed but not exhaustively pooled; unjudged relevant documents may depress measured precision."
+  },
+  "queries": [
+    {
+      "id": "q01",
+      "query": "BPC 157 liver necrosis rats",
+      "judgments": {"7901724": 2},
+      "rationale": "The source evaluates BPC 157 protection against experimentally induced liver injury, including necrosis, in rats."
+    },
+    {
+      "id": "q02",
+      "query": "GHK Cu cognitive decline neurodegeneration",
+      "judgments": {"22666519": 2},
+      "rationale": "The source discusses GHK-Cu as a possible therapeutic agent for age-associated neurodegeneration and cognitive decline."
+    },
+    {
+      "id": "q03",
+      "query": "thymosin beta 4 backbone conformations",
+      "judgments": {"1304362": 2},
+      "rationale": "The source uses thymosin beta 4 while presenting a procedure for assembling short polypeptide fragments into backbone-conformation models."
+    },
+    {
+      "id": "q04",
+      "query": "ipamorelin oral bioavailability growth hormone",
+      "judgments": {"9733495": 2},
+      "rationale": "The source describes ipamorelin-derived growth-hormone secretagogues and reports their oral bioavailability and potency."
+    },
+    {
+      "id": "q05",
+      "query": "tesamorelin HIV lipodystrophy clinical trials",
+      "judgments": {"17086939": 2},
+      "rationale": "The source reviews tesamorelin development and clinical trials for HIV-associated lipodystrophy."
+    },
+    {
+      "id": "q06",
+      "query": "epitalon drosophila lifespan increase",
+      "judgments": {"11087911": 2},
+      "rationale": "The source evaluates epitalon's effect on lifespan in Drosophila melanogaster."
+    },
+    {
+      "id": "q07",
+      "query": "MOTS c metabolic obesity insulin resistance",
+      "judgments": {"25738459": 2},
+      "rationale": "The source reports that MOTS-c promotes metabolic homeostasis while reducing obesity and insulin resistance."
+    },
+    {
+      "id": "q08",
+      "query": "PT 141 melanocortin sexual dysfunction",
+      "judgments": {"12851303": 2},
+      "rationale": "The source concerns PT-141 as a melanocortin agonist for treating sexual dysfunction."
+    },
+    {
+      "id": "q09",
+      "query": "BPC 157 gastric duodenal lesions rats",
+      "judgments": {"7904712": 2},
+      "rationale": "The source studies BPC 157 effects on induced gastric and duodenal lesions in rats."
+    },
+    {
+      "id": "q10",
+      "query": "GHK Cu healing ACL reconstruction rat",
+      "judgments": {"25731775": 2},
+      "rationale": "The source reports transiently improved healing after ACL reconstruction in a rat model treated with GHK-Cu."
+    },
+    {
+      "id": "q11",
+      "query": "TB 500 wound healing metabolites",
+      "judgments": {"38382158": 2},
+      "rationale": "Independent review replaced a token-accurate but topically weak swine-gestation source with a frozen-corpus paper directly evaluating TB-500 metabolites and wound-healing activity."
+    },
+    {
+      "id": "q12",
+      "query": "ipamorelin growth hormone release receptor",
+      "judgments": {"9849822": 2},
+      "rationale": "The source describes ipamorelin pharmacology and its selective stimulation of growth hormone release."
+    },
+    {
+      "id": "q13",
+      "query": "tesamorelin HIV visceral adipose triglycerides safety",
+      "judgments": {"18690162": 2},
+      "rationale": "The source reports long-term tesamorelin safety and reductions in visceral adipose tissue and triglycerides in patients with HIV."
+    },
+    {
+      "id": "q14",
+      "query": "epitalon evening melatonin cortisol secretion",
+      "judgments": {"11524632": 2},
+      "rationale": "The source tests epitalon effects on melatonin synthesis and cortisol secretion in senescent monkeys."
+    },
+    {
+      "id": "q15",
+      "query": "MOTS c mitochondrial polymorphism longevity",
+      "judgments": {"26289118": 2},
+      "rationale": "The source discusses a MOTS-c mitochondrial DNA polymorphism as a possible mechanism related to longevity."
+    }
+  ]
+}
