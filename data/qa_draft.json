@@ -1,0 +1,590 @@
+{
+  "version": 1,
+  "status": "candidate_pool_requires_human_review",
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "qrels_v2_sha256": "B30E1B7868EFFB580155442917C2BB0105ECC00E13527A103F6325B6A2B32ED6",
+  "source_qrels": "data/qrels_v2.json",
+  "development_case_ids": [
+    "qa01",
+    "qa02",
+    "qa03",
+    "qa04",
+    "qa05",
+    "qa06",
+    "qa07",
+    "qa08",
+    "qa09",
+    "qa10",
+    "qa16",
+    "qa17",
+    "qa18"
+  ],
+  "holdout_case_ids": [
+    "qa11",
+    "qa12",
+    "qa13",
+    "qa14",
+    "qa15",
+    "qa19",
+    "qa20"
+  ],
+  "cases": [
+    {
+      "id": "qa01",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q01",
+      "question": "BPC 157 liver necrosis rats?",
+      "acceptable_answer": "The hepatoprotective effects of a newly synthesized 15 amino acid fragment code named BPC 157 was evaluated in comparison with the reference standards (bromocriptine, amantadine and somatostatin) in various experimental models of liver injury in rats: 24 h-bile duct+hepatic artery ligation 48 h-restraint stress and CCl4 administration. BPC 157 administered either intragastrically or intraperitoneally, significantly prevented the development of liver necrosis or fatty changes in rats subjected to 24 h bile duct + hepatic artery ligation, 48 h-restraint stress, CCl4 treatment (1 ml/kg i.p., sacrifice 48 h thereafter).",
+      "pmids": [
+        "7901724"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "7901724",
+          "start": 0,
+          "end": 624,
+          "text": "The hepatoprotective effects of a newly synthesized 15 amino acid fragment code named BPC 157 was evaluated in comparison with the reference standards (bromocriptine, amantadine and somatostatin) in various experimental models of liver injury in rats: 24 h-bile duct+hepatic artery ligation 48 h-restraint stress and CCl4 administration. BPC 157 administered either intragastrically or intraperitoneally, significantly prevented the development of liver necrosis or fatty changes in rats subjected to 24 h bile duct + hepatic artery ligation, 48 h-restraint stress, CCl4 treatment (1 ml/kg i.p., sacrifice 48 h thereafter). ",
+          "sha256": "A891A841311236641859062D005B13442FE0C33F2C14E097423FFF004BA4C2C6"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa02",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q02",
+      "question": "GHK Cu cognitive decline neurodegeneration?",
+      "acceptable_answer": "We propose GHK tripeptide as a possible therapeutic agent against age-associated neurodegeneration and cognitive decline.",
+      "pmids": [
+        "22666519"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "22666519",
+          "start": 1269,
+          "end": 1390,
+          "text": "We propose GHK tripeptide as a possible therapeutic agent against age-associated neurodegeneration and cognitive decline.",
+          "sha256": "85187BC46DE03E7B6BDF67A4811F6F826B00AABC7DD9D85FA9453420FEF8F515"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa03",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q03",
+      "question": "thymosin beta 4 backbone conformations?",
+      "acceptable_answer": "The procedure is applied to the calculation of the local backbone conformations of myoglobin and lysozyme whose structures have been solved by X-ray analysis and thymosin beta 4, a polypeptide of 43 amino acid residues whose structure was recently investigated by NMR spectroscopy.",
+      "pmids": [
+        "1304362"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "1304362",
+          "start": 977,
+          "end": 1259,
+          "text": "The procedure is applied to the calculation of the local backbone conformations of myoglobin and lysozyme whose structures have been solved by X-ray analysis and thymosin beta 4, a polypeptide of 43 amino acid residues whose structure was recently investigated by NMR spectroscopy. ",
+          "sha256": "1FD9FE1D923B920AF35E0D71C6E3B4D9AAF75CB6D7C37CF699F426D1D27DD8A8"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa04",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q04",
+      "question": "ipamorelin oral bioavailability growth hormone?",
+      "acceptable_answer": "A new series of GH secretagogues derived from ipamorelin is described. In an attempt to obtain oral bioavailability, by reducing the size and the number of potential hydrogen-bonding sites of the compounds, a strategy using the peptidomimetic fragment 3-(aminomethyl)benzoic acid and sequential backbone N-methylations was applied.",
+      "pmids": [
+        "9733495"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "9733495",
+          "start": 0,
+          "end": 332,
+          "text": "A new series of GH secretagogues derived from ipamorelin is described. In an attempt to obtain oral bioavailability, by reducing the size and the number of potential hydrogen-bonding sites of the compounds, a strategy using the peptidomimetic fragment 3-(aminomethyl)benzoic acid and sequential backbone N-methylations was applied. ",
+          "sha256": "C70BC1AB79A8EC878FF84BE2A3B073745A8902600148FB09593714310F149B99"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa05",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q05",
+      "question": "tesamorelin HIV lipodystrophy clinical trials?",
+      "acceptable_answer": "Phase III clinical trials for the treatment of HIV-associated lipodystrophy and phase II clinical trials for sleep disorder, chronic obstructive pulmonary disorder, hip fracture and immune system dysfunction are underway. Phase II trials are also assessing the influenza vaccination immune response and cognitive effects of tesamorelin.",
+      "pmids": [
+        "17086939"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "17086939",
+          "start": 275,
+          "end": 611,
+          "text": "Phase III clinical trials for the treatment of HIV-associated lipodystrophy and phase II clinical trials for sleep disorder, chronic obstructive pulmonary disorder, hip fracture and immune system dysfunction are underway. Phase II trials are also assessing the influenza vaccination immune response and cognitive effects of tesamorelin.",
+          "sha256": "3E803681A700E542A24C1040623C2168D9665A7F89E69D88891D5990EF0D7338"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa06",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q06",
+      "question": "epitalon drosophila lifespan increase?",
+      "acceptable_answer": "The substance was added to the culture medium only at the developmental stage (from egg to larva). Epitalon significantly increased the lifespan (LS) of imagoes by 11-16% when applied at unprecedented low concentrations-from 0.001 x 10(-6) to 5 x 10(-6) wt.% of culture medium for males and from 0.01 x 10(-6) to 0.1 x 10(-6) wt.% of culture medium for females. The increase in LS did not depend on the substance dose.",
+      "pmids": [
+        "11087911"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "11087911",
+          "start": 147,
+          "end": 566,
+          "text": "The substance was added to the culture medium only at the developmental stage (from egg to larva). Epitalon significantly increased the lifespan (LS) of imagoes by 11-16% when applied at unprecedented low concentrations-from 0.001 x 10(-6) to 5 x 10(-6) wt.% of culture medium for males and from 0.01 x 10(-6) to 0.1 x 10(-6) wt.% of culture medium for females. The increase in LS did not depend on the substance dose. ",
+          "sha256": "F795E3299EAAA970DC25A31DA748F74B1DB4F13DB3F206958D822105C693BAC6"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa07",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q07",
+      "question": "MOTS c metabolic obesity insulin resistance?",
+      "acceptable_answer": "MOTS-c treatment in mice prevented age-dependent and high-fat-diet-induced insulin resistance, as well as diet-induced obesity. These results suggest that mitochondria may actively regulate metabolic homeostasis at the cellular and organismal level via peptides encoded within their genome.",
+      "pmids": [
+        "25738459"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "25738459",
+          "start": 721,
+          "end": 1011,
+          "text": "MOTS-c treatment in mice prevented age-dependent and high-fat-diet-induced insulin resistance, as well as diet-induced obesity. These results suggest that mitochondria may actively regulate metabolic homeostasis at the cellular and organismal level via peptides encoded within their genome.",
+          "sha256": "E13B71C9AC777990D6668813026CFF8816CC2B8A9DADF63112B580ABB994E422"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa08",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q08",
+      "question": "PT 141 melanocortin sexual dysfunction?",
+      "acceptable_answer": "The results suggest that PT-141 holds promise as a new treatment for sexual dysfunction.",
+      "pmids": [
+        "12851303"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "12851303",
+          "start": 681,
+          "end": 769,
+          "text": "The results suggest that PT-141 holds promise as a new treatment for sexual dysfunction.",
+          "sha256": "6A964341B3EEE2E036AE2BBDBF21E6FBAF9ACB7C778C405E80B1F16CC81437C9"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa09",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q09",
+      "question": "BPC 157 gastric duodenal lesions rats?",
+      "acceptable_answer": "The protection of stomach and duodenum in conjecture with anti-inflammatory effect was demonstrated for a novel 15 amino acid peptide, coded BPC 157, a fragment of the recently discovered gastric juice peptide BPC. BPC 157 (i.p./i.g.) was investigated in rats in comparison with several reference standards in three experimental ulcer models (48 h-restraint stress, subcutaneous cysteamine, intragastrical 96% ethanol ulcer tests) (pre-/co-/post-treatment).",
+      "pmids": [
+        "7904712"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "7904712",
+          "start": 0,
+          "end": 458,
+          "text": "The protection of stomach and duodenum in conjecture with anti-inflammatory effect was demonstrated for a novel 15 amino acid peptide, coded BPC 157, a fragment of the recently discovered gastric juice peptide BPC. BPC 157 (i.p./i.g.) was investigated in rats in comparison with several reference standards in three experimental ulcer models (48 h-restraint stress, subcutaneous cysteamine, intragastrical 96% ethanol ulcer tests) (pre-/co-/post-treatment). ",
+          "sha256": "F1AC7F6E26D8F6ADCAFAA6C4588C97848A79AE22CDB12CD3665FCEC131A8468F"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa10",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q10",
+      "question": "GHK Cu healing ACL reconstruction rat?",
+      "acceptable_answer": "Intra-articular supplementation with a bioactive small molecule GHK-Cu improved graft healing following ACLR in rat, but the beneficial effects could not last as treatment discontinued.",
+      "pmids": [
+        "25731775"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "25731775",
+          "start": 1249,
+          "end": 1434,
+          "text": "Intra-articular supplementation with a bioactive small molecule GHK-Cu improved graft healing following ACLR in rat, but the beneficial effects could not last as treatment discontinued.",
+          "sha256": "66C52E5B426787F35E0FAEB31F5A54921B20ABA24CED17D80682ABC8F73635F7"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa11",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q11",
+      "question": "TB 500 wound healing metabolites?",
+      "acceptable_answer": "Also, the metabolite Ac-LKK was a long-term metabolite of TB-500 detected up to 72 hr. No cytotoxicity of the parent and its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control.",
+      "pmids": [
+        "38382158"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "38382158",
+          "start": 1213,
+          "end": 1444,
+          "text": "Also, the metabolite Ac-LKK was a long-term metabolite of TB-500 detected up to 72 hr. No cytotoxicity of the parent and its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. ",
+          "sha256": "E96514A829AD560FD99280E25AD01B2C63017A2240D468703A0C9448F1DBC70A"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa12",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q12",
+      "question": "ipamorelin growth hormone release receptor?",
+      "acceptable_answer": "A pharmacological profiling using GHRP and growth hormone-releasing hormone (GHRH) antagonists clearly demonstrated that ipamorelin, like GHRP-6, stimulates GH release via a GHRP-like receptor.",
+      "pmids": [
+        "9849822"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "9849822",
+          "start": 617,
+          "end": 811,
+          "text": "A pharmacological profiling using GHRP and growth hormone-releasing hormone (GHRH) antagonists clearly demonstrated that ipamorelin, like GHRP-6, stimulates GH release via a GHRP-like receptor. ",
+          "sha256": "CDABEAB566B813E5625AAF56B7C2B507EEA43EDD139ECE5B30DD528448B09154"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa13",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q13",
+      "question": "tesamorelin HIV visceral adipose triglycerides safety?",
+      "acceptable_answer": "METHODS: We randomly assigned 412 patients with HIV (86% of whom were men) who had an accumulation of abdominal fat to receive a daily subcutaneous injection of either 2 mg of tesamorelin or placebo for 26 weeks. The primary end point was the percent change from baseline in visceral adipose tissue as shown on computed tomography.",
+      "pmids": [
+        "18057338"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "18057338",
+          "start": 335,
+          "end": 667,
+          "text": "METHODS: We randomly assigned 412 patients with HIV (86% of whom were men) who had an accumulation of abdominal fat to receive a daily subcutaneous injection of either 2 mg of tesamorelin or placebo for 26 weeks. The primary end point was the percent change from baseline in visceral adipose tissue as shown on computed tomography. ",
+          "sha256": "CF2647DD4D81F9E84A936F8D9BAA0086BA7B1B09585C7D4822F65840A6718282"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa14",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q14",
+      "question": "epitalon evening melatonin cortisol secretion?",
+      "acceptable_answer": "RESULTS: Epitalon was proven to significantly stimulate melatonin synthesis in senescent monkeys in the evening, thereby normalising the circadian rhythm of cortisol secretion.",
+      "pmids": [
+        "11524632"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "11524632",
+          "start": 346,
+          "end": 522,
+          "text": "RESULTS: Epitalon was proven to significantly stimulate melatonin synthesis in senescent monkeys in the evening, thereby normalising the circadian rhythm of cortisol secretion.",
+          "sha256": "99E4D630A16DAF7CDCF50B8B8688BCCC16836DC47AF6D47A46EC4CF00CC0CA7E"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa15",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q15",
+      "question": "MOTS c mitochondrial polymorphism longevity?",
+      "acceptable_answer": "These include humanin, and the recently discovered mitochondrial open reading frame of the 12S rRNA-c (MOTS-c). Although more research is needed, we suggest that the m.1382A>C polymorphism located in the MOTS-c encoding mtDNA, which is specific for the Northeast Asian population, may be among the putative biological mechanisms explaining the high longevity of Japanese people.",
+      "pmids": [
+        "26289118"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "26289118",
+          "start": 123,
+          "end": 501,
+          "text": "These include humanin, and the recently discovered mitochondrial open reading frame of the 12S rRNA-c (MOTS-c). Although more research is needed, we suggest that the m.1382A>C polymorphism located in the MOTS-c encoding mtDNA, which is specific for the Northeast Asian population, may be among the putative biological mechanisms explaining the high longevity of Japanese people.",
+          "sha256": "F41E7F1603C630C5476DC681FBF1115735ECD7BEE8B56456D0DF837E83C0D6EF"
+        }
+      ],
+      "rationale": "Draft answer is limited to the exact cited abstract sentence; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa16",
+      "answerability": "unanswerable",
+      "split": "development",
+      "question": "Does BPC-157 cure cancer in humans?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The frozen abstract corpus has no sufficient direct evidence for this claim under the recorded lexical check. This absence check is not exhaustive and requires human review.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "bpc",
+          "157"
+        ],
+        "claim_tokens": [
+          "cure",
+          "cancer",
+          "human"
+        ],
+        "matching_pmids": [],
+        "limitation": "No matches under this deterministic lexical check; absence is not exhaustive evidence that no support exists."
+      },
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa17",
+      "answerability": "unanswerable",
+      "split": "development",
+      "question": "What dose of GHK-Cu safely treats Alzheimer's disease during pregnancy?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The frozen abstract corpus has no sufficient direct evidence for this claim under the recorded lexical check. This absence check is not exhaustive and requires human review.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "ghk",
+          "cu"
+        ],
+        "claim_tokens": [
+          "dose",
+          "alzheimer",
+          "pregnancy"
+        ],
+        "matching_pmids": [],
+        "limitation": "No matches under this deterministic lexical check; absence is not exhaustive evidence that no support exists."
+      },
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa18",
+      "answerability": "unanswerable",
+      "split": "development",
+      "question": "Does TB-500 reverse kidney failure in humans?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The frozen abstract corpus has no sufficient direct evidence for this claim under the recorded lexical check. This absence check is not exhaustive and requires human review.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "tb",
+          "500"
+        ],
+        "claim_tokens": [
+          "reverse",
+          "kidney",
+          "failure",
+          "human"
+        ],
+        "matching_pmids": [],
+        "limitation": "No matches under this deterministic lexical check; absence is not exhaustive evidence that no support exists."
+      },
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa19",
+      "answerability": "unanswerable",
+      "split": "holdout",
+      "question": "Can ipamorelin replace insulin for type 1 diabetes?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The frozen abstract corpus has no sufficient direct evidence for this claim under the recorded lexical check. This absence check is not exhaustive and requires human review.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "ipamorelin"
+        ],
+        "claim_tokens": [
+          "replace",
+          "insulin",
+          "type",
+          "diabetes"
+        ],
+        "matching_pmids": [],
+        "limitation": "No matches under this deterministic lexical check; absence is not exhaustive evidence that no support exists."
+      },
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    },
+    {
+      "id": "qa20",
+      "answerability": "unanswerable",
+      "split": "holdout",
+      "question": "Does PT-141 prevent myocardial infarction?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The frozen abstract corpus has no sufficient direct evidence for this claim under the recorded lexical check. This absence check is not exhaustive and requires human review.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "pt",
+          "141"
+        ],
+        "claim_tokens": [
+          "prevent",
+          "myocardial",
+          "infarction"
+        ],
+        "matching_pmids": [],
+        "limitation": "No matches under this deterministic lexical check; absence is not exhaustive evidence that no support exists."
+      },
+      "human_review": {
+        "approved": false,
+        "decision": "pending",
+        "reviewer": "",
+        "notes": ""
+      }
+    }
+  ],
+  "review_notice": "This candidate pool is not approved and must not be used to tune or evaluate RAG until project-owner review is recorded."
+}
