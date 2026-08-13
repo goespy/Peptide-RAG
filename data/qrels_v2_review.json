@@ -1,5 +1,5 @@
 {
-  "status": "human_pool_review_in_progress",
+  "status": "human_pool_review_complete",
   "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
   "source_qrels_version": 1,
   "target_qrels_version": 2,
@@ -7,6 +7,20 @@
     "0": "not relevant",
     "1": "partially relevant",
     "2": "directly relevant"
+  },
+  "consistency_audit": {
+    "audited_on": "2026-08-13",
+    "reviewer": "codex_delegated_by_project_owner",
+    "scope": "Second-pass comparison of all 75 query-document pairs under the same topical rubric.",
+    "changes": [
+      {
+        "query_id": "q07",
+        "pmid": "33394327",
+        "from_grade": 1,
+        "to_grade": 2,
+        "reason": "Although the population has obstructive sleep apnea, the study directly measures MOTS-c against BMI and insulin resistance, satisfying the query rather than merely providing background."
+      }
+    ]
   },
   "queries": [
     {
@@ -93,6 +107,354 @@
         "12606551": {
           "grade": 0,
           "reason": "Primarily measures actin-binding affinity of a short motif; it does not characterize thymosin beta 4 backbone conformations."
+        }
+      }
+    },
+    {
+      "id": "q04",
+      "query": "ipamorelin oral bioavailability growth hormone",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "project_owner",
+      "judgments": {
+        "9733495": {
+          "grade": 2,
+          "reason": "Directly reports oral activity and bioavailability of ipamorelin-derived growth-hormone secretagogues."
+        },
+        "9733496": {
+          "grade": 2,
+          "reason": "Directly develops orally bioavailable growth-hormone secretagogues from the ipamorelin lead compound."
+        },
+        "11459660": {
+          "grade": 1,
+          "reason": "Studies potent ipamorelin hybrids, but oral bioavailability is background rather than a reported outcome."
+        },
+        "12204475": {
+          "grade": 2,
+          "reason": "Directly uses ipamorelin as a structural comparison while developing related growth-hormone secretagogues and reporting oral bioavailability as a central outcome."
+        },
+        "9879640": {
+          "grade": 1,
+          "reason": "Provides useful ipamorelin pharmacokinetics and bioavailability evidence, but investigates nasal rather than oral delivery."
+        }
+      }
+    },
+    {
+      "id": "q05",
+      "query": "tesamorelin HIV lipodystrophy clinical trials",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "project_owner",
+      "judgments": {
+        "17086939": {
+          "grade": 2,
+          "reason": "Directly describes tesamorelin development and Phase III clinical trials for HIV-associated lipodystrophy."
+        },
+        "20872317": {
+          "grade": 2,
+          "reason": "Directly reviews tesamorelin evidence from two randomized Phase III trials for HIV-associated lipodystrophy."
+        },
+        "21668043": {
+          "grade": 2,
+          "reason": "Directly reviews tesamorelin efficacy and tolerability in two clinical trials of HIV-associated lipodystrophy."
+        },
+        "22050344": {
+          "grade": 2,
+          "reason": "Directly summarizes clinical-trial evidence for tesamorelin in HIV-associated lipodystrophy."
+        },
+        "22298602": {
+          "grade": 2,
+          "reason": "Directly evaluates tesamorelin efficacy and safety using two Phase III trials and their extensions."
+        }
+      }
+    },
+    {
+      "id": "q06",
+      "query": "epitalon drosophila lifespan increase",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "project_owner",
+      "judgments": {
+        "11087911": {
+          "grade": 2,
+          "reason": "Directly tests Epitalon and reports an 11-16% lifespan increase in Drosophila melanogaster."
+        },
+        "12374906": {
+          "grade": 1,
+          "reason": "Provides a broad aging review that mentions Epitalon increasing fruit-fly lifespan rather than focusing on that experiment."
+        },
+        "11103316": {
+          "grade": 2,
+          "reason": "The title directly identifies the Epitalon tetrapeptide, Drosophila melanogaster, and lifespan as the study topic."
+        },
+        "12209581": {
+          "grade": 0,
+          "reason": "Studies mammary tumors in mice rather than Drosophila lifespan."
+        },
+        "12500171": {
+          "grade": 0,
+          "reason": "Studies pineal secretion in stressed rats rather than Drosophila lifespan."
+        }
+      }
+    },
+    {
+      "id": "q07",
+      "query": "MOTS c metabolic obesity insulin resistance",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "project_owner",
+      "judgments": {
+        "25738459": {
+          "grade": 2,
+          "reason": "Directly shows MOTS-c promoting metabolic homeostasis while reducing obesity and insulin resistance."
+        },
+        "29593067": {
+          "grade": 2,
+          "reason": "Directly studies MOTS-c, metabolic homeostasis, obesity, and insulin sensitivity in humans."
+        },
+        "29691953": {
+          "grade": 2,
+          "reason": "Directly connects circulating MOTS-c levels with obesity and insulin resistance in children and adolescents."
+        },
+        "30725119": {
+          "grade": 2,
+          "reason": "Directly shows MOTS-c preventing ovariectomy-induced obesity and insulin resistance in mice."
+        },
+        "33394327": {
+          "grade": 2,
+          "reason": "Directly studies MOTS-c against BMI and insulin resistance; the obstructive-sleep-apnea population narrows but does not weaken its topical relevance."
+        }
+      }
+    },
+    {
+      "id": "q08",
+      "query": "PT 141 melanocortin sexual dysfunction",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "project_owner",
+      "judgments": {
+        "12851303": {
+          "grade": 2,
+          "reason": "Directly evaluates PT-141 as a melanocortin-receptor treatment for sexual dysfunction."
+        },
+        "14569381": {
+          "grade": 1,
+          "reason": "Provides a broad erectile-dysfunction review that only briefly identifies the melanocortin agonist PT-141 as promising."
+        },
+        "14963471": {
+          "grade": 2,
+          "reason": "Directly reports a placebo-controlled intranasal PT-141 study in men with erectile dysfunction."
+        },
+        "14999221": {
+          "grade": 2,
+          "reason": "Directly evaluates subcutaneous PT-141 in patients with erectile dysfunction who responded inadequately to Viagra."
+        },
+        "15226502": {
+          "grade": 2,
+          "reason": "Directly studies PT-141 melanocortin effects on female sexual desire and its potential use for sexual dysfunction."
+        }
+      }
+    },
+    {
+      "id": "q09",
+      "query": "BPC 157 gastric duodenal lesions rats",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "codex_delegated_by_project_owner",
+      "judgments": {
+        "7904712": {
+          "grade": 2,
+          "reason": "Directly tests BPC 157 against both gastric and duodenal lesions in rats."
+        },
+        "8689934": {
+          "grade": 2,
+          "reason": "Directly investigates BPC 157 effects on accompanying gastric and duodenal lesions in rats with acute pancreatitis."
+        },
+        "9149058": {
+          "grade": 1,
+          "reason": "Directly studies BPC 157 protection against duodenal lesions, while gastric injury is contextual rather than a coequal outcome."
+        },
+        "9920181": {
+          "grade": 1,
+          "reason": "Studies BPC 157 gastric cytoprotection in rats but does not directly evaluate both gastric and duodenal lesions."
+        },
+        "11595448": {
+          "grade": 1,
+          "reason": "Directly studies BPC 157 protection against duodenal and colon lesions, with gastric protection serving as background."
+        }
+      }
+    },
+    {
+      "id": "q10",
+      "query": "GHK Cu healing ACL reconstruction rat",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "codex_delegated_by_project_owner",
+      "judgments": {
+        "25731775": {
+          "grade": 2,
+          "reason": "Directly tests GHK-Cu healing after ACL reconstruction in rats."
+        },
+        "23744835": {
+          "grade": 1,
+          "reason": "Directly tests GHK-Cu wound healing in rats, but uses irradiated skin flaps rather than ACL reconstruction."
+        },
+        "1522753": {
+          "grade": 1,
+          "reason": "Provides a cellular GHK-Cu healing mechanism through glycosaminoglycan synthesis but does not study ACL reconstruction or rats."
+        },
+        "2244543": {
+          "grade": 1,
+          "reason": "Provides a possible GHK-Cu wound-healing mechanism involving ferritin iron release but does not study ACL reconstruction."
+        },
+        "3169264": {
+          "grade": 1,
+          "reason": "Provides a cellular GHK-Cu healing mechanism through collagen synthesis but does not study ACL reconstruction or rats."
+        }
+      }
+    },
+    {
+      "id": "q11",
+      "query": "TB 500 wound healing metabolites",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "codex_delegated_by_project_owner",
+      "judgments": {
+        "38382158": {
+          "grade": 2,
+          "reason": "Directly identifies TB-500 metabolites and experimentally compares their wound-healing activity."
+        },
+        "23084823": {
+          "grade": 0,
+          "reason": "Detects TB-500 metabolites for doping control but does not evaluate whether those metabolites produce wound healing."
+        },
+        "41476424": {
+          "grade": 1,
+          "reason": "Reviews TB-500 tissue repair and wound-healing evidence but does not address its metabolites."
+        },
+        "41490200": {
+          "grade": 1,
+          "reason": "Reviews TB-500 as a wound-healing peptide but does not address its metabolites."
+        },
+        "8837245": {
+          "grade": 0,
+          "reason": "Studies theobromine abbreviated as TB after a 500 mg dose; it is unrelated to the peptide TB-500."
+        }
+      }
+    },
+    {
+      "id": "q12",
+      "query": "ipamorelin growth hormone release receptor",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "codex_delegated_by_project_owner",
+      "judgments": {
+        "9849822": {
+          "grade": 2,
+          "reason": "Directly characterizes ipamorelin growth-hormone release through a GHRP-like receptor."
+        },
+        "15665799": {
+          "grade": 0,
+          "reason": "Studies ipamorelin-evoked insulin release through pancreatic pathways rather than growth-hormone release receptors."
+        },
+        "16648303": {
+          "grade": 1,
+          "reason": "Provides growth-hormone secretagogue receptor context and includes ipamorelin administration, but primarily studies seabream ghrelin gene regulation."
+        },
+        "9733495": {
+          "grade": 1,
+          "reason": "Directly demonstrates growth-hormone release by ipamorelin-derived peptides but does not investigate the receptor."
+        },
+        "10373343": {
+          "grade": 1,
+          "reason": "Directly demonstrates ipamorelin growth-hormone release and downstream growth but does not investigate the receptor."
+        }
+      }
+    },
+    {
+      "id": "q13",
+      "query": "tesamorelin HIV visceral adipose triglycerides safety",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "codex_delegated_by_project_owner",
+      "judgments": {
+        "18690162": {
+          "grade": 2,
+          "reason": "Directly evaluates long-term tesamorelin safety and sustained reductions in visceral adipose tissue and triglycerides in HIV patients."
+        },
+        "20554713": {
+          "grade": 2,
+          "reason": "Directly pools Phase III tesamorelin trials reporting HIV, visceral adipose tissue, triglyceride, and safety outcomes."
+        },
+        "18057338": {
+          "grade": 2,
+          "reason": "Directly reports a randomized HIV trial measuring tesamorelin effects on visceral adipose tissue, triglycerides, and adverse events."
+        },
+        "20101189": {
+          "grade": 1,
+          "reason": "Directly evaluates tesamorelin visceral-fat efficacy and safety in HIV patients but does not report triglyceride outcomes in the abstract."
+        },
+        "20872317": {
+          "grade": 1,
+          "reason": "Reviews tesamorelin efficacy for HIV-associated visceral adiposity and the need for long-term safety evidence, but triglyceride evidence is not a direct outcome."
+        }
+      }
+    },
+    {
+      "id": "q14",
+      "query": "epitalon evening melatonin cortisol secretion",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "codex_delegated_by_project_owner",
+      "judgments": {
+        "11524632": {
+          "grade": 2,
+          "reason": "Directly reports Epitalon stimulation of evening melatonin and normalization of cortisol secretion in senescent monkeys."
+        },
+        "11550036": {
+          "grade": 2,
+          "reason": "Directly reports Epithalon effects on evening melatonin and cortisol production in old monkeys."
+        },
+        "12374906": {
+          "grade": 1,
+          "reason": "Broadly reviews Epitalon restoration of melatonin and cortisol rhythms without focusing on the secretion experiment."
+        },
+        "23237594": {
+          "grade": 0,
+          "reason": "Studies reproductive-cycle catecholamine rhythms in rats rather than evening melatonin and cortisol secretion."
+        },
+        "28976150": {
+          "grade": 0,
+          "reason": "Studies reproductive regulation under adverse lighting and xenobiotic exposure rather than melatonin and cortisol secretion."
+        }
+      }
+    },
+    {
+      "id": "q15",
+      "query": "MOTS c mitochondrial polymorphism longevity",
+      "approved": true,
+      "approved_on": "2026-08-13",
+      "reviewer": "codex_delegated_by_project_owner",
+      "judgments": {
+        "26289118": {
+          "grade": 2,
+          "reason": "Directly proposes a MOTS-c mitochondrial DNA polymorphism as a mechanism contributing to exceptional longevity."
+        },
+        "27216708": {
+          "grade": 1,
+          "reason": "Reviews mitochondrial MOTS-c signaling and longevity but does not address a polymorphism."
+        },
+        "30104535": {
+          "grade": 1,
+          "reason": "Explains mitochondrial-encoded MOTS-c signaling and its possible influence on longevity but does not address a polymorphism."
+        },
+        "33468709": {
+          "grade": 1,
+          "reason": "Directly studies a MOTS-c mitochondrial polymorphism, but its outcome is diabetes susceptibility rather than longevity."
+        },
+        "33535098": {
+          "grade": 1,
+          "reason": "Connects MOTS-c-mediated mitohormesis with health and longevity but does not investigate a mitochondrial polymorphism."
         }
       }
     }

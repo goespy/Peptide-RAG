@@ -1,0 +1,311 @@
+{
+  "version": 2,
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "review": {
+    "status": "approved_pooled_judgment_set",
+    "approved_on": "2026-08-13",
+    "reviewers": [
+      "codex_delegated_by_project_owner",
+      "project_owner"
+    ],
+    "approval_basis": "The project owner approved q01-q08 and delegated q09-q15 plus a full consistency audit to Codex.",
+    "methodology": "Five candidates per query: existing judgments, strict Boolean matches, then deterministic distinct-term overlap; relevance was assigned only after title-and-abstract review.",
+    "limitation": "The pool is lexical and depth-5, not exhaustive; relevant documents outside the pool may remain unjudged.",
+    "consistency_audit_changes": [
+      {
+        "query_id": "q07",
+        "pmid": "33394327",
+        "from_grade": 1,
+        "to_grade": 2,
+        "reason": "Although the population has obstructive sleep apnea, the study directly measures MOTS-c against BMI and insulin resistance, satisfying the query rather than merely providing background."
+      }
+    ]
+  },
+  "queries": [
+    {
+      "id": "q01",
+      "query": "BPC 157 liver necrosis rats",
+      "judgments": {
+        "7901724": 2,
+        "8689934": 0,
+        "27627764": 1,
+        "30690000": 2,
+        "35203478": 0
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "7901724": "Directly evaluates BPC 157 prevention of liver necrosis in rat liver-injury models.",
+        "8689934": "The experiment focuses on acute pancreatitis and gastroduodenal lesions; liver protection is background rather than the studied information need.",
+        "27627764": "Includes BPC 157 effects on liver lesions and necrosis in rats, but only within a broader short-bowel multi-organ study.",
+        "30690000": "Directly evaluates BPC 157 treatment of rat liver injury, including hepatic necrosis after bile-duct ligation.",
+        "35203478": "The study primarily evaluates myocardial infarction; liver involvement is secondary to a broader multi-organ syndrome."
+      }
+    },
+    {
+      "id": "q02",
+      "query": "GHK Cu cognitive decline neurodegeneration",
+      "judgments": {
+        "22666519": 2,
+        "38014118": 2,
+        "40766919": 2,
+        "42245779": 2,
+        "35083444": 1
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "22666519": "Directly proposes GHK-Cu as a therapeutic agent against cognitive decline and neurodegeneration.",
+        "38014118": "Directly tests GHK-Cu and reports improved cognitive performance in aging mice.",
+        "40766919": "Directly evaluates GHK-Cu against Alzheimer's-related cognitive impairment and neuropathology.",
+        "42245779": "Directly studies GHK-Cu treatment of age-related cognitive decline in mice.",
+        "35083444": "Provides broad anti-aging background with preliminary cognitive evidence rather than a focused neurodegeneration study."
+      }
+    },
+    {
+      "id": "q03",
+      "query": "thymosin beta 4 backbone conformations",
+      "judgments": {
+        "1304362": 2,
+        "2261438": 2,
+        "8269922": 2,
+        "8630056": 2,
+        "12606551": 0
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "1304362": "Directly models local thymosin beta 4 backbone conformations and compares them with experimental structure.",
+        "2261438": "Directly investigates thymosin beta 4 solution conformation using NMR and simulated annealing.",
+        "8269922": "Directly characterizes thymosin beta 4 conformational preferences in water using NMR.",
+        "8630056": "Directly studies the alpha-helical conformation of the thymosin beta 4 N-terminal region.",
+        "12606551": "Primarily measures actin-binding affinity of a short motif; it does not characterize thymosin beta 4 backbone conformations."
+      }
+    },
+    {
+      "id": "q04",
+      "query": "ipamorelin oral bioavailability growth hormone",
+      "judgments": {
+        "9733495": 2,
+        "9733496": 2,
+        "11459660": 1,
+        "12204475": 2,
+        "9879640": 1
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "9733495": "Directly reports oral activity and bioavailability of ipamorelin-derived growth-hormone secretagogues.",
+        "9733496": "Directly develops orally bioavailable growth-hormone secretagogues from the ipamorelin lead compound.",
+        "11459660": "Studies potent ipamorelin hybrids, but oral bioavailability is background rather than a reported outcome.",
+        "12204475": "Directly uses ipamorelin as a structural comparison while developing related growth-hormone secretagogues and reporting oral bioavailability as a central outcome.",
+        "9879640": "Provides useful ipamorelin pharmacokinetics and bioavailability evidence, but investigates nasal rather than oral delivery."
+      }
+    },
+    {
+      "id": "q05",
+      "query": "tesamorelin HIV lipodystrophy clinical trials",
+      "judgments": {
+        "17086939": 2,
+        "20872317": 2,
+        "21668043": 2,
+        "22050344": 2,
+        "22298602": 2
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "17086939": "Directly describes tesamorelin development and Phase III clinical trials for HIV-associated lipodystrophy.",
+        "20872317": "Directly reviews tesamorelin evidence from two randomized Phase III trials for HIV-associated lipodystrophy.",
+        "21668043": "Directly reviews tesamorelin efficacy and tolerability in two clinical trials of HIV-associated lipodystrophy.",
+        "22050344": "Directly summarizes clinical-trial evidence for tesamorelin in HIV-associated lipodystrophy.",
+        "22298602": "Directly evaluates tesamorelin efficacy and safety using two Phase III trials and their extensions."
+      }
+    },
+    {
+      "id": "q06",
+      "query": "epitalon drosophila lifespan increase",
+      "judgments": {
+        "11087911": 2,
+        "12374906": 1,
+        "11103316": 2,
+        "12209581": 0,
+        "12500171": 0
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "11087911": "Directly tests Epitalon and reports an 11-16% lifespan increase in Drosophila melanogaster.",
+        "12374906": "Provides a broad aging review that mentions Epitalon increasing fruit-fly lifespan rather than focusing on that experiment.",
+        "11103316": "The title directly identifies the Epitalon tetrapeptide, Drosophila melanogaster, and lifespan as the study topic.",
+        "12209581": "Studies mammary tumors in mice rather than Drosophila lifespan.",
+        "12500171": "Studies pineal secretion in stressed rats rather than Drosophila lifespan."
+      }
+    },
+    {
+      "id": "q07",
+      "query": "MOTS c metabolic obesity insulin resistance",
+      "judgments": {
+        "25738459": 2,
+        "29593067": 2,
+        "29691953": 2,
+        "30725119": 2,
+        "33394327": 2
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "25738459": "Directly shows MOTS-c promoting metabolic homeostasis while reducing obesity and insulin resistance.",
+        "29593067": "Directly studies MOTS-c, metabolic homeostasis, obesity, and insulin sensitivity in humans.",
+        "29691953": "Directly connects circulating MOTS-c levels with obesity and insulin resistance in children and adolescents.",
+        "30725119": "Directly shows MOTS-c preventing ovariectomy-induced obesity and insulin resistance in mice.",
+        "33394327": "Directly studies MOTS-c against BMI and insulin resistance; the obstructive-sleep-apnea population narrows but does not weaken its topical relevance."
+      }
+    },
+    {
+      "id": "q08",
+      "query": "PT 141 melanocortin sexual dysfunction",
+      "judgments": {
+        "12851303": 2,
+        "14569381": 1,
+        "14963471": 2,
+        "14999221": 2,
+        "15226502": 2
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "12851303": "Directly evaluates PT-141 as a melanocortin-receptor treatment for sexual dysfunction.",
+        "14569381": "Provides a broad erectile-dysfunction review that only briefly identifies the melanocortin agonist PT-141 as promising.",
+        "14963471": "Directly reports a placebo-controlled intranasal PT-141 study in men with erectile dysfunction.",
+        "14999221": "Directly evaluates subcutaneous PT-141 in patients with erectile dysfunction who responded inadequately to Viagra.",
+        "15226502": "Directly studies PT-141 melanocortin effects on female sexual desire and its potential use for sexual dysfunction."
+      }
+    },
+    {
+      "id": "q09",
+      "query": "BPC 157 gastric duodenal lesions rats",
+      "judgments": {
+        "7904712": 2,
+        "8689934": 2,
+        "9149058": 1,
+        "9920181": 1,
+        "11595448": 1
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "7904712": "Directly tests BPC 157 against both gastric and duodenal lesions in rats.",
+        "8689934": "Directly investigates BPC 157 effects on accompanying gastric and duodenal lesions in rats with acute pancreatitis.",
+        "9149058": "Directly studies BPC 157 protection against duodenal lesions, while gastric injury is contextual rather than a coequal outcome.",
+        "9920181": "Studies BPC 157 gastric cytoprotection in rats but does not directly evaluate both gastric and duodenal lesions.",
+        "11595448": "Directly studies BPC 157 protection against duodenal and colon lesions, with gastric protection serving as background."
+      }
+    },
+    {
+      "id": "q10",
+      "query": "GHK Cu healing ACL reconstruction rat",
+      "judgments": {
+        "25731775": 2,
+        "23744835": 1,
+        "1522753": 1,
+        "2244543": 1,
+        "3169264": 1
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "25731775": "Directly tests GHK-Cu healing after ACL reconstruction in rats.",
+        "23744835": "Directly tests GHK-Cu wound healing in rats, but uses irradiated skin flaps rather than ACL reconstruction.",
+        "1522753": "Provides a cellular GHK-Cu healing mechanism through glycosaminoglycan synthesis but does not study ACL reconstruction or rats.",
+        "2244543": "Provides a possible GHK-Cu wound-healing mechanism involving ferritin iron release but does not study ACL reconstruction.",
+        "3169264": "Provides a cellular GHK-Cu healing mechanism through collagen synthesis but does not study ACL reconstruction or rats."
+      }
+    },
+    {
+      "id": "q11",
+      "query": "TB 500 wound healing metabolites",
+      "judgments": {
+        "38382158": 2,
+        "23084823": 0,
+        "41476424": 1,
+        "41490200": 1,
+        "8837245": 0
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "38382158": "Directly identifies TB-500 metabolites and experimentally compares their wound-healing activity.",
+        "23084823": "Detects TB-500 metabolites for doping control but does not evaluate whether those metabolites produce wound healing.",
+        "41476424": "Reviews TB-500 tissue repair and wound-healing evidence but does not address its metabolites.",
+        "41490200": "Reviews TB-500 as a wound-healing peptide but does not address its metabolites.",
+        "8837245": "Studies theobromine abbreviated as TB after a 500 mg dose; it is unrelated to the peptide TB-500."
+      }
+    },
+    {
+      "id": "q12",
+      "query": "ipamorelin growth hormone release receptor",
+      "judgments": {
+        "9849822": 2,
+        "15665799": 0,
+        "16648303": 1,
+        "9733495": 1,
+        "10373343": 1
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "9849822": "Directly characterizes ipamorelin growth-hormone release through a GHRP-like receptor.",
+        "15665799": "Studies ipamorelin-evoked insulin release through pancreatic pathways rather than growth-hormone release receptors.",
+        "16648303": "Provides growth-hormone secretagogue receptor context and includes ipamorelin administration, but primarily studies seabream ghrelin gene regulation.",
+        "9733495": "Directly demonstrates growth-hormone release by ipamorelin-derived peptides but does not investigate the receptor.",
+        "10373343": "Directly demonstrates ipamorelin growth-hormone release and downstream growth but does not investigate the receptor."
+      }
+    },
+    {
+      "id": "q13",
+      "query": "tesamorelin HIV visceral adipose triglycerides safety",
+      "judgments": {
+        "18690162": 2,
+        "20554713": 2,
+        "18057338": 2,
+        "20101189": 1,
+        "20872317": 1
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "18690162": "Directly evaluates long-term tesamorelin safety and sustained reductions in visceral adipose tissue and triglycerides in HIV patients.",
+        "20554713": "Directly pools Phase III tesamorelin trials reporting HIV, visceral adipose tissue, triglyceride, and safety outcomes.",
+        "18057338": "Directly reports a randomized HIV trial measuring tesamorelin effects on visceral adipose tissue, triglycerides, and adverse events.",
+        "20101189": "Directly evaluates tesamorelin visceral-fat efficacy and safety in HIV patients but does not report triglyceride outcomes in the abstract.",
+        "20872317": "Reviews tesamorelin efficacy for HIV-associated visceral adiposity and the need for long-term safety evidence, but triglyceride evidence is not a direct outcome."
+      }
+    },
+    {
+      "id": "q14",
+      "query": "epitalon evening melatonin cortisol secretion",
+      "judgments": {
+        "11524632": 2,
+        "11550036": 2,
+        "12374906": 1,
+        "23237594": 0,
+        "28976150": 0
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "11524632": "Directly reports Epitalon stimulation of evening melatonin and normalization of cortisol secretion in senescent monkeys.",
+        "11550036": "Directly reports Epithalon effects on evening melatonin and cortisol production in old monkeys.",
+        "12374906": "Broadly reviews Epitalon restoration of melatonin and cortisol rhythms without focusing on the secretion experiment.",
+        "23237594": "Studies reproductive-cycle catecholamine rhythms in rats rather than evening melatonin and cortisol secretion.",
+        "28976150": "Studies reproductive regulation under adverse lighting and xenobiotic exposure rather than melatonin and cortisol secretion."
+      }
+    },
+    {
+      "id": "q15",
+      "query": "MOTS c mitochondrial polymorphism longevity",
+      "judgments": {
+        "26289118": 2,
+        "27216708": 1,
+        "30104535": 1,
+        "33468709": 1,
+        "33535098": 1
+      },
+      "rationale": "Five pooled titles and abstracts were topically graded under the documented 0/1/2 rubric.",
+      "judgment_rationales": {
+        "26289118": "Directly proposes a MOTS-c mitochondrial DNA polymorphism as a mechanism contributing to exceptional longevity.",
+        "27216708": "Reviews mitochondrial MOTS-c signaling and longevity but does not address a polymorphism.",
+        "30104535": "Explains mitochondrial-encoded MOTS-c signaling and its possible influence on longevity but does not address a polymorphism.",
+        "33468709": "Directly studies a MOTS-c mitochondrial polymorphism, but its outcome is diabetes susceptibility rather than longevity.",
+        "33535098": "Connects MOTS-c-mediated mitohormesis with health and longevity but does not investigate a mitochondrial polymorphism."
+      }
+    }
+  ]
+}

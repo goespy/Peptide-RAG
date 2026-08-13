@@ -9,11 +9,12 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Corpus snapshot generated and reviewed
 - [x] Deterministic 15-document qrels review packet generated
 - [x] Fifteen-query provisional judgment set (`data/qrels.json`)
+- [x] Pooled version-2 judgment set with 75 graded query-document pairs (`data/qrels_v2.json`)
 - [x] Positional inverted index
 - [x] Boolean `AND`/`OR` retrieval
 - [x] Red precision@k and recall@k harness
 
-The Day 1 baseline is measured below. The version-1 qrels are a reviewed known-item set. A separate 75-pair pooling worksheet is now ready for human labels; the reported metrics remain unchanged until those judgments are approved as qrels version 2.
+The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
 
 ### Frozen corpus snapshot
 
@@ -88,7 +89,13 @@ python scripts/prepare_qrels_pool.py
 python scripts/render_qrels_pool_review.py
 ```
 
-The outputs are `data/qrels_pool.json` and `QRELS-POOL-REVIEW.md`: 75 query-document pairs consisting of the 15 existing judgments plus 60 unjudged candidates. Candidate selection uses strict Boolean matching followed by deterministic distinct-term coverage, but it never assigns relevance. A human must read each paper and choose `0` (not relevant), `1` (partially relevant), or `2` (directly relevant), with a reason. Only then should the approved labels become qrels version 2. Use `--overwrite` to regenerate either artifact intentionally.
+The outputs are `data/qrels_pool.json` and `QRELS-POOL-REVIEW.md`: 75 query-document pairs consisting of the 15 existing judgments plus 60 initially unjudged candidates. Candidate selection uses strict Boolean matching followed by deterministic distinct-term coverage, but it never assigns relevance. Every available title and abstract was reviewed under the documented rubric: `0` (not relevant), `1` (partially relevant), or `2` (directly relevant). The project owner individually approved q01-q08, then explicitly delegated q09-q15 and the all-query consistency audit to Codex; that provenance is recorded rather than presented as fully manual labeling. Freeze the validated review reproducibly with:
+
+```bash
+python scripts/freeze_qrels_v2.py
+```
+
+This produces `data/qrels_v2.json` while leaving the version-1 `data/qrels.json` and metrics untouched. The completed set contains 75 judgments: 40 grade-2, 25 grade-1, and 10 grade-0. Use `--overwrite` only to reproduce an intentionally changed reviewed artifact.
 
 ### NCBI use and attribution
 
@@ -104,7 +111,13 @@ From a clean clone, the complete Day 1 evaluation runs with:
 python run_day1.py
 ```
 
-It verifies the qrels-to-corpus SHA-256 binding, builds the positional index from scratch, evaluates all 15 Boolean queries, and prints paste-ready Markdown. Direct search is also available:
+It verifies the qrels-to-corpus SHA-256 binding, builds the positional index from scratch, evaluates all 15 Boolean queries, and prints paste-ready Markdown. Evaluate the strengthened qrels separately with:
+
+```bash
+python run_day1.py --qrels data/qrels_v2.json
+```
+
+Direct search is also available:
 
 ```bash
 python search.py "BPC 157 tissue regeneration"
@@ -118,15 +131,15 @@ python search.py "BPC 157 tissue regeneration"
 - Index: 19,023 terms
 - Ordering: numeric PMID, because the Day 1 Boolean baseline is deliberately unranked
 
-These are the preserved version-1 known-item results. Consequently, unjudged relevant papers may be counted as non-relevant and measured precision may be lower than true precision. The in-progress pooled review is not included in these values; version-2 results will be added alongside them after human approval.
+These are the preserved version-1 known-item results. Consequently, unjudged relevant papers may be counted as non-relevant and measured precision may be lower than true precision. They are retained as historical evidence rather than overwritten by version 2.
 
-### Aggregate results
+### Version 1 aggregate results
 
 | Evaluated queries | Mean Precision@1 | Mean Precision@3 | Mean Precision@5 | Mean Recall@1 | Mean Recall@3 | Mean Recall@5 |
 |---:|---:|---:|---:|---:|---:|---:|
 | 15 | 0.933 | 0.333 | 0.200 | 0.933 | 1.000 | 1.000 |
 
-### Per-query results
+### Version 1 per-query results
 
 | Query ID | Query | Relevant | Retrieved | Precision@1 | Precision@3 | Precision@5 | Recall@1 | Recall@3 | Recall@5 |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -147,6 +160,36 @@ These are the preserved version-1 known-item results. Consequently, unjudged rel
 | q15 | MOTS c mitochondrial polymorphism longevity | 1 | 1 | 1.000 | 0.333 | 0.200 | 1.000 | 1.000 | 1.000 |
 
 The red signal is q11: numeric PMID ordering places a doping-control paper first and the directly relevant TB-500 wound-healing paper second. Recall@1 therefore fails while Recall@3 succeeds. That result is preserved for the later ranked-retrieval phase rather than tuned away.
+
+### Version 2 pooled results
+
+- Command: `python run_day1.py --qrels data/qrels_v2.json`
+- Judgments: 75 across the same 15 queries; grades greater than zero count as relevant
+- Pooling limitation: depth-5 lexical pooling is stronger than a known-item set but is not exhaustive
+
+| Evaluated queries | Mean Precision@1 | Mean Precision@3 | Mean Precision@5 | Mean Recall@1 | Mean Recall@3 | Mean Recall@5 |
+|---:|---:|---:|---:|---:|---:|---:|
+| 15 | 0.933 | 0.622 | 0.507 | 0.220 | 0.428 | 0.570 |
+
+| Query ID | Query | Relevant | Retrieved | Precision@1 | Precision@3 | Precision@5 | Recall@1 | Recall@3 | Recall@5 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| q01 | BPC 157 liver necrosis rats | 3 | 6 | 1.000 | 0.667 | 0.600 | 0.333 | 0.667 | 1.000 |
+| q02 | GHK Cu cognitive decline neurodegeneration | 5 | 1 | 1.000 | 0.333 | 0.200 | 0.200 | 0.200 | 0.200 |
+| q03 | thymosin beta 4 backbone conformations | 4 | 1 | 1.000 | 0.333 | 0.200 | 0.250 | 0.250 | 0.250 |
+| q04 | ipamorelin oral bioavailability growth hormone | 5 | 4 | 1.000 | 1.000 | 0.800 | 0.200 | 0.600 | 0.800 |
+| q05 | tesamorelin HIV lipodystrophy clinical trials | 5 | 9 | 1.000 | 1.000 | 1.000 | 0.200 | 0.600 | 1.000 |
+| q06 | epitalon drosophila lifespan increase | 3 | 1 | 1.000 | 0.333 | 0.200 | 0.333 | 0.333 | 0.333 |
+| q07 | MOTS c metabolic obesity insulin resistance | 5 | 14 | 1.000 | 1.000 | 1.000 | 0.200 | 0.600 | 1.000 |
+| q08 | PT 141 melanocortin sexual dysfunction | 5 | 9 | 1.000 | 1.000 | 1.000 | 0.200 | 0.600 | 1.000 |
+| q09 | BPC 157 gastric duodenal lesions rats | 5 | 12 | 1.000 | 1.000 | 1.000 | 0.200 | 0.600 | 1.000 |
+| q10 | GHK Cu healing ACL reconstruction rat | 5 | 1 | 1.000 | 0.333 | 0.200 | 0.200 | 0.200 | 0.200 |
+| q11 | TB 500 wound healing metabolites | 3 | 2 | 0.000 | 0.333 | 0.200 | 0.000 | 0.333 | 0.333 |
+| q12 | ipamorelin growth hormone release receptor | 4 | 3 | 1.000 | 0.667 | 0.400 | 0.250 | 0.500 | 0.500 |
+| q13 | tesamorelin HIV visceral adipose triglycerides safety | 5 | 2 | 1.000 | 0.667 | 0.400 | 0.200 | 0.400 | 0.400 |
+| q14 | epitalon evening melatonin cortisol secretion | 3 | 1 | 1.000 | 0.333 | 0.200 | 0.333 | 0.333 | 0.333 |
+| q15 | MOTS c mitochondrial polymorphism longevity | 5 | 1 | 1.000 | 0.333 | 0.200 | 0.200 | 0.200 | 0.200 |
+
+Version 2 reveals that the version-1 Recall@5 of `1.000` was a known-item artifact: strict implicit-AND retrieval misses many partially or directly relevant papers that omit one query term. Precision rises because formerly unjudged relevant results now have labels, while recall falls because the denominator is a meaningfully larger relevant set. This is the intended “measured, not vibed” red signal for ranked and less brittle retrieval.
 
 ## Day 1 chronological checklist
 
