@@ -17,18 +17,22 @@ import os
 from pathlib import Path
 import platform
 import statistics
+import subprocess
 import sys
 import tempfile
 import time
 import tracemalloc
 from typing import Callable, TypeVar
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from src.bm25 import BM25Config, rank_bm25
 from src.analysis import ANALYSIS_CONFIGS
 from src.index import InvertedIndex
 
 
-ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CORPUS = ROOT / "data" / "corpus.jsonl"
 DEFAULT_QRELS = ROOT / "data" / "qrels_v2.json"
 DEFAULT_CONFIG = ROOT / "data" / "lexical_config.json"
@@ -261,6 +265,15 @@ def load_frozen_config(path: Path) -> tuple[BM25Config, object]:
     )
 
 
+def _source_revision() -> str:
+    try:
+        return subprocess.run(
+            ["git", "rev-parse", "HEAD"], check=True, capture_output=True, text=True
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "unavailable"
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS)
@@ -281,6 +294,9 @@ def main(argv: list[str] | None = None) -> int:
         config=config,
         analysis_config=analysis_config,
     )
+    report["source_revision"] = _source_revision()
+    report["inputs"]["lexical_config_path"] = str(arguments.config)  # type: ignore[index]
+    report["inputs"]["lexical_config_sha256"] = _sha256(arguments.config)  # type: ignore[index]
     write_reports(report, arguments.output_json, arguments.output_markdown)
     return 0
 
