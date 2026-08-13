@@ -1,0 +1,1396 @@
+# Pooled Qrels Human Review
+
+> **Human labels required.** Candidate selection is automatic; relevance is not. Read each title and abstract, choose exactly one grade, and add a short reason. Do not copy unchecked values into `data/qrels.json`.
+
+- Corpus SHA-256: `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`
+- Queries: 15
+- Candidate query-document pairs: 75
+- Existing grades are retained for re-confirmation, not treated as automatic answers.
+
+## Grade rubric
+
+- **2 — directly relevant:** substantially answers the query's information need.
+- **1 — partially relevant:** useful background or related evidence, but does not fully answer it.
+- **0 — not relevant:** term overlap without satisfying the information need.
+
+For every candidate, select one grade and explain the topical decision. After all labels are reviewed, create qrels version 2 and rerun the same metrics without changing the retrieval code.
+
+## q01 — `BPC 157 liver necrosis rats`
+
+### PMID 7901724
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/7901724/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `bpc, 157, liver, necrosis, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Hepatoprotective effect of BPC 157, a 15-amino acid peptide, on liver lesions induced by either restraint stress or bile duct and hepatic artery ligation or CCl4 administration. A comparative study with dopamine agonists and somatostatin.
+
+**Abstract**
+
+The hepatoprotective effects of a newly synthesized 15 amino acid fragment code named BPC 157 was evaluated in comparison with the reference standards (bromocriptine, amantadine and somatostatin) in various experimental models of liver injury in rats: 24 h-bile duct+hepatic artery ligation 48 h-restraint stress and CCl4 administration. BPC 157 administered either intragastrically or intraperitoneally, significantly prevented the development of liver necrosis or fatty changes in rats subjected to 24 h bile duct + hepatic artery ligation, 48 h-restraint stress, CCl4 treatment (1 ml/kg i.p., sacrifice 48 h thereafter). The other reference drugs had either little or no protective actions in these models. Noteworthy, the laboratory test results for bilirubin, SGOT, SGPT fully correlated with the macro/microscopical findings. Thus, on the basis of consistent protective effect of BPC 157, possible clinical application in liver diseases is now warranted.
+
+### PMID 8689934
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/8689934/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, liver, necrosis, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Salutary and prophylactic effect of pentadecapeptide BPC 157 on acute pancreatitis and concomitant gastroduodenal lesions in rats.
+
+**Abstract**
+
+The superior effectiveness of a new pentadecapeptide, BPC 157, on gastrointestinal and liver lesions, in conjunction with an antiinflammatory and analgetic activity was recently noted. In the present study, BPC 157 was tested as either a protective or healing agent in bile duct ligation-induced acute pancreatitis in rats. In addition, the positive influence of BPC 157 on concomitantly developed gastric and duodenal lesions was simultaneously investigated. BPC 157 (10 microg, 10 ng/kg body wt, intraperitoneally or intragastrically) was given prophylactically 1 hr before ligation, whereas the therapy was given once daily beginning with the 24 hr following ligation (last application 24 hr before killing). The effect was investigated at daily intervals until the end of the fifth day after ligation. In the pretreatment regimen, a strong pancreas protection was obtained. When applied in the condition of already established severe acute pancreatitis, an obvious salutory effect was consistently noted. Assessing the appearance of the necrosis, edema, neutrophils, and mononuclears, consistently less necrosis, edema, and neutrophils, but more mononuclears, were found in BPC-treated rats. Likewise, in studies of the serum amylase values, relative to control data, a markedly lower rise (BPC pretreatment regimen) as well as a worsening of the already raised values (BPC therapy regimen) was noted. Along with its beneficial effect on pancreatitis, a positive influence of BPC 157 on the gastric and duodenal lesion course in bile duct-ligated rats was noted in both the pre- and posttreatment regimen. Taken together, in further studies of acute pancreatitis therapy, BPC could be an interesting and useful agent with an additional positive impact on concomitant gastroduodenal pathology.
+
+### PMID 27627764
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/27627764/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, liver, necrosis, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Effects of Diclofenac, L-NAME, L-Arginine, and Pentadecapeptide BPC 157 on Gastrointestinal, Liver, and Brain Lesions, Failed Anastomosis, and Intestinal Adaptation Deterioration in 24 Hour-Short-Bowel Rats.
+
+**Abstract**
+
+Stable gastric pentadecapeptide BPC 157 was previously used to ameliorate wound healing following major surgery and counteract diclofenac toxicity. To resolve the increasing early risks following major massive small bowel resectioning surgery, diclofenac combined with nitric oxide (NO) system blockade was used, suggesting therapy with BPC 157 and the nitric oxide synthase (NOS substrate) L-arginine, is efficacious. Immediately after anastomosis creation, short-bowel rats were untreated or administered intraperitoneal diclofenac (12 mg/kg), BPC 157 (10 μg/kg or 10 ng/kg), L-NG-nitroarginine methyl ester (L-NAME, 5 mg/kg), L-arginine (100 mg/kg) alone or combined, and assessed 24 h later. Short-bowel rats exhibited poor anastomosis healing, failed intestine adaptation, and gastrointestinal, liver, and brain lesions, which worsened with diclofenac. This was gradually ameliorated by immediate therapy with BPC 157 and L-arginine. Contrastingly, NOS-blocker L-NAME induced further aggravation and lesions gradually worsened. Specifically, rats with surgery alone exhibited mild stomach/duodenum lesions, considerable liver lesions, and severe cerebral/hippocampal lesions while those also administered diclofenac showed widespread severe lesions in the gastrointestinal tract, liver, cerebellar nuclear/Purkinje cells, and cerebrum/hippocampus. Rats subjected to surgery, diclofenac, and L-NAME exhibited the mentioned lesions, worsening anastomosis, and macro/microscopical necrosis. Thus, rats subjected to surgery alone showed evidence of deterioration. Furtheremore, rats subjected to surgery and administered diclofenac showed worse symptoms, than the rats subjected to surgery alone did. Rats subjected to surgery combined with diclofenac and L-NAME showed the worst deterioration. Rats subjected to surgery exhibited habitual adaptation of the remaining small intestine, which was markedly reversed in rats subjected to surgery and diclofenac, and those with surgery, diclofenac, and L-NAME. BPC 157 completely ameliorated symptoms in massive intestinal resection-, massive intestinal resection plus diclofenac-, and massive intestinal resection plus diclofenac plus L-NAME-treated short bowel rats that presented with cyclooxygenase (COX)-NO-system inhibition. L-arginine ameliorated only L-NAME-induced aggravation of symptoms in rats subjected to massive intestinal resection and administered diclofenac plus L-NAME.
+
+### PMID 30690000
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/30690000/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, liver, necrosis, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Stable gastric pentadecapeptide BPC 157 in the therapy of the rats with bile duct ligation.
+
+**Abstract**
+
+Recently, stable gastric pentadecapeptide BPC 157 reversed the high MDA- and NO-tissue values to the healthy levels. Thereby, BPC 157 therapy cured rats with bile duct ligation (BDL) (sacrifice at 2, 4, 6, 8 week). BPC 157-medication (10 μg/kg, 10 ng/kg) was continuously in drinking water (0.16 μg/ml, 0.16 ng/ml, 12 ml/rat/day) since awakening from surgery, or since week 4. Intraperitoneal administration was first at 30 min post-ligation, last at 24 h before sacrifice. Local bath BPC 157 (10 μg/kg) with assessed immediate normalization of portal hypertension was given immediately after establishing portal hypertension values at 4, 6, 8 week. BPC 157 therapy markedly abated jaundice, snout, ears, paws, and yellow abdominal tegmentum in controls since 4th week, ascites, nodular, steatotic liver with large dilatation of main bile duct, increased liver and/or cyst weight, decreased body weight. BPC 157 counteracts the piecemeal necrosis, focal lytic necrosis, apoptosis and focal inflammation, disturbed cell proliferation (Ki-67-staining), cytoskeletal structure in the hepatic stellate cell (α-SMA staining), collagen presentation (Mallory staining). Likewise, counteraction includes increased AST, ALT, GGT, ALP, total bilirubin, direct and indirect and decreased albumin serum levels. As the end-result appear normalized MDA- and NO-tissue values, next to Western blot of NOS2 and NOS3 in the liver tissue, and decreased IL-6, TNF-α, IL-1β levels in liver tissue. Finally, although portal hypertension is sustained in BDL-rats, with BPC 157 therapy, portal hypertension in BDL-rats is either not even developed or rapidly abated, depending on the given BPC 157's regimen. Thus, BPC 157 may counteract liver fibrosis and portal hypertension.
+
+### PMID 35203478
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/35203478/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, liver, necrosis, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Stable Gastric Pentadecapeptide BPC 157 May Counteract Myocardial Infarction Induced by Isoprenaline in Rats.
+
+**Abstract**
+
+We revealed that the stable gastric pentadecapeptide BPC 157, a useful peptide therapy against isoprenaline myocardial infarction, as well as against isoprenaline myocardial reinfarction, may follow the counteraction of the recently described occlusion-like syndrome, induced peripherally and centrally, which was described for the first time in isoprenaline-treated rats. BPC 157 (10 ng/kg, 10 μg/kg i.p.), L-NAME (5 mg/kg i.p.), and L-arginine (200 mg/kg i.p.) were given alone or together at (i) 30 min before or, alternatively, (ii) at 5 min after isoprenaline (75 or 150 mg/kg s.c.). At 30 min after isoprenaline 75 mg/kg s.c., we noted an early multiorgan failure (brain, heart, lung, liver, kidney and gastrointestinal lesions), thrombosis, intracranial (superior sagittal sinus) hypertension, portal and caval hypertension, and aortal hypotension, in its full presentation (or attenuated by BPC 157 therapy (given at 5 min after isoprenaline) via activation of the azygos vein). Further, we studied isoprenaline (75 or 150 mg/kg s.c.) myocardial infarction (1 challenge) and reinfarction (isoprenaline at 0 h and 24 h, 2 challenges) in rats (assessed at the end of the subsequent 24 h period). BPC 157 reduced levels of all necrosis markers, CK, CK-MB, LDH, and cTnT, and attenuated gross (no visible infarcted area) and histological damage, ECG (no ST-T ischemic changes), and echocardiography (preservation of systolic left ventricular function) damage induced by isoprenaline. Its effect was associated with a significant decrease in oxidative stress parameters and likely maintained NO system function, providing that BPC 157 interacted with eNOS and COX2 gene expression in a particular way and counteracted the noxious effect of the NOS-blocker, L-NAME.
+
+## q02 — `GHK Cu cognitive decline neurodegeneration`
+
+### PMID 22666519
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/22666519/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `ghk, cu, cognitive, decline, neurodegeneration`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+The human tripeptide GHK-Cu in prevention of oxidative stress and degenerative conditions of aging: implications for cognitive health.
+
+**Abstract**
+
+Oxidative stress, disrupted copper homeostasis, and neuroinflammation due to overproduction of proinflammatory cytokines are considered leading causative factors in development of age-associated neurodegenerative conditions. Recently, a new mechanism of aging-detrimental epigenetic modifications-has emerged. Thus, compounds that possess antioxidant, anti-inflammatory activity as well as compounds capable of restoring copper balance and proper gene functioning may be able to prevent age-associated cognitive decline and ward off many common neurodegenerative conditions. The aim of this paper is to bring attention to a compound with a long history of safe use in wound healing and antiaging skin care. The human tripeptide GHK was discovered in 1973 as an activity in human albumin that caused old human liver tissue to synthesize proteins like younger tissue. It has high affinity for copper ions and easily forms a copper complex or GHK-Cu. In addition, GHK possesses a plethora of other regenerative and protective actions including antioxidant, anti-inflammatory, and wound healing properties. Recent studies revealed its ability to up- and downregulate a large number of human genes including those that are critical for neuronal development and maintenance. We propose GHK tripeptide as a possible therapeutic agent against age-associated neurodegeneration and cognitive decline.
+
+### PMID 38014118
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/38014118/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, cognitive, decline`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Intranasal GHK peptide enhances resilience to cognitive decline in aging mice.
+
+**Abstract**
+
+Brain aging and cognitive decline are aspects of growing old. Age-related cognitive impairment entails the early stages of cognitive decline, and is extremely common, affecting millions of older people. Investigation into early cognitive decline as a treatable condition is relevant to a wide range of cognitive impairment conditions, since mild age-related neuropathology increases risk for more severe neuropathology and dementia associated with Alzheimer's Disease. Recent studies suggest that the naturally occurring peptide GHK (glycyl-L-histidyl-L-lysine) in its Cu-bound form, has the potential to treat cognitive decline associated with aging. In order to test this concept, male and female C57BL/6 mice, 20 months of age, were given intranasal GHK-Cu, 15 mg/kg daily, for two months. Results showed that mice treated with intranasal GHK-Cu had an enhanced level of cognitive performance in spatial memory and learning navigation tasks, and expressed decreased neuroinflammatory and axonal damage markers compared to mice treated with intranasal saline. These observations suggest that GHK-Cu can enhance resilience to brain aging, and has translational implications for further testing in both preclinical and clinical studies using an atomizer device for intranasal delivery.
+
+### PMID 40766919
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/40766919/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, cognitive, neurodegeneration`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Behavioral and neuropathological features of Alzheimer's disease are attenuated in 5xFAD mice treated with intranasal GHK peptide.
+
+**Abstract**
+
+Alzheimer's disease (AD) is a complex neurodegenerative disease and a leading cause of morbidity and mortality. Efforts to find disease modifying treatments have met with limited success. The naturally occurring peptide GHK (glycyl-L-histidyl-L-lysine), in its Cu-bound form, supports angiogenesis, remodeling, and tissue repair, has anti-inflammatory and antioxidant properties, and has been shown to improve cognitive performance in aging mice. These features raised the question of whether GHK-Cu could alleviate neurodegeneration observed in AD. Male and female 5xFAD transgenic mice on the C57BL/6J background at 4 months of age were given 15 mg/kg GHK-Cu intranasally 3 times per week for 3 months until 7 months of age. Results showed that intranasal GHK-Cu treatment delayed cognitive impairment, reduced amyloid plaques, and lowered MCP1-mediated inflammation levels in the frontal cortex and hippocampus. These observations provide the rationale for conducting additional studies to investigate the potential of GHK-Cu peptide as a promising treatment for AD.
+
+### PMID 42245779
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/42245779/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, cognitive, decline`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Middle-aged mice treated with GHK-Cu peptide administered intraperitoneally or intranasally show behavioral rescue but divergent hippocampal aging programs.
+
+**Abstract**
+
+Age-related cognitive decline (ARCD) is driven by conserved biological mechanisms of aging, yet no gerotherapeutic directly targets these processes in the brain. Glycyl-L-histidyl-L-lysine complexed with copper (GHK-Cu) is an endogenous peptide with regenerative and anti-inflammatory properties that declines with age. Whether its effects on cognitive aging depend on delivery route or exposure duration remains unclear. Aged C57BL/6J mice (20-21 months) received GHK-Cu (15 mg/kg) via short-term intraperitoneal (IP; 5 days) or longer-term intranasal (IN; 8 weeks) administration. Hippocampal-dependent escape learning was assessed using a spatial navigation task. Molecular effects were evaluated using hippocampal immunohistochemistry and bulk RNA sequencing. Differential gene expression was analyzed using DESeq2 with false discovery rate (FDR) correction, and pathway-level changes were assessed via gene set enrichment analysis (GSEA). IN GHK-Cu improved escape latency across Trials 2-4 in both sexes (P < 0.05), whereas IP dosing produced a transient improvement in males during Trial 2 (P < 0.05) without sustained effects or improvement in females. IN treatment increased synaptophysin in females (P < 0.001) and decreased GFAP in both sexes (P < 0.01), while IP treatment reduced TGF-β, GFAP, and MCP-1 in males (P < 0.05) and decreased p21 in females (P < 0.0001). Transcriptomic analysis revealed distinct molecular programs. IN GHK-Cu induced coordinated suppression of oxidative phosphorylation (male NES - 5.44, female NES - 4.20; FDR < 0.0001) and MYC target pathways (female NES - 4.31, FDR < 0.0001), with additional attenuation of PI3K-AKT-mTOR signaling in females (NES - 3.15, FDR = 0.062). In contrast, IP treatment activated oxidative phosphorylation (female NES 4.97, FDR < 0.001), DNA repair (NES 5.58, FDR < 0.001), and MYC targets (NES 4.34, FDR = 0.002), indicating engagement of acute stress-response and repair pathways. GHK-Cu improves hippocampal-dependent learning in aged mice through distinct biological modes: IP exposure activates repair and stress-response pathways, whereas IN delivery induces sustained suppression of growth and mitochondrial metabolic signaling associated with aging biology. These findings demonstrate that functional cognitive improvement can arise from divergent molecular states and identify administrative route and exposure duration as key determinants of gerotherapeutic response.
+
+### PMID 35083444
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/35083444/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, cognitive`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+The potential of GHK as an anti-aging peptide.
+
+**Abstract**
+
+GHK (glycyl-L-histidyl-L-lysine) is a naturally occurring peptide found in human serum with levels averaging 200 ng/ml at age 20 but declining to an average of 80 ng/ml by age 60. The molecule has a very high affinity for copper and forms the chelate GHK-Cu. The peptide as well as its Cu (II) chelate have anti-inflammatory and tissue remodeling properties. GHK-Cu has been shown to promote skin remodeling, wound healing and regeneration, and has prominent antioxidant and anti-inflammatory effects in in vitro and in vivo studies. In addition, preliminary observations suggest GHK can partially reverse cognitive impairment in aging mice by targeting anti-inflammatory and epigenetic pathways. The evidence as presented provides the rationale to further investigate this naturally occurring peptide in preclinical and clinical aging studies.
+
+## q03 — `thymosin beta 4 backbone conformations`
+
+### PMID 1304362
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/1304362/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `thymosin, beta, 4, backbone, conformations`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Assembly of polypeptide and protein backbone conformations from low energy ensembles of short fragments: development of strategies and construction of models for myoglobin, lysozyme, and thymosin beta 4.
+
+**Abstract**
+
+Recently we developed methods for the construction of knowledge-based mean fields from a data base of known protein structures. As shown previously, this approach can be used to calculate ensembles of probable conformations for short fragments of polypeptide chains. Here we develop procedures for the assembly of short fragments to complete three-dimensional models of polypeptide chains. The amino acid sequence of a given protein is decomposed into all possible overlapping fragments of a given length, and an ensemble of probable conformations is calculated for each fragment. The fragments are assembled to a complete model by choosing appropriate conformations from the individual ensembles and by averaging over equivalent angles. Finally a consistent model is obtained by rebuilding the conformation from the average angles. From the average angles the local variability of the structure can be calculated, which is a useful criterion for the reliability of the model. The procedure is applied to the calculation of the local backbone conformations of myoglobin and lysozyme whose structures have been solved by X-ray analysis and thymosin beta 4, a polypeptide of 43 amino acid residues whose structure was recently investigated by NMR spectroscopy. We demonstrate that substantial fractions of the calculated local backbone conformations are similar to the experimentally determined structures.
+
+### PMID 2261438
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/2261438/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `thymosin, beta, 4, backbone`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Solution conformation of thymosin beta 4: a nuclear magnetic resonance and simulated annealing study.
+
+**Abstract**
+
+The conformation of the polypeptide thymosin beta 4 in solutions of 60% (v/v) trifluoroethanol-d3 and 50% (v/v) hexafluoroisopropyl-d2 alcohol in water is investigated by nuclear magnetic resonance (NMR) spectroscopy. Under these conditions thymosin beta 4 adopts an ordered structure. By use of a combination of two-dimensional NMR techniques, the 1H NMR spectrum of thymosin beta 4 is assigned. A set of 180 approximate interproton distance constraints is derived from nuclear Overhauser enhancement (NOE) measurements. These, together with 33 phi constraints obtained for JNH alpha coupling data and the 23 psi dihedral angles identified on the basis of the pattern of short-range NOEs, form the basis of a three-dimensional structure determination by dynamical simulated annealing. The calculations are carried out starting from three initial structures, an alpha-helix, an extended beta-strand, and a mixed alpha/beta structure. Ten independent structures are computed from each starting structure by using different random number seeds for the assignments of the initial velocities. All 30 calculated structures satisfy the experimental constraints, display very small deviations from idealized covalent geometry, and possess good nonbonded contacts. Analysis of the 30 converged structures indicates that there are two helical regions extending from residues 4-16 and from residues 30-40, which are well defined both in terms of atomic root mean square differences and backbone torsion angles. For the two helical regions individually the average backbone rms difference between all pairs of structures is approximately 2 A. The two helices exhibit typical amino acid preferences for specific locations at the ends of helices.(ABSTRACT TRUNCATED AT 250 WORDS)
+
+### PMID 8269922
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/8269922/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `thymosin, beta, 4, conformations`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Conformation of thymosin beta 4 in water determined by NMR spectroscopy.
+
+**Abstract**
+
+The conformational preferences of a 43-amino-acid G-actin-binding peptide, thymosin beta 4, in water at 1, 4 and 14 degrees C, and at pH 3.0 and 6.5 were studied by NMR. NMR showed that thymosin beta 4 lacks a uniquely folded conformation in water. However, some preferential alpha-helical conformations of thymosin beta 4 can be observed in aqueous solutions. The segment at residues 5-16 showed characteristic interactions for conformations in both the beta-strand and alpha-helical regions of the phi-psi space, based on strong C alpha H(i)-NH(i+1) interactions and NH-NH, C alpha H(i)-NH(i+3), and C alpha H(i)-C beta H(i+3) interactions, respectively. At 1-4 degrees C, another segment at residues 31-37 also shows both beta and alpha conformations, forming however a less well-defined helix than the segment at residues 5-16. At 14 degrees C, the conformational population of the helix at positions 5-16 is shifted more towards the random and turn-like structures, whereas the segment at positions 31-37 becomes exclusively a random coil.
+
+### PMID 8630056
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/8630056/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `thymosin, beta, 4, conformations`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+The N-terminal sequences (5-20) of thymosin beta 4 binds to monomeric actin in an alpha-helical conformation.
+
+**Abstract**
+
+The relationship between the conformation of a peptide in solution and its interaction capacity is generally unclear. Trifluoroethanol (TFE), which stabilizes alpha-helical conformations, can be used to induce definite folding in synthetic peptides. The N-terminal part of thymosin beta 4, including the 5-20 sequences, is implicated in binding to monomeric actin. The corresponding peptide was synthesized and its conformation studied by CD. The peptide is unstructured in solution, and becomes folded at medium TFE concentrations, below 30%. In contrast, TFE does not significantly modify the conformation of monomeric actin which conserves its intrinsic properties, such as gelsolin interaction and DNase-I inactivation. We report here that the apparent affinity of the synthetic peptide to monomeric actin is increased by an order of magnitude in the presence of TFE, which implies that the peptide adopts a folded conformation needed for accurate interaction.
+
+### PMID 12606551
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/12606551/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `thymosin, beta, 4, conformations`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+A phage display-based method for determination of relative affinities of mutants. Application of the actin-binding motifs in thymosin beta 4 and the villin headpiece.
+
+**Abstract**
+
+We propose phage display combined with enzyme-linked immunosorbent assay as a tool for the systematic analysis of protein-protein interactions by investigating the binding behavior of variants to a partner protein. Via enzyme-linked immunosorbent assay we determine both the amount of fusion protein presented at the phage surface and the amount of complex formed, the ratio of which is proportional to the affinity. Hence this method enables us to calculate the relative affinities of a large number of mutants. As model systems, we investigated actin-binding motifs conserved in a number of proteins binding monomeric or filamentous actin. The hexapeptide motifs LKKTET, present in thymosin beta4, and LKKEKG, present in the villin headpiece, were mutated, and the variants were analyzed. Study of the positional tolerance allows postulating that the motifs, although similar in primary structures adopt different conformations when bound to actin. In addition, our data show that the second and the fourth amino acid of the thymosin beta4 motif and the first three residues of the villin headpiece motif are most important for actin binding. The latter result challenges the charged crown hypothesis for the villin headpiece filamentous actin interaction.
+
+## q04 — `ipamorelin oral bioavailability growth hormone`
+
+### PMID 9733495
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/9733495/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `ipamorelin, oral, bioavailability, growth, hormone`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+A new series of highly potent growth hormone-releasing peptides derived from ipamorelin.
+
+**Abstract**
+
+A new series of GH secretagogues derived from ipamorelin is described. In an attempt to obtain oral bioavailability, by reducing the size and the number of potential hydrogen-bonding sites of the compounds, a strategy using the peptidomimetic fragment 3-(aminomethyl)benzoic acid and sequential backbone N-methylations was applied. Several compounds from this series release GH with high in vitro potency and efficacy in a rat pituitary cell assay and high in vivo potency and efficacy in anesthetized rats. The tetrapeptide NNC 26-0235 (3-(aminomethyl)benzoyl-D-2Nal-N-Me-D-Phe-Lys-NH2) shows, following iv administration, comparable in vivo potency to ipamorelin, GHRP-2, and GHRP-6 with an ED50 in swine at 2 nmol/kg. NNC 26-0235 demonstrated a 10% oral bioavailability in dogs, and NNC 26-0235 and ipamorelin were able to increase basal GH level by more than 10-fold after oral administration of a dose of 1.8 and 2.7 mg/kg, respectively. The tripeptide NNC 26-0323 (3-(aminomethyl)benzoic acid-N-Me-D-2Nal-N-Me-D-Phe-ol) which showed moderate in vitro potency but lacked in vivo potency demonstrated a 20% oral bioavailability in rats.
+
+### PMID 9733496
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/9733496/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `ipamorelin, oral, bioavailability, growth, hormone`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Novel orally active growth hormone secretagogues.
+
+**Abstract**
+
+A novel class of growth hormone-releasing compounds with a molecular weight in the range from 500 to 650 has been discovered. The aim of this study was to obtain growth hormone secretagogues with oral bioavailability. By a rational approach we were able to reduce the size of the lead compound ipamorelin (4) and simultaneously to reduce hydrogen-bonding potential by incorporation of backbone isosters while retaining in vivo potency in swine. A rat pituitary assay was used for screening of all compounds and to evaluate which compounds should be tested further for in vivo potency in swine and oral bioavailability, fpo, in dogs. Most of the tested compounds had fpo in the range of 10-55%. In vivo potency in swine after iv dosing is reported, and ED50 was found to be 30 nmol/kg of body weight for the most potent compound.
+
+### PMID 11459660
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/11459660/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `ipamorelin, oral, bioavailability, growth, hormone`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Highly potent growth hormone secretagogues: hybrids of NN703 and ipamorelin.
+
+**Abstract**
+
+A series of NN703 analogues with lysine mimetics combined with naphthyl- or biphenylalanine in the core has been prepared and tested in vitro in a rat pituitary cell based assay and subsequently in vivo in pigs in a single dose at 50 nmol/kg. Re-introduction of certain pharmacophores in the C-terminal of NN703, which were originally removed during optimisation for oral bioavailability, led to unexpectedly potent compounds in vitro as well as in vivo.
+
+### PMID 12204475
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/12204475/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `ipamorelin, oral, bioavailability, growth, hormone`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+The influence of conformational restriction in the C-terminus of growth hormone secretagogues on their potency.
+
+**Abstract**
+
+In order to obtain more potent growth hormone secretagogues, a comparison of ipamorelin and NN703 suggested the addition of a polar group at the C-terminus of NN703. A study was conducted using constrained amines for this purpose. Here, substituted 4-piperidinylamino- and 4-dimethylaminopiperidino-substituents were found to give the most active compounds. A replacement of the 4-dimethylaminopiperidino-substituent with 4-hydroxypiperidino resulted in a series of compounds, which showed in vitro activity with EC(50) values in the low nanomolar range, and favourable kinetic properties, such as 40% oral bioavailability. The most promising compound was also tested in a swine in vivo model, resulting in a growth hormone level with a C(max) of over 40 ng mL(-1).
+
+### PMID 9879640
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/9879640/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ipamorelin, bioavailability, growth, hormone`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Pharmacokinetic evaluation of ipamorelin and other peptidyl growth hormone secretagogues with emphasis on nasal absorption.
+
+**Abstract**
+
+1. The pharmacokinetics of three new peptidyl growth hormone secretagogues, ipamorelin (NNC 26-0161), NNC 26-0194 and NNC 26-0235, were compared with two well-known hexapeptides, GHRP-2 and GHRP-6, in the male rat following different routes of administration. 2. Following i.v. bolus injection, plasma concentrations of the peptides declined biexponentially. Ipamorelin differed markedly from the other peptides investigated, demonstrating a systemic plasma clearance 5-fold lower than that of GHRP-6. Ipamorelin was mainly excreted in the urine, whereas GHRP-6 was predominantly excreted in the bile. NNC 26-0194 and NNC 26-0235 also showed high biliary excretions. Ipamorelin and the two NNC peptides were moderately resistant towards metabolism as 60-80% of the administered dose could be recovered from bile and urine as intact peptide. 3. After intranasal application, the bioavailability of ipamorelin was estimated at approximately 20%. Higher bioavailabilities of approximately 50% were determined for NNC 26-0235, NNC 26-0194 and GHRP-2, whereas the nasal absorption of GHRP-6 was somewhat lower. Thus, the peptides could be easily transported across the nasal epithelium suggesting that the nasal route seems promising for systemic delivery of this family of peptidyl growth hormone secretagogues.
+
+## q05 — `tesamorelin HIV lipodystrophy clinical trials`
+
+### PMID 17086939
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/17086939/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `tesamorelin, hiv, lipodystrophy, clinical, trials`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Drug evaluation: tesamorelin, a synthetic human growth hormone releasing factor.
+
+**Abstract**
+
+Theratechnologies, under license from Valeant, is developing tesamorelin as a potential vaccine adjuvant and for the potential treatment of wasting, hip fracture recovery, immune disorders, HIV-related lipodystrophy, sleep maintenance insomnia and mild cognitive impairment. Phase III clinical trials for the treatment of HIV-associated lipodystrophy and phase II clinical trials for sleep disorder, chronic obstructive pulmonary disorder, hip fracture and immune system dysfunction are underway. Phase II trials are also assessing the influenza vaccination immune response and cognitive effects of tesamorelin.
+
+### PMID 20872317
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/20872317/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `tesamorelin, hiv, lipodystrophy, clinical, trials`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Growth hormone-releasing factor agonists for the treatment of HIV-associated lipodystrophy.
+
+**Abstract**
+
+HIV-associated lipodystrophy characterized by body composition changes and associated metabolic abnormalities, including dyslipidemia and insulin resistance, is a major challenge in the treatment of HIV infection. Growth hormone-releasing factor (GRF) analogs with greater stability than the natural hormone can induce growth hormone secretion in a physiological manner, and appear to be promising candidate therapies for these conditions. The most promising GRF agonist in development is tesamorelin (EMD Serono/Theratechnologies), which has exhibited efficacy for the treatment of excess visceral adipose tissue in patients with HIV infection in two recent phase III, randomized, placebo-controlled clinical trials. Additional long-term outcome trials are required to determine the long-term safety of tesamorelin and to evaluate whether this agent, or other GRF agonists, could reduce the cardiovascular risk associated with lipodystrophy-related metabolic complications and help to maintain a more normal distribution of body fat.
+
+### PMID 21668043
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/21668043/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `tesamorelin, hiv, lipodystrophy, clinical, trials`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Tesamorelin: a review of its use in the management of HIV-associated lipodystrophy.
+
+**Abstract**
+
+Tesamorelin (EgriftaTM) is a synthetic analogue of human growth hormone-releasing hormone (also known as growth hormone-releasing factor) that stimulates the synthesis and release of endogenous growth hormone. It is the first and, so far, only treatment indicated for the reduction of excess abdominal fat in patients with HIV-associated lipodystrophy. This article reviews the pharmacological properties, clinical efficacy and tolerability of tesamorelin in patients with HIV-associated central fat accumulation. Subcutaneous tesamorelin was effective in reducing visceral adipose tissue (VAT), but did not affect subcutaneous adipose tissue to a clinically significant extent in two 26-week, well designed, clinical trials in patients with HIV-associated central fat accumulation. This reduction in VAT was maintained in the longer term in patients who continued to receive tesamorelin until week 52 in the extension phases of the two trials. However, discontinuation of therapy during this period resulted in the reaccumulation of VAT. Tesamorelin therapy was also associated with significant improvements in other body composition measures (e.g. trunk fat and waist circumference) and improvements were generally seen in some body image parameters (e.g. belly image distress). Tesamorelin was generally well tolerated, with treatment-emergent serious adverse events occurring in <4% of patients during 26 weeks of therapy. Most of these events were injection-site reactions or events known to be associated with growth hormone therapy (e.g. arthralgia, headache and peripheral oedema). Although long-term clinical experience is needed to further assess the benefits and risks of therapy, current evidence suggests that tesamorelin may be useful for reducing visceral adiposity in patients with HIV-associated lipodystrophy, thereby potentially improving self image.
+
+### PMID 22050344
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/22050344/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `tesamorelin, hiv, lipodystrophy, clinical, trials`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Spotlight on tesamorelin in HIV-associated lipodystrophy.
+
+**Abstract**
+
+Tesamorelin (EgriftaTM) is a synthetic analog of human growth hormone-releasing hormone (also known as growth hormone-releasing factor) that stimulates the synthesis and release of endogenous growth hormone. It is the first and, so far, only treatment indicated for the reduction of excess abdominal fat in patients with HIV-associated lipodystrophy. This article reviews the pharmacological properties, clinical efficacy and tolerability of tesamorelin in patients with HIV-associated central fat accumulation. Subcutaneous tesamorelin was effective in reducing visceral adipose tissue (VAT), but did not affect subcutaneous adipose tissue to a clinically significant extent in two 26-week, well designed, clinical trials in patients with HIV-associated central fat accumulation. This reduction in VAT was maintained in the longer term in patients who continued to receive tesamorelin until week 52 in the extension phases of the two trials. However, discontinuation of therapy during this period resulted in the reaccumulation of VAT. Tesamorelin therapy was also associated with significant improvements in other body composition measures (e.g. trunk fat and waist circumference) and improvements were generally seen in some body image parameters (e.g. belly image distress). Tesamorelin was generally well tolerated, with treatment-emergent serious adverse events occurring in <4% of patients during 26 weeks of therapy. Most of these events were injection-site reactions or events known to be associated with growth hormone therapy (e.g. arthralgia, headache and peripheral edema). Although long-term clinical experience is needed to further assess the benefits and risks of therapy, current evidence suggests that tesamorelin may be useful for reducing visceral adiposity in patients with HIV-associated lipodystrophy, thereby potentially improving self image.
+
+### PMID 22298602
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/22298602/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `tesamorelin, hiv, lipodystrophy, clinical, trials`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Tesamorelin: a growth hormone-releasing factor analogue for HIV-associated lipodystrophy.
+
+**Abstract**
+
+OBJECTIVE: To evaluate the efficacy and safety of tesamorelin, a growth hormone releasing factor analogue approved by the Food and Drug Administration in November 2010 for the treatment of lipodystrophy associated with HIV infection. DATA SOURCES: Literature was obtained through MEDLINE (1948-November 2011) and International Pharmaceutical Abstracts (1970-October 2011) using the search terms tesamorelin, TH9507, growth hormone releasing factor, and HIV-associated lipodystrophy syndrome. Additional publications were obtained through review of references within primary literature publications as well as pertinent Web sites. STUDY SELECTION AND DATA EXTRACTION: All articles published in English identified from the data sources were evaluated and all pertinent information was included. All studies relevant to the evaluation of efficacy and safety of tesamorelin in the management of HIV-associated lipodystrophy were included, with a focus on trials completed in humans. DATA SYNTHESIS: In 2 Phase 3 clinical trials and their pooled analyses, tesamorelin was proven to significantly decrease waist circumference and visceral adipose tissue (VAT) following 26 weeks of treatment. Both trials also demonstrated significant improvements in some subjective body image parameters. Both studies had 26-week extension phases that confirmed maintenance of VAT improvements on treatment without adverse impact on blood glucose and lipid parameters. Limited data support off-label uses of tesamorelin at this time. CONCLUSIONS: Tesamorelin is effective in improving visceral adiposity and body image in patients with HIV-associated lipodystrophy over 26-52 weeks of treatment. Potential limitations for its use include high cost and lack of long-term safety and adherence data. Tesamorelin provides a useful treatment option for management of patients with significant lipodystrophy related to HIV infection.
+
+## q06 — `epitalon drosophila lifespan increase`
+
+### PMID 11087911
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/11087911/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `epitalon, drosophila, lifespan, increase`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Effect of epitalon on the lifespan increase in Drosophila melanogaster.
+
+**Abstract**
+
+The geroprotector activity of epitalon, a synthetic tetrapeptide Ala-Glu-Asp-Gly, was studied on the Drosophila melanogaster wild strain Canton-S. The substance was added to the culture medium only at the developmental stage (from egg to larva). Epitalon significantly increased the lifespan (LS) of imagoes by 11-16% when applied at unprecedented low concentrations-from 0.001 x 10(-6) to 5 x 10(-6) wt.% of culture medium for males and from 0.01 x 10(-6) to 0.1 x 10(-6) wt.% of culture medium for females. The increase in LS did not depend on the substance dose. Effective concentrations of epitalon were 16,000-80,000,000 times lower than those of melatonin. The possible mechanisms of the antioxidant and regulatory effects of epitalon are discussed.
+
+### PMID 12374906
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/12374906/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `epitalon, lifespan, increase`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Peptides and Ageing.
+
+**Abstract**
+
+A technology has been developed for manufacturing of biologically active complex peptide preparations from extracts of different tissues. In particular, the pineal preparation (Epithalamin) augments the in vitro outgrowth of explants from the pineal gland but not from other tissues, the latter being stimulated by peptide preparations from respective tissues. Epithalamin increases melatonin production by the pineal gland of rats, improves immunological parameters in rats and mice, produces anticarcinogenic effects in different experimental models, stimulates antioxidant defenses, and restores the reproductive function in old rats. These effects are combined in the ability of Epithalamin to increase the lifespan in rats, mice, and fruit flies. Many of these effects are reproduced in clinical trials, which have demonstrated the geroprotector activity of Epithalamin in humans. Among the effects of the thymic preparation Thymalin, those related to its ability to stimulate immunity are the most prominent. This ability is associated with anticarcinogenic and geroprotector activities. Clinical trials of the peptide preparations obtained from other organs including the prostate, the cerebral cortex, and the eye retina, have demonstrated beneficial effects reflected by the improvement of the conditions of respective organs. Based on the data about the amino acid compositions of the peptide preparations, novel principles of the design of biologically active short peptides possessing tissue-specific activities has been developed. Dipeptides specific for the thymus and tetrapeptides specific for the heart, liver, brain cortex, and pineal glands stimulate the in vitro outgrowth of explants of respective organs. Interestingly, for eye retina and the pineal gland, a common tetrapeptide Ala-Glu-Asp-Gly (Epitalon) has been designed, probably reflecting the common embryonal origin of these two organs. Epitalon reproduces the effects of Epithalamin including those related to its geroprotector activity. In particular, Epitalon increases the lifespan of mice and fruit flies and restores the circadian rhythms of melatonin and cortisol production in old rhesus monkeys. At the same time, Epitalon prolongs the functional integrity of the eye retina in Campbell rats with hereditary Retinitis Pigmentosa and improves the visual functions in patients with pigmental retinal degeneration. Changes in gene expression were observed to be produced by the short peptide preparations. Therefore, the effects of Epitalon are suggested to be mediated by transcriptional machinery common for the pineal gland and the retina and, probably, for regulation of melatonin production in fruit flies. Based on three decades of studies of the peptide preparations, the peptide theory of ageing has been put forward. According this theory, ageing is an evolutionary determined biological process of changes in gene expression resulting in impaired synthesis of regulatory and tissue-specific peptides in organs and tissues, which provokes their structural and functional changes and the development of diseases. Correspondingly, correction of such disorders by means of stimulation of peptide production in the organism or through their delivery can promote the normalisation of disturbed body functions.
+
+### PMID 11103316
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/11103316/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `drosophila, lifespan`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Effect of the Ala-Glu-Asp-Gly peptide on lifespan in Drosophila melanogaster.
+
+**Abstract**
+
+*No abstract available.*
+
+### PMID 12209581
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/12209581/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `epitalon, increase`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Inhibitory effect of the peptide epitalon on the development of spontaneous mammary tumors in HER-2/neu transgenic mice.
+
+**Abstract**
+
+Female FVB/N HER-2/neu transgenic mice from the age of 2 months were subcutaneously injected with saline, the peptide Epitalon(R) (Ala-Glu-Asp-Gly) or with the peptide Vilon(R) (Lys-Glu) in a single dose of 1 microg/mouse for 5 consecutive days every month. Epitalon treatment reduced the cumulative number and the maximum size of tumors (p < 0.05). Furthermore, the number of mice bearing 1 mammary tumor was increased, whereas the number of mice bearing 2 or more mammary tumors was reduced in Epitalon-treated in comparison to saline-treated animals (p < 0.05). The size but not the number of lung metastases was reduced in Epitalon-treated compared to saline-treated mice (p < 0.05). The treatment with Vilon produced significant negative effects when compared to the control group, with an increased incidence of mammary cancer development (p < 0.05), a shorter mean latent period of tumors (p < 0.05) and an increased cumulative number of tumors (p < 0.05). A 3.7-fold reduction in the expression of HER-2/neu mRNA was found in mammary tumors from HER-2/neu transgenic mice treated with Epitalon compared to control animals. The expression of mRNA for HER-2/neu was also partially reduced in Vilon-treated mice, but it remained significantly higher in Vilon- than in Epitalon-treated animals (1.9-fold increase). The data demonstrate the inhibitory effect of Epitalon in the development of spontaneous mammary tumors in HER-2/neu mice, suggesting that a downregulation of HER-2/neu gene expression in mammary adenocarcinoma may be responsible, at least in part, for the antitumor effect of the peptide.
+
+### PMID 12500171
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/12500171/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `epitalon, increase`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Epitalon influences pineal secretion in stress-exposed rats in the daytime.
+
+**Abstract**
+
+OBJECTIVES: The content of C-Fos protein was tested in rat pinealocytes in the norm and stress and in case of intranasal administration of Epitalon (Ala-Glu-Asp-Gly), which regulated pineal secretion processes, presumably, via protooncogenes. SETTING: Intact and osmotic-stress-exposed rats were used for the immunohistochemical detection of C-Fos protein. All animals were intranasally administered with Epitalon, the last infusion made in two hours before the biopsy. Simultaneously, light microscopy of the pineal parenchyma was performed in all groups of animals. RESULTS: A slight but significant C-Fos increase was observed only in stress-exposed pinealocytes of rats after intranasal Epitalon infusions. C-Fos was irregularly distributed throughout pineal cells. In stress, the clusters of 5 10 cells containing C-Fos in their cytoplasm were detected. The dilation of capillaries and pericapillary space induced by an osmotic stress was partially reduced by the intranasal infusions of Epitalon. CONCLUSIONS: Tetrapeptide Epitalon is synthesised on the basis of the amino acid composition of pineal peptide extract Epithalamin. Epitalon modulates pineal secretion only under a stress impact but never in the norm. It prevents osmotic-stress-induced pathologic changes in the pineal parenchyma structure. Besides, the physiological activity of Epitalon seems to be mediated by the activation of protooncogenes in pinealocytes.
+
+## q07 — `MOTS c metabolic obesity insulin resistance`
+
+### PMID 25738459
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/25738459/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `mots, c, metabolic, obesity, insulin, resistance`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+The mitochondrial-derived peptide MOTS-c promotes metabolic homeostasis and reduces obesity and insulin resistance.
+
+**Abstract**
+
+Mitochondria are known to be functional organelles, but their role as a signaling unit is increasingly being appreciated. The identification of a short open reading frame (sORF) in the mitochondrial DNA (mtDNA) that encodes a signaling peptide, humanin, suggests the possible existence of additional sORFs in the mtDNA. Here we report a sORF within the mitochondrial 12S rRNA encoding a 16-amino-acid peptide named MOTS-c (mitochondrial open reading frame of the 12S rRNA-c) that regulates insulin sensitivity and metabolic homeostasis. Its primary target organ appears to be the skeletal muscle, and its cellular actions inhibit the folate cycle and its tethered de novo purine biosynthesis, leading to AMPK activation. MOTS-c treatment in mice prevented age-dependent and high-fat-diet-induced insulin resistance, as well as diet-induced obesity. These results suggest that mitochondria may actively regulate metabolic homeostasis at the cellular and organismal level via peptides encoded within their genome.
+
+### PMID 29593067
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/29593067/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `mots, c, metabolic, obesity, insulin, resistance`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Plasma MOTS-c levels are associated with insulin sensitivity in lean but not in obese individuals.
+
+**Abstract**
+
+Mitochondrial open reading frame of the 12S rRNA-c (MOTS-c) is a mitochondrial-derived peptide that attenuates weight gain and hyperinsulinemia when administered to high fat-fed mice. MOTS-c is therefore a potential regulator of metabolic homeostasis under conditions of high-energy supply. However, the effect of insulin resistance and obesity on plasma MOTS-c concentration in humans is unknown. To gain insight into MOTS-c regulation, we measured plasma MOTS-c concentration and analyzed its relationship with insulin sensitivity surrogates, in lean and obese humans (n=10 per group). Obese individuals had impaired insulin sensitivity as indicated by low Matsuda and high Homeostatic Model Assessment (HOMA) indexes. Although plasma MOTS-c concentration was similar in lean and obese individuals (0.48±0.16 and 0.52±0.15 ng/mL; p=0.60), it was correlated with HOMA (r=0.53; p<0.05) and Matsuda index (r=-0.46; p<0.05). Notably, when the groups were analyzed separately, the associations remained only in lean individuals. We conclude that plasma MOTS-c concentration is unaltered in human obesity. However, MOTS-c associates positively with insulin resistance mostly in lean individuals, indicating that plasma MOTS-c concentration depends on the metabolic status in this population. Such dependence seems altered when obesity settles. The implications of plasma MOTS-c for human metabolic homeostasis deserve future examination.
+
+### PMID 29691953
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/29691953/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `mots, c, metabolic, obesity, insulin, resistance`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Circulating MOTS-c levels are decreased in obese male children and adolescents and associated with insulin resistance.
+
+**Abstract**
+
+BACKGROUND AND AIMS: A novel bioactive peptide, mitochondrial-derived peptide (MOTS-c), has recently attracted attention as a potential prevention or therapeutic option for obesity and type 2 diabetes mellitus (T2DM). MOTS-c profiles have not yet been reported in human obesity and T2DM. We aimed to determine circulating MOTS-c levels in obesity and explore the association between MOTS-c levels and various metabolic parameters. METHODS: In this case-control study, 40 obese children and adolescents (27 males) and 57 controls (40 males) were recruited in the Hubei Province of China in 2017. Circulating MOTS-c levels were measured, clinical data (eg, glucose, insulin, and lipid profile) were recorded, and anthropometric measurements were performed. Finally, we investigated correlations between MOTS-c levels and related variables. RESULTS: MOTS-c levels were significantly decreased in the obese group compared with the control group (472.61 ±22.83 vs 561.64 ±19.19 ng/mL, P <.01). After classification by sex, MOTS-c levels were significantly decreased in obese male children and adolescents compared to their counterparts (465.26 ±24.53 vs 584.07 ±21.18 ng/mL, P <.001), while they were comparable between the obese and healthy female subjects (487.89 ±49.77 vs 508.85 ±38.76 ng/mL, P >.05). Further, MOTS-c levels were negatively correlated with body mass index (BMI), BMI SD score, waist circumference, waist-to-hip ratio, fasting insulin level, homeostasis model assessment of insulin resistance (HOMA-IR), and glycated hemoglobin (HbA1c) in the male cohort. CONCLUSIONS: Circulating MOTS-c levels were decreased in obese male children and adolescents and correlated with markers of insulin resistance and obesity.
+
+### PMID 30725119
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/30725119/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `mots, c, metabolic, obesity, insulin, resistance`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+MOTS-c peptide regulates adipose homeostasis to prevent ovariectomy-induced metabolic dysfunction.
+
+**Abstract**
+
+The postmenopausal state is associated with an increased risk of metabolic disorder including reduced energy expenditure and weight gain, leading to higher cardiovascular and cancer risks among other diseases. Mitochondrial-derived peptide (MOTS-c) is a 16-amino acid peptide encoded by mitochondrial DNA. Here, we showed that MOTS-c treatment in mice prevented ovariectomy-induced obesity and insulin resistance. After ovariectomy, low levels of estrogens increased fat mass overload and disturbed normal adipose function, forcing the development of insulin resistance. MOTS-c treatment increased brown fat activation and reduced OVX-induced fat accumulation and inflammatory invasion in white adipose tissue, which contributes to the lower level of fatty acid in serum and liver. Moreover, MOTS-c activated AMPK pathway to improve energy dissipation and insulin sensitivity. And a blocker of AMPK pathway was found to attenuate the role of MOTS-c in the regulation of adipocyte lipid metabolism. In conclusion, MOTS-c is a high potential candidate for chronic treatment of menopausal induced metabolic dysfunction. KEY MESSAGES: • MOTS-c prevents ovariectomy (OVX)-induced body weight gain and insulin resistance. • MOTS-c reduces fat mass and suppresses inflammatory response under OVX condition. • MOTS-c sustains the activity of the brown adipose under OVX condition. • MOTS-c mediates AMPK pathway activation to control adipose metabolic homeostasis.
+
+### PMID 33394327
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/33394327/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `mots, c, metabolic, obesity, insulin, resistance`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Relationship between the mitochondria-derived peptide MOTS-c and insulin resistance in obstructive sleep apnea.
+
+**Abstract**
+
+PURPOSE: The co-occurrence of obstructive sleep apnea (OSA) and obesity are common. Mitochondrial open reading frame of the 12S rRNA-c (MOTS-C) is one of the newly identified mitochondrial derivative peptides that play a role in the regulation of metabolic homeostasis. We aimed to examine the serum levels of MOTS-C to help understand the role of the disease in the pathophysiology, thereby investigating whether it can contribute to the appropriate treatment. MATERIALS AND METHODS: Seventy patients with OSAS and 20 healthy controls were included. The serum MOTS-C level was measured in all patients. For each participant, demographic features, lipid profile, serum glucose levels, and insulin levels were also evaluated. Homeostatic model assessment indicator of insulin resistance (HOMA-IR) was calculated for all participants. RESULTS: Patients with OSAS (n = 70) were grouped as mild (n = 19), moderate (n = 19), and severe (n = 32). Patients with AHI ≤ 5 were considered as the healthy control group (n = 20). Mean age was 50.3 years and 74% (67/90) of the study sample was male. As expected, as the severity of OSA increased, BMI, insulin levels and HOMA-IR increased. MOTS-C levels were significantly lower in patients with OSA compared to healthy controls (p < 0.000) and we found that MOTS-C levels decreased as OSA severity increased. There was a negative correlation between serum MOTS-C levels and AHI and BMI (r = - 0.492, p < 0.001, r = - 0.382, p < 0.001, respectively). Serum MOTS-C levels were independently associated with AHI in BMI and HOMA-IR in linear regression analysis (p < 0.010, p < 0.007, p < 0.007, respectively). CONCLUSION: Serum MOTS-C level is related to OSA and BMI. MOTS-C may be a useful new marker for early metabolic disorders in patients with OSA.
+
+## q08 — `PT 141 melanocortin sexual dysfunction`
+
+### PMID 12851303
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/12851303/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `pt, 141, melanocortin, sexual, dysfunction`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+PT-141: a melanocortin agonist for the treatment of sexual dysfunction.
+
+**Abstract**
+
+PT-141, a synthetic peptide analogue of alpha-MSH, is an agonist at melanocortin receptors including the MC3R and MC4R, which are expressed primarily in the central nervous system. Administration of PT-141 to rats and nonhuman primates results in penile erections. Systemic administration of PT-141 to rats activates neurons in the hypothalamus as shown by an increase in c-Fos immunoreactivity. Neurons in the same region of the central nervous system take up pseudorabies virus injected into the corpus cavernosum of the rat penis. Administration of PT-141 to normal men and to patients with erectile dysfunction resulted in a rapid dose-dependent increase in erectile activity. The results suggest that PT-141 holds promise as a new treatment for sexual dysfunction.
+
+### PMID 14569381
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/14569381/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `pt, 141, melanocortin, sexual, dysfunction`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+[Therapy of erectile dysfunction in 2005].
+
+**Abstract**
+
+Erectile dysfunction (ED) management in the following 3-5 years will be dominated by substances targeting the L-arginine-NO-guanylate cyclase-cGMP-PDE-5 pathway, resulting in an intracellular elevation of the cGMP concentrations. Promising alternatives to the PDE-5 inhibitors, such as guanylate cyclase activators and Rho-kinase inhibitors, may also effectively compliment a PDE-5 inhibitor. Intranasal application of the melanocortin agonist PT 141 (Melanotan II) seems to be promising. As scheduled sexual activities are not preferred by the majority of couples, the future of ED-therapy will focus on drugs with a 1-2 day long efficacy window, or a daily bedtime application of low dosage agents which result in nocturnal reoxygenation of the cavernous bodies and in turn in functional improvement. Elevation of the cGMP levels and improvement of endothelial function as a result of this approach also promises benefits in cardiovascular diseases and in LUTS.
+
+### PMID 14963471
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/14963471/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `pt, 141, melanocortin, sexual, dysfunction`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Double-blind, placebo-controlled evaluation of the safety, pharmacokinetic properties and pharmacodynamic effects of intranasal PT-141, a melanocortin receptor agonist, in healthy males and patients with mild-to-moderate erectile dysfunction.
+
+**Abstract**
+
+PT-141, a cyclic heptapeptide melanocortin analog, was evaluated following intranasal administration in healthy male subjects and in Viagra-responsive erectile dysfunction (ED) patients. Erectile response was assessed by RigiScan trade mark in healthy subjects without visual sexual stimulation (VSS) and in Viagra-responsive ED patients with VSS. In healthy subjects, mean C(max) and AUC((0-t)) increased in a dose-dependent manner. Median T(max) was 0.50 h and mean t(1/2) ranged from 1.85 to 2.09 h. In both studies, an erectile response induced by PT-141 administration was statistically significant, compared to placebo, at doses greater than 7 mg, with the onset of the first erection occurring in approximately 30 min. PT-141 was safely administered and well tolerated in both studies. A maximum-tolerated dose was not identified. Flushing and nausea were the most common adverse events reported in both studies and no clinically significant changes in vital signs, laboratory tests, ECGs, or physical exams were observed. Based upon its erectogenic potential and tolerability profile, PT-141 is a promising candidate for further evaluation as a treatment for male ED.
+
+### PMID 14999221
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/14999221/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `pt, 141, melanocortin, sexual, dysfunction`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Evaluation of the safety, pharmacokinetics and pharmacodynamic effects of subcutaneously administered PT-141, a melanocortin receptor agonist, in healthy male subjects and in patients with an inadequate response to Viagra.
+
+**Abstract**
+
+PT-141, a cyclic heptapeptide melanocortin analog, was evaluated following subcutaneous administration to healthy male subjects and to patients with erectile dysfunction (ED) who report an inadequate response to Viagra. An inadequate response was defined for this study by patient report indicating that achievement of an erection suitable for vaginal penetration occurred < or =50% of the time while taking 100 mg Viagra. Erectile responses were assessed by RigiScan in healthy subjects in the absence of visual sexual stimulation (VSS) and in ED patients in the presence of VSS. Doses ranging from 0.3 to 10 mg were administered to healthy male subjects, resulting in a statistically significant erectile response at doses greater than 1.0 mg. ED patients were treated with placebo, 4 or 6 mg PT-141 in a crossover design in the presence of VSS. The erectile response induced by PT-141 was statistically significant at both doses. PT-141 was safe and well tolerated in both studies. The erectogenic potential of PT-141, its tolerability profile and its ability to cause significant erections in patients who do not have an adequate response to a PDE5 inhibitor suggest that PT-141 may provide an alternative treatment for ED with a potentially broad patient base.
+
+### PMID 15226502
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/15226502/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `pt, 141, melanocortin, sexual, dysfunction`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Selective facilitation of sexual solicitation in the female rat by a melanocortin receptor agonist.
+
+**Abstract**
+
+Disorders of sexual desire affect an estimated 30% of women in North America and Europe, with etiologies based on interpersonal, personal, and physiological factors. There are currently no pharmacological agents approved for use in the treatment of female sexual dysfunction. This is due, in part, to a focus on the effects of experimental drugs on reflexive components of sexual behavior, such as lordosis, in animal models. Here we report that PT-141, a peptide analogue of alpha-melanocyte-stimulating hormone that binds to central melanocortin receptors, selectively stimulates solicitational behaviors in the female rat. This occurs without affecting lordosis, pacing, or other sexual behaviors. PT-141 did not cause generalized motor activation, nor did it affect the perception of sexual reward. A selective pharmacological effect on appetitive sexual behavior in female rats has not been reported previously, and indicates that central melanocortin systems are important in the regulation of female sexual desire. Accordingly, PT-141 may be the first identified pharmacological agent with the capability to treat female sexual desire disorders.
+
+## q09 — `BPC 157 gastric duodenal lesions rats`
+
+### PMID 7904712
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/7904712/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `bpc, 157, gastric, duodenal, lesions, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+The beneficial effect of BPC 157, a 15 amino acid peptide BPC fragment, on gastric and duodenal lesions induced by restraint stress, cysteamine and 96% ethanol in rats. A comparative study with H2 receptor antagonists, dopamine promotors and gut peptides.
+
+**Abstract**
+
+The protection of stomach and duodenum in conjecture with anti-inflammatory effect was demonstrated for a novel 15 amino acid peptide, coded BPC 157, a fragment of the recently discovered gastric juice peptide BPC. BPC 157 (i.p./i.g.) was investigated in rats in comparison with several reference standards in three experimental ulcer models (48 h-restraint stress, subcutaneous cysteamine, intragastrical 96% ethanol ulcer tests) (pre-/co-/post-treatment). Only BPC 157 regimens were consistently effective in all of the tested models. On the other hand, bromocriptine, amantadine, famotidine, cimetidine and somatostatin were ineffective (restraint stress). A dose-dependent protection (cysteamine) and/or partial positive effect (related to treatment conditions) (ethanol), was obtained with glucagon, NPY and secretin whereas CCK/26-30/was not effective. Based on Monastral blue studies BPC 157 beneficial effect appears to be related to a strong endothelial protection.
+
+### PMID 8689934
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/8689934/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, gastric, duodenal, lesions, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Salutary and prophylactic effect of pentadecapeptide BPC 157 on acute pancreatitis and concomitant gastroduodenal lesions in rats.
+
+**Abstract**
+
+The superior effectiveness of a new pentadecapeptide, BPC 157, on gastrointestinal and liver lesions, in conjunction with an antiinflammatory and analgetic activity was recently noted. In the present study, BPC 157 was tested as either a protective or healing agent in bile duct ligation-induced acute pancreatitis in rats. In addition, the positive influence of BPC 157 on concomitantly developed gastric and duodenal lesions was simultaneously investigated. BPC 157 (10 microg, 10 ng/kg body wt, intraperitoneally or intragastrically) was given prophylactically 1 hr before ligation, whereas the therapy was given once daily beginning with the 24 hr following ligation (last application 24 hr before killing). The effect was investigated at daily intervals until the end of the fifth day after ligation. In the pretreatment regimen, a strong pancreas protection was obtained. When applied in the condition of already established severe acute pancreatitis, an obvious salutory effect was consistently noted. Assessing the appearance of the necrosis, edema, neutrophils, and mononuclears, consistently less necrosis, edema, and neutrophils, but more mononuclears, were found in BPC-treated rats. Likewise, in studies of the serum amylase values, relative to control data, a markedly lower rise (BPC pretreatment regimen) as well as a worsening of the already raised values (BPC therapy regimen) was noted. Along with its beneficial effect on pancreatitis, a positive influence of BPC 157 on the gastric and duodenal lesion course in bile duct-ligated rats was noted in both the pre- and posttreatment regimen. Taken together, in further studies of acute pancreatitis therapy, BPC could be an interesting and useful agent with an additional positive impact on concomitant gastroduodenal pathology.
+
+### PMID 9149058
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/9149058/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, gastric, duodenal, lesions, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Pentadecapeptide BPC 157, cimetidine, ranitidine, bromocriptine, and atropine effect in cysteamine lesions in totally gastrectromized rats: a model for cytoprotective studies.
+
+**Abstract**
+
+A superior effectiveness in various lesion assays was noted for the novel pentadecapeptide BPC 157, originated from human gastric juice protein (BPC) and claimed to be a cytoprotective agent. From this viewpoint, as a previously untreated experimental improvement to create an acid-free environmental for cytoprotection studies, total gastrectomy was done 24 hr before the ulcerogenic procedure. In the absence of stomach and gastric acid, the damaging effects of cysteamine (400 mg/kg subcutaneously, death 24 hr thereafter), to date thought to be an acid-related duodenal ulcerogen, and the BPC 157 cytoprotective effect (10 microg or 10 ng/kg intraperitoneally) were further challenged. BPC 157 was compared with reference agents [cimetidine (50), ranitidine (10), omeprazole (10), bromocriptine (10) and atropine (10) (mg/kg intraperitoneally, 1 hr before cysteamine] known to be also cytoprotective. In naive rats, with intact stomach, all of them showed a strong beneficial effect. Interestingly, in gastrectomized animals, the application of BPC 157 or the reference agents before cysteamine significantly prevented the otherwise severe duodenal lesion development noted in the control gastrectomized cysteamine rats. In groups without cysteamine, no lesions were noted (laparotomy, gastrectomy only, 24 or 48 hr postsurgical period), nor was lesion potentiation seen in cysteamine-treated laparotomized animals. In summary, these findings--equal damaging effect of cysteamine and equal protection of pentadecapeptide BPC 157 and reference agents in gastrectomized and rats with intact stomach--seem to be particularly relevant for a cytoprotective viewpoint. Without a stomach, the cysteamine damaging effect was convincingly defined as an essential gastric acid-independent injury (analogous to ethanol gastric lesions). Likewise, a high "cytoprotective capacity," apparently acid independent, common for all tested agents (novel pentadecapeptide BPC 157, cimetidine, ranitidine, omeprazole and atropine) could be clearly stressed.
+
+### PMID 9920181
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/9920181/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, gastric, duodenal, lesions, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+New model of cytoprotection/adaptive cytoprotection in rats: endogenous small irritants, antiulcer agents and indomethacin.
+
+**Abstract**
+
+Adaptive cytoprotection in the stomach was originally defined by applying the exogenous irritants only. The contribution of endogenous irritants as inductors of initial lesions was not specially evaluated. No attempt was made to either focus antiulcer agent activity on adaptive cytoprotection, or split their 'cytoprotection' into complex adaptive cytoprotective activity and simple cytoprotective effects. Agents had so far not been applied simultaneously with the second challenge with ethanol (or irritant), when differences between cytoprotection and adaptive cytoprotection appear. Gastrojejunal anastomosis for 24 h in rats was introduced as new model for analyzing cytoprotection/adaptive cytoprotection. The contribution of the up-normal level of endogenous irritants and the endogenous small irritant-induced minor lesions during the adaptive cytoprotection were studied. The effect of late challenge with 96% ethanol in the presence of an up-normal level of endogenous irritants and endogenous small irritant-induced minor lesions was compared with results of classic studies of ethanol-induced gastric lesions in normal rats (1 ml/rat i.g.). Antiulcer agents or a prostaglandins-synthesis inhibitor, indomethacin, given once only in classic studies, were given at several points during injury induction: (i) surgery, (ii) mild ethanol, (iii) strong ethanol, (iv) strong ethanol applied after a suitable period following either mild ethanol or surgery). Their effects were compared in rats treated as follows: exogenous irritant studies (96% or 20% ethanol), exogenous/exogenous irritant studies (20% ethanol 1 h before 96% ethanol), endogenous irritant studies (gastrojejunal anastomosis for 24 h), and endogenous/exogenous irritant studies (gastrojejunal anastomosis for 24 h before 96% ethanol). Characteristic of the various irritants differed: the (preceding) small irritants (exogenous (i.e., mild ethanol in healthy intact rats) (exogenous irritant studies) vs. endogenous (e.g., (increased) gastric acid secretion, duodenal reflux in gastric content in rats with termino-lateral gastrojejunal anastomosis) (endogenous irritant studies)). These factors caused modifications of agents' activities not, as initially thought, giving simple 'cytoprotection', but being only cytoprotective, or adaptive cytoprotective, or both cytoprotective and adaptive cytoprotective. Atropine (10 mg/kg i.p.) and ranitidine (10 mg) had only cytoprotective activity (exogenous irritant-studies), whereas pentadecapeptide BPC157 (10 microg or 10 ng), and omeprazole (10 mg) had mainly adaptive cytoprotective activity (endogenous/exogenous irritant studies) or both cytoprotective and adaptive cytoprotective activities (exogenous/exogenous irritant studies). Augmentation of the lesions by indomethacin (5 mg/kg s.c.), showed that only events preceding the late challenge with ethanol may be prostaglandin-dependent in both models. The second, adaptive cytoprotective part, seen after late ethanol challenge, may be either prostaglandin-dependent (exogenous/exogenous irritant studies) or non-dependent (endogenous/exogenous irritant studies). Both spontaneous lesion reduction, as an essential mechanism of adaptive cytoprotection, and the further lesion reduction by agents, such as pentadecapeptide BPC 157 and omeprazole, suggests that these agents function as an essential link between the various reactions in cytoprotection/adaptive cytoprotection.
+
+### PMID 11595448
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/11595448/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `bpc, 157, gastric, duodenal, lesions, rats`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Cysteamine-colon and cysteamine-duodenum lesions in rats. Attenuation by gastric pentadecapeptide BPC 157, cimetidine, ranitidine, atropine, omeprazole, sulphasalazine and methylprednisolone.
+
+**Abstract**
+
+Recently, we showed cysteamine-duodenal lesions without gastric acid, since they were induced also in gastrectomized rats, as in naive rats, and they were inhibited by the novel stomach pentadecapeptide BPC 157 as well as standard antiulcer drugs (i.e. cimetidine, ranitidine, omeprazole, bromocriptine, atropine). Therefore, as an advantage of considering cysteamine as a directly acting cytotoxic agent and mentioned agents as direct cytoprotective agents, the present focus was on the ulcerogenic effect of cysteamine and protective effect of gastroduodenal antiulcer agents outside upper gastrointestinal tract (i.e. in colon). Intrarectal administration of the cysteamine (200 or 400 mg/kg b.w) produced severe colon lesions (i.e. transmural inflammation with serosal involvement) in rats (30 min-72 h-experimental period), apparently distinctive from smaller lesions after non-specific irritant enema [diluted HCl solution, pH 3.8 (adjusted to pH of cysteamine solution (pH 3.8)]. All of the tested antiulcer agents were applied simultaneously with cysteamine enema (8 cm from the anus, in a volume of the 1.0 ml/rat) intraperitoneally (i.p.), intragastrically (i.g.) or intrarectally (i.r.). Pentadecapeptide BPC 157 (10 microg or 10 ng/kg b.w.), given in either regimen, previously shown to have, besides others, a particular beneficial activity just in the intestinal mucosa, inhibited these cysteamine colon lesions (assessed after 30 min, 60 min, 180 min, 24 h, 48 h, 72 h following cysteamine in a dose of either 200 or 400 mg/kg i.r.). Cysteamine-colon lesions were also attenuated by standard antiulcer agents (mg/kg b.w.), given i.p., i.g., or i.r., such as ranitidine (10), cimetidine (50), omeprazole (10), atropine (10), together with methylprednisolone (1), and sulphasalazine (50, i.r.), assessed 30 min following application of 200 mg of cysteamine. Finally, standard cysteamine duodenal lesions (assessed 24 h after a subcutaneous application of 400 mg/kg of cysteamine) were also attenuated by these agents application (given in the same doses, i.p., 1 h before cysteamine), with only exception to sulphasalazine. Thus, the extended cysteamine specific ulcerogenic effect, cysteamine colon/duodenum lesion-link and an extenuation of agents protection from upper to lower part of gastrointestinal tract (i.e. stomach pentadecapeptide BPC 157, standard antiulcer agents, cimetidine, ranitidine, atropine, omeprazole) and vice versa (remedies for inflammatory bowel disease) evidenced in the present study may be potentially important for both further experimental and clinical research.
+
+## q10 — `GHK Cu healing ACL reconstruction rat`
+
+### PMID 25731775
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/25731775/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `ghk, cu, healing, acl, reconstruction, rat`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Tripeptide-copper complex GHK-Cu (II) transiently improved healing outcome in a rat model of ACL reconstruction.
+
+**Abstract**
+
+After anterior cruciate ligament reconstruction (ACLR), the biological healing of the graft is a rate-limiting step which can contribute to graft failure. The tripeptide-copper complex glycyl-L-histidyl-L-lysine-Cu(II) (GHK-Cu) is a well-known activator of tissue remodeling. We investigated whether GHK-Cu can improve graft healing following ACLR. Seventy-two rats underwent unilateral ACLR were randomized to saline, 0.3 or 3 mg/ml GHK-Cu groups (n = 24). Post-operational intra-articular injections were given from week 2, once a week, for 4 weeks. Gait analysis was performed pre-injury and at harvesting time. At 6 or 12 weeks post-operation, knee specimens were harvested for knee laxity test, graft pull-out test, and histology. At 6 weeks post-ACLR, GHK-Cu groups resulted in a smaller side-to-side difference in knee laxity as compared to the saline group (p = 0.009), but there was no significant difference at 12 weeks post-operation. The graft complex in the 0.3 mg/ml GHK-Cu group had higher stiffness than saline group at 6 weeks post-operation (p = 0.026), but there was no significant difference in ultimate load, gait parameters, and histological scores among treatment groups. All grafts failed mid-substance during pull-out test. Intra-articular supplementation with a bioactive small molecule GHK-Cu improved graft healing following ACLR in rat, but the beneficial effects could not last as treatment discontinued.
+
+### PMID 23744835
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/23744835/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, healing, rat`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Effects of topical copper tripeptide complex on wound healing in an irradiated rat model.
+
+**Abstract**
+
+OBJECTIVES: To evaluate clinical and immunohistopathological effects of topical glycyl-histidyl-lysine-copper (GHK-Cu) on in vivo irradiated rat wounds. DESIGN: Animal model. SETTING: Academic institution. SUBJECTS AND METHODS: After dorsal irradiation and a 28-day recovery period, 2 × 8 cm cranially based dorsal flaps were created in Sprague-Dawley rats. Twice daily GHK-Cu gel (test) or aquaphilic ointment (control) was applied for 10 days. Animals were euthanized, digital images of flaps were taken, and harvested tissues were immunohistochemically stained for a vascular endothelium marker, caveolin-1, and vascular endothelial growth factor (VEGF). Digital image analysis was used for outcome measures. Unpaired t-tests were used for statistical analyses; significance of P < .01 accounted for multiple comparisons. RESULTS: By digital analysis of clinical images, 13 test and 10 control animals showed mean ischemic areas of 5.0 cm(2) (SD = 0.9) for tests and 3.8 cm(2) (SD = 1.1; P = .011) for controls. Whole slide digitized images allowed quantification of caveolin-1-stained blood vessels and VEGF expression in fibroblasts at the interface of healing flaps. Caveolin-1 analyses showed a mean of 209.0 vessels (SD = 111.1) and a mean vessel luminal area of 525.7 um(2) (SD = 191.0) in tests and 207.4 vessels (SD = 109.4; P = .973) and 422.8 um(2) (SD = 109.7; P = .118) in controls. VEGF quantified as the percentage of pixels exceeding a colorimetric threshold, with higher fractions of positive pixels indicating more intense staining, showed a mean intensity score of 0.34 (SD = 0.19) in tests and 0.54 (SD = 0.41; P = .169) in controls. CONCLUSIONS: Irradiated dorsal rat flaps treated with topical GHK-Cu gel demonstrated no difference in flap ischemia, blood vessel number or area, or VEGF expression compared to controls.
+
+### PMID 1522753
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/1522753/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, healing`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Stimulation of sulfated glycosaminoglycan synthesis by the tripeptide-copper complex glycyl-L-histidyl-L-lysine-Cu2+.
+
+**Abstract**
+
+Glycyl-L-histidyl-L-lysine-copper (II) complex (GHK-Cu) is a naturally occurring tripeptide with potential healing properties. We studied the effect of GHK-Cu on the synthesis of glycosaminoglycans (GAGs) by normal human fibroblasts in culture. Cells were incubated with 3H glucosamine and 35S sulfate and the radioactivity of isolated GAGs was determined. GHK-Cu induced a dose-dependent increase of the synthesis of total GAGs secreted into the culture medium and those associated with the cell layer. The effect of GHK-Cu was biphasic with a maximal stimulation at 10(-9) to 10(-8) M. At higher concentrations, the rate of synthesis returned progressively to that of control cultures. Electrophoretic analysis of the different GAG populations showed that GHK-Cu preferentially stimulated the synthesis of extracellular dermatan sulfate and cell layer associated heparan sulfate. No influence of GHK-Cu on the synthesis of hyaluronic acid was observed. GHK-Cu stimulation of GAG synthesis may be one of the phenomenons implicated in the wound healing properties of the peptide.
+
+### PMID 2244543
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/2244543/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, healing`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Effects of glycyl-histidyl-lysyl chelated Cu(II) on ferritin dependent lipid peroxidation.
+
+**Abstract**
+
+The copper binding tripeptide, glycyl-L-histidyl-L-lysine [GHK:Cu(II)] has a plethora of biological effects related to the wound healing process. The presence of iron complexes in damaged tissues is detrimental to wound healing, due to local inflammation, as well as microbial infection mediated by iron. To test if the wound healing properties of GHK:Cu(II) are due to an affect on iron metabolism, we examined the effects of GHK:Cu(II) on iron catalyzed lipid peroxidation. GHK:Cu(II) inhibited lipid peroxidation only if the iron source was ferritin. Whereas GHK:Cu(II) inhibited ferritin iron release it did not exhibit significant superoxide dismutase-like or ceruloplasmin-like activity. We propose that GHK:Cu(II) binds to the channels of ferritin involved in iron release and physically prevents the release of Fe(II). Thus, a biological effect of GHK:Cu(II), possibly related to wound healing, may be the inhibition of ferritin iron release in damaged tissues, preventing inflammation and microbial infections.
+
+### PMID 3169264
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/3169264/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ghk, cu, healing`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Stimulation of collagen synthesis in fibroblast cultures by the tripeptide-copper complex glycyl-L-histidyl-L-lysine-Cu2+.
+
+**Abstract**
+
+Glycyl-L-histidyl-L-lysine (GHK) is a tripeptide with affinity for copper(II) ions and was isolated from human plasma. This peptide appears to play a physiological role in wound healing. We report the stimulating effect of GHK-Cu on collagen synthesis by fibroblasts. The stimulation began between 10(-12) and 10(-11) M, maximized at 10(-9) M, and was independent of any change in cell number. The presence of a GHK triplet in the alpha 2(I) chain of type I collagen suggests that the tripeptide might be liberated by proteases at the site of a wound and exert in situ healing effects.
+
+## q11 — `TB 500 wound healing metabolites`
+
+### PMID 38382158
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/38382158/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `tb, 500, wound, healing, metabolites`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro.
+
+**Abstract**
+
+BACKGROUND: TB-500 (Ac-LKKTETQ), derived from the active site of thymosin β4 (Tβ4), has various biological functions in its unacetylated form, LKKTETQ. These functions include actin binding, dermal wound healing, angiogenesis, and skin repair. The biological effects of TB-500, however, have not been documented. And the analysis of TB-500 and its metabolites have been neither simultaneously quantified nor structurally identified using synthesized authentic standards. METHODS: This study was aimed to investigating simultaneous analytical methods of TB-500 and its metabolites in in-vitro and urine samples by using UHPLC-Q-Exactive orbitrap MS, and to comparing the biological activity of its metabolites with the parent TB-500. The metabolism of TB-500 was investigated in human serum, various in-vitro enzyme systems, and urine samples from rats treated with TB-500, and their biological activities measured by cytotoxicity and wound healing experiments were also evaluated in fibroblasts. RESULTS: The simultaneous analytical method for TB-500 and its metabolites was developed and validated. The study found that Ac-LK was the primary metabolite with the highest concentration in rats at 0-6 h intervals. Also, the metabolite Ac-LKK was a long-term metabolite of TB-500 detected up to 72 hr. No cytotoxicity of the parent and its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. CONCLUSION: The study provides a valuable tool for quantifying TB-500 and its metabolites, contributing to the understanding of metabolism and potential therapeutic applications. Our results also suggest that the previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent form.
+
+### PMID 23084823
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/23084823/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `tb, 500, wound, healing, metabolites`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Doping control analysis of TB-500, a synthetic version of an active region of thymosin β4, in equine urine and plasma by liquid chromatography-mass spectrometry.
+
+**Abstract**
+
+A veterinary preparation known as TB-500 and containing a synthetic version of the naturally occurring peptide LKKTETQ has emerged. The peptide segment (17)LKKTETQ(23) is the active site within the protein thymosin β(4) responsible for actin binding, cell migration and wound healing. The key ingredient of TB-500 is the peptide LKKTETQ with artificial acetylation of the N-terminus. TB-500 is claimed to promote endothelial cell differentiation, angiogenesis in dermal tissues, keratinocyte migration, collagen deposition and decrease inflammation. In order to control the misuse of TB-500 in equine sports, a method to definitely identify its prior use in horses is required. This study describes a method for the simultaneous detection of N-acetylated LKKTETQ and its metabolites in equine urine and plasma samples. The possible metabolites of N-acetylated LKKTETQ were first identified from in vitro studies. The parent peptide and its metabolites were isolated from equine urine or plasma by solid-phase extraction using ion-exchange cartridges, and analysed by liquid chromatography-mass spectrometry (LC/MS). These analytes were identified according to their LC retention times and relative abundances of the major product ions. The peptide N-acetylated LKKTETQ could be detected and confirmed at 0.02 ng/mL in equine plasma and 0.01 ng/mL in equine urine. This method was successful in confirming the presence of N-acetylated LKKTETQ and its metabolites in equine urine and plasma collected from horses administered with a single dose of TB-500 (containing 10mg of N-acetylated LKKTETQ). To our knowledge, this is the first identification of TB-500 and its metabolites in post-administration samples from horses.
+
+### PMID 41476424
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/41476424/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `tb, 500, wound, healing`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Injectable Peptide Therapy: A Primer for Orthopaedic and Sports Medicine Physicians.
+
+**Abstract**
+
+BACKGROUND: Therapeutic peptides are short-chain amino acids that regulate cellular functions and facilitate biochemical processes. In recent years, there has been significant growth in the global market for therapeutic peptides and thus its popularity among patients. Given the increase in the development of peptides and increased marketing to patients for orthopaedic injuries, it is critical for orthopaedic surgeons to understand the current evidence behind these therapeutic peptides. PURPOSE: To evaluate the current evidence and applications of injectable peptide therapy, focusing on its potential in regenerative medicine and sports performance, to help orthopaedic providers better understand the current state of different therapeutic peptide approaches. STUDY DESIGN: Narrative review. METHODS: A comprehensive literature search was conducted using PubMed to identify biochemical and clinical studies on the most popular types of injectable peptide therapy. Key peptides evaluated included BPC-157, TB-4, TB-500, CJC-1295 + ipamorelin, tesamorelin, and GHK-Cu. RESULTS: BPC-157 demonstrated potential benefits in tendon and muscle repair, but these findings are largely unvalidated in human trials. A single human case series reported improvements in pain after intra-articular knee injections of BPC-157, although significant methodological flaws and a lack of controls limit its applicability and reliability. TB-4 and its derivative TB-500 promoted angiogenesis and tissue repair in preclinical models, but human orthopaedic data are lacking, and both remain banned substances in sports. CJC-1295 combined with ipamorelin showed significantly improved maximum tetanic tension in murine models with glucocorticoid-induced muscle loss, but these findings are limited to animal studies. Tesamorelin, approved for treating HIV-associated lipodystrophy, has no supporting orthopaedic evidence. GHK-Cu showed promise in wound healing and anti-inflammatory effects, but no clinical data support its use for musculoskeletal conditions. CONCLUSION: While peptide therapy may possess significant therapeutic and regenerative potential, it is critical that orthopaedic and sports medicine providers understand the current lack of evidence to support the clinical use of these peptides. Importantly, information regarding the indications, dosing, frequency, and duration of treatment remains unknown. Despite the popularity of these peptides in mainstream media and among patients, significant research regarding the safety and efficacy of these therapeutic methods is required before definitive recommendations can be made to patients.
+
+### PMID 41490200
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/41490200/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `tb, 500, wound, healing`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Therapeutic Peptides in Orthopaedics: Applications, Challenges, and Future Directions.
+
+**Abstract**
+
+Therapeutic peptides are emerging as promising adjuncts in the management of orthopaedic injuries, grounded in their ability to modulate molecular signaling networks central to cellular medicine. By acting on key pathways such as PI3K/Akt, mTOR, MAPK, TGF-β, and AMPK, peptides exert influence over tissue regeneration, inflammation resolution, and neuromuscular recovery. Wound-healing peptides such as BPC-157, TB-500, and GHK-Cu promote angiogenesis, integrin-mediated extracellular matrix remodeling, and fibroblast activation, whereas growth hormone secretagogues like ipamorelin, CJC-1295, tesamorelin, sermorelin, and AOD-9604 activate IGF-1 signaling and satellite cell repair. Recovery-enhancing agents such as epithalon, delta sleep-inducing peptide, and pinealon target circadian and mitochondrial regulators, and neuroactive peptides like selank, semax, and dihexa enhance brain-derived neurotrophic factor and HGF/c-Met pathways critical to neuroplasticity. Although preclinical studies are promising, there is a current lack of clinical trials. This review integrates current mechanistic insights with orthopaedic relevance, emphasizing safety, efficacy, and future directions for responsible integration into musculoskeletal care.
+
+### PMID 8837245
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/8837245/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `tb, 500, metabolites`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Elimination of theobromine metabolites in healthy adults.
+
+**Abstract**
+
+The metabolism of theobromine (TB) (500 mg per os) was determined by measuring plasma and saliva concentrations of TB and its metabolites 0-24 h after the load, and urinary excretion 0-48 h after the load. TB and its six metabolites were separated and quantified by combining high performance liquid chromatography and capillary electrophoresis. The urine analyses showed that unchanged TB accounted for 21 +/- 4% (mean +/- SD) of total excretion, the remainder being 7-methylxanthine (7-X, 36 +/- 5%), 3-methylxanthine (3-X, 21 +/- 4%), 6-amino-5[N-methylformylamino]-1-methyluracil (6-AMMU, 11 +/- 4%), 7-methyluric acid (7-U, 10 +/- 2%), 3,7-dimethyluric acid (3,7-U, 1.3 +/- 0.6%) and 3-methyluric acid (3-U, 0.5 +/- 0.4%). In addition to TB, 7-X and 3-X were consistently found in plasma and saliva; 6-AMMU and 7-U were found in plasma and saliva at concentrations < or = 2 mumol l-1 and 0.2 mumol l-1, respectively. TB concentrations in plasma and saliva were similar, whereas the saliva concentrations for 7-X and 3-X were found to be 63 +/- 17% of the plasma concentrations for 7-X and 74 +/- 13% for 3-X, respectively. The high urinary-to-plasma concentration ratio of 7-U (200-300) suggests high excretion of 7-U by the kidneys. Excretion of 7-X, 3-X and 6-AMMU was also high (urinary-to-plasma concentration ratio 45-150), whereas the excretion of TB was significantly lower than its metabolites (urinary-to-plasma concentration ratio 4-6). N3-demethylation of TB accounted for 58 +/- 7% of the urinary metabolites, N7-demethylation for 27 +/- 6%, C8-oxidation of 7-X for 22 +/- 4%, C8-oxidation of 3-X for 2 +/- 2% and formation of 6-AMMU for 13 +/- 4%. The ratio of N3- to N7-demethylation of TB remained constant during the load, but the large interindividual variation observed in ratio makes it unsuitable as a function test for evaluation of liver disease.
+
+## q12 — `ipamorelin growth hormone release receptor`
+
+### PMID 9849822
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/9849822/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `ipamorelin, growth, hormone, release, receptor`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Ipamorelin, the first selective growth hormone secretagogue.
+
+**Abstract**
+
+The development and pharmacology of a new potent growth hormone (GH) secretagogue, ipamorelin, is described. Ipamorelin is a pentapeptide (Aib-His-D-2-Nal-D-Phe-Lys-NH2), which displays high GH releasing potency and efficacy in vitro and in vivo. As an outcome of a major chemistry programme, ipamorelin was identified within a series of compounds lacking the central dipeptide Ala-Trp of growth hormone-releasing peptide (GHRP)-1. In vitro, ipamorelin released GH from primary rat pituitary cells with a potency and efficacy similar to GHRP-6 (ECs) = 1.3+/-0.4nmol/l and Emax = 85+/-5% vs 2.2+/-0.3nmol/l and 100%). A pharmacological profiling using GHRP and growth hormone-releasing hormone (GHRH) antagonists clearly demonstrated that ipamorelin, like GHRP-6, stimulates GH release via a GHRP-like receptor. In pentobarbital anaesthetised rats, ipamorelin released GH with a potency and efficacy comparable to GHRP-6 (ED50 = 80+/-42nmol/kg and Emax = 1545+/-250ng GH/ml vs 115+/-36nmol/kg and 1167+/-120ng GH/ml). In conscious swine, ipamorelin released GH with an ED50 = 2.3+/-0.03 nmol/kg and an Emax = 65+/-0.2 ng GH/ml plasma. Again, this was very similar to GHRP-6 (ED50 = 3.9+/-1.4 nmol/kg and Emax = 74+/-7ng GH/ml plasma). GHRP-2 displayed higher potency but lower efficacy (ED50 = 0.6 nmol/kg and Emax = 56+/-6 ng GH/ml plasma). The specificity for GH release was studied in swine. None of the GH secretagogues tested affected FSH, LH, PRL or TSH plasma levels. Administration of both GHRP-6 and GHRP-2 resulted in increased plasma levels of ACTH and cortisol. Very surprisingly, ipamorelin did not release ACTH or cortisol in levels significantly different from those observed following GHRH stimulation. This lack of effect on ACTH and cortisol plasma levels was evident even at doses more than 200-fold higher than the ED50 for GH release. In conclusion, ipamorelin is the first GHRP-receptor agonist with a selectivity for GH release similar to that displayed by GHRH. The specificity of ipamorelin makes this compound a very interesting candidate for future clinical development.
+
+### PMID 15665799
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/15665799/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `ipamorelin, growth, hormone, release, receptor`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Mechanism of ipamorelin-evoked insulin release from the pancreas of normal and diabetic rats.
+
+**Abstract**
+
+OBJECTIVE: To examine the effect of ipamorelin (IPA), a novel pentapeptide with a strong growth hormone releasing potency, on insulin secretion from pancreatic tissue fragments of normal and diabetic rats. MATERIALS AND METHODS: Diabetes mellitus was induced by streptozotocin (60 mg kg(-1)). Four weeks after the induction of diabetes, pancreatic tissue fragments of normal and diabetic rats were removed and incubated with different concentrations (10(-12) - 10(-6) M) of IPA. Insulin release from the pancreas was measured by radioimmunoassay. RESULTS: Ipamorelin evoked significant (p<0.04) increases in insulin secretion from the pancreas of normal and diabetic rats. Either diltiazem or yohimbine or propranolol or a combination of atropine, propranolol and yohimbine inhibited IPA-evoked insulin secretion significantly (p<0.03) from the pancreas of normal and diabetic rats. Atropine caused a significant (p<0.007) reduction in the IPA-induced insulin secretion in diabetic but not in normal rats. CONCLUSION: IPA stimulates insulin release through the calcium channel and the adrenergic receptor pathways. This is the first study to examine the effect of ipamorelin on insulin secretion in the pancreas.
+
+### PMID 16648303
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/16648303/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `ipamorelin, growth, hormone, release, receptor`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Seabream ghrelin: cDNA cloning, genomic organization and promoter studies.
+
+**Abstract**
+
+Recent studies have indicated that ghrelin stimulates growth hormone release from the pituitary via the growth hormone secretagogue receptor (GHSR). We have previously isolated two GHSR subtypes from the pituitary of the black seabream Acanthopagrus schlegeli. In the present study, we have cloned and characterized ghrelin from the same fish species at both the cDNA and gene levels. The full-length seabream ghrelin cDNA, isolated from sea-bream stomach using a novel approach by exploiting a single conserved region in the coding region, was found to encode a prepropeptide of 107 amino acids, with the predicted mature ghrelin peptide consisting of 20 amino acids (GSSFLSPSQKPQNRGKSSRV). Embedded in this full-length cDNA is a putative fish orthologue of the recently reported mammalian obestatin peptide. The ghrelin gene in black seabream, obtained by genomic PCR, was found to encompass four exons and three introns, possessing the same structural organization as in tilapia and goldfish, but different from that in rainbow trout. In addition, a 2230-bp 5'-flanking region of the seabream ghrelin gene was obtained by genome walking. Sequence analysis revealed that, as in the case of the human ghrelin gene, there is neither a GC box nor a CAAT box present in the isolated 5'-flanking region. However, a number of putative transcription factor-binding sites different from the human counterpart were found in the 5'-flanking region of the seabream ghrelin gene, suggesting that different cis- and trans-acting elements are involved in controlling their gene expression. Functional activity of this 5'-flanking region was examined by cloning it into the pGL3-Basic vector upstream of the luciferase reporter gene and transfected into various cell lines. Positive promoter activity could only be recorded in the colon-derived Caco-2 cells, suggesting that the cloned 5'-flanking region represents the functional promoter of the seabream ghrelin gene, which exhibits tissue-specific promoter activity. Using reverse transcriptase PCR analysis, expression of ghrelin was detected only in the seabream stomach, but not in the other tissues examined, including the brain, gill, intestine, kidney, liver and spleen. This stomach-specific expression of ghrelin in seabream is subject to regulation, as administration of growth hormone or ipamorelin to the fish in vivo was demonstrated to enhance its expression. Reminiscent of the homologous upregulation found in the transcriptional control of the seabream GHSR gene, a similar homologous regulatory mechanism might also exist in controlling the expression of seabream ghrelin. The identification of both GHSR and ghrelin from a single fish species would facilitate our subsequent studies on the elucidation of the physiological functions of the ghrelin/GHSR system in teleost. The possible existence of obestatin in teleost opens up new research avenues on the somatotropic axis in fish.
+
+### PMID 9733495
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/9733495/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ipamorelin, growth, hormone, release`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+A new series of highly potent growth hormone-releasing peptides derived from ipamorelin.
+
+**Abstract**
+
+A new series of GH secretagogues derived from ipamorelin is described. In an attempt to obtain oral bioavailability, by reducing the size and the number of potential hydrogen-bonding sites of the compounds, a strategy using the peptidomimetic fragment 3-(aminomethyl)benzoic acid and sequential backbone N-methylations was applied. Several compounds from this series release GH with high in vitro potency and efficacy in a rat pituitary cell assay and high in vivo potency and efficacy in anesthetized rats. The tetrapeptide NNC 26-0235 (3-(aminomethyl)benzoyl-D-2Nal-N-Me-D-Phe-Lys-NH2) shows, following iv administration, comparable in vivo potency to ipamorelin, GHRP-2, and GHRP-6 with an ED50 in swine at 2 nmol/kg. NNC 26-0235 demonstrated a 10% oral bioavailability in dogs, and NNC 26-0235 and ipamorelin were able to increase basal GH level by more than 10-fold after oral administration of a dose of 1.8 and 2.7 mg/kg, respectively. The tripeptide NNC 26-0323 (3-(aminomethyl)benzoic acid-N-Me-D-2Nal-N-Me-D-Phe-ol) which showed moderate in vitro potency but lacked in vivo potency demonstrated a 20% oral bioavailability in rats.
+
+### PMID 10373343
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/10373343/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `ipamorelin, growth, hormone, release`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Ipamorelin, a new growth-hormone-releasing peptide, induces longitudinal bone growth in rats.
+
+**Abstract**
+
+Ipamorelin is a new and potent synthetic pentapeptide which has distinct and specific growth hormone (GH)-releasing properties. With the objective of investigating the effects on longitudinal bone growth rate (LGR), body weight (BW), and GH release, ipamorelin in different doses (0, 18, 90 and 450 microg/day) was injected s.c. three times daily for 15 days to adult female rats. After intravital tetracycline labelling on days 0, 6, and 13, LGR was determined by measuring the distance between the respective fluorescent bands in the proximal tibia metaphysis. Ipamorelin dose-dependently increased LGR from 42 microm/day in the vehicle group to 44, 50, and 52 microm/day in the treatment groups (P<0.0001). There was also a pronounced and dose-dependent effect on BW gain. The treatment did not affect total IGF-I levels, IGFBPs, or serum markers of bone formation and resorption. The number of tartrate-resistant acid phosphatase-positive multinuclear cells in the metaphysis of the tibia did not change significantly with treatment. The responsiveness of the pituitary to a provocative i.v. dose of ipamorelin or GHRH showed that the plasma GH response was marginally reduced (P<0.03) after ipamorelin, but unchanged after GHRH. The pituitary GH content was unchanged by ipamorelin treatment. Whether ipamorelin or other GH secretagogues may have a place in the treatment of children with growth retardation requires demonstration in future clinical studies.
+
+## q13 — `tesamorelin HIV visceral adipose triglycerides safety`
+
+### PMID 18690162
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/18690162/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `tesamorelin, hiv, visceral, adipose, triglycerides, safety`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Long-term safety and effects of tesamorelin, a growth hormone-releasing factor analogue, in HIV patients with abdominal fat accumulation.
+
+**Abstract**
+
+OBJECTIVE: Treatment of HIV patients with daily tesamorelin, a growth hormone-releasing factor analogue, for 26 weeks resulted in a significant decrease in visceral adipose tissue (VAT) and improvement in lipids. The objective of the 26-week extension phase was to evaluate long-term safety and effects of tesamorelin. DESIGN: HIV patients with central fat accumulation in the context of antiretroviral therapy were randomized to tesamorelin 2 mg (n = 273) or placebo (n = 137) s.c. daily for 26 weeks. At week 26, patients originally on tesamorelin were rerandomized to 2 mg tesamorelin (T-T group, n = 154) or placebo (T-P group, n = 50), whereas patients originally on placebo were switched to tesamorelin (P-T group, n = 111). METHODS: Safety included adverse events and glucose parameters. RESULTS: Tesamorelin was generally well tolerated. The prevalence of adverse events and serious adverse events during the extension phase was comparable with the initial phase. Changes in glucose parameters over 52 weeks were not clinically significant and similar to those after 26 weeks. The change in VAT was sustained at -18% over 52 weeks of treatment (P < 0.001 versus baseline) as was the change in triglycerides (-51 mg/dl, P < 0.001 versus baseline). Similar sustained beneficial effects were seen for total cholesterol, but high-density lipoprotein decreased minimally over 52 weeks. Upon discontinuation of tesamorelin, VAT reaccumulated. CONCLUSION: Treatment with tesamorelin was generally well tolerated and resulted in sustained decreases in VAT and triglycerides over 52 weeks without aggravating glucose. Though effects on VAT are sustained during treatment for 52 weeks, these effects do not last beyond the duration of treatment.
+
+### PMID 20554713
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/20554713/
+- Existing grade: `unjudged`
+- Candidate source: `strict_boolean`
+- Matched query terms: `tesamorelin, hiv, visceral, adipose, triglycerides, safety`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Effects of tesamorelin (TH9507), a growth hormone-releasing factor analog, in human immunodeficiency virus-infected patients with excess abdominal fat: a pooled analysis of two multicenter, double-blind placebo-controlled phase 3 trials with safety extension data.
+
+**Abstract**
+
+CONTEXT: HIV patients treated with antiretroviral therapy (ART) often develop increased visceral adipose tissue (VAT). OBJECTIVE: Our objective was to perform a pooled analysis of two phase-3 studies of tesamorelin in ART-treated HIV patients with excess abdominal fat. DESIGN AND SETTING: Two multicenter, international studies were conducted; a 26-wk randomized, placebo-controlled primary intervention phase was followed by a 26-wk safety extension. PATIENTS: A total of 806 ART-treated HIV patients with excess abdominal fat were randomized in a 2:1 fashion to receive tesamorelin 2 mg (n = 543) or placebo (n = 263) sc daily. At wk 26, patients initially on tesamorelin were rerandomized to 2 mg tesamorelin (T-T group, n = 246) or placebo (T-P, n = 135) for an additional 26 wk, whereas patients on placebo were switched to tesamorelin (P-T, n = 197). INTERVENTIONS: Tesamorelin (GHRH(1-44)) at a dose of 2 mg or identical placebo, sc, was given daily. MAIN OUTCOME MEASURE: We evaluated percent change in VAT by computed tomography scan at wk 26. RESULTS: At wk 26, VAT decreased significantly in tesamorelin-treated patients (-24 +/- 41 vs. 2 +/- 35 cm(2), tesamorelin vs. placebo, P < 0.001; treatment effect, -15.4%). No significant changes were observed in abdominal sc adipose tissue (-2 +/- 32 vs. 2 +/- 29 cm(2), P = 0.08; treatment effect, -0.6%). Treatment with tesamorelin resulted in significant decreases in triglycerides (-37 +/- 139 vs. 6 +/- 112 mg/dl, P < 0.001; treatment effect, -12.3%) and cholesterol to high-density lipoprotein ratio (-0.18 +/- 1.00 vs. 0.18 +/- 0.94, P < 0.001; treatment effect, -7.2%) vs. placebo. Tesamorelin improved body image [belly appearance distress (P = 0.002)], patient rating of belly profile (P = 0.003), and physician rating of belly profile (P < 0.001). Mean IGF-I increased 108 +/- 112 vs.-7 +/- 64 ng/ml (P < 0.001 vs. placebo). At wk 52, decreases in VAT [-35 +/- 50 cm(2) (-17.5 +/- 23.3%)], waist circumference (-3.4 +/- 6.0 cm), triglycerides (-48 +/- 182 mg/dl), cholesterol (-8 +/- 38 mg/dl), and non-high-density lipoprotein (-7 +/- 38 mg/dl) were maintained (all P < 0.001 vs. original baseline) in the T-T group. Treatment with tesamorelin was generally well tolerated. No clinically meaningful differences were observed between groups in glucose parameters at wk 26 and 52. CONCLUSIONS: Treatment with tesamorelin reduces VAT and maintains the reduction for up to 52 wk, preserves abdominal sc adipose tissue, improves body image and lipids, and is overall well tolerated without clinically meaningful changes in glucose parameters.
+
+### PMID 18057338
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/18057338/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `tesamorelin, hiv, visceral, adipose, triglycerides`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Metabolic effects of a growth hormone-releasing factor in patients with HIV.
+
+**Abstract**
+
+BACKGROUND: Visceral adipose tissue accumulates during antiretroviral therapy in many patients who are infected with the human immunodeficiency virus (HIV); this process is associated with an increased cardiovascular risk. We assessed the use of a growth hormone-releasing factor analogue, tesamorelin, to decrease visceral adiposity. METHODS: We randomly assigned 412 patients with HIV (86% of whom were men) who had an accumulation of abdominal fat to receive a daily subcutaneous injection of either 2 mg of tesamorelin or placebo for 26 weeks. The primary end point was the percent change from baseline in visceral adipose tissue as shown on computed tomography. Secondary end points included triglyceride levels, the ratio of total cholesterol to high-density lipoprotein (HDL) cholesterol, the level of insulin-like growth factor I (IGF-I), and self-assessed body image. Glycemic measures included glucose and insulin levels. RESULTS: The measure of visceral adipose tissue decreased by 15.2% in the tesamorelin group and increased by 5.0% in the placebo group; the levels of triglycerides decreased by 50 mg per deciliter and increased by 9 mg per deciliter, respectively, and the ratio of total cholesterol to HDL cholesterol decreased by 0.31 and increased by 0.21, respectively (P<0.001 for all comparisons). Levels of total cholesterol and HDL cholesterol also improved significantly in the tesamorelin group. Levels of IGF-I increased by 81.0% in the tesamorelin group and decreased by 5.0% in the placebo group (P<0.001). Adverse events did not differ significantly between the two study groups, but more patients in the tesamorelin group withdrew from the study because of an adverse event. No significant differences were observed in glycemic measures. CONCLUSIONS: Daily tesamorelin for 26 weeks decreased visceral fat and improved lipid profiles, effects that might be useful in HIV-infected patients who have treatment-associated central fat accumulation. (ClinicalTrials.gov number, NCT00123253 [ClinicalTrials.gov] .).
+
+### PMID 20101189
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/20101189/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `tesamorelin, hiv, visceral, adipose, safety`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension.
+
+**Abstract**
+
+BACKGROUND: HIV-infected patients receiving antiretroviral therapy often demonstrate excess visceral fat. A growth hormone-releasing factor, tesamorelin, may selectively reduce visceral fat in this population. We investigated the effects of tesamorelin (GHRH(1-44)) in HIV-infected patients with central fat accumulation. METHODS: A 12-month study of 404 HIV-infected patients with excess abdominal fat in the context of antiretroviral therapy was conducted between January 2007 and October 2008. The study consisted of 2 sequential phases. In the primary efficacy phase (months 0-6), patients were randomly assigned to receive tesamorelin [2 mg subcutaneous (SC) every day] or placebo in a 2:1 ratio. In the extension phase (months 6-12), patients receiving tesamorelin were rerandomized to continue on tesamorelin (2 mg SC every day) or switch to placebo. Patients initially randomized to placebo switched to tesamorelin. Patients and investigators were blinded to treatment assignment throughout the study. The primary endpoint was visceral adipose tissue (VAT). Secondary endpoints included body image, IGF-I, safety measures, including glucose, and other body composition measures. RESULTS: VAT decreased by -10.9% (-21 cm(2)) in the tesamorelin group vs. -0.6% (-1 cm(2)) in the placebo group in the 6-month efficacy phase, P < 0.0001. Trunk fat (P < 0.001), waist circumference (P = 0.02), and waist-hip-ratio (P = 0.001) improved, with no change in limb or abdominal SC fat. Insulin-like growth factor-1 increased (P < 0.001), but no change in glucose parameters was observed. Patient rating of belly appearance distress (P = 0.02) and physician rating of belly profile (P = 0.02) were significantly improved in the tesamorelin vs. placebo-treated groups. The drug was well tolerated. VAT was reduced by approximately 18% (P < 0.001) in patients continuing tesamorelin for 12 months. The initial improvements over 6 months in VAT were rapidly lost in those switching from tesamorelin to placebo. CONCLUSIONS: Tesamorelin reduces visceral fat by approximately 18% and improves body image distress in HIV-infected patients with central fat accumulation. These changes are achieved without significant side effects or perturbation of glucose.
+
+### PMID 20872317
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/20872317/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `tesamorelin, hiv, visceral, adipose, safety`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Growth hormone-releasing factor agonists for the treatment of HIV-associated lipodystrophy.
+
+**Abstract**
+
+HIV-associated lipodystrophy characterized by body composition changes and associated metabolic abnormalities, including dyslipidemia and insulin resistance, is a major challenge in the treatment of HIV infection. Growth hormone-releasing factor (GRF) analogs with greater stability than the natural hormone can induce growth hormone secretion in a physiological manner, and appear to be promising candidate therapies for these conditions. The most promising GRF agonist in development is tesamorelin (EMD Serono/Theratechnologies), which has exhibited efficacy for the treatment of excess visceral adipose tissue in patients with HIV infection in two recent phase III, randomized, placebo-controlled clinical trials. Additional long-term outcome trials are required to determine the long-term safety of tesamorelin and to evaluate whether this agent, or other GRF agonists, could reduce the cardiovascular risk associated with lipodystrophy-related metabolic complications and help to maintain a more normal distribution of body fat.
+
+## q14 — `epitalon evening melatonin cortisol secretion`
+
+### PMID 11524632
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/11524632/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `epitalon, evening, melatonin, cortisol, secretion`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Synthetic tetrapeptide epitalon restores disturbed neuroendocrine regulation in senescent monkeys.
+
+**Abstract**
+
+UNLABELLED: The OBJECTIVE of this research was to investigate the regulatory effect of Epitalon on the production of melatonin and cortisol in senescent monkeys. MATERIAL AND METHODS: We investigated the character of melatonin and cortisol secretion by immunoferment assay in Epitalon-administered female Macaca mulatta in different age periods. RESULTS: Epitalon was proven to significantly stimulate melatonin synthesis in senescent monkeys in the evening, thereby normalising the circadian rhythm of cortisol secretion.
+
+### PMID 11550036
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/11550036/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `evening, melatonin, cortisol, secretion`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Regulatory effect of Epithalon on production of melatonin and cortisol in old monkeys.
+
+**Abstract**
+
+The effect of Epithalon on melatonin and cortisol secretion in female rhesus monkeys of various ages was evaluated by enzyme immunoassay. Epithalon stimulated evening melatonin production and normalized circadian rhythms of cortisol production in old monkeys.
+
+### PMID 12374906
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/12374906/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `epitalon, melatonin, cortisol`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Peptides and Ageing.
+
+**Abstract**
+
+A technology has been developed for manufacturing of biologically active complex peptide preparations from extracts of different tissues. In particular, the pineal preparation (Epithalamin) augments the in vitro outgrowth of explants from the pineal gland but not from other tissues, the latter being stimulated by peptide preparations from respective tissues. Epithalamin increases melatonin production by the pineal gland of rats, improves immunological parameters in rats and mice, produces anticarcinogenic effects in different experimental models, stimulates antioxidant defenses, and restores the reproductive function in old rats. These effects are combined in the ability of Epithalamin to increase the lifespan in rats, mice, and fruit flies. Many of these effects are reproduced in clinical trials, which have demonstrated the geroprotector activity of Epithalamin in humans. Among the effects of the thymic preparation Thymalin, those related to its ability to stimulate immunity are the most prominent. This ability is associated with anticarcinogenic and geroprotector activities. Clinical trials of the peptide preparations obtained from other organs including the prostate, the cerebral cortex, and the eye retina, have demonstrated beneficial effects reflected by the improvement of the conditions of respective organs. Based on the data about the amino acid compositions of the peptide preparations, novel principles of the design of biologically active short peptides possessing tissue-specific activities has been developed. Dipeptides specific for the thymus and tetrapeptides specific for the heart, liver, brain cortex, and pineal glands stimulate the in vitro outgrowth of explants of respective organs. Interestingly, for eye retina and the pineal gland, a common tetrapeptide Ala-Glu-Asp-Gly (Epitalon) has been designed, probably reflecting the common embryonal origin of these two organs. Epitalon reproduces the effects of Epithalamin including those related to its geroprotector activity. In particular, Epitalon increases the lifespan of mice and fruit flies and restores the circadian rhythms of melatonin and cortisol production in old rhesus monkeys. At the same time, Epitalon prolongs the functional integrity of the eye retina in Campbell rats with hereditary Retinitis Pigmentosa and improves the visual functions in patients with pigmental retinal degeneration. Changes in gene expression were observed to be produced by the short peptide preparations. Therefore, the effects of Epitalon are suggested to be mediated by transcriptional machinery common for the pineal gland and the retina and, probably, for regulation of melatonin production in fruit flies. Based on three decades of studies of the peptide preparations, the peptide theory of ageing has been put forward. According this theory, ageing is an evolutionary determined biological process of changes in gene expression resulting in impaired synthesis of regulatory and tissue-specific peptides in organs and tissues, which provokes their structural and functional changes and the development of diseases. Correspondingly, correction of such disorders by means of stimulation of peptide production in the organism or through their delivery can promote the normalisation of disturbed body functions.
+
+### PMID 23237594
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/23237594/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `epitalon, melatonin, secretion`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Melatonin and pineal gland peptides are able to correct the impairment of reproductive cycles in rats.
+
+**Abstract**
+
+Catecholamines play an important role in the hypothalamic regulation of the synthesis and secretion of gonadotropin- releasing hormone, or gonadoliberin. We have shown that melatonin and the pineal gland peptides (epithalamine and epitalon) exert a correcting influence on the diurnal dynamics of norepinephrine (NE) in the medial preoptic area (MPA) and of dopamine (DA) in the median eminence with arcuate nuclei (ME-Arc) disturbed by single administration of the neurotoxic xenobiotic 1,2-dimethylhydrazine (DMH) in female rats. It has been found that experiments with DMH administration can be used as an animal model of female reproductive system premature aging. The investigation of epithalamine (a polypeptide preparation from the bovine pineal gland) effect on circadian rhythms disturbed by the neurotoxic compound DMH has shown a recovery of the diurnal dynamics of NE in MPA. In addition, NE was found to decrease from 9:30 till 11 o'clock, Circadian Time (CT), which was typical of control animals. Epitalon (Ala-Glu-Asp-Gly) proved to be more effective in ME-Arc. This peptide prevents the xenobiotic caused disturbance of DA diurnal rhythm, keeping this metabolite low at 5 o'clock (CT) with it having increased by 11 o'clock (CT). The data obtained suggest that the pineal gland is important for the circadian signal normalization needed for gonadoliberin surge on the day of proestrus. Melatonin and peptides of the pineal gland can be considered as effective protectors of female reproductive system from xenobiotics and premature aging.
+
+### PMID 28976150
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/28976150/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `epitalon, melatonin, secretion`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+[Protective effect of melatonin and epithalon on hypothalamic regulation of reproduction in female rats in its premature aging model and on estrous cycles in senescent animals in various lighting regimes].
+
+**Abstract**
+
+Potential neuroprotective effects of the pineal gland hormone melatonin and peptide preparation epitalon on estrous cycles and the central regulation of reproduction in female rats exposed to unfavourable environmental factors have been studied. Estrous cycles of young, mature and aging rats exposed to light pollution were described. The diurnal dynamics and daily mean content of biogenic amines in the hypothalamic areas responsible for gonadotropin-releasing hormone synthesis and secretion in animals of different age groups were investigated. An effect of a chemical factor on the noradrenergic system of the medial preoptic area and on the dopaminergic system of the median eminence with arcuate nuclei of the hypothalamus was studied in premature aging of reproduction model. Administration of the pineal gland peptide melatonin and peptide preparation epitalon was shown to be able to correct a number of impairments of the hypothalamic-pituitary-gonadal axis that can be observed, when the experimental animals were exposed to permanent artificial lighting and a neurotoxic xenobiotic 1,2-dimethylhydrazine. The data obtained testify to an important role of the pineal gland in the circadian signal formation needed for gonadotropin-releasing hormone in order to exert its preovulatory peak secretion and to the protective effect of melatonin and epitalon, which are able to reduce unfavourable environmental influences on reproduction of young and aging female rats.
+
+## q15 — `MOTS c mitochondrial polymorphism longevity`
+
+### PMID 26289118
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/26289118/
+- Existing grade: `2`
+- Candidate source: `existing_judgment, strict_boolean`
+- Matched query terms: `mots, c, mitochondrial, polymorphism, longevity`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+The mitochondrial-derived peptide MOTS-c: a player in exceptional longevity?
+
+**Abstract**
+
+Mitochondrial-derived peptides (MDP) are encoded by functional short open reading frames in the mitochondrial DNA (mtDNA). These include humanin, and the recently discovered mitochondrial open reading frame of the 12S rRNA-c (MOTS-c). Although more research is needed, we suggest that the m.1382A>C polymorphism located in the MOTS-c encoding mtDNA, which is specific for the Northeast Asian population, may be among the putative biological mechanisms explaining the high longevity of Japanese people.
+
+### PMID 27216708
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/27216708/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `mots, c, mitochondrial, longevity`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+MOTS-c: A novel mitochondrial-derived peptide regulating muscle and fat metabolism.
+
+**Abstract**
+
+Mitochondria are ancient organelles that are thought to have emerged from once free-living α-proto-bacteria. As such, they still possess several bacterial-like qualities, including a semi-autonomous genetic system, complete with an independent genome and a unique genetic code. The bacterial-like circular mitochondrial DNA (mtDNA) has been described to encode 37 genes, including 22 tRNAs, 2 rRNAs, and 13 mRNAs. Two additional peptides reported to originate from the mtDNA, namely humanin (Hashimoto et al., 2001; Ikone et al., 2003; Guo et al., 2003) [1-3] and MOTS-c (mitochondrial ORF of the twelve S c) (Lee et al., 2015) [4], indicate a larger mitochondrial genetic repertoire (Shokolenko and Alexeyev, 2015) [5]. These mitochondrial-derived peptides (MDPs) have profound and distinct biological activities and provide a paradigm-shifting concept of active mitochondrial-encoded signals that act at the cellular and organismal level (i.e. mitochondrial hormone) (da Cunha et al., 2015; Quiros et al., 2016) [6,7]. Considering that mitochondria are the single most important metabolic organelle, it is not surprising that these MDPs have metabolic actions. MOTS-c has been shown to target the skeletal muscle and enhance glucose metabolism. As such, MOTS-c has implications in the regulation of obesity, diabetes, exercise, and longevity, representing an entirely novel mitochondrial signaling mechanism to regulate metabolism within and between cells.
+
+### PMID 30104535
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/30104535/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `mots, c, mitochondrial, longevity`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+A Mitochondrial Encoded Messenger at the Nucleus.
+
+**Abstract**
+
+Mitochondria−nucleus (mitonuclear) retrograde signaling via nuclear import of otherwise mitochondrial targeted factors occurs during mitochondrial unfolded protein response (UPRmt), a mechanism that counters mitochondrial and cellular stresses. Other than nuclear encoded proteins, mitochondrial DNA (mtDNA)-encoded peptides, such as humanin, are known to have important pro-survival and metabolic regulatory functions. A recent report has indicated that another mtDNA-encoded peptide, the mitochondrial open reading frame of the 12S rRNA-c (MOTS-c), could translocate into the nucleus upon stress induction. In the nucleus, MOTS-c binds to DNA and regulates the transcription of stress response genes in concert with other transcription factors. This is the first clear example of a mitochondria-derived peptide (MDP) acting in the nucleus to affect transcriptional responses to stress. Thus, MOTS-c may bear some characteristics of a 'mitokine' factor that mediates mitohormesis, influencing cell survival as well as organismal health and longevity.
+
+### PMID 33468709
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/33468709/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `mots, c, mitochondrial, polymorphism`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+A pro-diabetogenic mtDNA polymorphism in the mitochondrial-derived peptide, MOTS-c.
+
+**Abstract**
+
+Type 2 Diabetes (T2D) is an emerging public health problem in Asia. Although ethnic specific mtDNA polymorphisms have been shown to contribute to T2D risk, the functional effects of the mtDNA polymorphisms and the therapeutic potential of mitochondrial-derived peptides at the mtDNA polymorphisms are underexplored. Here, we showed an Asian-specific mitochondrial DNA variation m.1382A>C (rs111033358) leads to a K14Q amino acid replacement in MOTS-c, an insulin sensitizing mitochondrial-derived peptide. Meta-analysis of three cohorts (n = 27,527, J-MICC, MEC, and TMM) show that males but not females with the C-allele exhibit a higher prevalence of T2D. In J-MICC, only males with the C-allele in the lowest tertile of physical activity increased their prevalence of T2D, demonstrating a kinesio-genomic interaction. High-fat fed, male mice injected with MOTS-c showed reduced weight and improved glucose tolerance, but not K14Q-MOTS-c treated mice. Like the human data, female mice were unaffected. Mechanistically, K14Q-MOTS-c leads to diminished insulin-sensitization in vitro. Thus, the m.1382A>C polymorphism is associated with susceptibility to T2D in men, possibly interacting with exercise, and contributing to the risk of T2D in sedentary males by reducing the activity of MOTS-c.
+
+### PMID 33535098
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/33535098/
+- Existing grade: `unjudged`
+- Candidate source: `relaxed_distinct_term_overlap`
+- Matched query terms: `mots, c, mitochondrial, longevity`
+- Human grade: [ ] 0  [ ] 1  [ ] 2
+- Human reason:
+- Reviewer:
+
+**Title**
+
+Mitohormesis in Hypothalamic POMC Neurons Mediates Regular Exercise-Induced High-Turnover Metabolism.
+
+**Abstract**
+
+Low-grade mitochondrial stress can promote health and longevity, a phenomenon termed mitohormesis. Here, we demonstrate the opposing metabolic effects of low-level and high-level mitochondrial ribosomal (mitoribosomal) stress in hypothalamic proopiomelanocortin (POMC) neurons. POMC neuron-specific severe mitoribosomal stress due to Crif1 homodeficiency causes obesity in mice. By contrast, mild mitoribosomal stress caused by Crif1 heterodeficiency in POMC neurons leads to high-turnover metabolism and resistance to obesity. These metabolic benefits are mediated by enhanced thermogenesis and mitochondrial unfolded protein responses (UPRmt) in distal adipose tissues. In POMC neurons, partial Crif1 deficiency increases the expression of β-endorphin (β-END) and mitochondrial DNA-encoded peptide MOTS-c. Central administration of MOTS-c or β-END recapitulates the adipose phenotype of Crif1 heterodeficient mice, suggesting these factors as potential mediators. Consistently, regular running exercise at moderate intensity stimulates hypothalamic MOTS-c/β-END expression and induces adipose tissue UPRmt and thermogenesis. Our findings indicate that POMC neuronal mitohormesis may underlie exercise-induced high-turnover metabolism.

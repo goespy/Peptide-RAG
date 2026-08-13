@@ -77,6 +77,18 @@ Labels are created before using this engine to search. This prevents the impleme
 
 This is a provisional known-item set, not exhaustive relevance pooling. The selected source PMID guarantees at least one positive judgment per query, but unjudged relevant papers may be retrieved and counted as non-relevant, depressing measured precision. The README must disclose that limitation beside reported results.
 
+### Pooled judgment-set strengthening
+
+After recording the untouched Day 1 baseline, strengthen the oracle without changing retrieval behavior:
+
+1. Run `scripts/prepare_qrels_pool.py` against the frozen corpus and approved version-1 qrels.
+2. For each query, preserve every existing judgment, add strict Boolean matches in numeric PMID order, then fill a five-document pool by descending distinct query-term coverage and numeric PMID as the tie-breaker.
+3. Treat this procedure only as candidate discovery. It must never assign relevance automatically. Its Boolean/term-overlap bias is disclosed because the pool does not represent every potentially relevant corpus document.
+4. A human reads every pooled title and abstract and assigns exactly one grade: `2` directly relevant, `1` partially relevant, or `0` not relevant, with a topical reason. Literal term overlap alone is not relevance.
+5. Reconfirm old judgments, record all new positive and negative judgments, increment the qrels version, retain the same corpus hash, and rerun the unchanged retrieval and metrics code.
+
+The version-1 metrics remain historical baseline evidence. Version-2 results must be reported separately rather than replacing the earlier numbers, so judgment expansion cannot be mistaken for a retrieval improvement.
+
 `data/qrels.json` will use this versioned shape:
 
 ```json
@@ -103,3 +115,4 @@ Judgment keys are PMIDs and values are integer grades. For Day 1 binary precisio
 3. Build and validate the positional inverted index.
 4. Implement deterministic Boolean retrieval.
 5. Run the precision@k/recall@k harness, expect failures or weak scores initially, and record the output before tuning.
+6. Pool and manually label additional query-document pairs, freeze qrels version 2, and report its metrics separately.

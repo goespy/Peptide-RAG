@@ -1,0 +1,100 @@
+{
+  "status": "human_pool_review_in_progress",
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "source_qrels_version": 1,
+  "target_qrels_version": 2,
+  "rubric": {
+    "0": "not relevant",
+    "1": "partially relevant",
+    "2": "directly relevant"
+  },
+  "queries": [
+    {
+      "id": "q01",
+      "query": "BPC 157 liver necrosis rats",
+      "approved": true,
+      "approved_on": "2026-08-12",
+      "reviewer": "project_owner",
+      "judgments": {
+        "7901724": {
+          "grade": 2,
+          "reason": "Directly evaluates BPC 157 prevention of liver necrosis in rat liver-injury models."
+        },
+        "8689934": {
+          "grade": 0,
+          "reason": "The experiment focuses on acute pancreatitis and gastroduodenal lesions; liver protection is background rather than the studied information need."
+        },
+        "27627764": {
+          "grade": 1,
+          "reason": "Includes BPC 157 effects on liver lesions and necrosis in rats, but only within a broader short-bowel multi-organ study."
+        },
+        "30690000": {
+          "grade": 2,
+          "reason": "Directly evaluates BPC 157 treatment of rat liver injury, including hepatic necrosis after bile-duct ligation."
+        },
+        "35203478": {
+          "grade": 0,
+          "reason": "The study primarily evaluates myocardial infarction; liver involvement is secondary to a broader multi-organ syndrome."
+        }
+      }
+    },
+    {
+      "id": "q02",
+      "query": "GHK Cu cognitive decline neurodegeneration",
+      "approved": true,
+      "approved_on": "2026-08-12",
+      "reviewer": "project_owner",
+      "judgments": {
+        "22666519": {
+          "grade": 2,
+          "reason": "Directly proposes GHK-Cu as a therapeutic agent against cognitive decline and neurodegeneration."
+        },
+        "38014118": {
+          "grade": 2,
+          "reason": "Directly tests GHK-Cu and reports improved cognitive performance in aging mice."
+        },
+        "40766919": {
+          "grade": 2,
+          "reason": "Directly evaluates GHK-Cu against Alzheimer's-related cognitive impairment and neuropathology."
+        },
+        "42245779": {
+          "grade": 2,
+          "reason": "Directly studies GHK-Cu treatment of age-related cognitive decline in mice."
+        },
+        "35083444": {
+          "grade": 1,
+          "reason": "Provides broad anti-aging background with preliminary cognitive evidence rather than a focused neurodegeneration study."
+        }
+      }
+    },
+    {
+      "id": "q03",
+      "query": "thymosin beta 4 backbone conformations",
+      "approved": true,
+      "approved_on": "2026-08-12",
+      "reviewer": "project_owner",
+      "judgments": {
+        "1304362": {
+          "grade": 2,
+          "reason": "Directly models local thymosin beta 4 backbone conformations and compares them with experimental structure."
+        },
+        "2261438": {
+          "grade": 2,
+          "reason": "Directly investigates thymosin beta 4 solution conformation using NMR and simulated annealing."
+        },
+        "8269922": {
+          "grade": 2,
+          "reason": "Directly characterizes thymosin beta 4 conformational preferences in water using NMR."
+        },
+        "8630056": {
+          "grade": 2,
+          "reason": "Directly studies the alpha-helical conformation of the thymosin beta 4 N-terminal region."
+        },
+        "12606551": {
+          "grade": 0,
+          "reason": "Primarily measures actin-binding affinity of a short motif; it does not characterize thymosin beta 4 backbone conformations."
+        }
+      }
+    }
+  ]
+}

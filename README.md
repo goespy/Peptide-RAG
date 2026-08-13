@@ -13,7 +13,7 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Boolean `AND`/`OR` retrieval
 - [x] Red precision@k and recall@k harness
 
-The Day 1 baseline is measured below. The qrels are a reviewed known-item set, not exhaustive relevance pooling.
+The Day 1 baseline is measured below. The version-1 qrels are a reviewed known-item set. A separate 75-pair pooling worksheet is now ready for human labels; the reported metrics remain unchanged until those judgments are approved as qrels version 2.
 
 ### Frozen corpus snapshot
 
@@ -79,6 +79,17 @@ python scripts/render_qrels_review.py
 
 The outputs are `data/qrels_candidates.json`, `data/qrels_draft.json`, and `QRELS-REVIEW.md`. They remain explicitly marked as draft/audit artifacts rather than masquerading as the oracle. After an independent Claude Code cross-check, a structured q11 reviewer override, Codex validation, and project-owner authorization to progress, the approved provisional set was frozen as `data/qrels.json`. Reruns require `--overwrite` so reviewed material is not replaced accidentally.
 
+### Strengthen the judgment set with pooling
+
+After preserving the version-1 baseline, create a deterministic five-paper review pool for each query and render the human worksheet:
+
+```bash
+python scripts/prepare_qrels_pool.py
+python scripts/render_qrels_pool_review.py
+```
+
+The outputs are `data/qrels_pool.json` and `QRELS-POOL-REVIEW.md`: 75 query-document pairs consisting of the 15 existing judgments plus 60 unjudged candidates. Candidate selection uses strict Boolean matching followed by deterministic distinct-term coverage, but it never assigns relevance. A human must read each paper and choose `0` (not relevant), `1` (partially relevant), or `2` (directly relevant), with a reason. Only then should the approved labels become qrels version 2. Use `--overwrite` to regenerate either artifact intentionally.
+
 ### NCBI use and attribution
 
 This project uses the [NCBI E-utilities](https://www.ncbi.nlm.nih.gov/books/NBK25501/) and follows the [usage guidance](https://www.ncbi.nlm.nih.gov/books/NBK25497/) to identify the tool and developer email, batch requests, and stay below three requests per second without relying on an API key. For a full 3,000-record job, NCBI recommends large jobs run on weekends or between 9:00 PM and 5:00 AM Eastern time.
@@ -107,7 +118,7 @@ python search.py "BPC 157 tissue regeneration"
 - Index: 19,023 terms
 - Ordering: numeric PMID, because the Day 1 Boolean baseline is deliberately unranked
 
-The known-item judgment set will be provisional and not exhaustively pooled. Consequently, unjudged relevant papers may be counted as non-relevant and measured precision may be lower than true precision.
+These are the preserved version-1 known-item results. Consequently, unjudged relevant papers may be counted as non-relevant and measured precision may be lower than true precision. The in-progress pooled review is not included in these values; version-2 results will be added alongside them after human approval.
 
 ### Aggregate results
 
