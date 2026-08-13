@@ -187,3 +187,106 @@ split, development experiment, and frozen configuration hashes. The first
 invocation reached evaluation but failed before exposing results due to a
 lowercase JSON Boolean in Python; the frozen configuration was not changed,
 and the corrected invocation is disclosed as a technical rerun.
+
+## Section 5: measured RAG extension
+
+RAG selection begins with a separate 20-question oracle, not with a chunk-size
+guess. `data/qa_draft.json` and `QA-REVIEW.md` contain 15 answerable and five
+intentionally unanswerable candidate cases. They remain unusable while their
+status is `candidate_pool_requires_human_review`. `scripts/freeze_qa.py`
+requires an explicit approve decision and named reviewer for every case,
+revalidates every abstract offset and span hash against the frozen corpus, and
+normalizes the approved file to this public shape:
+
+```json
+{
+  "version": 1,
+  "corpus_sha256": "<frozen corpus>",
+  "questions": [{
+    "id": "qa01",
+    "question": "<human information need>",
+    "answerable": true,
+    "acceptable_answer": "<bounded answer>",
+    "relevant_pmids": ["12345678"],
+    "supporting_spans": [{
+      "pmid": "12345678",
+      "start_char": 0,
+      "end_char": 120,
+      "text_sha256": "<exact abstract substring hash>"
+    }],
+    "rationale": "<manual rationale>",
+    "split": "development",
+    "human_review": {"approved": true, "decision": "approve", "reviewer": "<owner>"}
+  }]
+}
+```
+
+The fixed split is 10 answerable plus three unanswerable development cases and
+five answerable plus two unanswerable holdout cases. Holdout is not available
+to chunk, fusion, or generator selection.
+
+Chunking uses exact abstract-relative character offsets and deterministic
+whitespace-word windows: 128/32, 256/64, and 512/128 words/overlap. Titles are
+prepended only to retrieval and embedding input. Title-only records receive an
+empty, non-evidence chunk so they remain lexically searchable without creating
+answer support. Each JSONL snapshot has a corpus-bound manifest and stable
+`{PMID}:cNNNN` identifiers.
+
+`scripts/evaluate_chunks.py` evaluates all three snapshots on the 10 approved
+answerable development cases. It reports lexical and semantic Recall@1/3/5/10
+and Evidence Hit@k. Selection maximizes the lower of lexical and semantic
+Recall@5, then their mean, then fewer average context tokens. Weighted RRF uses
+50 candidates per source and `alpha/(60+lexical_rank) +
+(1-alpha)/(60+semantic_rank)` for alpha values 0.25, 0.5, and 0.75. It selects
+by hybrid Recall@5, Evidence Hit@5, then proximity to alpha 0.5. The selected
+configuration, exact system prompt, generation settings, embedding model, QA
+hash, and source-evaluation hash are frozen together before the bake-off.
+
+Embeddings use an OpenRouter-hosted model only after explicit credentials are
+provided. Corpus inputs are embedded once, normalized, and saved in an atomic
+NumPy cache containing model, dimension, corpus/chunk/input hashes, timestamp,
+and chunk order. Query vectors and cached document vectors use brute-force
+cosine similarity. Production retrieval and RRF are hand-built; there is no
+vector database or semantic retrieval library.
+
+Grounded generation sends at most five numbered chunks at temperature zero and
+a 400-token cap. Structured output must either be `answered` with an exact set
+of supplied citation IDs or `insufficient_evidence` with no citations. Every
+substantive factual sentence needs a citation marker. Unknown IDs, unused
+declared citations, uncited sentences, malformed output, missing evidence, and
+provider failures fail closed. One schema repair is permitted. Personalized or
+prescriptive dosing requests are rejected deterministically before a provider
+call; questions about doses reported in a named study remain research queries.
+
+The three-model development bake-off requires identical stored contexts and
+hashes. A structurally invalid model is disqualified before selection by
+faithfulness, refusal correctness, relevancy, citation correctness, actual
+provider-reported cost when available, and p95 latency. Claude is the
+different-family judge, but its verdict is unusable until a deterministic
+10-output sample reaches at least 80% owner agreement and Cohen's kappa 0.60.
+Undefined kappa remains inconclusive and is accompanied by the confusion
+matrix.
+
+## Application and release boundary
+
+The single-process FastAPI service exposes `/healthz`, `/api/metrics`,
+`/api/search`, and `/api/answer`. Local Boolean and frozen tuned-BM25 search
+work without a provider. Semantic/hybrid retrieval activates only when the
+configured cache matches the selected chunk, corpus, and model identities.
+Without it, explicit semantic/hybrid requests return no fabricated downgrade;
+Q&A returns retrieved evidence and an insufficient-evidence status.
+
+The browser renders corpus and model strings with text nodes, converts only
+the service's `[[query match]]` markers to safe `<mark>` elements, and creates
+PubMed citation links itself. Queries are capped at 500 characters, `k` at
+1--20 for search and 1--8 for Q&A, and the in-memory single-process limits are
+30 search requests and five answer requests per IP per minute plus 200 answer
+attempts per UTC day. Keys stay server-side and raw query text is not logged.
+These counters are explicitly single-instance controls, not a distributed
+rate-limiting claim.
+
+`python run_project.py` is the network-free release check. It validates the
+frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics, and
+validates committed chunk manifests. Until the approved QA, embedding caches,
+bake-off, human judge labels, and deployment artifacts exist, those checks are
+reported as `TBD`; they are not converted into zeros or passing claims.

@@ -19,7 +19,10 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Ranked CLI results with scores, snippets, and PubMed links
 - [x] Section 3 Boolean/BM25 baseline saved as JSON and Markdown
 - [x] Section 4 lexical tuning and hardening
-- [ ] Section 5 semantic/hybrid RAG
+- [x] Section 5 offline RAG foundations: QA draft, chunk artifacts, retrieval contracts, grounded-answer validation, and local web shell
+- [ ] Project-owner approval of the 20-case QA oracle
+- [ ] Paid semantic/chunk evaluation, model bake-off, judge validation, and Railway deployment
+- [x] Section 6 offline release-check, CI, self-evaluation, cost, and deployment-document foundations
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
 
@@ -34,10 +37,10 @@ The exact query returned 2,000 PMIDs, below the configured maximum of 3,000. Rec
 ## Prerequisites and setup
 
 - Python 3.11 or newer
-- Internet access for the corpus fetch only
+- Internet access for corpus fetching and, later, explicitly approved hosted RAG evaluation
 - A valid contact email for NCBI E-utilities
 
-Create an environment and install the sole runtime dependency:
+Create an environment and install the runtime dependencies:
 
 ```bash
 python -m venv .venv
@@ -149,7 +152,110 @@ The command writes [`artifacts/section3/baseline.json`](artifacts/section3/basel
 and [`artifacts/section3/baseline.md`](artifacts/section3/baseline.md), including
 corpus/qrels hashes, code revision, exact configuration, rankings, and metrics.
 
+The current whole-project offline check is:
+
+```bash
+python run_project.py
+```
+
+It makes no network or paid calls. It verifies the frozen core hashes, rebuilds
+the index, recomputes Boolean/BM25 metrics, validates every committed chunk
+manifest, and labels unavailable RAG evidence as `TBD` instead of inventing a
+pass. `python run_project.py --live-eval` is currently a readiness check only;
+it does not call a provider while the QA and embedding gates are incomplete.
+
+## Section 5 RAG workflow
+
+The implementation exists, but the evaluation is deliberately stopped at its
+first human gate. Review all 20 proposed cases in
+[`QA-REVIEW.md`](QA-REVIEW.md), then record an explicit project-owner decision,
+reviewer, and notes in `data/qa_draft.json`. The checked-in questions and
+concise acceptable answers were edited after the first mechanical draft; q13
+now cites the trial's exact outcome and adverse-event sentences instead of its
+methods paragraph. Only after every case is approved
+can the normalized immutable oracle be created:
+
+```bash
+python scripts/freeze_qa.py
+```
+
+The three candidate chunk snapshots are already deterministic and hash-bound:
+
+| Window | Overlap | Chunks | Artifact SHA-256 |
+|---:|---:|---:|---|
+| 128 words | 32 | 4,565 | `81B45B34429419CCC44C42AA27FFB7715012491F731A64576A14DBC7BAB7D41D` |
+| 256 words | 64 | 2,440 | `85B62B8AF56DAFD6AE4A1D1B5C87DA950828BB767FDDF9633445E53CA5567B9C` |
+| 512 words | 128 | 2,007 | `AF83690E677750BC7E884DF04C70FB203D3103938FA141AB8D9EA031966FCFAF` |
+
+After approval, create one embedding cache for each candidate with
+`scripts/embed_chunks.py`, then run `scripts/evaluate_chunks.py` with all three
+`--candidate NAME CHUNKS MANIFEST CACHE` arguments. The evaluator uses only the
+10 answerable development cases to select chunk size and RRF alpha, writes the
+frozen configuration, and can save the identical 13-case development contexts
+for the generator bake-off. Holdout questions remain excluded.
+
+```bash
+python scripts/embed_chunks.py --chunks artifacts/section5/chunks_128_32.jsonl --output artifacts/section5/embeddings_128_32.npz
+python scripts/embed_chunks.py --chunks artifacts/section5/chunks_256_64.jsonl --output artifacts/section5/embeddings_256_64.npz
+python scripts/embed_chunks.py --chunks artifacts/section5/chunks_512_128.jsonl --output artifacts/section5/embeddings_512_128.npz
+python scripts/evaluate_chunks.py --candidate 128_32 artifacts/section5/chunks_128_32.jsonl artifacts/section5/chunks_128_32.jsonl.manifest.json artifacts/section5/embeddings_128_32.npz --candidate 256_64 artifacts/section5/chunks_256_64.jsonl artifacts/section5/chunks_256_64.jsonl.manifest.json artifacts/section5/embeddings_256_64.npz --candidate 512_128 artifacts/section5/chunks_512_128.jsonl artifacts/section5/chunks_512_128.jsonl.manifest.json artifacts/section5/embeddings_512_128.npz --output-json artifacts/section5/chunk_evaluation.json --output-md artifacts/section5/chunk_evaluation.md --frozen-config artifacts/section5/frozen_config.json --contexts-output data/rag_development_contexts.json
+```
+
+Immediately before the paid bake-off, create `data/model_candidates.json` from
+current OpenRouter model pages/API metadata. It must record one available Qwen,
+OpenAI, and Google-family candidate, structured-JSON support, context length,
+input/output price, check timestamp, and direct sources. Live execution rejects
+a catalog older than 24 hours. It also requires an explicit user-supplied cost
+bound and confirmation:
+
+```bash
+python scripts/run_rag_bakeoff.py --live --max-cost-usd 2.00 --confirm-cost
+python scripts/validate_judge.py
+# Fill the 10 owner_label entries in data/judge_validation_worksheet.json.
+python scripts/validate_judge.py --validate
+python scripts/export_rag_holdout_contexts.py --cache <selected-cache.npz> --max-cost-usd 0.25 --confirm-cost
+python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
+```
+
+The final command freezes a generator only when all seven holdout outputs are
+structurally valid and judged. Offline reruns use the saved outputs and make no
+provider calls.
+
+The local application is available without provider credentials:
+
+```bash
+python -m uvicorn app:app --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000`. Boolean and tuned BM25 search work entirely
+offline. Semantic/hybrid modes activate only when `EMBEDDING_CACHE_PATH` points
+to a cache matching the selected chunk artifact. Grounded Q&A fails closed as
+retrieval-only until that measured configuration exists; `OPENROUTER_API_KEY`
+is server-side only.
+
 ## Metrics Report
+
+### Section 5 RAG metrics
+
+No RAG score is reported yet. The QA packet is unapproved and no paid embedding
+run has occurred, so zeros would be fabricated results.
+
+| Retrieval mode | Recall@1 | Recall@3 | Recall@5 | Recall@10 | Evidence Hit@5 |
+|---|---:|---:|---:|---:|---:|
+| Lexical chunks | TBD | TBD | TBD | TBD | TBD |
+| Semantic chunks | TBD | TBD | TBD | TBD | TBD |
+| Hybrid chunks | TBD | TBD | TBD | TBD | TBD |
+
+| Generator | Faithfulness | Correct refusal | Relevancy | Citation correctness | Status |
+|---|---:|---:|---:|---:|---|
+| Qwen candidate | TBD | TBD | TBD | TBD | Not run |
+| OpenAI candidate | TBD | TBD | TBD | TBD | Not run |
+| Google candidate | TBD | TBD | TBD | TBD | Not run |
+
+These fields become reportable only after owner approval, measured chunk
+selection, the three-model development bake-off, and human validation of the
+Claude judge. See [`SELF-EVALUATION.md`](SELF-EVALUATION.md) for the live gate
+status and [`COST-REPORT.md`](COST-REPORT.md) for cost accounting.
 
 ### Section 3 ranked-retrieval baseline
 
@@ -297,4 +403,4 @@ Version 2 reveals that the version-1 Recall@5 of `1.000` was a known-item artifa
 4. **Implement Boolean retrieval.** Support deterministic `AND`/`OR`, `AND` precedence, and implicit `AND`, plus empty and unknown-term robustness.
 5. **Stub and run the red harness.** Calculate precision@k and recall@k directly against the frozen qrels, print aggregate and per-query Markdown tables, and paste the unaltered output into this report before tuning.
 
-Architecture details and the judgment protocol live in [`ARCHITECTURE.md`](ARCHITECTURE.md). AI-assisted development evidence lives in [`AI-LOG.md`](AI-LOG.md).
+Architecture details and the judgment protocol live in [`ARCHITECTURE.md`](ARCHITECTURE.md). AI-assisted development evidence lives in [`AI-LOG.md`](AI-LOG.md). The current release evidence and remaining gates are tracked in [`SELF-EVALUATION.md`](SELF-EVALUATION.md), [`COST-REPORT.md`](COST-REPORT.md), and [`DEPLOYMENT.md`](DEPLOYMENT.md). [`DEMO-SCRIPT.md`](DEMO-SCRIPT.md) and [`SOCIAL-POST.md`](SOCIAL-POST.md) are explicitly unfilled submission templates, not claims that those deliverables have been published.

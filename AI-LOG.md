@@ -15,12 +15,17 @@
 | 2026-08-13 | Claude Code review attempt | A direct source review was blocked because it would transmit repository files externally; a specification-only retry had no local-file access but timed out without a verdict. | No Claude claim was used. BM25 acceptance relied on hand calculations and the passing independent `bm25s` differential; this limitation is recorded rather than presented as a completed review. |
 | 2026-08-13 | Codex + three GPT-5.6 Terra subagents | Added configurable analysis/index metadata, the development-only tuning runner, proximity experiment, properties, deletion/robustness tests, and benchmark tooling. | Codex integrated query/index analyzers, ran the complete grid without holdout access, froze `k1=0.8`, ran the holdout after the freeze, and recorded 114 tests and the full benchmark. |
 | 2026-08-13 | Claude Code, specification-only reviewer | Reviewed the frozen Section 4 methodology and aggregate outcomes without repository access. | Returned `CHANGES_REQUIRED` because holdout gains were small and Recall@5-focused while NDCG@3 declined. The concern was accepted and documented, but the configuration was not changed after holdout exposure. |
+| 2026-08-13 | Codex + three GPT-5.6 Terra subagents | Implemented bounded Section 5 packets for chunking/caches/retrieval, grounded generation/judging, local FastAPI service, and bake-off/judge-validation tooling; added the Section 6 offline runner and CI/report foundations. | The primary agent normalized the public QA schema, strengthened citation and medical-refusal validation, blocked use of unselected full abstracts as answer evidence, installed web dependencies, ran 178 tests, and exercised the rendered local app. QA approval, provider runs, judge labels, and deployment remain explicit gates. |
 
 Second required AI tool or integration: **Claude Code** (independent qrels review, distinct from the Codex/GPT-5.6 build agent — satisfies the "two tools" requirement and is a deliberate second-model check, not just a second interface).
 
 ## MCP Usage
 
-No MCP integration has been used for project implementation yet. **TBD if one is used later.** Local filesystem and shell tools are not being relabeled as MCP usage.
+The Codex in-app Browser MCP was used to test the local FastAPI application as
+a user: it verified tuned BM25 search, highlighted snippets, PubMed links,
+metrics, research disclaimers, and the retrieval-only answer fallback, with no
+browser console errors. Local filesystem and shell tools are not relabeled as
+MCP usage.
 
 ## Effective Prompts
 
@@ -31,6 +36,7 @@ Preserve 3–5 prompts that produced useful, verifiable work.
 3. **Bounded engine modules:** “Implement only one named retrieval module and its tests against these frozen public interfaces; do not edit other files; use the Python standard library and no IR libraries.” Result: independently developed index, Boolean, and metrics modules that were then integration-tested by the primary agent.
 
 4. **BM25 differential:** "Implement the exact frozen Lucene-style formula, keep the reference package test-only, and compare positive scores within `1e-6` after deterministic tie normalization." Result: a scorer that matches `bm25s` on a hand corpus and all 15 frozen queries after the primary agent corrected the first reference API call.
+5. **Bounded RAG packets:** "Own only the named Section 5 module and tests; require approved hash-bound artifacts, make no network call in tests, preserve the development/holdout boundary, and do not invent metrics." Result: independently testable chunking, retrieval, answer/judge, application, and evaluation modules whose live gates remain closed without human approval and credentials.
 
 ## Code Analysis
 
@@ -50,7 +56,9 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **Observed strength:** With interfaces frozen first, lower-cost agents produced non-overlapping BM25, metrics, and CLI modules that integrated without production-code conflicts.
 - **Observed limitation:** The first suite skipped the optional reference test, and its first actual run exposed incorrect use of the reference API. Optional oracle dependencies must be installed and exercised before acceptance.
 - **Observed limitation:** Two scripts passed import-based tests but initially failed as documented direct CLI commands because `scripts/` replaced the repository root on `sys.path`. Direct-command smoke tests are now treated as separate acceptance evidence.
-- **TBD:** Add RAG findings only after that phase exists.
+- **Observed strength:** Fail-closed interfaces made incomplete RAG work safe to run: lexical search remains usable while semantic and answer modes expose missing measured assets instead of silently substituting a different system.
+- **Observed limitation:** The first generated web test used `pytest` despite the repository's `unittest` convention, repeating an earlier delegation error. Integration converted it and installed the actual web dependencies before acceptance.
+- **Observed limitation:** The initial RAG integration had three cross-module contract gaps: the frozen QA shape differed from the approved public schema, the app initially used untuned BM25/full abstracts for answer contexts, and generic saved-answer validation did not bind citations to stored chunks. Primary review and tests corrected all three before any paid run.
 
 ## Oracle Catches
 
@@ -66,6 +74,9 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **2026-08-13 — holdout runner failed after evaluation:** The frozen one-shot holdout command computed the requested runs, then crashed before displaying or writing metrics because Python code used lowercase JSON `true`. No result was available for tuning and the frozen configuration remained byte-identical. Only that Boolean token changed; the technical rerun is explicitly disclosed in the architecture and README.
 - **2026-08-13 — benchmark direct execution:** The benchmark's import-based tests passed, but `python scripts/benchmark_lexical.py` failed with `ModuleNotFoundError: src`. A direct CLI smoke run caught the missing project-root path setup. After the minimal import fix, the full five-build/1,500-query benchmark completed and recorded reproducibility metadata.
 - **2026-08-13 — rejected tuning ideas:** Greek expansion tied the baseline, while stopword removal and every tested positive proximity boost reduced development metrics. The measured outcome was to keep the simpler analyzer and no boost, demonstrating that implementing a feature does not justify enabling it.
+- **2026-08-13 -- RAG human gate works:** Direct invocations of `scripts/freeze_qa.py` and the chunk evaluator failed because none of the 20 cases has an explicit owner approval. No `data/qa.json`, embedding request, chunk-selection metric, or model score was produced. This is a successful oracle guardrail, not an implementation failure.
+- **2026-08-13 -- unsafe answer-context shortcut removed:** The first local service could send whole BM25-ranked abstracts to the generator when selected chunks were unavailable. That bypassed the measured chunk gate. Integration removed the shortcut: answer generation now requires the frozen selected chunk configuration and matching embedding cache; otherwise it returns retrieval-only insufficient evidence.
+- **2026-08-13 -- saved citations needed evidence binding:** A generic saved-answer shape check accepted citation metadata without proving it matched the identical stored contexts. The bake-off now reconstructs the answer and runs the production citation/sentence validator against each query's hash-bound context before a model is eligible.
 - Add later retrieval incidents when a qrels metric, differential oracle, property test, or robustness test exposes them. Include the failing evidence, correction, and changed metric/test result.
 
 ## Key Learnings
@@ -79,7 +90,7 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - Verify against the full untruncated source before writing a finding into a permanent log, even when the finding sounds correct — the q02 near-miss shows a truncated read produces confident, wrong conclusions exactly like the ones this log exists to catch.
 - Optional oracle tests are not evidence until their dependency is installed and the test actually executes. A skipped differential is an unverified requirement, not a pass.
 - A holdout can remain methodologically valid after a technical rerun only when no result was exposed, the selected configuration is demonstrably unchanged, and the failure/rerun are both disclosed.
-- **TBD:** Add concrete lessons from later oracle catches.
+- Human approval and credentials are dependencies, not inconveniences to route around. A correct partial system should expose its gate and remain reproducible rather than manufacture downstream metrics.
 
 ## AI Cost Tracking
 

@@ -19,8 +19,8 @@ flowchart LR
 | 2. Oracle and Boolean MVP | Complete |
 | 3. BM25 and full IR evaluation | Complete |
 | 4. Retrieval tuning and hardening | Complete |
-| 5. RAG and hybrid retrieval | Next |
-| 6. Final evaluation and submission | Not started |
+| 5. RAG and hybrid retrieval | In progress: offline implementation complete; owner oracle approval and paid evaluation pending |
+| 6. Final evaluation and submission | In progress: offline runner, CI, and report foundations complete; final measured artifacts/deployment pending |
 
 The frozen corpus contains 2,000 PubMed records and has SHA-256 `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. The frozen qrels v2 contains 75 graded judgments across 15 queries. Neither artifact may be silently changed.
 
@@ -396,7 +396,7 @@ Use prices retrieved on the report date and identify where the single-instance a
 
 Complete architecture, AI development log, README, self-evaluation, deployment runbook, cost report, demo, screenshots, and social post. Distinguish human approval from Codex and Claude review.
 
-GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies artifact hashes, runs the offline evaluation, and fails on stale generated metrics.
+GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies the currently implemented artifact hashes, runs the offline evaluation, and fails if those checks mutate tracked evidence. A final stale-Markdown regeneration check remains gated on the completed RAG artifacts.
 
 Release steps:
 
