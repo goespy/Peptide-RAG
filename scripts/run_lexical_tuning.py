@@ -114,7 +114,9 @@ def evaluate_development(index: InvertedIndex, qrels: Mapping[str, Any], config:
     rankings: dict[str, list[str]] = {}
     for entry in qrels["queries"]:
         rankings[entry["id"]] = [item.doc_id for item in rank_bm25(index, entry["query"], k=len(index.documents), config=config)]
-    return {"rankings": rankings, "evaluation": evaluate_run(qrels, rankings, CUTOFFS).to_dict()}
+    # Per-query metrics are sufficient to audit selection and avoid duplicating
+    # many full-corpus rankings across every grid candidate.
+    return {"evaluation": evaluate_run(qrels, rankings, CUTOFFS).to_dict()}
 
 
 def _metrics(result: Mapping[str, Any]) -> tuple[float, float, float]:
