@@ -26,3 +26,11 @@ class PrepareQAReviewTests(unittest.TestCase):
             result = subprocess.run([sys.executable, "scripts/prepare_qa_review.py", "--output", str(output)], cwd=ROOT, text=True, capture_output=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(json.loads(output.read_text(encoding="utf-8"))["status"], "candidate_pool_requires_human_review")
+
+    def test_checked_in_review_draft_has_exact_edited_evidence(self):
+        packet = json.loads((ROOT / "data/qa_draft.json").read_text(encoding="utf-8"))
+        validate_packet(packet, ROOT / "data/corpus.jsonl", ROOT / "data/qrels_v2.json")
+        qa13 = next(case for case in packet["cases"] if case["id"] == "qa13")
+        self.assertEqual(len(qa13["evidence_spans"]), 2)
+        self.assertIn("What effects did tesamorelin", qa13["question"])
+        self.assertTrue(all(case["human_review"]["approved"] is False for case in packet["cases"]))

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Peptide Literature Explorer</title><link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header><p class="eyebrow">Peptide-RAG</p><h1>Peptide literature explorer</h1><p class="notice">Research use only. This tool does not provide medical advice.</p></header>
+    <section class="controls" aria-label="Research query">
+      <label for="query">Question or search terms</label>
+      <textarea id="query" maxlength="500" rows="3" placeholder="e.g., antimicrobial peptide mechanisms"></textarea>
+      <div class="control-row"><label for="mode">Retrieval mode</label><select id="mode"><option value="bm25">BM25</option><option value="boolean">Boolean</option><option value="hybrid">Hybrid (validated cache required)</option><option value="semantic">Semantic (validated cache required)</option></select><button id="search" type="button">Search literature</button></div>
+    </section>
+    <nav class="tabs" aria-label="Views"><button class="tab active" data-tab="results">Results</button><button class="tab" data-tab="answer">Evidence-based answer</button><button class="tab" data-tab="metrics">Metrics</button></nav>
+    <p id="status" class="status" role="status"></p>
+    <section id="results" class="panel active"><div id="result-list"></div></section>
+    <section id="answer" class="panel"><button id="answer-button" type="button">Draft from evidence</button><article id="answer-content"></article><div id="answer-evidence"></div></section>
+    <section id="metrics" class="panel"><button id="metrics-button" type="button">Load metrics</button><pre id="metrics-content"></pre></section>
+    <footer>Literature records and PubMed links are attributed to the National Center for Biotechnology Information (NCBI).</footer>
+  </main><script src="/static/app.js"></script>
+</body>
+</html>

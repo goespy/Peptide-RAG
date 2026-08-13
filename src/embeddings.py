@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import tempfile
 import time
 from typing import Iterable, Sequence
 
@@ -56,6 +57,7 @@ class EmbeddingCacheManifest:
     input_hashes: tuple[str, ...]
     chunk_ids: tuple[str, ...]
     created_at: str
+    provider: str = "OpenRouter"
 
     @classmethod
     def create(
@@ -72,7 +74,16 @@ class EmbeddingCacheManifest:
             raise ValueError("invalid embedding cache manifest metadata")
         if len(inputs) != len(chunk_ids):
             raise ValueError("inputs and chunk_ids must have equal length")
-        return cls(model, dimension, corpus_hash, chunk_hash, text_hashes(inputs), tuple(chunk_ids), datetime.now(timezone.utc).isoformat())
+        return cls(
+            model=model,
+            dimension=dimension,
+            corpus_hash=corpus_hash,
+            chunk_hash=chunk_hash,
+            input_hashes=text_hashes(inputs),
+            chunk_ids=tuple(chunk_ids),
+            created_at=datetime.now(timezone.utc).isoformat(),
+            provider="OpenRouter",
+        )
 
 
 class EmbeddingClient:
@@ -94,11 +105,26 @@ class EmbeddingClient:
         self.api_key = api_key if api_key is not None else os.environ.get("OPENROUTER_API_KEY")
         self.model, self.timeout, self.retries = model, timeout, retries
         self.session = session if session is not None else requests.Session()
+        self.last_metadata: dict[str, object] = {}
+        self.total_metadata: dict[str, object] = {
+            "provider": "OpenRouter",
+            "provider_calls": 0,
+            "input_tokens": 0,
+            "cost_usd": 0.0,
+        }
+        self._usage_complete = True
 
     def embed(self, inputs: Sequence[str], *, batch_size: int = 100) -> np.ndarray:
         """Embed inputs in batches; empty input deliberately performs no HTTP work."""
 
         values = tuple(inputs)
+        self.last_metadata = {
+            "provider": "OpenRouter",
+            "provider_calls": 0,
+            "input_tokens": 0,
+            "cost_usd": 0.0,
+        }
+        self._usage_complete = True
         if any(not isinstance(value, str) for value in values):
             raise ValueError("embedding inputs must be strings")
         if not values:
@@ -110,13 +136,26 @@ class EmbeddingClient:
         vectors: list[list[float]] = []
         for start in range(0, len(values), batch_size):
             vectors.extend(self._embed_batch(values[start : start + batch_size]))
-        return normalize_embeddings(vectors)
+        result = normalize_embeddings(vectors)
+        self._accumulate_total()
+        return result
+
+    def _accumulate_total(self) -> None:
+        self.total_metadata["provider"] = self.last_metadata.get("provider", "OpenRouter")
+        self.total_metadata["provider_calls"] = int(self.total_metadata["provider_calls"]) + int(self.last_metadata["provider_calls"])
+        if self.total_metadata.get("input_tokens") is None or self.last_metadata.get("input_tokens") is None:
+            self.total_metadata["input_tokens"] = None
+            self.total_metadata["cost_usd"] = None
+        else:
+            self.total_metadata["input_tokens"] = int(self.total_metadata["input_tokens"]) + int(self.last_metadata["input_tokens"])
+            self.total_metadata["cost_usd"] = float(self.total_metadata["cost_usd"]) + float(self.last_metadata["cost_usd"])
 
     def _embed_batch(self, inputs: Sequence[str]) -> list[list[float]]:
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
         last_error: Exception | None = None
         for attempt in range(self.retries + 1):
             try:
+                self.last_metadata["provider_calls"] = int(self.last_metadata["provider_calls"]) + 1
                 response = self.session.post(
                     OPENROUTER_EMBEDDINGS_URL, headers=headers,
                     json={"model": self.model, "input": list(inputs)}, timeout=self.timeout,
@@ -132,6 +171,7 @@ class EmbeddingClient:
                         continue
                 response.raise_for_status()
                 payload = response.json()
+                self._record_usage(payload)
                 records = payload.get("data")
                 if not isinstance(records, list) or len(records) != len(inputs):
                     raise ValueError("embedding response has an invalid data array")
@@ -150,6 +190,25 @@ class EmbeddingClient:
                     time.sleep(0.25 * (2 ** attempt))
         raise RuntimeError("OpenRouter embeddings request failed") from last_error
 
+    def _record_usage(self, payload: object) -> None:
+        if not isinstance(payload, dict):
+            self._usage_complete = False
+        else:
+            provider = payload.get("provider")
+            if isinstance(provider, str) and provider:
+                self.last_metadata["provider"] = provider
+            usage = payload.get("usage")
+            tokens = usage.get("prompt_tokens", usage.get("total_tokens")) if isinstance(usage, dict) else None
+            cost = usage.get("cost") if isinstance(usage, dict) else None
+            if self._usage_complete and isinstance(tokens, int) and not isinstance(tokens, bool) and tokens >= 0 and isinstance(cost, (int, float)) and not isinstance(cost, bool) and cost >= 0:
+                self.last_metadata["input_tokens"] = int(self.last_metadata["input_tokens"]) + tokens
+                self.last_metadata["cost_usd"] = float(self.last_metadata["cost_usd"]) + float(cost)
+            elif self._usage_complete:
+                self._usage_complete = False
+        if not self._usage_complete:
+            self.last_metadata["input_tokens"] = None
+            self.last_metadata["cost_usd"] = None
+
 
 def save_embedding_cache(path: Path, embeddings: np.ndarray, manifest: EmbeddingCacheManifest) -> None:
     """Atomically save normalized vectors and their manifest to ``path`` (.npz)."""
@@ -159,10 +218,21 @@ def save_embedding_cache(path: Path, embeddings: np.ndarray, manifest: Embedding
         raise ValueError("embedding matrix does not match cache manifest")
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
-    temporary = target.with_name(target.name + ".tmp")
-    with temporary.open("wb") as output:
-        np.savez_compressed(output, embeddings=matrix, manifest=json.dumps(asdict(manifest), sort_keys=True))
-    os.replace(temporary, target)
+    descriptor, temporary_name = tempfile.mkstemp(
+        dir=target.parent, prefix=f".{target.name}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(descriptor, "wb") as output:
+            np.savez_compressed(output, embeddings=matrix, manifest=json.dumps(asdict(manifest), sort_keys=True))
+            output.flush()
+            os.fsync(output.fileno())
+        os.replace(temporary_name, target)
+    except BaseException:
+        try:
+            os.unlink(temporary_name)
+        except FileNotFoundError:
+            pass
+        raise
 
 
 def load_embedding_cache(path: Path, expected: EmbeddingCacheManifest) -> np.ndarray | None:
@@ -183,6 +253,7 @@ def load_embedding_cache(path: Path, expected: EmbeddingCacheManifest) -> np.nda
                 actual.chunk_hash,
                 actual.input_hashes,
                 actual.chunk_ids,
+                actual.provider,
             ) != (
                 expected.model,
                 expected.dimension,
@@ -190,6 +261,7 @@ def load_embedding_cache(path: Path, expected: EmbeddingCacheManifest) -> np.nda
                 expected.chunk_hash,
                 expected.input_hashes,
                 expected.chunk_ids,
+                expected.provider,
             ):
                 return None
             matrix = normalize_embeddings(stored["embeddings"])

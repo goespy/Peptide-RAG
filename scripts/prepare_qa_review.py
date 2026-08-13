@@ -162,11 +162,13 @@ def validate_packet(packet: dict[str, Any], corpus_path: Path, qrels_path: Path)
     for case in cases:
         if case.get("human_review", {}).get("approved") is not False: raise QAReviewPreparationError(f"{case['id']} must remain unapproved")
         if case["answerability"] == "answerable":
-            if len(case.get("pmids", [])) != 1 or len(case.get("evidence_spans", [])) != 1 or not case.get("acceptable_answer"): raise QAReviewPreparationError(f"{case['id']} needs exactly one PMID, span, and answer")
-            span = case["evidence_spans"][0]; abstract = corpus[span["pmid"]]["text"]
-            extracted = abstract[span["start"]:span["end"]]
-            if extracted != span["text"] or hashlib.sha256(extracted.encode("utf-8")).hexdigest().upper() != span["sha256"] or case["acceptable_answer"] != extracted.strip(): raise QAReviewPreparationError(f"{case['id']} evidence span is not exact")
-            if not 1 <= len(sentences(extracted)) <= 3: raise QAReviewPreparationError(f"{case['id']} support must contain 1-3 sentences")
+            if len(case.get("pmids", [])) != 1 or not case.get("evidence_spans") or not case.get("acceptable_answer"): raise QAReviewPreparationError(f"{case['id']} needs a PMID, at least one span, and an answer")
+            if {span.get("pmid") for span in case["evidence_spans"]} != set(case["pmids"]): raise QAReviewPreparationError(f"{case['id']} evidence PMIDs do not match")
+            for span in case["evidence_spans"]:
+                abstract = corpus[span["pmid"]]["text"]
+                extracted = abstract[span["start"]:span["end"]]
+                if extracted != span["text"] or hashlib.sha256(extracted.encode("utf-8")).hexdigest().upper() != span["sha256"]: raise QAReviewPreparationError(f"{case['id']} evidence span is not exact")
+                if not 1 <= len(sentences(extracted)) <= 3: raise QAReviewPreparationError(f"{case['id']} each support span must contain 1-3 sentences")
         elif case.get("pmids") or case.get("evidence_spans") or case.get("acceptable_answer"): raise QAReviewPreparationError(f"{case['id']} unanswerable case cannot have evidence")
 
 

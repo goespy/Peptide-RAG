@@ -9,7 +9,8 @@ from typing import Callable, Iterable, Literal, Sequence
 
 import numpy as np
 
-from src.bm25 import rank_bm25
+from src.analysis import AnalysisConfig, BASELINE_ANALYSIS
+from src.bm25 import BM25Config, rank_bm25
 from src.embeddings import EmbeddingClient, normalize_embeddings
 from src.index import InvertedIndex
 from src.models import Document
@@ -78,6 +79,8 @@ class Retriever:
         embedding_client: EmbeddingClient | None = None,
         query_embedding: Callable[[str], np.ndarray | Sequence[float]] | None = None,
         alpha: float = 0.5,
+        bm25_config: BM25Config = BM25Config(),
+        analysis_config: AnalysisConfig = BASELINE_ANALYSIS,
     ) -> None:
         self.chunks = tuple(chunks)
         ids = [chunk.chunk_id for chunk in self.chunks]
@@ -89,11 +92,17 @@ class Retriever:
         if isinstance(alpha, bool) or not isinstance(alpha, Real) or not math.isfinite(alpha) or not 0 <= alpha <= 1:
             raise ValueError("alpha must be a finite number between 0 and 1")
         self.alpha = float(alpha)
+        if not isinstance(bm25_config, BM25Config):
+            raise ValueError("bm25_config must be a BM25Config")
+        if not isinstance(analysis_config, AnalysisConfig):
+            raise ValueError("analysis_config must be an AnalysisConfig")
+        self.bm25_config = bm25_config
+        self.analysis_config = analysis_config
         self.embedding_client = embedding_client
         self.query_embedding = query_embedding
         self._chunk_by_doc_id = {_synthetic_id(i): chunk for i, chunk in enumerate(self.chunks)}
         documents = (Document(_synthetic_id(i), chunk.title, chunk.text) for i, chunk in enumerate(self.chunks))
-        self.index = InvertedIndex.from_documents(documents)
+        self.index = InvertedIndex.from_documents(documents, analysis_config=analysis_config)
 
     def _validate(self, query: str, k: int, mode: str) -> None:
         if not isinstance(query, str):
@@ -105,7 +114,7 @@ class Retriever:
 
     def _lexical(self, query: str, limit: int) -> list[RetrievedChunk]:
         return [RetrievedChunk(self._chunk_by_doc_id[item.doc_id], item.score, "lexical", rank, None)
-                for rank, item in enumerate(rank_bm25(self.index, query, k=limit), start=1)]
+                for rank, item in enumerate(rank_bm25(self.index, query, k=limit, config=self.bm25_config), start=1)]
 
     def _semantic(self, query: str, limit: int) -> list[RetrievedChunk]:
         if not query.strip() or not self.chunks:

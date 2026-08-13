@@ -20,7 +20,9 @@ def render(packet):
         lines += [f"## {case['id']} — {case['answerability']} ({case['split']})", "", f"**Question:** {case['question']}", "", "- Decision: [ ] Approve  [ ] Edit  [ ] Reject", "- Reviewer:", "- Notes:", ""]
         if case['answerability']=='answerable':
             evidence=case['evidence_spans'][0]
-            lines += [f"- Source: [PMID {evidence['pmid']}](https://pubmed.ncbi.nlm.nih.gov/{evidence['pmid']}/)", f"- Acceptable answer: {case['acceptable_answer']}", f"- Exact support offsets: `{evidence['start']}:{evidence['end']}`; SHA-256: `{evidence['sha256']}`", "", "### Exact abstract support", "", evidence['text'], ""]
+            lines += [f"- Source: [PMID {evidence['pmid']}](https://pubmed.ncbi.nlm.nih.gov/{evidence['pmid']}/)", f"- Acceptable answer: {case['acceptable_answer']}"]
+            for number, span in enumerate(case['evidence_spans'], 1):
+                lines += [f"- Exact support {number} offsets: `{span['start']}:{span['end']}`; SHA-256: `{span['sha256']}`", "", f"### Exact abstract support {number}", "", span['text'].rstrip(), ""]
         else:
             check=case['lexical_absence_check']; lines += ["- Proposed response: Insufficient evidence in this frozen abstract corpus.", f"- Lexical check: no matching PMID for peptide tokens `{', '.join(check['peptide_tokens'])}` plus claim tokens `{', '.join(check['claim_tokens'])}`.", f"- Caveat: {check['limitation']}", ""]
     return '\n'.join(lines).rstrip()+"\n"
