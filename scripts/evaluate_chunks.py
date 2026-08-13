@@ -78,7 +78,8 @@ def evaluate_retriever(cases: Sequence[dict[str, Any]], retriever: Retriever, *,
     report: dict[str, Any] = {"case_count": len(cases), "modes": {}}
     for mode in modes:
         rankings = {str(case["id"]): [item.chunk_id for item in retriever.retrieve(str(case["question"]), k=10, mode=mode)] for case in cases}
-        report["modes"][mode] = {f"@{cutoff}": {"recall": _metric(rankings, gold, cutoff)[0], "evidence_hit": _metric(rankings, gold, cutoff)[1]} for cutoff in CUTOFFS}
+        measured = {cutoff: _metric(rankings, gold, cutoff) for cutoff in CUTOFFS}
+        report["modes"][mode] = {f"@{cutoff}": {"recall": measured[cutoff][0], "evidence_hit": measured[cutoff][1]} for cutoff in CUTOFFS}
     return report
 
 def _selection_key(item: dict[str, Any]) -> tuple[float, float, float]:
@@ -87,7 +88,9 @@ def _selection_key(item: dict[str, Any]) -> tuple[float, float, float]:
 
 def select_chunk_config(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
     if not results: raise ChunkEvaluationError("no chunk configurations evaluated")
-    return sorted(results, key=lambda item: (_selection_key(item), item["name"]), reverse=True)[0]
+    # Primary criteria are descending; an otherwise exact tie uses the
+    # configuration name in ascending order for platform-independent output.
+    return min(results, key=lambda item: tuple(-value for value in _selection_key(item)) + (str(item["name"]),))
 
 def select_alpha(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
     if not results: raise ChunkEvaluationError("no RRF alphas evaluated")

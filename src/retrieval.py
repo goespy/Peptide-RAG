@@ -59,10 +59,6 @@ class RetrievedChunk:
         return self.chunk.end_char
 
 
-def _chunk_input(chunk: Chunk) -> str:
-    return f"{chunk.title}\n{chunk.text}"
-
-
 def _synthetic_id(position: int) -> str:
     # Index requires numeric PMID ids. This mapping is local and preserves chunk order.
     return str(position + 1)

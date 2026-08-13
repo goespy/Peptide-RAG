@@ -134,6 +134,8 @@ def load_semantic_retriever(
             return None
         with np.load(cache_path, allow_pickle=False) as stored:
             raw = json.loads(stored["manifest"].item())
+        if not isinstance(frozen.get("embedding_model"), str) or raw.get("model") != frozen["embedding_model"]:
+            return None
         expected = EmbeddingCacheManifest.create(
             model=str(raw["model"]), dimension=int(raw["dimension"]),
             corpus_hash=chunk_manifest["corpus_sha256"], chunk_hash=chunk_manifest["chunk_sha256"],
@@ -216,7 +218,18 @@ class LocalResearchService:
 
     @staticmethod
     def _chunk_record(item: RetrievedChunk) -> dict[str, Any]:
-        return {"pmid": item.pmid, "title": item.title, "snippet": item.text, "score": item.score, "chunk_id": item.chunk_id}
+        return {
+            "pmid": item.pmid,
+            "title": item.title,
+            "snippet": item.text,
+            "score": item.score,
+            "chunk_id": item.chunk_id,
+            "start_char": item.start_char,
+            "end_char": item.end_char,
+            "mode": item.mode,
+            "lexical_rank": item.lexical_rank,
+            "semantic_rank": item.semantic_rank,
+        }
 
     def search(self, query: str, mode: str, k: int) -> list[dict[str, Any]]:
         if mode == "boolean":
@@ -234,18 +247,40 @@ class LocalResearchService:
         # to an unannounced lexical result. Hybrid similarly fails closed.
         return []
 
-    def _contexts(self, query: str, mode: str, k: int) -> tuple[RetrievedChunk, ...]:
+    def _contexts_from_evidence(self, evidence: list[dict[str, Any]], k: int) -> tuple[RetrievedChunk, ...]:
+        """Re-bind displayed evidence to canonical selected chunks without retrieval."""
+
         if self.semantic_retriever is None:
             return ()
-        try:
-            return self.semantic_retriever.retrieve(query, k=k, mode=mode)
-        except (RuntimeError, ValueError):
-            return ()
+        known = {chunk.chunk_id: chunk for chunk in self.semantic_retriever.chunks}
+        contexts: list[RetrievedChunk] = []
+        seen: set[str] = set()
+        for item in evidence[:k]:
+            if not isinstance(item, dict):
+                continue
+            chunk_id = item.get("chunk_id")
+            chunk = known.get(chunk_id) if isinstance(chunk_id, str) else None
+            if chunk is None or chunk_id in seen:
+                continue
+            if (item.get("pmid"), item.get("title"), item.get("snippet")) != (chunk.pmid, chunk.title, chunk.text):
+                continue
+            score = item.get("score", 0.0)
+            if isinstance(score, bool) or not isinstance(score, (int, float)):
+                score = 0.0
+            contexts.append(RetrievedChunk(
+                chunk,
+                float(score),
+                str(item.get("mode", "stored")),
+                item.get("lexical_rank") if isinstance(item.get("lexical_rank"), int) else None,
+                item.get("semantic_rank") if isinstance(item.get("semantic_rank"), int) else None,
+            ))
+            seen.add(chunk_id)
+        return tuple(contexts)
 
     def answer(self, query: str, mode: str, k: int, evidence: list[dict[str, Any]]) -> dict[str, Any]:
         if self.answer_client is None:
             return {"answer": None, "refusal": "Grounded generation is unavailable until the measured RAG configuration and holdout winner are frozen.", "citations": []}
-        result: AnswerResult = self.answer_client.answer(query, self._contexts(query, mode, k))
+        result: AnswerResult = self.answer_client.answer(query, self._contexts_from_evidence(evidence, k))
         if result.status != "answered":
             return {"answer": None, "refusal": result.text, "citations": []}
         return {

@@ -22,5 +22,6 @@ class EvaluationTests(unittest.TestCase):
     def test_selection_prefers_minimum_then_context_and_alpha_half(self):
         def result(name,l,s,t): return {"name":name,"average_context_tokens":t,"evaluation":{"modes":{"lexical":{"@5":{"recall":l}},"semantic":{"@5":{"recall":s}}}}}
         self.assertEqual(select_chunk_config([result("a",.8,.4,1),result("b",.5,.5,100)])["name"],"b")
+        self.assertEqual(select_chunk_config([result("z",.5,.5,10),result("a",.5,.5,10)])["name"],"a")
         items=[{"alpha":.25,"evaluation":{"modes":{"hybrid":{"@5":{"recall":.5,"evidence_hit":.5}}}}},{"alpha":.5,"evaluation":{"modes":{"hybrid":{"@5":{"recall":.5,"evidence_hit":.5}}}}}]
         self.assertEqual(select_alpha(items)["alpha"],.5)

@@ -60,7 +60,8 @@ def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChu
         usage = dict(generator.last_metadata)
         judge_usage = dict(judge.last_metadata)
         usage.update({"latency_ms": latency, "generator_usage": dict(generator.last_metadata), "judge_usage": judge_usage, "token_cost_status": "provider_reported" if usage.get("input_tokens") is not None and usage.get("cost_usd") is not None else "unknown_not_exposed_by_provider"})
-        result.append({"model": winner, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": {"status": answer.status, "text": answer.text, "citations": [item.__dict__ for item in answer.citations]}, "judge": judge_payload, "structurally_valid": validate_answer_result(answer, contexts[case["id"]]), "metadata": usage})
+        answer_payload = {"status": answer.status, "text": answer.text, "citations": [item.__dict__ for item in answer.citations]}
+        result.append({"model": winner, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": answer_is_structurally_valid(answer_payload) and validate_answer_result(answer, contexts[case["id"]]), "metadata": usage})
     return result
 
 def main(argv: Sequence[str] | None = None) -> int:

@@ -95,7 +95,7 @@ def _evidence(items: Any) -> list[dict[str, Any]]:
         if isinstance(item, dict):
             value = item
         else:
-            value = {name: getattr(item, name) for name in ("pmid", "title", "text", "snippet", "score", "chunk_id") if hasattr(item, name)}
+            value = {name: getattr(item, name) for name in ("pmid", "title", "text", "snippet", "score", "chunk_id", "start_char", "end_char", "mode", "lexical_rank", "semantic_rank") if hasattr(item, name)}
         pmid = str(value.get("pmid", ""))
         text = value.get("snippet", value.get("text", ""))
         output.append({
@@ -104,6 +104,11 @@ def _evidence(items: Any) -> list[dict[str, Any]]:
             "snippet": str(text),
             "score": value.get("score"),
             "chunk_id": str(value.get("chunk_id", "")),
+            "start_char": value.get("start_char"),
+            "end_char": value.get("end_char"),
+            "mode": value.get("mode"),
+            "lexical_rank": value.get("lexical_rank"),
+            "semantic_rank": value.get("semantic_rank"),
             "pubmed_url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/" if pmid else None,
         })
     return output

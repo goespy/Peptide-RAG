@@ -49,6 +49,17 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(response.json()["retrieval_only"])
         self.assertEqual(response.json()["evidence"][0]["pmid"], "12345")
 
+    def test_answer_endpoint_retrieves_evidence_once(self):
+        class Counting(FakeService):
+            def __init__(self): self.search_calls = 0
+            def search(self, query, mode, k):
+                self.search_calls += 1
+                return super().search(query, mode, k)
+        service = Counting()
+        client = TestClient(create_app(service))
+        self.assertEqual(client.post("/api/answer", json={"query": "peptide", "mode": "hybrid", "k": 1}).status_code, 200)
+        self.assertEqual(service.search_calls, 1)
+
     def test_rate_and_daily_answer_limits(self):
         client = TestClient(create_app(FakeService(), daily_answer_cap=1))
         self.assertEqual(client.post("/api/answer", json={"query": "one"}).status_code, 200)
