@@ -30,6 +30,7 @@ class BM25ConfigTests(unittest.TestCase):
         for kwargs in (
             {"k1": 0}, {"k1": -1}, {"k1": math.inf}, {"k1": True},
             {"b": -0.01}, {"b": 1.01}, {"b": math.nan}, {"b": False},
+            {"proximity_boost": -0.01}, {"proximity_boost": math.inf},
         ):
             with self.subTest(kwargs=kwargs), self.assertRaises(ValueError):
                 BM25Config(**kwargs)
@@ -88,6 +89,29 @@ class BM25RankingTests(unittest.TestCase):
                 rank_bm25(index, "alpha", k=k)  # type: ignore[arg-type]
         with self.assertRaises(ValueError):
             rank_bm25(index, "alpha", config=None)  # type: ignore[arg-type]
+
+    def test_proximity_bonus_respects_order_gap_and_field_boundary(self) -> None:
+        index = InvertedIndex.from_documents(
+            [
+                Document("1", "alpha beta", ""),
+                Document("2", "alpha x beta", ""),
+                Document("3", "beta alpha", ""),
+                Document("4", "alpha", "beta"),
+            ]
+        )
+        baseline = {item.doc_id: item.score for item in rank_bm25(index, "alpha beta")}
+        boosted = {
+            item.doc_id: item.score
+            for item in rank_bm25(
+                index,
+                "alpha beta",
+                config=BM25Config(proximity_boost=0.5),
+            )
+        }
+        self.assertAlmostEqual(boosted["1"] - baseline["1"], 0.5)
+        self.assertAlmostEqual(boosted["2"] - baseline["2"], 0.25)
+        self.assertAlmostEqual(boosted["3"] - baseline["3"], 0.0)
+        self.assertAlmostEqual(boosted["4"] - baseline["4"], 0.0)
 
 
 if __name__ == "__main__":

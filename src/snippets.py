@@ -5,18 +5,20 @@ from __future__ import annotations
 import html
 import re
 
-from .analysis import analyze
+from .analysis import AnalysisConfig, BASELINE_ANALYSIS, analyze
 
 _WORD = re.compile(r"[^\W_]+", flags=re.UNICODE)
 _OPERATORS = frozenset({"and", "or"})
 
 
-def query_terms(query: str) -> frozenset[str]:
+def query_terms(
+    query: str, config: AnalysisConfig = BASELINE_ANALYSIS
+) -> frozenset[str]:
     """Return distinct searchable terms from *query*, ignoring Boolean words."""
 
     if not isinstance(query, str):
         return frozenset()
-    return frozenset(term for term in analyze(query) if term not in _OPERATORS)
+    return frozenset(term for term in analyze(query, config) if term not in _OPERATORS)
 
 
 def _word_matches(text: str, terms: frozenset[str]) -> list[tuple[int, int]]:

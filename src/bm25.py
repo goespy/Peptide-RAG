@@ -16,15 +16,22 @@ class BM25Config:
 
     k1: float = 1.2
     b: float = 0.75
+    proximity_boost: float = 0.0
 
     def __post_init__(self) -> None:
-        for name, value in (("k1", self.k1), ("b", self.b)):
+        for name, value in (
+            ("k1", self.k1),
+            ("b", self.b),
+            ("proximity_boost", self.proximity_boost),
+        ):
             if isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value):
                 raise ValueError(f"{name} must be a finite real number")
         if self.k1 <= 0:
             raise ValueError("k1 must be greater than zero")
         if not 0 <= self.b <= 1:
             raise ValueError("b must be between zero and one")
+        if self.proximity_boost < 0:
+            raise ValueError("proximity_boost must be non-negative")
 
 
 @dataclass(frozen=True)
@@ -58,7 +65,7 @@ def rank_bm25(
     if not isinstance(config, BM25Config):
         raise ValueError("config must be a BM25Config")
 
-    query_terms = analyze(query)
+    query_terms = analyze(query, index.analysis_config)
     if not query_terms or not index.documents:
         return ()
 
@@ -80,6 +87,28 @@ def rank_bm25(
             scores[posting.doc_id] = scores.get(posting.doc_id, 0.0) + (
                 term_idf * term_frequency / denominator
             )
+
+    if config.proximity_boost and len(query_terms) > 1:
+        postings_by_term = {
+            term: {posting.doc_id: posting.positions for posting in index.postings.get(term, ())}
+            for term in set(query_terms)
+        }
+        for left_term, right_term in zip(query_terms, query_terms[1:]):
+            left_documents = postings_by_term.get(left_term, {})
+            right_documents = postings_by_term.get(right_term, {})
+            for document_id in set(left_documents) & set(right_documents):
+                title_length = index.title_lengths[document_id]  # type: ignore[index]
+                best_gap: int | None = None
+                for left_position in left_documents[document_id]:
+                    for right_position in right_documents[document_id]:
+                        gap = right_position - left_position
+                        same_field = (left_position < title_length) == (
+                            right_position < title_length
+                        )
+                        if same_field and 1 <= gap <= 3:
+                            best_gap = gap if best_gap is None else min(best_gap, gap)
+                if best_gap is not None:
+                    scores[document_id] += config.proximity_boost / best_gap
 
     return tuple(
         ScoredDocument(document_id, score)

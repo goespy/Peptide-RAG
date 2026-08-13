@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "status": "frozen_before_holdout_evaluation",
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "qrels_sha256": "B30E1B7868EFFB580155442917C2BB0105ECC00E13527A103F6325B6A2B32ED6",
+  "eval_split_sha256": "A709630AE3210AC8C7279DEBAABC5EC4BC8105B73221CDB14501CAD8CF1A6931",
+  "development_experiments_sha256": "465DDD711528534A872FB531A39BB8D71B9BBA3A3F12CE83359A4B4B1AA6585E",
+  "analysis": {
+    "name": "baseline",
+    "expand_greek": false,
+    "remove_stopwords": false
+  },
+  "bm25": {
+    "variant": "lucene",
+    "k1": 0.8,
+    "b": 0.75,
+    "proximity_boost": 0.0
+  },
+  "selection_basis": [
+    "development macro NDCG@10",
+    "development macro Recall@10",
+    "development MRR",
+    "simplicity",
+    "distance from the untouched baseline",
+    "numeric parameter order"
+  ],
+  "development_result": {
+    "ndcg_at_10": 0.9681,
+    "recall_at_10": 0.975,
+    "mrr": 1.0
+  },
+  "rejected_changes": {
+    "greek_expansion": "Exact metric tie; baseline retained for simplicity.",
+    "stopword_removal": "Reduced development NDCG@10 and Recall@10.",
+    "proximity_boost": "Every tested positive boost reduced development NDCG@10 and Recall@10."
+  }
+}
