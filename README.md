@@ -18,7 +18,7 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Differential scores/rankings match `bm25s` on all 15 frozen queries
 - [x] Ranked CLI results with scores, snippets, and PubMed links
 - [x] Section 3 Boolean/BM25 baseline saved as JSON and Markdown
-- [ ] Section 4 lexical tuning and hardening
+- [x] Section 4 lexical tuning and hardening
 - [ ] Section 5 semantic/hybrid RAG
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
@@ -174,6 +174,52 @@ are untouched defaults, not tuned Section 4 results.
 The pre-registered development/holdout division is hash-bound in
 [`data/eval_split.json`](data/eval_split.json). Section 4 may tune only on the
 development queries; the holdout cannot be used for selection.
+
+### Section 4 measured tuning and hardening
+
+The development-only grid selected the frozen configuration in
+[`data/lexical_config.json`](data/lexical_config.json): baseline analysis,
+`k1=0.8`, `b=0.75`, and no proximity boost. Greek-letter expansion tied the
+baseline, stopword removal reduced development quality, and every positive
+proximity boost reduced development NDCG@10 and Recall@10. The simpler baseline
+analysis therefore remained in place.
+
+The frozen configuration was then evaluated on `q09`, `q10`, `q11`, `q13`, and
+`q15` without further tuning:
+
+| Holdout mode | MRR | P@5 | R@5 | NDCG@3 | NDCG@5 | NDCG@10 |
+|---|---:|---:|---:|---:|---:|---:|
+| Untuned BM25 | 0.900 | 0.440 | 0.467 | 0.720 | 0.694 | 0.838 |
+| Tuned BM25 | 0.900 | 0.480 | 0.507 | 0.714 | 0.708 | 0.841 |
+| Delta | +0.000 | +0.040 | +0.040 | -0.006 | +0.014 | +0.003 |
+
+This is a modest tradeoff, not a universal improvement: deeper precision,
+recall, and NDCG improve, while shallow NDCG@3 slips slightly. Over all 15
+queries, the tuned system descriptively reaches Recall@10 `0.957` and NDCG@10
+`0.926`, compared with the untouched BM25 baseline's `0.940` and `0.921`.
+
+The one-shot output and complete development grid are preserved in
+[`artifacts/section4/holdout.md`](artifacts/section4/holdout.md) and
+[`artifacts/section4/development_experiments.md`](artifacts/section4/development_experiments.md).
+The first holdout command computed the frozen run but crashed before exposing
+or writing metrics because a Python Boolean was misspelled as JSON `true`; only
+that serialization token was fixed before the successful unchanged rerun.
+
+The selected configuration benchmark measured five cold builds and 100 runs of
+each frozen query:
+
+| Operation | Median | p95 | Peak traced allocation |
+|---|---:|---:|---:|
+| Cold index build | 11,503.597 ms | 11,597.386 ms | 111,491,576 bytes |
+| BM25 query | 2.490 ms | 7.743 ms | 162,277 bytes |
+
+`tracemalloc` adds significant overhead to the build measurement; these are
+observations from the recorded Windows development environment, not service
+level guarantees. See
+[`artifacts/section4/benchmark_lexical.md`](artifacts/section4/benchmark_lexical.md).
+Claude's specification-only audit challenged the practical significance of the
+small holdout gains; the concern and decision not to retune on holdout are
+preserved in [`artifacts/section4/claude_review.md`](artifacts/section4/claude_review.md).
 
 ### Historical Day 1 Boolean report
 

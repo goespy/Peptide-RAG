@@ -1,0 +1,123 @@
+{
+  "configuration": {
+    "bm25": {
+      "b": 0.75,
+      "k1": 0.8,
+      "proximity_boost": 0.0
+    },
+    "build_runs": 5,
+    "clock": "time.perf_counter",
+    "memory_tracer": "tracemalloc",
+    "percentile_method": "linear interpolation",
+    "query_runs_per_query": 100,
+    "warmup_runs": 1
+  },
+  "environment": {
+    "machine": "AMD64",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.13 (main, Aug  7 2026, 02:26:41) [MSC v.1944 64 bit (AMD64)]",
+    "python_implementation": "CPython"
+  },
+  "inputs": {
+    "corpus_path": "C:\\Users\\User\\Desktop\\DEV\\oooo\\Codex\\Peptide-RAG\\data\\corpus.jsonl",
+    "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+    "lexical_config_path": "C:\\Users\\User\\Desktop\\DEV\\oooo\\Codex\\Peptide-RAG\\data\\lexical_config.json",
+    "lexical_config_sha256": "D3A3002D0ECB1E141BA9FD73843880E01FE268AB8AEF9770E32466003D34E4D0",
+    "qrels_path": "C:\\Users\\User\\Desktop\\DEV\\oooo\\Codex\\Peptide-RAG\\data\\qrels_v2.json",
+    "qrels_sha256": "B30E1B7868EFFB580155442917C2BB0105ECC00E13527A103F6325B6A2B32ED6",
+    "query_count": 15
+  },
+  "measurements": {
+    "build": {
+      "median_ms": 11503.596599970479,
+      "p95_ms": 11597.386379970703,
+      "peak_memory_bytes": 111491576
+    },
+    "peak_memory_bytes": 111491576,
+    "query": {
+      "median_ms": 2.489500038791448,
+      "p95_ms": 7.742834993405268,
+      "peak_memory_bytes": 162277,
+      "per_query": {
+        "q01": {
+          "median_ms": 3.1019499874673784,
+          "p95_ms": 3.929274994879961,
+          "peak_memory_bytes": 66368
+        },
+        "q02": {
+          "median_ms": 0.7827999943401664,
+          "p95_ms": 0.860580027801916,
+          "peak_memory_bytes": 21103
+        },
+        "q03": {
+          "median_ms": 7.893650006735697,
+          "p95_ms": 9.578179960954001,
+          "peak_memory_bytes": 162277
+        },
+        "q04": {
+          "median_ms": 2.4759499938227236,
+          "p95_ms": 3.2614050345728174,
+          "peak_memory_bytes": 62507
+        },
+        "q05": {
+          "median_ms": 2.018250001128763,
+          "p95_ms": 3.006520014605485,
+          "peak_memory_bytes": 48110
+        },
+        "q06": {
+          "median_ms": 1.145399990491569,
+          "p95_ms": 1.7214000341482458,
+          "peak_memory_bytes": 32750
+        },
+        "q07": {
+          "median_ms": 3.340099996421486,
+          "p95_ms": 4.121819991269149,
+          "peak_memory_bytes": 65938
+        },
+        "q08": {
+          "median_ms": 0.4600500105880201,
+          "p95_ms": 0.6371650175424293,
+          "peak_memory_bytes": 14823
+        },
+        "q09": {
+          "median_ms": 3.009600011864677,
+          "p95_ms": 3.873214960913174,
+          "peak_memory_bytes": 51454
+        },
+        "q10": {
+          "median_ms": 2.723250014241785,
+          "p95_ms": 3.561089967843145,
+          "peak_memory_bytes": 67862
+        },
+        "q11": {
+          "median_ms": 2.023849985562265,
+          "p95_ms": 2.4578750162618235,
+          "peak_memory_bytes": 49333
+        },
+        "q12": {
+          "median_ms": 3.214149968698621,
+          "p95_ms": 4.048880023765378,
+          "peak_memory_bytes": 73835
+        },
+        "q13": {
+          "median_ms": 0.8980500278994441,
+          "p95_ms": 0.9760599728906526,
+          "peak_memory_bytes": 22258
+        },
+        "q14": {
+          "median_ms": 0.6539499736391008,
+          "p95_ms": 0.9412599931238218,
+          "peak_memory_bytes": 22026
+        },
+        "q15": {
+          "median_ms": 2.6769999822136015,
+          "p95_ms": 3.391125032794662,
+          "peak_memory_bytes": 51094
+        }
+      }
+    }
+  },
+  "recorded_at_utc": "2026-08-13T18:21:47.156089+00:00",
+  "schema_version": 1,
+  "source_revision": "1e13a60e80a000068aa06572c0463aa60bf91df2"
+}

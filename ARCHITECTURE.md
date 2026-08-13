@@ -156,3 +156,34 @@ Before BM25 results were measured, `data/eval_split.json` froze development
 queries `q01`–`q08`, `q12`, and `q14`, with `q09`, `q10`, `q11`, `q13`, and
 `q15` reserved as the Section 4 holdout. Baseline reporting may describe all
 15 queries, but no tuning decision may use holdout results.
+
+## Section 4: measured lexical tuning
+
+Section 4 evaluated 16 `k1`/`b` pairs on development queries only, followed by
+four pre-registered analyzers and four proximity boosts. Selection was ordered
+by NDCG@10, Recall@10, MRR, simplicity, distance from the untouched default,
+and numeric order. `data/lexical_config.json` hash-freezes the resulting
+development artifact before holdout access.
+
+The selected configuration keeps the baseline analyzer and uses `k1=0.8`,
+`b=0.75`, and `proximity_boost=0.0`. Greek expansion tied the baseline and was
+rejected for unnecessary complexity. The fixed stopword list and every tested
+positive proximity boost reduced development quality and were rejected.
+
+Alternative analyzers are immutable named configurations stored with each
+index. Index construction and query analysis must use the same configuration.
+The index now stores analyzed title lengths so proximity checks cannot cross
+the title/abstract boundary. Experimental proximity considers adjacent query
+token pairs in order, allows gaps from one to three, contributes at most one
+bonus per pair/document, and scales the bonus inversely with the gap.
+
+`without_document(doc_id)` returns a newly rebuilt index under the same
+analyzer. The original index is not mutated. Property tests cover IDF
+monotonicity, matching-term advantage, diminishing term-frequency gains,
+determinism, Unicode normalization, long inputs, deletion, and index integrity.
+
+The holdout script refuses existing outputs and validates the corpus, qrels,
+split, development experiment, and frozen configuration hashes. The first
+invocation reached evaluation but failed before exposing results due to a
+lowercase JSON Boolean in Python; the frozen configuration was not changed,
+and the corrected invocation is disclosed as a technical rerun.
