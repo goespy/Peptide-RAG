@@ -172,7 +172,7 @@ def run(
             "schema_version": 1,
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "source_revision": _revision(),
-            "one_shot_holdout": true,
+            "one_shot_holdout": True,
             "corpus_sha256": sha256(corpus),
             "qrels_sha256": sha256(qrels_path),
             "split_sha256": sha256(split_path),
