@@ -1,11 +1,17 @@
 """Local service contracts: lexical search works offline and RAG is opt-in."""
 
 import json
+import hashlib
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
+import numpy as np
+
+from src.chunks import Chunk, embedding_text
+from src.embeddings import EmbeddingCacheManifest, save_embedding_cache
 from src.generation import insufficient_evidence
+from src.retrieval import RetrievedChunk
 from src.service import LocalResearchService, _load_lexical_metrics, load_semantic_retriever
 
 
@@ -46,6 +52,33 @@ class ServiceTests(unittest.TestCase):
             frozen.write_text(json.dumps({"schema_version": 1, "corpus_sha256": "wrong"}), encoding="utf-8")
             self.assertIsNone(load_semantic_retriever(corpus, frozen, directory / "cache.npz", lexical_config_sha256="hash"))
 
+    def test_semantic_cache_model_must_match_frozen_selection(self):
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            corpus = self._corpus(directory)
+            corpus_hash = hashlib.sha256(corpus.read_bytes()).hexdigest().upper()
+            chunks_path = directory / "chunks_128_32.jsonl"
+            chunk = Chunk("1:c0001", "1", "Alpha peptide", "Alpha supports repair.", 0, 22, 3)
+            chunks_path.write_text(json.dumps(chunk.__dict__) + "\n", encoding="utf-8")
+            chunk_hash = hashlib.sha256(chunks_path.read_bytes()).hexdigest().upper()
+            chunks_path.with_suffix(".jsonl.manifest.json").write_text(json.dumps({
+                "schema_version": 1, "corpus_sha256": corpus_hash,
+                "chunk_sha256": chunk_hash, "chunk_count": 1,
+            }), encoding="utf-8")
+            frozen = directory / "frozen_config.json"
+            frozen.write_text(json.dumps({
+                "schema_version": 1, "corpus_sha256": corpus_hash,
+                "lexical_config_sha256": "LEXICAL", "chunk_config": {"words": 128, "overlap": 32},
+                "embedding_model": "expected/model", "rrf_alpha": 0.5,
+            }), encoding="utf-8")
+            cache = directory / "cache.npz"
+            manifest = EmbeddingCacheManifest.create(
+                model="different/model", dimension=2, corpus_hash=corpus_hash,
+                chunk_hash=chunk_hash, inputs=[embedding_text(chunk)], chunk_ids=[chunk.chunk_id],
+            )
+            save_embedding_cache(cache, np.array([[1.0, 0.0]]), manifest)
+            self.assertIsNone(load_semantic_retriever(corpus, frozen, cache, lexical_config_sha256="LEXICAL"))
+
     def test_metrics_require_matching_frozen_provenance(self):
         with TemporaryDirectory() as temp:
             path = Path(temp) / "evaluation.json"
@@ -84,3 +117,20 @@ class ServiceTests(unittest.TestCase):
             self.assertEqual(client.contexts, ())
             self.assertIsNone(response["answer"])
             self.assertEqual(response["citations"], [])
+
+    def test_answer_reuses_canonical_displayed_chunks_without_second_retrieval(self):
+        class RecordingClient:
+            def __init__(self): self.contexts = ()
+            def answer(self, query, contexts):
+                self.contexts = tuple(contexts); return insufficient_evidence()
+        class StoredRetriever:
+            def __init__(self, chunks): self.chunks = chunks
+
+        with TemporaryDirectory() as temp:
+            client = RecordingClient(); corpus = self._corpus(Path(temp))
+            service = LocalResearchService(corpus_path=corpus, lexical_config_path=self._lexical_config(Path(temp), corpus), answer_client=client)
+            chunk = Chunk("1:c0001", "1", "Alpha peptide", "Alpha supports repair.", 0, 22, 3)
+            service.semantic_retriever = StoredRetriever((chunk,))
+            displayed = service._chunk_record(RetrievedChunk(chunk, 1.0, "hybrid", 1, 1))
+            service.answer("What supports repair?", "hybrid", 1, [displayed])
+            self.assertEqual(tuple(item.chunk_id for item in client.contexts), ("1:c0001",))

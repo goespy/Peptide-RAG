@@ -10,6 +10,7 @@ DIMENSIONS = ("faithful", "relevant", "citations_correct", "refusal_correct")
 
 
 def percentile95(values: Iterable[float]) -> float | None:
+    """Return the nearest-rank p95 (ceil(0.95*n), one-indexed)."""
     items = sorted(float(value) for value in values)
     if not items:
         return None

@@ -83,7 +83,10 @@ class AnswerJudge:
             self._record_usage(response_payload)
             content = response_payload["choices"][0]["message"]["content"]
             payload = json.loads(content) if isinstance(content, str) else content
-            verdict = self._parse(payload)
+            refusal_correct = False if expected_answerable is None else (
+                (answer.status == "insufficient_evidence") == (not expected_answerable)
+            )
+            verdict = self._parse(payload, refusal_correct=refusal_correct)
             return verdict if validate_verdict(verdict, selected) else None
         except (requests.RequestException, OSError, KeyError, IndexError, TypeError, ValueError, json.JSONDecodeError):
             return None
@@ -118,12 +121,11 @@ class AnswerJudge:
         expected_answerable: bool | None,
     ) -> dict[str, object]:
         evidence = "\n\n".join(f"[{i}] PMID {chunk.pmid} | {chunk.title}\n{chunk.text}" for i, chunk in enumerate(contexts, 1))
-        schema = {"name": "faithfulness_verdict", "strict": True, "schema": {"type": "object", "additionalProperties": False, "required": ["claims", "faithful", "relevant", "citations_correct", "refusal_correct"], "properties": {"claims": {"type": "array", "items": {"type": "object", "additionalProperties": False, "required": ["text", "supported", "citation_ids"], "properties": {"text": {"type": "string"}, "supported": {"type": "boolean"}, "citation_ids": {"type": "array", "items": {"type": "integer"}}}}}, "faithful": {"type": "boolean"}, "relevant": {"type": "boolean"}, "citations_correct": {"type": "boolean"}, "refusal_correct": {"type": "boolean"}}}}
-        oracle = "unknown" if expected_answerable is None else ("answerable" if expected_answerable else "unanswerable")
-        return {"model": self.model, "temperature": 0, "max_tokens": 600, "response_format": {"type": "json_schema", "json_schema": schema}, "messages": [{"role": "system", "content": "Judge only supplied evidence. Extract atomic claims and mark support. Do not infer missing facts. Use the provided oracle answerability only to classify whether a refusal was correct."}, {"role": "user", "content": f"Question: {query}\nOracle answerability: {oracle}\nAnswer status: {answer.status}\nAnswer: {answer.text}\nCitations: {tuple((c.citation_id, c.pmid, c.chunk_id) for c in answer.citations)}\n\nEvidence:\n{evidence}"}]}
+        schema = {"name": "faithfulness_verdict", "strict": True, "schema": {"type": "object", "additionalProperties": False, "required": ["claims", "faithful", "relevant", "citations_correct"], "properties": {"claims": {"type": "array", "items": {"type": "object", "additionalProperties": False, "required": ["text", "supported", "citation_ids"], "properties": {"text": {"type": "string"}, "supported": {"type": "boolean"}, "citation_ids": {"type": "array", "items": {"type": "integer"}}}}}, "faithful": {"type": "boolean"}, "relevant": {"type": "boolean"}, "citations_correct": {"type": "boolean"}}}}
+        return {"model": self.model, "temperature": 0, "max_tokens": 600, "response_format": {"type": "json_schema", "json_schema": schema}, "messages": [{"role": "system", "content": "Judge only supplied evidence. Extract atomic claims and mark support. Do not infer missing facts. Evaluate faithfulness, relevance, and citation correctness only; refusal correctness is computed outside the model."}, {"role": "user", "content": f"Question: {query}\nAnswer status: {answer.status}\nAnswer: {answer.text}\nCitations: {tuple((c.citation_id, c.pmid, c.chunk_id) for c in answer.citations)}\n\nEvidence:\n{evidence}"}]}
 
     @staticmethod
-    def _parse(payload: object) -> JudgeVerdict:
+    def _parse(payload: object, *, refusal_correct: bool) -> JudgeVerdict:
         if not isinstance(payload, dict):
             raise ValueError("judge payload must be an object")
         raw_claims = payload["claims"]
@@ -134,4 +136,4 @@ class AnswerJudge:
             if not isinstance(item, dict) or not isinstance(item.get("text"), str) or not isinstance(item.get("supported"), bool) or not isinstance(item.get("citation_ids"), list):
                 raise ValueError("invalid claim")
             claims.append(AtomicClaim(item["text"], item["supported"], tuple(item["citation_ids"])))
-        return JudgeVerdict(tuple(claims), payload["faithful"], payload["relevant"], payload["citations_correct"], payload["refusal_correct"])
+        return JudgeVerdict(tuple(claims), payload["faithful"], payload["relevant"], payload["citations_correct"], refusal_correct)

@@ -82,10 +82,12 @@ class GenerationTests(unittest.TestCase):
         self.assertTrue(validate_answer_result(valid, [item]))
         self.assertFalse(validate_answer_result(AnswerResult("answered", "The study reported healing.", valid.citations), [item]))
         self.assertFalse(validate_answer_result(AnswerResult("answered", "The study reported healing. [2]", valid.citations), [item]))
+        self.assertFalse(validate_answer_result(AnswerResult("answered", "17 patients.", valid.citations), [item]))
 
     def test_refuses_personalized_or_prescriptive_dosing_before_http(self):
         self.assertTrue(requires_medical_refusal("What dose of BPC-157 is safe to take?"))
         self.assertTrue(requires_medical_refusal("Should I inject this peptide?"))
+        self.assertTrue(requires_medical_refusal("What dose should I take based on the study?"))
         self.assertFalse(requires_medical_refusal("What dose was administered to rats in the study?"))
         session = Mock()
         result = GroundedAnswerClient(api_key="key", session=session).answer(

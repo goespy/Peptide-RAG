@@ -47,16 +47,30 @@ def sample_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return selected
 
 def worksheet(rows: list[dict[str, Any]]) -> dict[str, Any]:
-    return {"version": 1, "purpose": "Project-owner labels for deterministic judge validation", "sample": [{"sample_id": f"{row['model']}:{row['qa_id']}", "model": row["model"], "qa_id": row["qa_id"], "answerability": row["answerability"], "answer": row.get("answer"), "judge": row["judge"], "owner_label": {"reviewer": "", **{dimension: None for dimension in DIMENSIONS}}} for row in sample_rows(rows)]}
+    # Judge verdicts are deliberately omitted so owner labels are blind. They
+    # are reloaded from the immutable source outputs during validation.
+    return {"version": 1, "purpose": "Blind project-owner labels for deterministic judge validation", "sample": [{"sample_id": f"{row['model']}:{row['qa_id']}", "model": row["model"], "qa_id": row["qa_id"], "answerability": row["answerability"], "answer": row.get("answer"), "owner_label": {"reviewer": "", **{dimension: None for dimension in DIMENSIONS}}} for row in sample_rows(rows)]}
 
-def validate_labels(packet: dict[str, Any]) -> dict[str, Any]:
+def validate_labels(packet: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any]:
     sample = packet.get("sample")
     if not isinstance(sample, list) or len(sample) != 10: raise JudgeValidationError("worksheet must contain exactly ten sampled outputs")
+    source: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        if not isinstance(row, dict) or not isinstance(row.get("model"), str) or not isinstance(row.get("qa_id"), str):
+            continue
+        sample_id = f"{row['model']}:{row['qa_id']}"
+        if sample_id in source: raise JudgeValidationError(f"duplicate source output: {sample_id}")
+        source[sample_id] = row
     report: dict[str, Any] = {"n": 10, "dimensions": {}}
     for dimension in DIMENSIONS:
         pairs = []
         for item in sample:
-            owner, judge = item.get("owner_label"), item.get("judge")
+            if not isinstance(item, dict) or not isinstance(item.get("sample_id"), str) or item["sample_id"] not in source:
+                raise JudgeValidationError("worksheet sample is not present in the source outputs")
+            saved = source[item["sample_id"]]
+            if any(item.get(key) != saved.get(key) for key in ("model", "qa_id", "answerability", "answer")):
+                raise JudgeValidationError(f"worksheet evidence changed for {item['sample_id']}")
+            owner, judge = item.get("owner_label"), saved.get("judge")
             if not isinstance(owner, dict) or not isinstance(owner.get("reviewer"), str) or not owner["reviewer"].strip() or not isinstance(owner.get(dimension), bool): raise JudgeValidationError(f"owner label and reviewer required for {dimension}")
             if not isinstance(judge, dict) or not isinstance(judge.get(dimension), bool): raise JudgeValidationError(f"saved judge verdict required for {dimension}")
             pairs.append((owner[dimension], judge[dimension]))
@@ -70,16 +84,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_bakeoff_outputs.json"); parser.add_argument("--worksheet", type=Path, default=ROOT / "data/judge_validation_worksheet.json"); parser.add_argument("--report", type=Path, default=ROOT / "data/judge_validation_report.json"); parser.add_argument("--validate", action="store_true"); parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
     try:
-        if args.validate:
-            worksheet_packet = load(args.worksheet)
-            report = validate_labels(worksheet_packet)
-            report["worksheet_sha256"] = hashlib.sha256(args.worksheet.read_bytes()).hexdigest().upper()
-            report["source_outputs_sha256"] = worksheet_packet.get("source_outputs_sha256")
-            write_atomic(args.report, report, overwrite=args.overwrite); print(json.dumps(report, sort_keys=True)); return 0 if report["passes"] else 1
         output_packet = load(args.outputs); outputs = output_packet.get("outputs")
         if not isinstance(outputs, list): raise JudgeValidationError("outputs artifact needs an outputs list")
+        outputs_hash = hashlib.sha256(args.outputs.read_bytes()).hexdigest().upper()
+        if args.validate:
+            worksheet_packet = load(args.worksheet)
+            if worksheet_packet.get("source_outputs_sha256") != outputs_hash:
+                raise JudgeValidationError("worksheet is not bound to the supplied source outputs")
+            report = validate_labels(worksheet_packet, outputs)
+            report["worksheet_sha256"] = hashlib.sha256(args.worksheet.read_bytes()).hexdigest().upper()
+            report["source_outputs_sha256"] = outputs_hash
+            write_atomic(args.report, report, overwrite=args.overwrite); print(json.dumps(report, sort_keys=True)); return 0 if report["passes"] else 1
         packet = worksheet(outputs)
-        packet["source_outputs_sha256"] = hashlib.sha256(args.outputs.read_bytes()).hexdigest().upper()
+        packet["source_outputs_sha256"] = outputs_hash
         write_atomic(args.worksheet, packet, overwrite=args.overwrite)
     except (JudgeValidationError, OSError, TypeError) as exc: print(f"Error: {exc}", file=sys.stderr); return 1
     print(f"Wrote deterministic 10-output owner-label worksheet to {args.worksheet}"); return 0

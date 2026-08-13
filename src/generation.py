@@ -69,13 +69,13 @@ def requires_medical_refusal(query: str) -> bool:
 
     if not isinstance(query, str):
         return False
+    personalized_action = bool(_FIRST_PERSON.search(query) and _MEDICAL_ACTION.search(query))
+    if personalized_action:
+        return True
     reported_context = re.search(r"\b(?:study|paper|trial|reported|tested|administered|rats?|mice)\b", query, re.IGNORECASE)
     if reported_context:
         return False
-    return bool(
-        _DOSING_REQUEST.search(query)
-        or (_FIRST_PERSON.search(query) and _MEDICAL_ACTION.search(query))
-    )
+    return bool(_DOSING_REQUEST.search(query))
 
 
 def validate_answer_result(result: AnswerResult, contexts: Sequence[RetrievedChunk]) -> bool:
@@ -106,7 +106,7 @@ def validate_answer_result(result: AnswerResult, contexts: Sequence[RetrievedChu
     for sentence in _SENTENCE.split(citation_bound):
         stripped = sentence.strip()
         words = re.sub(r"\[\d+\]", "", stripped).strip()
-        if len(re.findall(r"\w+", words)) >= 3 and not _CITATION.search(stripped):
+        if (len(re.findall(r"\w+", words)) >= 3 or re.search(r"\d", words)) and not _CITATION.search(stripped):
             return False
     return True
 
