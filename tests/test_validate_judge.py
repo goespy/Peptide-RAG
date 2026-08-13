@@ -21,8 +21,10 @@ class JudgeValidationTests(unittest.TestCase):
         second = judge_validation.worksheet(list(reversed(rows())))
         self.assertEqual(first, second)
         self.assertEqual(len(first["sample"]), 10)
-        self.assertEqual(sum(item["answerability"] == "answerable" for item in first["sample"]), 6)
+        source = {f"{row['model']}:{row['qa_id']}": row for row in rows()}
+        self.assertEqual(sum(source[item["sample_id"]]["answerability"] == "answerable" for item in first["sample"]), 6)
         self.assertTrue(all("judge" not in item for item in first["sample"]))
+        self.assertTrue(all("answerability" not in item for item in first["sample"]))
 
     def test_labels_are_required_and_kappa_is_honestly_undefined(self):
         packet = judge_validation.worksheet(rows())

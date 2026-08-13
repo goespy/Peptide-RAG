@@ -32,8 +32,10 @@ class HoldoutTests(unittest.TestCase):
         for case in cases:
             rows.append({"model": "model", "qa_id": case["id"], "config_sha256": "c", "contexts_sha256": "x", "answer": {"status": "answered", "text": "Three factual words [1].", "citations": [{"citation_id": 1, "pmid": "1", "chunk_id": "1:c0001", "title": "title"}]}})
         rows[0]["answer"]["citations"][0]["pmid"] = "wrong"
+        rows[1]["answerability"] = "tampered"
         saved = holdout.saved_rows({"outputs": rows}, cases, contexts, "model", "c", "x")
         self.assertFalse(saved[0]["structurally_valid"])
+        self.assertEqual(saved[1]["answerability"], cases[1]["answerability"])
 
     def test_context_provenance_requires_frozen_config_hash(self):
         holdout.validate_context_provenance({"retriever_config_sha256": "x"}, "x")

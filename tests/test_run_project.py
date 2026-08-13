@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -40,3 +41,17 @@ class RunProjectTests(unittest.TestCase):
                 checks, failed = run_project.run()
         self.assertTrue(failed)
         self.assertTrue(any(check.state == "FAIL" and check.name.startswith("RAG ") for check in checks))
+
+    def test_recomputed_metric_drift_from_saved_evidence_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "baseline.json"
+            payload = json.loads(run_project.BASELINE.read_text(encoding="utf-8"))
+            payload["runs"]["boolean"]["evaluation"]["aggregate"]["mrr"] += 0.01
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "BASELINE", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(
+            check.name == "current boolean evaluation" and check.state == "FAIL"
+            for check in checks
+        ))

@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import sys
 from dataclasses import dataclass
@@ -18,6 +19,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from run_day1 import Day1Error, load_qrels, sha256, validate_corpus_binding
+from src.analysis import ANALYSIS_CONFIGS
 from src.bm25 import BM25Config, rank_bm25
 from src.boolean import search_boolean
 from src.index import InvertedIndex
@@ -82,11 +84,38 @@ def _core_checks() -> tuple[list[Check], InvertedIndex, dict[str, Any], BM25Conf
     bm25 = config.get("bm25")
     if not isinstance(bm25, dict) or not all(isinstance(bm25.get(k), (int, float)) for k in ("k1", "b")):
         raise ValueError("frozen lexical configuration has no usable BM25 parameters")
-    index = InvertedIndex.from_jsonl(CORPUS)
+    try:
+        analysis = ANALYSIS_CONFIGS[config["analysis"]["name"]]
+        bm25_config = BM25Config(
+            k1=float(bm25["k1"]),
+            b=float(bm25["b"]),
+            proximity_boost=float(bm25.get("proximity_boost", 0.0)),
+        )
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("frozen lexical analyzer/BM25 configuration is invalid") from exc
+    index = InvertedIndex.from_jsonl(CORPUS, analysis_config=analysis)
     return [
         Check("frozen core hashes", "PASS", f"corpus {corpus_hash}; qrels/config/split bindings match", True),
         Check("inverted index", "PASS", f"{len(index.documents)} documents; {len(index.postings)} terms", True),
-    ], index, qrels, BM25Config(k1=float(bm25["k1"]), b=float(bm25["b"]))
+    ], index, qrels, bm25_config
+
+
+def _reports_match(actual: Any, expected: Any, *, tolerance: float = 1e-9) -> bool:
+    """Compare complete saved/recomputed reports with a strict float tolerance."""
+
+    if isinstance(actual, bool) or isinstance(expected, bool):
+        return actual is expected
+    if isinstance(actual, (int, float)) and isinstance(expected, (int, float)):
+        return math.isclose(float(actual), float(expected), rel_tol=tolerance, abs_tol=tolerance)
+    if isinstance(actual, dict) and isinstance(expected, dict):
+        return set(actual) == set(expected) and all(
+            _reports_match(actual[key], expected[key], tolerance=tolerance) for key in actual
+        )
+    if isinstance(actual, list) and isinstance(expected, list):
+        return len(actual) == len(expected) and all(
+            _reports_match(left, right, tolerance=tolerance) for left, right in zip(actual, expected)
+        )
+    return actual == expected
 
 
 def _evaluate(index: InvertedIndex, qrels: dict[str, Any], config: BM25Config) -> list[Check]:
@@ -97,13 +126,22 @@ def _evaluate(index: InvertedIndex, qrels: dict[str, Any], config: BM25Config) -
             for entry in qrels["queries"]
         },
     }
+    baseline = _json(BASELINE)
+    holdout = _json(HOLDOUT)
+    expected_reports = {
+        "boolean": baseline.get("runs", {}).get("boolean", {}).get("evaluation"),
+        "bm25": holdout.get("full_descriptive"),
+    }
     checks: list[Check] = []
     for mode, ranked in rankings.items():
         report = evaluate_run(qrels, ranked, (1, 3, 5, 10))
         aggregate = report.aggregate
+        matches = _reports_match(report.to_dict(), expected_reports[mode])
         checks.append(Check(
-            f"current {mode} evaluation", "PASS",
-            f"{aggregate['query_count']} queries; MRR={aggregate['mrr']:.3f}; NDCG@10={aggregate['ndcg_at'][10]:.3f}", True,
+            f"current {mode} evaluation", "PASS" if matches else "FAIL",
+            f"{aggregate['query_count']} queries; MRR={aggregate['mrr']:.3f}; NDCG@10={aggregate['ndcg_at'][10]:.3f}; "
+            + ("complete report matches saved evidence" if matches else "complete report differs from saved evidence"),
+            True,
         ))
     return checks
 

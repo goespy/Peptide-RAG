@@ -8,10 +8,10 @@ from typing import Any, Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.run_rag_bakeoff import (BakeoffError, _saved_answer, contexts_from, hash_file, load_json, validate_config, validate_live_cost, write_json_atomic)  # noqa: E402
-from src.generation import GroundedAnswerClient, validate_answer_result  # noqa: E402
+from scripts.run_rag_bakeoff import (BakeoffError, contexts_from, hash_file, load_json, structurally_valid_answer, validate_config, validate_live_cost, write_json_atomic)  # noqa: E402
+from src.generation import GroundedAnswerClient  # noqa: E402
 from src.judge import AnswerJudge  # noqa: E402
-from src.rag_metrics import answer_is_structurally_valid, candidate_summary  # noqa: E402
+from src.rag_metrics import candidate_summary  # noqa: E402
 from src.retrieval import RetrievedChunk  # noqa: E402
 
 class HoldoutError(BakeoffError): pass
@@ -42,13 +42,14 @@ def validate_context_provenance(packet: dict[str, Any], config_hash: str) -> Non
 def saved_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], winner: str, config_hash: str, context_hash: str) -> list[dict[str, Any]]:
     rows = outputs.get("outputs")
     if not isinstance(rows, list) or len(rows) != len(cases): raise HoldoutError("holdout output must contain exactly seven records")
-    expected = {item["id"] for item in cases}; result = []
+    expected = {item["id"]: item for item in cases}; result = []
     for row in rows:
         if not isinstance(row, dict) or row.get("model") != winner or row.get("qa_id") not in expected or row.get("config_sha256") != config_hash or row.get("contexts_sha256") != context_hash: raise HoldoutError("holdout output provenance does not match the frozen winner/config/contexts")
-        answer = _saved_answer(row.get("answer")); copied = dict(row)
-        copied["structurally_valid"] = answer is not None and answer_is_structurally_valid(copied.get("answer", {})) and validate_answer_result(answer, contexts[copied["qa_id"]])
+        copied = dict(row)
+        copied["answerability"] = expected[copied["qa_id"]]["answerability"]
+        copied["structurally_valid"] = structurally_valid_answer(copied.get("answer"), contexts[copied["qa_id"]])
         result.append(copied)
-    if {row["qa_id"] for row in result} != expected: raise HoldoutError("holdout output must contain each frozen question once")
+    if {row["qa_id"] for row in result} != set(expected): raise HoldoutError("holdout output must contain each frozen question once")
     return result
 
 def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], winner: str, config_hash: str, context_hash: str, api_key: str) -> list[dict[str, Any]]:
@@ -61,7 +62,7 @@ def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChu
         judge_usage = dict(judge.last_metadata)
         usage.update({"latency_ms": latency, "generator_usage": dict(generator.last_metadata), "judge_usage": judge_usage, "token_cost_status": "provider_reported" if usage.get("input_tokens") is not None and usage.get("cost_usd") is not None else "unknown_not_exposed_by_provider"})
         answer_payload = {"status": answer.status, "text": answer.text, "citations": [item.__dict__ for item in answer.citations]}
-        result.append({"model": winner, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": answer_is_structurally_valid(answer_payload) and validate_answer_result(answer, contexts[case["id"]]), "metadata": usage})
+        result.append({"model": winner, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": structurally_valid_answer(answer_payload, contexts[case["id"]]), "metadata": usage})
     return result
 
 def main(argv: Sequence[str] | None = None) -> int:

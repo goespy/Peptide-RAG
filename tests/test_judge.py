@@ -46,6 +46,11 @@ class JudgeTests(unittest.TestCase):
     def test_invalid_schema_and_provider_error_return_none(self):
         session = Mock()
         session.post.return_value = response({"claims": [], "faithful": "yes", "relevant": True, "citations_correct": True})
-        self.assertIsNone(AnswerJudge(api_key="key", session=session).judge("q", AnswerResult("insufficient_evidence", "x", ()), [context()]))
+        self.assertIsNone(AnswerJudge(api_key="key", session=session).judge("q", AnswerResult("insufficient_evidence", "x", ()), [context()], expected_answerable=False))
         session.post.side_effect = OSError("network")
+        self.assertIsNone(AnswerJudge(api_key="key", session=session).judge("q", AnswerResult("insufficient_evidence", "x", ()), [context()], expected_answerable=False))
+
+    def test_missing_answerability_fails_closed_without_http(self):
+        session = Mock()
         self.assertIsNone(AnswerJudge(api_key="key", session=session).judge("q", AnswerResult("insufficient_evidence", "x", ()), [context()]))
+        session.post.assert_not_called()

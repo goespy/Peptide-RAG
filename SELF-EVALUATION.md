@@ -14,6 +14,7 @@
 | Lexical/semantic/hybrid chunk metrics | `scripts/evaluate_chunks.py` | Not run; no approved QA/cache |
 | Grounded answers, citations, refusal | `src/generation.py`; unit tests | Contract passes; live evaluation pending |
 | Three-model bake-off and judge validation | bake-off/validation scripts | Not run |
+| Independent implementation review | `artifacts/section6/claude_opus_review.md` | Opus re-review passed after fixes |
 | Public deployment | `app.py`; `DEPLOYMENT.md` | Local shell implemented; Railway pending |
 | Cost report | `COST-REPORT.md` | Formula frozen; actual prices/usage TBD |
 | Demo and social evidence | `DEMO-SCRIPT.md`; `SOCIAL-POST.md` | Draft only |

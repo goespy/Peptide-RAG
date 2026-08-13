@@ -211,7 +211,7 @@ bound and confirmation:
 ```bash
 python scripts/run_rag_bakeoff.py --live --max-cost-usd 2.00 --confirm-cost
 python scripts/validate_judge.py
-# Fill the 10 owner_label entries in data/judge_validation_worksheet.json.
+# Blindly label the 10 outputs; judge verdicts and answerability are hidden.
 python scripts/validate_judge.py --validate
 python scripts/export_rag_holdout_contexts.py --cache <selected-cache.npz> --max-cost-usd 0.25 --confirm-cost
 python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
@@ -219,7 +219,8 @@ python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
 
 The final command freezes a generator only when all seven holdout outputs are
 structurally valid and judged. Offline reruns use the saved outputs and make no
-provider calls.
+provider calls. The independent Section 5/6 code audit and resolution trail is
+saved in [`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md).
 
 The local application is available without provider credentials:
 

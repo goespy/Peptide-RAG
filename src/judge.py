@@ -73,19 +73,17 @@ class AnswerJudge:
             "cost_usd": 0.0,
             "provider": None,
         }
-        if not isinstance(query, str) or not query.strip() or not self.api_key:
+        if not isinstance(query, str) or not query.strip() or not self.api_key or not isinstance(expected_answerable, bool):
             return None
         try:
             self.last_metadata["provider_calls"] = 1
-            response = self.session.post(OPENROUTER_CHAT_URL, headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}, json=self._payload(query, answer, selected, expected_answerable=expected_answerable), timeout=self.timeout)
+            response = self.session.post(OPENROUTER_CHAT_URL, headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}, json=self._payload(query, answer, selected), timeout=self.timeout)
             response.raise_for_status()
             response_payload = response.json()
             self._record_usage(response_payload)
             content = response_payload["choices"][0]["message"]["content"]
             payload = json.loads(content) if isinstance(content, str) else content
-            refusal_correct = False if expected_answerable is None else (
-                (answer.status == "insufficient_evidence") == (not expected_answerable)
-            )
+            refusal_correct = (answer.status == "insufficient_evidence") == (not expected_answerable)
             verdict = self._parse(payload, refusal_correct=refusal_correct)
             return verdict if validate_verdict(verdict, selected) else None
         except (requests.RequestException, OSError, KeyError, IndexError, TypeError, ValueError, json.JSONDecodeError):
@@ -117,8 +115,6 @@ class AnswerJudge:
         query: str,
         answer: AnswerResult,
         contexts: Sequence[RetrievedChunk],
-        *,
-        expected_answerable: bool | None,
     ) -> dict[str, object]:
         evidence = "\n\n".join(f"[{i}] PMID {chunk.pmid} | {chunk.title}\n{chunk.text}" for i, chunk in enumerate(contexts, 1))
         schema = {"name": "faithfulness_verdict", "strict": True, "schema": {"type": "object", "additionalProperties": False, "required": ["claims", "faithful", "relevant", "citations_correct"], "properties": {"claims": {"type": "array", "items": {"type": "object", "additionalProperties": False, "required": ["text", "supported", "citation_ids"], "properties": {"text": {"type": "string"}, "supported": {"type": "boolean"}, "citation_ids": {"type": "array", "items": {"type": "integer"}}}}}, "faithful": {"type": "boolean"}, "relevant": {"type": "boolean"}, "citations_correct": {"type": "boolean"}}}}

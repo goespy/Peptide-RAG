@@ -265,7 +265,12 @@ provider-reported cost when available, and p95 latency. Claude is the
 different-family judge, but its verdict is unusable until a deterministic
 10-output sample reaches at least 80% owner agreement and Cohen's kappa 0.60.
 Undefined kappa remains inconclusive and is accompanied by the confusion
-matrix.
+matrix. The owner worksheet hides both the judge verdict and frozen
+answerability label. During validation it is SHA-256-bound back to the saved
+outputs, and the judge verdict is reloaded rather than trusted from the
+human-editable worksheet. Answerability never enters the LLM judge prompt;
+refusal correctness is calculated deterministically from the frozen QA label
+and returned answer status.
 
 ## Application and release boundary
 
@@ -286,7 +291,8 @@ These counters are explicitly single-instance controls, not a distributed
 rate-limiting claim.
 
 `python run_project.py` is the network-free release check. It validates the
-frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics, and
+frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics,
+compares the complete per-query and aggregate reports with saved evidence, and
 validates committed chunk manifests. Until the approved QA, embedding caches,
 bake-off, human judge labels, and deployment artifacts exist, those checks are
 reported as `TBD`; they are not converted into zeros or passing claims.

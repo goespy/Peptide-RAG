@@ -49,7 +49,7 @@ def sample_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def worksheet(rows: list[dict[str, Any]]) -> dict[str, Any]:
     # Judge verdicts are deliberately omitted so owner labels are blind. They
     # are reloaded from the immutable source outputs during validation.
-    return {"version": 1, "purpose": "Blind project-owner labels for deterministic judge validation", "sample": [{"sample_id": f"{row['model']}:{row['qa_id']}", "model": row["model"], "qa_id": row["qa_id"], "answerability": row["answerability"], "answer": row.get("answer"), "owner_label": {"reviewer": "", **{dimension: None for dimension in DIMENSIONS}}} for row in sample_rows(rows)]}
+    return {"version": 1, "purpose": "Blind project-owner labels for deterministic judge validation", "sample": [{"sample_id": f"{row['model']}:{row['qa_id']}", "model": row["model"], "qa_id": row["qa_id"], "answer": row.get("answer"), "owner_label": {"reviewer": "", **{dimension: None for dimension in DIMENSIONS}}} for row in sample_rows(rows)]}
 
 def validate_labels(packet: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any]:
     sample = packet.get("sample")
@@ -68,7 +68,7 @@ def validate_labels(packet: dict[str, Any], rows: list[dict[str, Any]]) -> dict[
             if not isinstance(item, dict) or not isinstance(item.get("sample_id"), str) or item["sample_id"] not in source:
                 raise JudgeValidationError("worksheet sample is not present in the source outputs")
             saved = source[item["sample_id"]]
-            if any(item.get(key) != saved.get(key) for key in ("model", "qa_id", "answerability", "answer")):
+            if any(item.get(key) != saved.get(key) for key in ("model", "qa_id", "answer")):
                 raise JudgeValidationError(f"worksheet evidence changed for {item['sample_id']}")
             owner, judge = item.get("owner_label"), saved.get("judge")
             if not isinstance(owner, dict) or not isinstance(owner.get("reviewer"), str) or not owner["reviewer"].strip() or not isinstance(owner.get(dimension), bool): raise JudgeValidationError(f"owner label and reviewer required for {dimension}")

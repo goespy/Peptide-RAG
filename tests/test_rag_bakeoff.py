@@ -66,6 +66,17 @@ class BakeoffTests(unittest.TestCase):
         grouped = bakeoff.offline_rows({"outputs": rows}, cases, contexts, "config", "contexts")
         self.assertFalse(grouped[bakeoff.MODELS[0]][0]["structurally_valid"])
 
+    def test_offline_rows_restore_answerability_and_share_live_validator(self):
+        cases = bakeoff.validate_qa(approved_qa())
+        context = RetrievedChunk(Chunk("1:c0001", "1", "title", "evidence", 0, 8, 1), 1.0, "stored")
+        contexts = {case["id"]: (context,) for case in cases}
+        valid_answer = {"status": "answered", "text": "Three factual words [1].", "citations": [{"citation_id": 1, "pmid": "1", "chunk_id": "1:c0001", "title": "title"}]}
+        rows = [{"model": model, "qa_id": case["id"], "answerability": "tampered", "config_sha256": "config", "contexts_sha256": "contexts", "answer": valid_answer} for model in bakeoff.MODELS for case in cases]
+        grouped = bakeoff.offline_rows({"outputs": rows}, cases, contexts, "config", "contexts")
+        first = grouped[bakeoff.MODELS[0]][0]
+        self.assertEqual(first["answerability"], cases[0]["answerability"])
+        self.assertEqual(first["structurally_valid"], bakeoff.structurally_valid_answer(valid_answer, contexts[first["qa_id"]]))
+
     def test_atomic_writes_and_live_cost_confirmation_fail_closed(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "artifact.json"

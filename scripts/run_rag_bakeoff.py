@@ -145,6 +145,11 @@ def _saved_answer(payload: Any) -> AnswerResult | None:
         return AnswerResult(payload["status"], payload["text"], tuple(citations))
     except (KeyError, TypeError): return None
 
+def structurally_valid_answer(payload: Any, contexts: tuple[RetrievedChunk, ...]) -> bool:
+    """Apply one identical saved/live structural validator."""
+    answer = _saved_answer(payload)
+    return answer is not None and answer_is_structurally_valid(payload) and validate_answer_result(answer, contexts)
+
 def offline_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], config_hash: str, context_hash: str, models: Sequence[str] = MODELS) -> dict[str, list[dict[str, Any]]]:
     rows = outputs.get("outputs")
     if not isinstance(rows, list): raise BakeoffError("offline artifact needs an outputs list")
@@ -152,8 +157,9 @@ def offline_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts:
     for row in rows:
         if not isinstance(row, dict) or row.get("model") not in grouped or row.get("qa_id") not in expected: raise BakeoffError("output has unknown model or non-development case")
         if row.get("config_sha256") != config_hash or row.get("contexts_sha256") != context_hash: raise BakeoffError("output was not generated with the selected config and identical stored contexts")
-        answer = _saved_answer(row.get("answer")); row = dict(row)
-        row["structurally_valid"] = answer is not None and answer_is_structurally_valid(row["answer"]) and validate_answer_result(answer, contexts[row["qa_id"]])
+        row = dict(row)
+        row["answerability"] = expected[row["qa_id"]]["answerability"]
+        row["structurally_valid"] = structurally_valid_answer(row.get("answer"), contexts[row["qa_id"]])
         grouped[row["model"]].append(row)
     for model, model_rows in grouped.items():
         if {row["qa_id"] for row in model_rows} != set(expected) or len(model_rows) != len(expected):
@@ -182,7 +188,7 @@ def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChu
                     else "unknown_not_exposed_by_provider"
                 ),
             })
-            grouped[model].append({"model": model, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": answer_is_structurally_valid(answer_payload) and validate_answer_result(answer, contexts[case["id"]]), "metadata": usage})
+            grouped[model].append({"model": model, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": structurally_valid_answer(answer_payload, contexts[case["id"]]), "metadata": usage})
     return grouped
 
 def main(argv: Sequence[str] | None = None) -> int:
