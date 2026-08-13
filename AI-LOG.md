@@ -11,6 +11,8 @@
 | 2026-08-12 | Codex + GPT-5.6 Terra subagent | Added deterministic five-document-per-query pooling after preserving the version-1 baseline; rendered a 75-pair worksheet without automatic relevance grades. | Codex reviewed the algorithm, caught and fixed a direct-script import failure that unit imports did not expose, and ran 59 tests plus both CLI commands. Human pooled labeling remains pending. |
 | 2026-08-12 | Claude (Claude Code), independent second reviewer | Re-read all 15 draft `QRELS-REVIEW.md` entries against the frozen no-stemming tokenizer rule, checking that every analyzed query term is literally present in its source; grepped the full 2,000-record corpus for a topically better TB-500 candidate. | Found and corrected one real defect (q11); flagged and then retracted one false positive (q02) after re-reading the untruncated source. Both outcomes logged under Oracle Catches below. |
 | 2026-08-12 | Codex + three GPT-5.6 Terra subagents | Froze shared interfaces, then delegated the positional index, Boolean parser, and dependency-free metrics module as isolated workstreams. | Codex integrated the modules, converted an undiscovered pytest-style test file to `unittest`, fixed Windows Unicode output, ran 52 tests, and reproduced the 15-query metrics report. |
+| 2026-08-13 | Codex + three GPT-5.6 Terra subagents | Implemented isolated BM25, full-metrics, and ranked-search work packets after freezing the interfaces and tuning split. | The primary agent installed the reference package, repaired a batch-query differential bug, expanded the differential to all 15 frozen queries, ran 88 tests, and saved the untouched baseline artifacts. |
+| 2026-08-13 | Claude Code review attempt | A direct source review was blocked because it would transmit repository files externally; a specification-only retry had no local-file access but timed out without a verdict. | No Claude claim was used. BM25 acceptance relied on hand calculations and the passing independent `bm25s` differential; this limitation is recorded rather than presented as a completed review. |
 
 Second required AI tool or integration: **Claude Code** (independent qrels review, distinct from the Codex/GPT-5.6 build agent — satisfies the "two tools" requirement and is a deliberate second-model check, not just a second interface).
 
@@ -25,6 +27,8 @@ Preserve 3–5 prompts that produced useful, verifiable work.
 1. **Foundation constraints:** The initial project prompt requiring the exact PubMed query, a from-scratch index/metrics approach, and the “measured, not vibed” ordering. Result: **fetcher and foundation docs; engine work remains pending**.
 2. **Bounded qrels drafting:** “Read ONLY candidates q01-q05 from `data/qrels_candidates.json`. Do not search the rest of the corpus or use retrieval code. Draft a short 3–6 term information need whose analyzed terms occur in the source, and return JSON requiring human approval.” Result: five draft queries; the same prompt was applied to two disjoint five-document batches.
 3. **Bounded engine modules:** “Implement only one named retrieval module and its tests against these frozen public interfaces; do not edit other files; use the Python standard library and no IR libraries.” Result: independently developed index, Boolean, and metrics modules that were then integration-tested by the primary agent.
+
+4. **BM25 differential:** "Implement the exact frozen Lucene-style formula, keep the reference package test-only, and compare positive scores within `1e-6` after deterministic tie normalization." Result: a scorer that matches `bm25s` on a hand corpus and all 15 frozen queries after the primary agent corrected the first reference API call.
 
 ## Code Analysis
 
@@ -41,7 +45,9 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **Observed limitation:** The first test command assumed `python` was on `PATH`; verification required the workspace's bundled Python runtime and a project virtual environment.
 - **Observed limitation:** Mechanical delegates produced fluent queries but three omitted the peptide identity, so primary review added the peptide terms before validation.
 - **Observed limitation:** The Boolean delegate wrote pytest-style functions even though the repository standard was `unittest`; they looked valid but were invisible to test discovery until integration review converted them.
-- **TBD:** Add findings from indexing, Boolean retrieval, BM25, and RAG work only after those phases exist.
+- **Observed strength:** With interfaces frozen first, lower-cost agents produced non-overlapping BM25, metrics, and CLI modules that integrated without production-code conflicts.
+- **Observed limitation:** The first suite skipped the optional reference test, and its first actual run exposed incorrect use of the reference API. Optional oracle dependencies must be installed and exercised before acceptance.
+- **TBD:** Add RAG findings only after that phase exists.
 
 ## Oracle Catches
 
@@ -52,6 +58,8 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **2026-08-12 — Unicode CLI output:** Retrieval itself handled `β4`, but the Windows console crashed while printing a matching title because its legacy encoding could not encode Greek beta. A direct search smoke test caught the boundary failure; the CLI now configures UTF-8 output and a Unicode retrieval regression test prevents recurrence.
 - **2026-08-12 — qrels pool CLI import:** The new pooling module passed tests when imported from the repository root, but `python scripts/prepare_qrels_pool.py` failed because direct execution placed `scripts/` rather than the project root on Python's import path. A direct CLI smoke test caught the mismatch; the script now inserts its resolved project root before importing `src`, and both documented pooling commands run successfully.
 - **2026-08-13 — pooled-qrels consistency audit:** After 75 query-document pairs were graded, a second pass compared borderline grades across all queries. PMID 33394327 for q07 changed from `1` to `2`: although its population has obstructive sleep apnea, the study directly measures MOTS-c against BMI and insulin resistance, so the population qualifier does not make it merely background. The change and reason are preserved in `data/qrels_v2_review.json`. The stronger qrels reduced measured mean Recall@5 from the version-1 known-item `1.000` to `0.570`, exposing relevant papers missed by strict implicit-AND retrieval.
+- **2026-08-13 — reference differential was only apparently green:** The first full suite reported the `bm25s` differential as skipped because the optional reference package was absent. After installing the pinned dependency, the test failed because it passed a flat token list where `bm25s` requires a batch of token lists. The harness was corrected, moved to float64, and expanded from a toy query to all 15 frozen queries. Every positive score and ranking now matches within `1e-6`.
+- **2026-08-13 — BM25 improves the scoreboard but exposes q09:** With unchanged qrels v2, BM25 raised Recall@10 from `0.570` to `0.940` and NDCG@10 from `0.716` to `0.921`, and promoted q11's relevant TB-500 paper to rank one. However, q09 now has an irrelevant first result. The miss remains visible so aggregate improvement is not mistaken for universal correctness.
 - Add later retrieval incidents when a qrels metric, differential oracle, property test, or robustness test exposes them. Include the failing evidence, correction, and changed metric/test result.
 
 ## Key Learnings
@@ -63,6 +71,7 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - A single AI agent drafting and reviewing its own qrels is the same failure mode as a student writing an easy quiz and grading it themselves; an independent second reviewer with no stake in the retrieval implementation caught a real defect a same-agent review plausibly would not have prioritized.
 - Token-literal validation ("does this word appear in the source") is necessary but not sufficient — q11 passed that check and was still a bad judgment because the source was topically implausible as a real information need. Schema/token checks and human topical judgment are different failure modes and need different checks.
 - Verify against the full untruncated source before writing a finding into a permanent log, even when the finding sounds correct — the q02 near-miss shows a truncated read produces confident, wrong conclusions exactly like the ones this log exists to catch.
+- Optional oracle tests are not evidence until their dependency is installed and the test actually executes. A skipped differential is an unverified requirement, not a pass.
 - **TBD:** Add concrete lessons from later oracle catches.
 
 ## AI Cost Tracking

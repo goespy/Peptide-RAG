@@ -2,7 +2,7 @@
 
 A from-scratch relevance engine over a custom corpus of therapeutic-peptide research from PubMed. The project follows the Gauntlet AI rule **measured, not vibed**: freeze human relevance judgments before tuning retrieval, calculate metrics ourselves, and do not add an LLM until lexical retrieval is objectively evaluated.
 
-## Day 1 status
+## Project status
 
 - [x] Assignment constraints and analysis/index architecture documented
 - [x] Executable PubMed corpus fetcher with offline tests
@@ -13,6 +13,13 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Positional inverted index
 - [x] Boolean `AND`/`OR` retrieval
 - [x] Red precision@k and recall@k harness
+- [x] Lucene-style BM25 ranking implemented from scratch
+- [x] MRR and graded NDCG implemented from scratch
+- [x] Differential scores/rankings match `bm25s` on all 15 frozen queries
+- [x] Ranked CLI results with scores, snippets, and PubMed links
+- [x] Section 3 Boolean/BM25 baseline saved as JSON and Markdown
+- [ ] Section 4 lexical tuning and hardening
+- [ ] Section 5 semantic/hybrid RAG
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
 
@@ -69,6 +76,14 @@ Run the network-free verification suite with:
 python -m unittest discover -s tests -v
 ```
 
+To include the test-only reference-BM25 differential, install the development
+dependencies first:
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m unittest discover -s tests -v
+```
+
 ## Prepare the judgment-set review
 
 Generate the fixed, peptide-stratified candidate set and validate/render the AI suggestions:
@@ -120,10 +135,47 @@ python run_day1.py --qrels data/qrels_v2.json
 Direct search is also available:
 
 ```bash
-python search.py "BPC 157 tissue regeneration"
+python search.py "BPC 157 tissue regeneration" --mode bm25 --top-k 10
+python search.py "BPC 157 tissue regeneration" --mode boolean --top-k 10
 ```
 
+Run the reproducible full lexical baseline with:
+
+```bash
+python run_ir_eval.py --qrels data/qrels_v2.json --modes boolean,bm25
+```
+
+The command writes [`artifacts/section3/baseline.json`](artifacts/section3/baseline.json)
+and [`artifacts/section3/baseline.md`](artifacts/section3/baseline.md), including
+corpus/qrels hashes, code revision, exact configuration, rankings, and metrics.
+
 ## Metrics Report
+
+### Section 3 ranked-retrieval baseline
+
+- Qrels: frozen pooled version 2
+- BM25: Lucene variant, `k1=1.2`, `b=0.75`
+- Cutoffs: `1`, `3`, `5`, and `10`
+- Reference differential: every positive score/ranking matched `bm25s==0.3.9`
+  within `1e-6` on the same analyzed corpus and all 15 queries
+
+| Mode | MRR | P@1 | P@3 | P@5 | P@10 | R@1 | R@3 | R@5 | R@10 | NDCG@1 | NDCG@3 | NDCG@5 | NDCG@10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Boolean | 0.967 | 0.933 | 0.622 | 0.507 | 0.253 | 0.220 | 0.428 | 0.570 | 0.570 | 0.933 | 0.725 | 0.716 | 0.716 |
+| BM25 | 0.967 | 0.933 | 0.756 | 0.640 | 0.407 | 0.229 | 0.538 | 0.749 | 0.940 | 0.933 | 0.850 | 0.860 | 0.921 |
+| BM25 delta | +0.000 | +0.000 | +0.134 | +0.133 | +0.154 | +0.009 | +0.110 | +0.179 | +0.370 | +0.000 | +0.125 | +0.144 | +0.205 |
+
+BM25 produces a large recall and ranking-quality gain without changing the
+corpus or judgments. It fixes q11's known first-result failure, but q09 becomes
+a first-rank miss. That failure is retained: partial matching improves the
+overall system while still admitting high-scoring irrelevant documents. These
+are untouched defaults, not tuned Section 4 results.
+
+The pre-registered development/holdout division is hash-bound in
+[`data/eval_split.json`](data/eval_split.json). Section 4 may tune only on the
+development queries; the holdout cannot be used for selection.
+
+### Historical Day 1 Boolean report
 
 - Command: `python run_day1.py`
 - Qrels: version 1

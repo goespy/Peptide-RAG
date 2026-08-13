@@ -116,3 +116,43 @@ Judgment keys are PMIDs and values are integer grades. For Day 1 binary precisio
 4. Implement deterministic Boolean retrieval.
 5. Run the precision@k/recall@k harness, expect failures or weak scores initially, and record the output before tuning.
 6. Pool and manually label additional query-document pairs, freeze qrels version 2, and report its metrics separately.
+
+## Section 3: ranked lexical retrieval
+
+BM25 is now the default ranked-search mode; Boolean retrieval remains an exact
+filter and historical baseline. The production scorer uses the existing
+postings, document frequencies, and combined title-plus-abstract document
+lengths. It does not import a ranking library.
+
+The baseline is the Lucene BM25 variant:
+
+```text
+idf(t) = ln(1 + (N - df(t) + 0.5) / (df(t) + 0.5))
+
+tf_component(t,d) = tf(t,d) /
+    (tf(t,d) + k1 * (1 - b + b * document_length / average_document_length))
+
+score(q,d) = sum(idf(t) * tf_component(t,d))
+```
+
+`k1=1.2` and `b=0.75` are untouched defaults. Each occurrence of a repeated
+query token contributes separately. Candidate generation unions the postings
+for all in-vocabulary terms; documents with no match receive no result. Results
+sort by descending score and numeric PMID. `BM25Config` and `ScoredDocument`
+are frozen dataclasses, and invalid parameters fail before scoring.
+
+The full metrics harness treats grades above zero as relevant for binary
+precision, recall, and reciprocal rank. Graded NDCG uses gain `2^grade - 1`
+and discount `log2(rank + 1)`. Aggregate metrics are macro means. The evaluator
+saves rankings, per-query results, aggregates, environment details, and input
+hashes as JSON, then renders Markdown from the same report object.
+
+`bm25s==0.3.9` is allowed only in the development test environment. Its Lucene
+variant receives the exact same analyzed token arrays; all positive scores are
+compared within `1e-6`, and ties are normalized by numeric PMID. Production
+imports remain dependency-free.
+
+Before BM25 results were measured, `data/eval_split.json` froze development
+queries `q01`–`q08`, `q12`, and `q14`, with `q09`, `q10`, `q11`, `q13`, and
+`q15` reserved as the Section 4 holdout. Baseline reporting may describe all
+15 queries, but no tuning decision may use holdout results.
