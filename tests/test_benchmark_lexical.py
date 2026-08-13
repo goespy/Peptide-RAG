@@ -41,8 +41,14 @@ class LexicalBenchmarkTests(unittest.TestCase):
             directory = Path(temporary)
             corpus, qrels = self._write_inputs(directory)
             json_path, markdown_path = directory / "report.json", directory / "report.md"
+            config_path = directory / "config.json"
+            config_path.write_text(json.dumps({
+                "analysis": {"name": "baseline"},
+                "bm25": {"variant": "lucene", "k1": 0.8, "b": 0.75, "proximity_boost": 0.0},
+            }), encoding="utf-8")
             self.assertEqual(main([
                 "--corpus", str(corpus), "--qrels", str(qrels),
+                "--config", str(config_path),
                 "--output-json", str(json_path), "--output-markdown", str(markdown_path),
                 "--build-runs", "1", "--warmup-runs", "1", "--query-runs", "1",
             ]), 0)

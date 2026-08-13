@@ -24,12 +24,14 @@ import tracemalloc
 from typing import Callable, TypeVar
 
 from src.bm25 import BM25Config, rank_bm25
+from src.analysis import ANALYSIS_CONFIGS
 from src.index import InvertedIndex
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CORPUS = ROOT / "data" / "corpus.jsonl"
 DEFAULT_QRELS = ROOT / "data" / "qrels_v2.json"
+DEFAULT_CONFIG = ROOT / "data" / "lexical_config.json"
 DEFAULT_JSON = ROOT / "artifacts" / "section4" / "benchmark_lexical.json"
 DEFAULT_MARKDOWN = ROOT / "artifacts" / "section4" / "benchmark_lexical.md"
 T = TypeVar("T")
@@ -110,6 +112,7 @@ def run_benchmark(
     query_runs: int = 100,
     warmup_runs: int = 1,
     config: BM25Config = BM25Config(),
+    analysis_config=None,
 ) -> dict[str, object]:
     """Measure cold index builds and repeated ranking of every qrels query."""
 
@@ -135,7 +138,11 @@ def run_benchmark(
     build_peaks: list[int] = []
     index: InvertedIndex | None = None
     for _ in range(build_runs):
-        index, elapsed_ms, peak_bytes = _measure(lambda: InvertedIndex.from_jsonl(corpus_path))
+        build = lambda: InvertedIndex.from_jsonl(
+            corpus_path,
+            **({"analysis_config": analysis_config} if analysis_config is not None else {}),
+        )
+        index, elapsed_ms, peak_bytes = _measure(build)
         build_samples.append(elapsed_ms)
         build_peaks.append(peak_bytes)
     assert index is not None
@@ -236,21 +243,43 @@ def write_reports(report: dict[str, object], json_path: Path, markdown_path: Pat
     _atomic_write(Path(markdown_path), render_markdown(report))
 
 
+def load_frozen_config(path: Path) -> tuple[BM25Config, object]:
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    analysis = payload.get("analysis")
+    bm25 = payload.get("bm25")
+    if not isinstance(analysis, dict) or analysis.get("name") not in ANALYSIS_CONFIGS:
+        raise ValueError("invalid lexical analysis configuration")
+    if not isinstance(bm25, dict) or bm25.get("variant") != "lucene":
+        raise ValueError("invalid lexical BM25 configuration")
+    return (
+        BM25Config(
+            k1=bm25.get("k1"),
+            b=bm25.get("b"),
+            proximity_boost=bm25.get("proximity_boost", 0.0),
+        ),
+        ANALYSIS_CONFIGS[analysis["name"]],
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS)
     parser.add_argument("--qrels", type=Path, default=DEFAULT_QRELS)
+    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--output-json", type=Path, default=DEFAULT_JSON)
     parser.add_argument("--output-markdown", type=Path, default=DEFAULT_MARKDOWN)
     parser.add_argument("--build-runs", type=int, default=5)
     parser.add_argument("--query-runs", type=int, default=100)
     parser.add_argument("--warmup-runs", type=int, default=1)
     arguments = parser.parse_args(argv)
+    config, analysis_config = load_frozen_config(arguments.config)
     report = run_benchmark(
         arguments.corpus, arguments.qrels,
         build_runs=arguments.build_runs,
         query_runs=arguments.query_runs,
         warmup_runs=arguments.warmup_runs,
+        config=config,
+        analysis_config=analysis_config,
     )
     write_reports(report, arguments.output_json, arguments.output_markdown)
     return 0
