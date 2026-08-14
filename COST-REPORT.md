@@ -2,7 +2,21 @@
 
 ## Development spend
 
-No provider usage ledger is committed in this repository. Actual development API calls, input/output tokens, and spend are therefore **TBD**, not zero.
+The hash-bound ledger is
+[`artifacts/section5/embedding_usage.json`](artifacts/section5/embedding_usage.json).
+OpenRouter routed `openai/text-embedding-3-small` to OpenAI at the listed
+`$0.02/M` input-token price on 2026-08-14.
+
+| Work | Inputs | Input tokens | Provider calls | Cost |
+|---|---:|---:|---:|---:|
+| 128/32 corpus chunks | 4,565 | 889,325 | 46 | $0.01778650 |
+| 256/64 corpus chunks | 2,440 | 744,444 | 25 | $0.01488888 |
+| 512/128 corpus chunks | 2,007 | 687,680 | 21 | $0.01375360 |
+| Development questions | 13 | 180 | 1 | $0.00000360 |
+| **Total** | **9,025** | **2,321,629** | **93** | **$0.04643258** |
+
+Generator, OpenRouter judge, Railway, and coding-agent subscription token costs
+remain `TBD` or `unknown/not exposed`; they are not represented as zero.
 
 ## Production projection
 

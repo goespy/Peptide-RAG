@@ -52,8 +52,8 @@ def saved_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts: d
     if {row["qa_id"] for row in result} != set(expected): raise HoldoutError("holdout output must contain each frozen question once")
     return result
 
-def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], winner: str, config_hash: str, context_hash: str, api_key: str) -> list[dict[str, Any]]:
-    generator, judge, result = GroundedAnswerClient(api_key=api_key, model=winner), AnswerJudge(api_key=api_key), []
+def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], winner: str, judge_model: str, config_hash: str, context_hash: str, api_key: str) -> list[dict[str, Any]]:
+    generator, judge, result = GroundedAnswerClient(api_key=api_key, model=winner), AnswerJudge(api_key=api_key, model=judge_model), []
     for case in cases:
         started = time.perf_counter(); answer = generator.answer(case["question"], contexts[case["id"]]); latency = (time.perf_counter() - started) * 1000
         verdict = judge.judge(case["question"], answer, contexts[case["id"]], expected_answerable=case["answerability"] == "answerable")
@@ -78,6 +78,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             raise HoldoutError(f"refusing to overwrite existing file: {args.outputs}; pass --overwrite")
         qa, config, bakeoff, judge_report, context_packet = load_json(args.qa), load_json(args.config), load_json(args.bakeoff), load_json(args.judge_validation), load_json(args.contexts)
         cases = holdout_cases(qa); validate_config(config); winner = winner_from(bakeoff)
+        judge_model = bakeoff.get("judge_model")
+        if not isinstance(judge_model, str) or not judge_model.strip():
+            raise HoldoutError("holdout requires the bake-off's validated judge model ID")
         if judge_report.get("passes") is not True: raise HoldoutError("holdout requires a passing judge-validation artifact")
         qa_hash, config_hash, context_hash = hash_file(args.qa), hash_file(args.config), hash_file(args.contexts)
         if bakeoff.get("qa_sha256") != qa_hash or bakeoff.get("config_sha256") != config_hash:
@@ -90,11 +93,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             if not args.confirm_cost: raise HoldoutError("--live requires --confirm-cost after reviewing the maximum-cost status")
             key = os.environ.get("OPENROUTER_API_KEY")
             if not key: raise HoldoutError("--live requires OPENROUTER_API_KEY; no provider call was made")
-            rows = run_live(cases, contexts, winner, config_hash, context_hash, key); write_json_atomic(args.outputs, {"outputs": rows}, overwrite=args.overwrite)
+            rows = run_live(cases, contexts, winner, judge_model, config_hash, context_hash, key); write_json_atomic(args.outputs, {"outputs": rows}, overwrite=args.overwrite)
         else: rows = saved_rows(load_json(args.outputs), cases, contexts, winner, config_hash, context_hash)
         metrics = candidate_summary(rows)
-        if metrics["outputs"] != 7 or metrics["structural_validity"] != 1.0 or any(metrics[key] is None for key in ("faithfulness", "correct_refusal", "relevancy", "citation_correctness")): raise HoldoutError("holdout is incomplete, structurally invalid, or unjudged; generator configuration remains unfrozen")
-        summary = {"qa_sha256": qa_hash, "config_sha256": config_hash, "bakeoff_sha256": hash_file(args.bakeoff), "judge_validation_sha256": hash_file(args.judge_validation), "contexts_sha256": context_hash, "outputs_sha256": hash_file(args.outputs), "winner": winner, "live_calls": args.live, "metrics": metrics}
+        if metrics["outputs"] != 7 or metrics["structural_validity"] != 1.0 or metrics["judged_outputs"] != 7 or any(metrics[key] is None for key in ("faithfulness", "correct_refusal", "relevancy", "citation_correctness")): raise HoldoutError("holdout is incomplete, structurally invalid, or not fully judged; generator configuration remains unfrozen")
+        summary = {"qa_sha256": qa_hash, "config_sha256": config_hash, "bakeoff_sha256": hash_file(args.bakeoff), "judge_validation_sha256": hash_file(args.judge_validation), "contexts_sha256": context_hash, "outputs_sha256": hash_file(args.outputs), "winner": winner, "judge_model": judge_model, "live_calls": args.live, "metrics": metrics}
         write_json_atomic(args.result, summary, overwrite=args.overwrite)
         write_json_atomic(args.frozen_generator_config, {"status": "frozen_after_complete_holdout", "winner": winner, "qa_sha256": summary["qa_sha256"], "rag_config_sha256": config_hash, "bakeoff_sha256": summary["bakeoff_sha256"], "judge_validation_sha256": summary["judge_validation_sha256"], "holdout_contexts_sha256": context_hash, "holdout_outputs_sha256": summary["outputs_sha256"], "holdout_summary_sha256": hash_file(args.result)}, overwrite=args.overwrite)
     except (BakeoffError, OSError, TypeError) as exc: print(f"Error: {exc}", file=sys.stderr); return 1

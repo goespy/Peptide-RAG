@@ -23,7 +23,7 @@ def approved_qa():
 def config(): return {"status": "selected_and_frozen", "selected": True, "prompt": "fixed", "generation": {"temperature": 0, "max_tokens": 400}}
 
 def catalog():
-    return {"checked_at": "2026-08-13T00:00:00Z", "sources": ["https://example.test"], "models": [{"family": family, "id": model, "available": True, "structured_json": True, "context_length": 32768, "input_cost_per_million": .1, "output_cost_per_million": .5} for family, model in zip(bakeoff.MODEL_FAMILIES, bakeoff.MODELS)]}
+    return {"checked_at": "2026-08-13T00:00:00Z", "sources": ["https://example.test"], "models": [{"family": family, "id": model, "available": True, "structured_json": True, "context_length": 32768, "input_cost_per_million": .1, "output_cost_per_million": .5} for family, model in zip(bakeoff.MODEL_FAMILIES, bakeoff.MODELS)], "judge": {"family":"anthropic","id":"anthropic/judge","available":True,"structured_json":True,"context_length":32768,"input_cost_per_million":1.0,"output_cost_per_million":5.0}}
 
 
 class BakeoffTests(unittest.TestCase):
@@ -32,6 +32,7 @@ class BakeoffTests(unittest.TestCase):
             bakeoff.validate_qa({"status": "candidate", "questions": []})
         self.assertEqual(len(bakeoff.validate_qa(approved_qa())), 13)
         self.assertEqual(bakeoff.validate_model_catalog(catalog()), bakeoff.MODELS)
+        self.assertEqual(bakeoff.validate_judge_catalog(catalog()), "anthropic/judge")
 
     def test_selection_disqualifies_missing_or_invalid_rows(self):
         rows = {model: [] for model in bakeoff.MODELS}
@@ -48,6 +49,21 @@ class BakeoffTests(unittest.TestCase):
             {"structurally_valid": True, "answerability": "unanswerable", "answer": {"status": "insufficient_evidence"}, "judge": {"faithful": True, "relevant": True, "citations_correct": True, "refusal_correct": True}, "metadata": {"latency_ms": 1, "cost_usd": 0}},
         ]
         self.assertEqual(bakeoff.select_winner({"model": rows}, 2)["candidates"]["model"]["correct_refusal"], 1.0)
+
+    def test_partial_judge_failure_disqualifies_candidate(self):
+        rows = []
+        for index in range(13):
+            rows.append({
+                "structurally_valid": True,
+                "answerability": "unanswerable" if index >= 10 else "answerable",
+                "answer": {"status": "insufficient_evidence" if index >= 10 else "answered"},
+                "judge": None if index == 0 else {"faithful": True, "relevant": True, "citations_correct": True, "refusal_correct": True},
+                "metadata": {"latency_ms": 1, "cost_usd": 0},
+            })
+        result = bakeoff.select_winner({"model": rows}, 13)
+        self.assertIsNone(result["winner"])
+        self.assertEqual(result["candidates"]["model"]["judged_outputs"], 12)
+        self.assertIsNone(result["candidates"]["model"]["faithfulness"])
 
     def test_default_run_refuses_without_approved_artifacts(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -84,3 +100,13 @@ class BakeoffTests(unittest.TestCase):
             with self.assertRaises(bakeoff.BakeoffError): bakeoff.write_json_atomic(path, {"a": 2}, overwrite=False)
         with self.assertRaises(bakeoff.BakeoffError): bakeoff.validate_live_cost(None)
         self.assertIn("$1.00", bakeoff.validate_live_cost(1))
+        with self.assertRaises(bakeoff.BakeoffError): bakeoff.validate_live_cost(.01, .02)
+
+    def test_cost_estimate_includes_repairs_retries_and_all_judges(self):
+        cases = bakeoff.validate_qa(approved_qa())
+        context = RetrievedChunk(Chunk("1:c0001", "1", "title", "evidence", 0, 8, 1), 1.0, "stored")
+        contexts = {case["id"]: (context,) for case in cases}
+        estimate = bakeoff.estimate_bakeoff_cost(cases, contexts, catalog(), bakeoff.MODELS, "anthropic/judge")
+        self.assertEqual(estimate["maximum_provider_calls"], 195)
+        self.assertGreater(estimate["estimated_max_cost_usd"], 0)
+        self.assertEqual(len(estimate["generation"]), 3)

@@ -8,11 +8,18 @@ The repository supports a read-only offline release check:
 python run_project.py
 ```
 
-It validates frozen core hashes, builds the index, runs Boolean and BM25 evaluation, and validates committed chunk manifests. Core corruption exits nonzero. Missing or gated RAG assets are shown as `TBD` without changing that result.
+It validates frozen core hashes, builds the index, runs Boolean and BM25
+evaluation, and validates the approved QA set, chunk manifests, embedding
+ledger, selected hybrid configuration, and development contexts. Corruption
+exits nonzero. Generator/judge/holdout gates remain `TBD` until their evidence
+exists.
 
-## Pending human approval
+## Pending human validation
 
-Before a RAG release, approve and commit the QA set, evidence spans, faithfulness rubric/labels, and refusal cases. Commit reproducible semantic/hybrid/citation evaluation outputs bound to the corpus and chunk hashes.
+The 20-case QA set and evidence spans are approved. Before a RAG release, run
+the three-model development bake-off, manually label the blinded 10-output
+judge worksheet, validate agreement, and run the untouched seven-case holdout.
+Commit the reproducible generation, judge, and citation artifacts.
 
 ## Pending credentials and deployment
 
@@ -21,8 +28,9 @@ Set `OPENROUTER_API_KEY` only in the deployment environment after a paid-run bud
 ### Planned Railway environment
 
 - `OPENROUTER_API_KEY` -- required for query embeddings and grounded answers.
-- `EMBEDDING_CACHE_PATH` -- committed or mounted cache that matches the frozen RAG configuration.
+- `EMBEDDING_CACHE_PATH=artifacts/section5/embeddings_256_64.npz` -- selected cache matching the frozen RAG configuration.
 - `DAILY_ANSWER_CAP=200` -- default single-process budget guard.
+- `TRUST_PROXY_HEADERS=true` -- required on Railway so rate limits use the forwarded client IP; leave false for direct local serving.
 
 Planned start command:
 

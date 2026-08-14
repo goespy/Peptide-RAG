@@ -1,0 +1,38 @@
+{
+  "chunk_candidate": "256_64",
+  "chunk_config": {
+    "overlap": 64,
+    "words": 256
+  },
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "embedding_model": "openai/text-embedding-3-small",
+  "generation": {
+    "max_tokens": 400,
+    "temperature": 0
+  },
+  "generator_candidates": [
+    "qwen/qwen3.7-flash",
+    "openai/gpt-oss-20b",
+    "google/gemma-3-12b-it"
+  ],
+  "lexical_analysis": {
+    "expand_greek": false,
+    "name": "baseline",
+    "remove_stopwords": false
+  },
+  "lexical_bm25": {
+    "b": 0.75,
+    "k1": 0.8,
+    "proximity_boost": 0.0,
+    "variant": "lucene"
+  },
+  "lexical_config_sha256": "D3A3002D0ECB1E141BA9FD73843880E01FE268AB8AEF9770E32466003D34E4D0",
+  "prompt": "You are a research-literature assistant. Use only the supplied evidence. Do not give personalized medical, treatment, or dosing advice. If evidence is missing, conflicting, or the question requests personal medical/dosing advice, return insufficient_evidence. For answered responses, every factual sentence must end with one or more [citation_id] markers.",
+  "prompt_sha256": "E3B83499C4C506701465E7811AC50896CE209806C0F8F59D3EFB3F2A8E57A07E",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "rrf_alpha": 0.5,
+  "schema_version": 1,
+  "selected": true,
+  "source_evaluation_sha256": "57B21F0ED9380096ABFA815FB7CEFB728F06AF82F3BAFAD153DF738EFFF73A82",
+  "status": "selected_and_frozen"
+}

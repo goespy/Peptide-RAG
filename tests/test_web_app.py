@@ -1,14 +1,16 @@
 """Contract tests for the optional FastAPI web shell."""
 
 import unittest
+from datetime import UTC, datetime, timedelta
 
 try:
     from fastapi.testclient import TestClient
-    from app import BudgetExceeded, create_app
+    from app import BudgetExceeded, SlidingRateLimiter, create_app
 except ImportError:  # Standard-library test discovery works without web extras.
     TestClient = None
     BudgetExceeded = RuntimeError
     create_app = None
+    SlidingRateLimiter = None
 
 
 class FakeService:
@@ -70,3 +72,16 @@ class WebAppTests(unittest.TestCase):
         for _ in range(30):
             self.assertEqual(rate_client.post("/api/search", json={"query": "peptide"}).status_code, 200)
         self.assertEqual(rate_client.post("/api/search", json={"query": "peptide"}).status_code, 429)
+
+    def test_trusted_proxy_addresses_have_independent_limits(self):
+        client = TestClient(create_app(FakeService(), trust_proxy_headers=True))
+        for _ in range(30):
+            self.assertEqual(client.post("/api/search", json={"query": "peptide"}, headers={"x-forwarded-for":"198.51.100.1"}).status_code, 200)
+        self.assertEqual(client.post("/api/search", json={"query": "peptide"}, headers={"x-forwarded-for":"198.51.100.1"}).status_code, 429)
+        self.assertEqual(client.post("/api/search", json={"query": "peptide"}, headers={"x-forwarded-for":"198.51.100.2"}).status_code, 200)
+
+    def test_rate_limiter_prunes_expired_client_keys(self):
+        limiter = SlidingRateLimiter(); start = datetime(2026, 1, 1, tzinfo=UTC)
+        self.assertTrue(limiter.allow("search:first", 1, start))
+        self.assertTrue(limiter.allow("search:second", 1, start + timedelta(seconds=61)))
+        self.assertNotIn("search:first", limiter._events)

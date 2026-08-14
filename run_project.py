@@ -37,6 +37,12 @@ SECTION5 = ROOT / "artifacts/section5"
 DEVELOPMENT_EXPERIMENTS = ROOT / "artifacts/section4/development_experiments.json"
 HOLDOUT = ROOT / "artifacts/section4/holdout.json"
 BENCHMARK = ROOT / "artifacts/section4/benchmark_lexical.json"
+CHUNK_EVALUATION = SECTION5 / "chunk_evaluation.json"
+FROZEN_RAG_CONFIG = SECTION5 / "frozen_config.json"
+EMBEDDING_USAGE = SECTION5 / "embedding_usage.json"
+QUERY_EMBEDDING_USAGE = SECTION5 / "query_embeddings.npz.usage.json"
+QUERY_EMBEDDING_CACHE = SECTION5 / "query_embeddings.npz"
+RAG_DEVELOPMENT_CONTEXTS = ROOT / "data/rag_development_contexts.json"
 
 
 @dataclass(frozen=True)
@@ -189,7 +195,12 @@ def _validate_frozen_qa(path: Path) -> Check:
         raise ValueError("frozen QA qrels hash does not match")
     questions = qa.get("questions")
     expected_ids = [f"qa{number:02d}" for number in range(1, 21)]
-    if not isinstance(questions, list) or [item.get("id") for item in questions if isinstance(item, dict)] != expected_ids:
+    if (
+        not isinstance(questions, list)
+        or len(questions) != len(expected_ids)
+        or any(not isinstance(item, dict) for item in questions)
+        or [item.get("id") for item in questions] != expected_ids
+    ):
         raise ValueError("frozen QA must contain qa01 through qa20 exactly once")
     if sum(item.get("answerable") is True for item in questions) != 15 or sum(item.get("answerable") is False for item in questions) != 5:
         raise ValueError("frozen QA must contain 15 answerable and 5 unanswerable cases")
@@ -235,6 +246,73 @@ def _validate_frozen_qa(path: Path) -> Check:
     return Check("approved QA oracle", "PASS", "20 owner-approved cases (15/5); exact spans, hashes, and split PMID separation verified")
 
 
+def _validate_rag_retrieval() -> Check:
+    required = (CHUNK_EVALUATION, FROZEN_RAG_CONFIG, EMBEDDING_USAGE, QUERY_EMBEDDING_USAGE, QUERY_EMBEDDING_CACHE, RAG_DEVELOPMENT_CONTEXTS)
+    missing = [path.relative_to(ROOT).as_posix() for path in required if not path.is_file()]
+    if missing:
+        return Check("RAG retrieval evaluation", "TBD", f"missing frozen retrieval artifacts: {', '.join(missing)}")
+    report, frozen = _json(CHUNK_EVALUATION), _json(FROZEN_RAG_CONFIG)
+    ledger, query_usage = _json(EMBEDDING_USAGE), _json(QUERY_EMBEDDING_USAGE)
+    contexts = _json(RAG_DEVELOPMENT_CONTEXTS)
+    corpus_hash, qa_hash = sha256(CORPUS), sha256(QA)
+    if report.get("corpus_sha256") != corpus_hash or report.get("qa_sha256") != qa_hash:
+        raise ValueError("chunk evaluation is not bound to the frozen corpus and QA set")
+    if (
+        frozen.get("status") != "selected_and_frozen"
+        or frozen.get("selected") is not True
+        or frozen.get("corpus_sha256") != corpus_hash
+        or frozen.get("qa_sha256") != qa_hash
+        or frozen.get("source_evaluation_sha256") != sha256(CHUNK_EVALUATION)
+        or frozen.get("chunk_candidate") != report.get("selected_chunk_config")
+    ):
+        raise ValueError("selected RAG configuration does not match its source evaluation")
+    qa = _json(QA)
+    questions = qa.get("questions")
+    if not isinstance(questions, list) or any(not isinstance(item, dict) for item in questions):
+        raise ValueError("approved QA questions are malformed")
+    development_ids = sorted(str(item["id"]) for item in questions if item.get("split") == "development")
+    answerable_ids = sorted(str(item["id"]) for item in questions if item.get("split") == "development" and item.get("answerable") is True)
+    if report.get("case_ids") != answerable_ids:
+        raise ValueError("chunk evaluation case IDs are not the frozen answerable development split")
+    context_rows = contexts.get("contexts")
+    if (
+        contexts.get("qa_sha256") != qa_hash
+        or contexts.get("frozen_config_sha256") != sha256(FROZEN_RAG_CONFIG)
+        or not isinstance(context_rows, list)
+        or sorted(row.get("qa_id") for row in context_rows if isinstance(row, dict)) != development_ids
+    ):
+        raise ValueError("RAG development contexts are incomplete or leak outside the frozen split")
+    runs = ledger.get("runs")
+    totals = ledger.get("totals")
+    if not isinstance(runs, list) or len(runs) != 4 or not isinstance(totals, dict):
+        raise ValueError("embedding usage ledger is malformed")
+    measured_tokens = measured_calls = measured_inputs = 0
+    measured_cost = 0.0
+    root = ROOT.resolve()
+    for run in runs:
+        if not isinstance(run, dict) or not isinstance(run.get("artifact"), str):
+            raise ValueError("embedding usage run is malformed")
+        artifact = (ROOT / run["artifact"]).resolve()
+        if root != artifact and root not in artifact.parents:
+            raise ValueError("embedding usage artifact escapes the repository")
+        if not artifact.is_file() or run.get("artifact_sha256") != sha256(artifact):
+            raise ValueError(f"embedding usage hash mismatch for {run['artifact']}")
+        measured_tokens += int(run.get("input_tokens", -1))
+        measured_calls += int(run.get("provider_calls", -1))
+        measured_inputs += int(run.get("embedding_inputs", -1))
+        measured_cost += float(run.get("cost_usd", math.nan))
+    if (
+        totals.get("input_tokens") != measured_tokens
+        or totals.get("provider_calls") != measured_calls
+        or totals.get("embedding_inputs") != measured_inputs
+        or not math.isclose(float(totals.get("cost_usd", math.nan)), measured_cost, rel_tol=0, abs_tol=1e-12)
+    ):
+        raise ValueError("embedding usage totals do not equal the recorded runs")
+    if query_usage.get("query_cache_sha256") != sha256(QUERY_EMBEDDING_CACHE) or query_usage.get("qa_sha256") != qa_hash or query_usage.get("corpus_sha256") != corpus_hash:
+        raise ValueError("development-query usage metadata is not bound to its cache and frozen inputs")
+    return Check("RAG retrieval evaluation", "PASS", "development-only chunk metrics, selected hybrid config, caches, contexts, and $0.04643258 usage ledger verified", True)
+
+
 def _rag_checks() -> list[Check]:
     manifests = sorted(SECTION5.glob("*.jsonl.manifest.json")) if SECTION5.is_dir() else []
     checks: list[Check] = []
@@ -265,17 +343,21 @@ def _rag_checks() -> list[Check]:
             checks.append(_validate_frozen_qa(QA))
         except (OSError, ValueError, TypeError) as exc:
             checks.append(Check("approved QA oracle", "FAIL", str(exc)))
-    checks.append(Check("RAG faithfulness evaluation", "TBD", "embedding cache, selected retrieval configuration, and saved generator/judge outputs are pending"))
+    try:
+        checks.append(_validate_rag_retrieval())
+    except (Day1Error, OSError, ValueError, KeyError, TypeError) as exc:
+        checks.append(Check("RAG retrieval evaluation", "FAIL", str(exc), True))
+    checks.append(Check("RAG faithfulness evaluation", "TBD", "generator bake-off, owner-validated judge, and holdout outputs are pending"))
     return checks
 
 
 def _live_eval() -> list[Check]:
     # Never guess provider pricing or send a request from a release check.
-    checks = [Check("live-eval cost estimate", "TBD", "cannot estimate honestly: committed RAG token counts and provider pricing are absent")]
+    checks = [Check("live-eval cost estimate", "TBD", "embedding spend is recorded; generation/judge maximum requires a fresh model catalog and explicit confirmation")]
     if not os.environ.get("OPENROUTER_API_KEY"):
         checks.append(Check("live-eval credentials", "TBD", "OPENROUTER_API_KEY is not set; no network call attempted"))
     else:
-        checks.append(Check("live-eval pipeline", "TBD", "credential detected, but cached embeddings, selected retrieval configuration, and generator/judge artifacts are incomplete; no paid call attempted"))
+        checks.append(Check("live-eval pipeline", "TBD", "credential detected and retrieval is frozen, but generator/judge artifacts are incomplete; no paid call attempted"))
     return checks
 
 
@@ -286,7 +368,10 @@ def run(*, live_eval: bool = False) -> tuple[list[Check], bool]:
         checks.extend(_evaluate(index, qrels, config))
     except (Day1Error, OSError, ValueError, KeyError, TypeError) as exc:
         return [Check("required core artifacts", "FAIL", str(exc), True)], True
-    checks.extend(_rag_checks())
+    try:
+        checks.extend(_rag_checks())
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        checks.append(Check("RAG artifact validation", "FAIL", str(exc), True))
     if live_eval:
         checks.extend(_live_eval())
     return checks, any(check.state == "FAIL" for check in checks)

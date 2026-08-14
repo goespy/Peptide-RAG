@@ -19,9 +19,10 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Ranked CLI results with scores, snippets, and PubMed links
 - [x] Section 3 Boolean/BM25 baseline saved as JSON and Markdown
 - [x] Section 4 lexical tuning and hardening
-- [x] Section 5 offline RAG foundations: QA draft, chunk artifacts, retrieval contracts, grounded-answer validation, and local web shell
-- [ ] Project-owner approval of the 20-case QA oracle
-- [ ] Paid semantic/chunk evaluation, model bake-off, judge validation, and Railway deployment
+- [x] Section 5 RAG foundations: approved QA oracle, chunk artifacts, retrieval contracts, grounded-answer validation, and local web shell
+- [x] Project-owner approval of the 20-case QA oracle
+- [x] Paid semantic/chunk development evaluation and frozen hybrid retrieval configuration
+- [ ] Model bake-off, judge validation, untouched QA holdout, and Railway deployment
 - [x] Section 6 offline release-check, CI, self-evaluation, cost, and deployment-document foundations
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
@@ -166,14 +167,11 @@ it does not call a provider while the QA and embedding gates are incomplete.
 
 ## Section 5 RAG workflow
 
-The implementation exists, but the evaluation is deliberately stopped at its
-first human gate. Review all 20 proposed cases in
-[`QA-REVIEW.md`](QA-REVIEW.md), then record an explicit project-owner decision,
-reviewer, and notes in `data/qa_draft.json`. The checked-in questions and
-concise acceptable answers were edited after the first mechanical draft; q13
-now cites the trial's exact outcome and adverse-event sentences instead of its
-methods paragraph. Only after every case is approved
-can the normalized immutable oracle be created:
+All 20 cases passed project-owner review and are frozen in `data/qa.json` with
+exact evidence spans and corpus/qrels hashes. The QA SHA-256 is
+`196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725`.
+The approval history remains in [`QA-REVIEW.md`](QA-REVIEW.md) and
+`data/qa_draft.json`.
 
 ```bash
 python scripts/freeze_qa.py
@@ -187,26 +185,25 @@ The three candidate chunk snapshots are already deterministic and hash-bound:
 | 256 words | 64 | 2,440 | `85B62B8AF56DAFD6AE4A1D1B5C87DA950828BB767FDDF9633445E53CA5567B9C` |
 | 512 words | 128 | 2,007 | `AF83690E677750BC7E884DF04C70FB203D3103938FA141AB8D9EA031966FCFAF` |
 
-After approval, create one embedding cache for each candidate with
-`scripts/embed_chunks.py`, then run `scripts/evaluate_chunks.py` with all three
-`--candidate NAME CHUNKS MANIFEST CACHE` arguments. The evaluator uses only the
-10 answerable development cases to select chunk size and RRF alpha, writes the
-frozen configuration, and can save the identical 13-case development contexts
-for the generator bake-off. Holdout questions remain excluded.
+Each candidate now has a corpus-bound embedding cache. The evaluator uses only
+the 10 answerable development cases to select chunk size and RRF alpha, while a
+separate 13-question embedding cache supports all development contexts. The
+holdout remains excluded. Repeating the command without a key reproduced the
+evaluation JSON, Markdown, frozen configuration, and contexts byte-for-byte.
 
 ```bash
 python scripts/embed_chunks.py --chunks artifacts/section5/chunks_128_32.jsonl --output artifacts/section5/embeddings_128_32.npz
 python scripts/embed_chunks.py --chunks artifacts/section5/chunks_256_64.jsonl --output artifacts/section5/embeddings_256_64.npz
 python scripts/embed_chunks.py --chunks artifacts/section5/chunks_512_128.jsonl --output artifacts/section5/embeddings_512_128.npz
-python scripts/evaluate_chunks.py --candidate 128_32 artifacts/section5/chunks_128_32.jsonl artifacts/section5/chunks_128_32.jsonl.manifest.json artifacts/section5/embeddings_128_32.npz --candidate 256_64 artifacts/section5/chunks_256_64.jsonl artifacts/section5/chunks_256_64.jsonl.manifest.json artifacts/section5/embeddings_256_64.npz --candidate 512_128 artifacts/section5/chunks_512_128.jsonl artifacts/section5/chunks_512_128.jsonl.manifest.json artifacts/section5/embeddings_512_128.npz --output-json artifacts/section5/chunk_evaluation.json --output-md artifacts/section5/chunk_evaluation.md --frozen-config artifacts/section5/frozen_config.json --contexts-output data/rag_development_contexts.json
+python scripts/evaluate_chunks.py --candidate 128_32 artifacts/section5/chunks_128_32.jsonl artifacts/section5/chunks_128_32.jsonl.manifest.json artifacts/section5/embeddings_128_32.npz --candidate 256_64 artifacts/section5/chunks_256_64.jsonl artifacts/section5/chunks_256_64.jsonl.manifest.json artifacts/section5/embeddings_256_64.npz --candidate 512_128 artifacts/section5/chunks_512_128.jsonl artifacts/section5/chunks_512_128.jsonl.manifest.json artifacts/section5/embeddings_512_128.npz --embedding-model openai/text-embedding-3-small --query-cache artifacts/section5/query_embeddings.npz --output-json artifacts/section5/chunk_evaluation.json --output-md artifacts/section5/chunk_evaluation.md --frozen-config artifacts/section5/frozen_config.json --contexts-output data/rag_development_contexts.json
 ```
 
 Immediately before the paid bake-off, create `data/model_candidates.json` from
 current OpenRouter model pages/API metadata. It must record one available Qwen,
-OpenAI, and Google-family candidate, structured-JSON support, context length,
-input/output price, check timestamp, and direct sources. Live execution rejects
-a catalog older than 24 hours. It also requires an explicit user-supplied cost
-bound and confirmation:
+OpenAI, and Google-family candidate plus a different-family Anthropic judge,
+structured-JSON support, context length, input/output price, check timestamp,
+and direct sources. Live execution rejects a catalog older than 24 hours. It
+also requires an explicit user-supplied cost bound and confirmation:
 
 ```bash
 python scripts/run_rag_bakeoff.py --live --max-cost-usd 2.00 --confirm-cost
@@ -238,14 +235,16 @@ is server-side only.
 
 ### Section 5 RAG metrics
 
-No RAG score is reported yet. The QA packet is unapproved and no paid embedding
-run has occurred, so zeros would be fabricated results.
+The following are development-set retrieval measurements over the selected
+256-word/64-word-overlap chunks. They are not QA holdout results. Hybrid uses
+weighted RRF with `alpha=0.5`; selection and all losing configurations are saved
+in [`artifacts/section5/chunk_evaluation.json`](artifacts/section5/chunk_evaluation.json).
 
 | Retrieval mode | Recall@1 | Recall@3 | Recall@5 | Recall@10 | Evidence Hit@5 |
 |---|---:|---:|---:|---:|---:|
-| Lexical chunks | TBD | TBD | TBD | TBD | TBD |
-| Semantic chunks | TBD | TBD | TBD | TBD | TBD |
-| Hybrid chunks | TBD | TBD | TBD | TBD | TBD |
+| Lexical chunks | 0.470 | 0.590 | 0.710 | 0.830 | 0.900 |
+| Semantic chunks | 0.350 | 0.690 | 0.710 | 0.730 | 0.800 |
+| Hybrid chunks | 0.520 | 0.590 | 0.810 | 0.900 | 0.900 |
 
 | Generator | Faithfulness | Correct refusal | Relevancy | Citation correctness | Status |
 |---|---:|---:|---:|---:|---|
@@ -253,10 +252,10 @@ run has occurred, so zeros would be fabricated results.
 | OpenAI candidate | TBD | TBD | TBD | TBD | Not run |
 | Google candidate | TBD | TBD | TBD | TBD | Not run |
 
-These fields become reportable only after owner approval, measured chunk
-selection, the three-model development bake-off, and human validation of the
-Claude judge. See [`SELF-EVALUATION.md`](SELF-EVALUATION.md) for the live gate
-status and [`COST-REPORT.md`](COST-REPORT.md) for cost accounting.
+Generator fields remain `TBD` until the three-model development bake-off and
+human validation of the Claude judge. See
+[`SELF-EVALUATION.md`](SELF-EVALUATION.md) for the live gate status and
+[`COST-REPORT.md`](COST-REPORT.md) for measured embedding spend.
 
 ### Section 3 ranked-retrieval baseline
 

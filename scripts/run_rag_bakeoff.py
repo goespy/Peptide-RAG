@@ -12,7 +12,7 @@ MODELS = ("qwen/qwen3.7-flash", "openai/gpt-oss-20b", "google/gemma-3-12b-it")
 MODEL_FAMILIES = ("qwen", "openai", "google")
 
 sys.path.insert(0, str(ROOT))
-from src.generation import AnswerResult, Citation, GroundedAnswerClient, validate_answer_result  # noqa: E402
+from src.generation import AnswerResult, Citation, GENERATION_MAX_TOKENS, GroundedAnswerClient, validate_answer_result  # noqa: E402
 from src.judge import AnswerJudge  # noqa: E402
 from src.chunks import Chunk  # noqa: E402
 from src.retrieval import RetrievedChunk  # noqa: E402
@@ -42,10 +42,15 @@ def write_json_atomic(path: Path, payload: dict[str, Any], *, overwrite: bool) -
         except FileNotFoundError: pass
         raise
 
-def validate_live_cost(max_cost_usd: float | None) -> str:
+def validate_live_cost(max_cost_usd: float | None, estimated_cost_usd: float | None = None) -> str:
     if max_cost_usd is None or not isinstance(max_cost_usd, (int, float)) or not math.isfinite(max_cost_usd) or max_cost_usd <= 0:
-        raise BakeoffError("--live requires a positive --max-cost-usd bound because provider pricing is not available locally")
-    status = f"Live maximum-cost status: user-supplied bound ${max_cost_usd:.2f}; provider prices unavailable locally."
+        raise BakeoffError("--live requires a positive --max-cost-usd bound")
+    if estimated_cost_usd is not None and (
+        not math.isfinite(estimated_cost_usd) or estimated_cost_usd < 0 or max_cost_usd < estimated_cost_usd
+    ):
+        raise BakeoffError(f"--max-cost-usd must cover the conservative ${estimated_cost_usd:.4f} estimate")
+    estimate = "not available" if estimated_cost_usd is None else f"${estimated_cost_usd:.4f}"
+    status = f"Live maximum-cost status: conservative estimate {estimate}; user-approved bound ${max_cost_usd:.2f}."
     return status
 
 def validate_qa(packet: dict[str, Any]) -> list[dict[str, Any]]:
@@ -108,6 +113,84 @@ def validate_model_catalog(catalog: dict[str, Any], *, max_age_hours: float | No
         raise BakeoffError("model candidates must be distinct")
     return tuple(selected)
 
+def validate_judge_catalog(catalog: dict[str, Any]) -> str:
+    item = catalog.get("judge")
+    if (
+        not isinstance(item, dict)
+        or item.get("family") != "anthropic"
+        or not isinstance(item.get("id"), str) or not item["id"].strip()
+        or item.get("available") is not True
+        or item.get("structured_json") is not True
+        or isinstance(item.get("context_length"), bool) or not isinstance(item.get("context_length"), int) or item["context_length"] < 32768
+        or isinstance(item.get("input_cost_per_million"), bool) or not isinstance(item.get("input_cost_per_million"), (int, float)) or item["input_cost_per_million"] < 0
+        or isinstance(item.get("output_cost_per_million"), bool) or not isinstance(item.get("output_cost_per_million"), (int, float)) or item["output_cost_per_million"] < 0
+    ):
+        raise BakeoffError("model catalog must include one available Anthropic judge with structured JSON, >=32K context, and recorded prices")
+    return item["id"]
+
+def estimate_bakeoff_cost(
+    cases: Sequence[dict[str, Any]],
+    contexts: dict[str, tuple[RetrievedChunk, ...]],
+    catalog: dict[str, Any],
+    models: Sequence[str],
+    judge_model: str,
+) -> dict[str, Any]:
+    """Conservatively estimate the fixed development bake-off from frozen payloads."""
+
+    catalog_models = {
+        item.get("id"): item for item in catalog.get("models", []) if isinstance(item, dict)
+    }
+    judge_catalog = catalog.get("judge")
+    if not isinstance(judge_catalog, dict) or judge_catalog.get("id") != judge_model:
+        raise BakeoffError("judge pricing is missing from the validated model catalog")
+    generation_rows: list[dict[str, Any]] = []
+    total_cost = 0.0
+    total_calls = 0
+    for model in models:
+        pricing = catalog_models.get(model)
+        if not isinstance(pricing, dict):
+            raise BakeoffError(f"pricing is missing for {model}")
+        client = GroundedAnswerClient(api_key="cost-estimate", model=model)
+        input_tokens = output_tokens = calls = 0
+        for case in cases:
+            selected = contexts[case["id"]]
+            for repair in (False, True):
+                payload = client._payload(case["question"], selected, repair=repair)
+                conservative_input = math.ceil(len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3)
+                attempts = client.retries + 1
+                input_tokens += conservative_input * attempts
+                output_tokens += GENERATION_MAX_TOKENS * attempts
+                calls += attempts
+        cost = (
+            input_tokens * float(pricing["input_cost_per_million"])
+            + output_tokens * float(pricing["output_cost_per_million"])
+        ) / 1_000_000
+        generation_rows.append({"model": model, "provider_calls": calls, "conservative_input_tokens": input_tokens, "maximum_output_tokens": output_tokens, "estimated_cost_usd": cost})
+        total_cost += cost; total_calls += calls
+    judge = AnswerJudge(api_key="cost-estimate", model=judge_model)
+    judge_input = 0
+    for _model in models:
+        for case in cases:
+            selected = contexts[case["id"]]
+            citations = tuple(Citation(index, chunk.pmid, chunk.chunk_id, chunk.title) for index, chunk in enumerate(selected[:5], 1))
+            worst_answer = AnswerResult("answered", ("evidence " * GENERATION_MAX_TOKENS).strip() + " [1].", citations)
+            payload = judge._payload(case["question"], worst_answer, selected)
+            judge_input += math.ceil(len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3)
+    judge_calls = len(cases) * len(models)
+    judge_output = 600 * judge_calls
+    judge_cost = (
+        judge_input * float(judge_catalog["input_cost_per_million"])
+        + judge_output * float(judge_catalog["output_cost_per_million"])
+    ) / 1_000_000
+    total_cost += judge_cost; total_calls += judge_calls
+    return {
+        "method": "UTF-8 JSON characters/3 for conservative input tokens; all generation repair and retry attempts; maximum outputs",
+        "generation": generation_rows,
+        "judge": {"model": judge_model, "provider_calls": judge_calls, "conservative_input_tokens": judge_input, "maximum_output_tokens": judge_output, "estimated_cost_usd": judge_cost},
+        "maximum_provider_calls": total_calls,
+        "estimated_max_cost_usd": total_cost,
+    }
+
 def contexts_from(
     packet: dict[str, Any],
     cases: list[dict[str, Any]],
@@ -166,9 +249,9 @@ def offline_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts:
             raise BakeoffError(f"{model} does not contain exactly one output for each development question")
     return grouped
 
-def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], config_hash: str, context_hash: str, api_key: str, models: Sequence[str] = MODELS) -> dict[str, list[dict[str, Any]]]:
+def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], config_hash: str, context_hash: str, api_key: str, models: Sequence[str] = MODELS, *, judge_model: str) -> dict[str, list[dict[str, Any]]]:
     """Explicit paid path: every generator sees the same frozen contexts."""
-    grouped = {model: [] for model in models}; judge = AnswerJudge(api_key=api_key)
+    grouped = {model: [] for model in models}; judge = AnswerJudge(api_key=api_key, model=judge_model)
     for model in models:
         client = GroundedAnswerClient(api_key=api_key, model=model)
         for case in cases:
@@ -196,28 +279,33 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); parser.add_argument("--config", type=Path, default=ROOT / "artifacts/section5/frozen_config.json")
     parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json"); parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_bakeoff_outputs.json")
     parser.add_argument("--model-catalog", type=Path, default=ROOT / "data/model_candidates.json")
-    parser.add_argument("--result", type=Path, default=ROOT / "data/rag_bakeoff_summary.json"); parser.add_argument("--live", action="store_true")
+    parser.add_argument("--result", type=Path, default=ROOT / "data/rag_bakeoff_summary.json"); parser.add_argument("--live", action="store_true"); parser.add_argument("--estimate-only", action="store_true")
     parser.add_argument("--max-cost-usd", type=float); parser.add_argument("--confirm-cost", action="store_true"); parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
     try:
-        if args.result.exists() and not args.overwrite:
+        if not args.estimate_only and args.result.exists() and not args.overwrite:
             raise BakeoffError(f"refusing to overwrite existing file: {args.result}; pass --overwrite")
         if args.live and args.outputs.exists() and not args.overwrite:
             raise BakeoffError(f"refusing to overwrite existing file: {args.outputs}; pass --overwrite")
         qa, config, context_packet, model_catalog = load_json(args.qa), load_json(args.config), load_json(args.contexts), load_json(args.model_catalog)
-        models = validate_model_catalog(model_catalog, max_age_hours=24 if args.live else None)
+        models = validate_model_catalog(model_catalog, max_age_hours=24 if args.live or args.estimate_only else None)
+        judge_model = validate_judge_catalog(model_catalog)
         config_hash, context_hash = hash_file(args.config), hash_file(args.contexts)
         qa_hash = hash_file(args.qa)
         cases = validate_qa(qa); validate_config(config); contexts = contexts_from(context_packet, cases, qa_hash=qa_hash, config_hash=config_hash)
+        cost_estimate = estimate_bakeoff_cost(cases, contexts, model_catalog, models, judge_model)
+        if args.estimate_only:
+            print(json.dumps(cost_estimate, indent=2, sort_keys=True))
+            return 0
         if args.live:
-            print(validate_live_cost(args.max_cost_usd))
+            print(validate_live_cost(args.max_cost_usd, cost_estimate["estimated_max_cost_usd"]))
             if not args.confirm_cost: raise BakeoffError("--live requires --confirm-cost after reviewing the maximum-cost status")
             api_key = os.environ.get("OPENROUTER_API_KEY")
             if not api_key: raise BakeoffError("--live requires OPENROUTER_API_KEY; no provider call was made")
-            grouped = run_live(cases, contexts, config_hash, context_hash, api_key, models)
+            grouped = run_live(cases, contexts, config_hash, context_hash, api_key, models, judge_model=judge_model)
             write_json_atomic(args.outputs, {"outputs": [row for values in grouped.values() for row in values]}, overwrite=args.overwrite)
         else: grouped = offline_rows(load_json(args.outputs), cases, contexts, config_hash, context_hash, models)
-        result = {"qa_sha256": qa_hash, "config_sha256": config_hash, "contexts_sha256": context_hash, "model_catalog_sha256": hash_file(args.model_catalog), "models": list(models), "outputs_sha256": hash_file(args.outputs), "live_calls": args.live, "selection": select_winner(grouped, len(cases))}
+        result = {"qa_sha256": qa_hash, "config_sha256": config_hash, "contexts_sha256": context_hash, "model_catalog_sha256": hash_file(args.model_catalog), "models": list(models), "judge_model": judge_model, "cost_estimate": cost_estimate, "outputs_sha256": hash_file(args.outputs), "live_calls": args.live, "selection": select_winner(grouped, len(cases))}
         write_json_atomic(args.result, result, overwrite=args.overwrite)
     except (BakeoffError, OSError, TypeError) as exc: print(f"Error: {exc}", file=sys.stderr); return 1
     print(json.dumps(result, sort_keys=True)); return 0

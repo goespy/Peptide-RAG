@@ -61,6 +61,7 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **Observed limitation:** The first generated web test used `pytest` despite the repository's `unittest` convention, repeating an earlier delegation error. Integration converted it and installed the actual web dependencies before acceptance.
 - **Observed limitation:** The initial RAG integration had three cross-module contract gaps: the frozen QA shape differed from the approved public schema, the app initially used untuned BM25/full abstracts for answer contexts, and generic saved-answer validation did not bind citations to stored chunks. Primary review and tests corrected all three before any paid run.
 - **Observed strength:** An independent Opus audit went beyond green tests and found evaluation-design defects: visible judge labels, oracle leakage into the judge prompt, and a release check that did not compare recomputed values with saved evidence.
+- **Observed limitation:** A later Opus review found that partial judge failures could silently shrink metric denominators, embedding caches trusted their own model labels, and a chunk without a fully containing gold span aborted comparison instead of receiving zero recall. Primary review reproduced and fixed each issue before generator evaluation.
 
 ## Oracle Catches
 
@@ -81,6 +82,7 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **2026-08-13 -- saved citations needed evidence binding:** A generic saved-answer shape check accepted citation metadata without proving it matched the identical stored contexts. The bake-off now reconstructs the answer and runs the production citation/sentence validator against each query's hash-bound context before a model is eligible.
 - **2026-08-13 -- Opus caught a self-confirming judge gate:** The first worksheet placed the model judge's verdict beside the owner's blank label and exposed answerability to the judge. Tests proved schema validity but not independence. The worksheet is now blind, source-hash-bound, and rejoined to immutable verdicts only during validation; answerability never enters the model judge prompt.
 - **2026-08-13 -- Opus caught a false-green release check:** The offline runner labeled freshly computed metrics `PASS` without comparing them to the committed reports. It now compares complete per-query and aggregate results within `1e-9`; a regression test mutates a saved MRR and requires a failing release.
+- **2026-08-14 -- offline replay caught floating-point drift:** Development retrieval metrics and rankings matched, but the first saved contexts differed bytewise from a cache-only replay because the first run scored an in-memory normalized query vector while replay normalized the serialized vector. First-run evaluation now reloads the saved query cache before scoring; evaluation JSON, Markdown, frozen configuration, and contexts reproduce byte-for-byte without credentials.
 - Add later retrieval incidents when a qrels metric, differential oracle, property test, or robustness test exposes them. Include the failing evidence, correction, and changed metric/test result.
 
 ## Key Learnings

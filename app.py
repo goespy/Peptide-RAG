@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 import os
 from pathlib import Path
-from collections import defaultdict, deque
+from collections import deque
 from datetime import UTC, datetime
 from typing import Any, Literal, Protocol
 
@@ -61,12 +61,17 @@ class LocalOnlyService:
 
 class SlidingRateLimiter:
     def __init__(self) -> None:
-        self._events: dict[str, deque[datetime]] = defaultdict(deque)
+        self._events: dict[str, deque[datetime]] = {}
 
     def allow(self, key: str, maximum: int, now: datetime | None = None) -> bool:
         now = now or datetime.now(UTC)
         window_start = now.timestamp() - 60
-        events = self._events[key]
+        for stored_key, stored_events in list(self._events.items()):
+            while stored_events and stored_events[0].timestamp() <= window_start:
+                stored_events.popleft()
+            if not stored_events:
+                del self._events[stored_key]
+        events = self._events.setdefault(key, deque())
         while events and events[0].timestamp() <= window_start:
             events.popleft()
         if len(events) >= maximum:
@@ -77,6 +82,18 @@ class SlidingRateLimiter:
 
 def _utc_day() -> str:
     return datetime.now(UTC).date().isoformat()
+
+
+def _environment_daily_cap() -> int:
+    try:
+        value = int(os.getenv("DAILY_ANSWER_CAP", "200"))
+    except ValueError:
+        return 0
+    return value if value >= 0 else 0
+
+
+def _environment_trust_proxy() -> bool:
+    return os.getenv("TRUST_PROXY_HEADERS", "false").casefold() in {"1", "true", "yes", "on"}
 
 
 async def _call(method: Any, *args: Any) -> Any:
@@ -120,7 +137,7 @@ def _require_query(query: str) -> str:
     return query
 
 
-def create_app(service: ResearchService | None = None, *, daily_answer_cap: int | None = None) -> FastAPI:
+def create_app(service: ResearchService | None = None, *, daily_answer_cap: int | None = None, trust_proxy_headers: bool | None = None) -> FastAPI:
     """Create an app with explicitly injected, local-safe service dependencies."""
     app = FastAPI(title="Peptide RAG", docs_url=None, redoc_url=None)
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
@@ -137,9 +154,14 @@ def create_app(service: ResearchService | None = None, *, daily_answer_cap: int 
     app.state.limiter = SlidingRateLimiter()
     app.state.answer_count = 0
     app.state.answer_day = _utc_day()
-    app.state.daily_answer_cap = daily_answer_cap if daily_answer_cap is not None else int(os.getenv("DAILY_ANSWER_CAP", "200"))
+    app.state.daily_answer_cap = _environment_daily_cap() if daily_answer_cap is None else max(0, daily_answer_cap)
+    app.state.trust_proxy_headers = _environment_trust_proxy() if trust_proxy_headers is None else trust_proxy_headers
 
     def client_ip(request: Request) -> str:
+        if app.state.trust_proxy_headers:
+            forwarded = request.headers.get("x-forwarded-for", "").split(",", 1)[0].strip()
+            if forwarded:
+                return forwarded
         return request.client.host if request.client else "unknown"
 
     def limited(request: Request, kind: str, maximum: int) -> None:

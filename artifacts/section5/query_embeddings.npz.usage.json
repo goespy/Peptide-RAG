@@ -1,0 +1,14 @@
+{
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "model": "openai/text-embedding-3-small",
+  "provider_usage": {
+    "cost_usd": 3.6e-06,
+    "input_tokens": 180,
+    "provider": "OpenAI",
+    "provider_calls": 1
+  },
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "query_cache_sha256": "CAF4C172B66E209D5CD448DDF41B1D7ED4B8DD8EBC105939C94873A589323668",
+  "question_count": 13,
+  "schema_version": 1
+}

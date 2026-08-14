@@ -191,12 +191,11 @@ and the corrected invocation is disclosed as a technical rerun.
 ## Section 5: measured RAG extension
 
 RAG selection begins with a separate 20-question oracle, not with a chunk-size
-guess. `data/qa_draft.json` and `QA-REVIEW.md` contain 15 answerable and five
-intentionally unanswerable candidate cases. They remain unusable while their
-status is `candidate_pool_requires_human_review`. `scripts/freeze_qa.py`
-requires an explicit approve decision and named reviewer for every case,
-revalidates every abstract offset and span hash against the frozen corpus, and
-normalizes the approved file to this public shape:
+guess. `data/qa.json` contains 15 answerable and five intentionally unanswerable
+owner-approved cases. `scripts/freeze_qa.py` required an explicit approve
+decision and named reviewer for every case, revalidated every abstract offset
+and span hash against the frozen corpus, and normalized the approved file to
+this public shape:
 
 ```json
 {
@@ -242,12 +241,21 @@ by hybrid Recall@5, Evidence Hit@5, then proximity to alpha 0.5. The selected
 configuration, exact system prompt, generation settings, embedding model, QA
 hash, and source-evaluation hash are frozen together before the bake-off.
 
+The measured development winner is 256-word windows with 64-word overlap.
+Lexical and semantic Recall@5 both measured `0.710`; the selected `alpha=0.5`
+hybrid raised Recall@5 to `0.810` and Evidence Hit@5 to `0.900`. The 512-word
+candidate had slightly higher lexical Recall@5 (`0.717`) but lower semantic
+Recall@5 (`0.667`), so it lost under the preregistered max-min rule.
+
 Embeddings use an OpenRouter-hosted model only after explicit credentials are
 provided. Corpus inputs are embedded once, normalized, and saved in an atomic
 NumPy cache containing model, dimension, corpus/chunk/input hashes, timestamp,
-and chunk order. Query vectors and cached document vectors use brute-force
-cosine similarity. Production retrieval and RRF are hand-built; there is no
-vector database or semantic retrieval library.
+and chunk order. All 13 development-question vectors are also stored in a
+QA/corpus/model-bound cache with hash-bound provider-usage metadata. First-run
+evaluation reloads this saved cache before scoring, making cache-only replays
+byte-identical. Query vectors and cached document vectors use brute-force cosine
+similarity. Production retrieval and RRF are hand-built; there is no vector
+database or semantic retrieval library.
 
 Grounded generation sends at most five numbered chunks at temperature zero and
 a 400-token cap. Structured output must either be `answered` with an exact set
@@ -259,9 +267,11 @@ prescriptive dosing requests are rejected deterministically before a provider
 call; questions about doses reported in a named study remain research queries.
 
 The three-model development bake-off requires identical stored contexts and
-hashes. A structurally invalid model is disqualified before selection by
-faithfulness, refusal correctness, relevancy, citation correctness, actual
-provider-reported cost when available, and p95 latency. Claude is the
+hashes. A structurally invalid or incompletely judged model is disqualified
+before selection by faithfulness, refusal correctness, relevancy, citation
+correctness, actual provider-reported cost when available, and p95 latency.
+Every reported rate includes its denominator, and all expected outputs must
+have complete judge verdicts. Claude is the
 different-family judge, but its verdict is unusable until a deterministic
 10-output sample reaches at least 80% owner agreement and Cohen's kappa 0.60.
 Undefined kappa remains inconclusive and is accompanied by the confusion

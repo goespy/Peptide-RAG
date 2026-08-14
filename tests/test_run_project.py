@@ -17,6 +17,7 @@ class RunProjectTests(unittest.TestCase):
         self.assertTrue(any(check.name == "current bm25 evaluation" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "Section 4 experiment provenance" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "approved QA oracle" and check.state == "PASS" for check in checks))
+        self.assertTrue(any(check.name == "RAG retrieval evaluation" and check.state == "PASS" for check in checks))
 
     def test_missing_required_core_artifact_fails_only_core(self) -> None:
         with patch.object(run_project, "BASELINE", run_project.ROOT / "missing.json"):
@@ -67,3 +68,25 @@ class RunProjectTests(unittest.TestCase):
                 checks, failed = run_project.run()
         self.assertTrue(failed)
         self.assertTrue(any(check.name == "approved QA oracle" and check.state == "FAIL" for check in checks))
+
+    def test_nondict_qa_entry_reports_failure_without_traceback(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "qa.json"
+            payload = json.loads(run_project.QA.read_text(encoding="utf-8"))
+            payload["questions"].append("junk")
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "QA", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(check.name == "approved QA oracle" and check.state == "FAIL" for check in checks))
+
+    def test_embedding_ledger_hash_drift_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "embedding_usage.json"
+            payload = json.loads(run_project.EMBEDDING_USAGE.read_text(encoding="utf-8"))
+            payload["runs"][0]["artifact_sha256"] = "0" * 64
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "EMBEDDING_USAGE", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(check.name == "RAG retrieval evaluation" and check.state == "FAIL" for check in checks))
