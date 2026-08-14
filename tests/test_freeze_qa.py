@@ -3,6 +3,8 @@ import hashlib, json, tempfile, unittest
 from pathlib import Path
 from scripts.freeze_qa import QAFreezeError, validate_for_freeze, write_atomic
 
+ROOT = Path(__file__).resolve().parents[1]
+
 class FreezeQATests(unittest.TestCase):
     def packet(self, digest: str, approved: bool = True) -> dict:
         cases = []
@@ -28,3 +30,22 @@ class FreezeQATests(unittest.TestCase):
             output=Path(td)/"qa.json"; output.write_text("old")
             with self.assertRaises(QAFreezeError): write_atomic({}, output)
             self.assertEqual(output.read_text(), "old")
+
+    def test_checked_in_frozen_oracle_matches_approved_draft(self):
+        draft = json.loads((ROOT / "data/qa_draft.json").read_text(encoding="utf-8"))
+        expected = validate_for_freeze(draft, ROOT / "data/corpus.jsonl")
+        actual = json.loads((ROOT / "data/qa.json").read_text(encoding="utf-8"))
+        self.assertEqual(actual, expected)
+        development_pmids = {
+            pmid
+            for question in actual["questions"]
+            if question["split"] == "development"
+            for pmid in question["relevant_pmids"]
+        }
+        holdout_pmids = {
+            pmid
+            for question in actual["questions"]
+            if question["split"] == "holdout"
+            for pmid in question["relevant_pmids"]
+        }
+        self.assertTrue(development_pmids.isdisjoint(holdout_pmids))

@@ -29,6 +29,7 @@ from src.metrics import evaluate_run
 ROOT = Path(__file__).resolve().parent
 CORPUS = ROOT / "data/corpus.jsonl"
 QRELS = ROOT / "data/qrels_v2.json"
+QA = ROOT / "data/qa.json"
 LEXICAL_CONFIG = ROOT / "data/lexical_config.json"
 EVAL_SPLIT = ROOT / "data/eval_split.json"
 BASELINE = ROOT / "artifacts/section3/baseline.json"
@@ -178,11 +179,67 @@ def _section4_checks(config: dict[str, Any]) -> list[Check]:
     return [Check("Section 4 experiment provenance", "PASS", "development grid, one-shot holdout, and benchmark hashes match", True)]
 
 
+def _validate_frozen_qa(path: Path) -> Check:
+    qa = _json(path)
+    if qa.get("status") != "approved" or qa.get("version") != 1:
+        raise ValueError("frozen QA must be approved version 1")
+    if str(qa.get("corpus_sha256", "")).upper() != sha256(CORPUS):
+        raise ValueError("frozen QA corpus hash does not match")
+    if str(qa.get("qrels_v2_sha256", "")).upper() != sha256(QRELS):
+        raise ValueError("frozen QA qrels hash does not match")
+    questions = qa.get("questions")
+    expected_ids = [f"qa{number:02d}" for number in range(1, 21)]
+    if not isinstance(questions, list) or [item.get("id") for item in questions if isinstance(item, dict)] != expected_ids:
+        raise ValueError("frozen QA must contain qa01 through qa20 exactly once")
+    if sum(item.get("answerable") is True for item in questions) != 15 or sum(item.get("answerable") is False for item in questions) != 5:
+        raise ValueError("frozen QA must contain 15 answerable and 5 unanswerable cases")
+    corpus: dict[str, str] = {}
+    with CORPUS.open(encoding="utf-8") as source:
+        for line_number, line in enumerate(source, 1):
+            try:
+                record = json.loads(line)
+            except json.JSONDecodeError as exc:
+                raise ValueError(f"invalid corpus JSON line {line_number}") from exc
+            if not isinstance(record, dict) or not isinstance(record.get("id"), str) or not isinstance(record.get("text"), str):
+                raise ValueError(f"invalid corpus record at line {line_number}")
+            corpus[record["id"]] = record["text"]
+    split_pmids: dict[str, set[str]] = {"development": set(), "holdout": set()}
+    for item in questions:
+        review = item.get("human_review")
+        if not isinstance(review, dict) or review.get("approved") is not True or review.get("decision") != "approve" or not str(review.get("reviewer", "")).strip():
+            raise ValueError(f"{item['id']} lacks explicit human approval")
+        split = item.get("split")
+        if split not in split_pmids:
+            raise ValueError(f"{item['id']} has invalid split")
+        pmids, spans = item.get("relevant_pmids"), item.get("supporting_spans")
+        if not isinstance(pmids, list) or not isinstance(spans, list):
+            raise ValueError(f"{item['id']} has malformed evidence lists")
+        if item["answerable"] is False:
+            if pmids or spans or item.get("acceptable_answer"):
+                raise ValueError(f"{item['id']} unanswerable case contains answer evidence")
+            continue
+        if not pmids or not spans or not str(item.get("acceptable_answer", "")).strip():
+            raise ValueError(f"{item['id']} answerable case lacks evidence")
+        if {span.get("pmid") for span in spans if isinstance(span, dict)} != set(pmids):
+            raise ValueError(f"{item['id']} PMID and supporting-span sets disagree")
+        split_pmids[split].update(pmids)
+        for span in spans:
+            pmid, start, end = span.get("pmid"), span.get("start_char"), span.get("end_char")
+            if pmid not in corpus or isinstance(start, bool) or not isinstance(start, int) or isinstance(end, bool) or not isinstance(end, int) or start < 0 or end <= start:
+                raise ValueError(f"{item['id']} has malformed supporting span")
+            extracted = corpus[pmid][start:end]
+            if hashlib.sha256(extracted.encode("utf-8")).hexdigest().upper() != str(span.get("text_sha256", "")).upper():
+                raise ValueError(f"{item['id']} supporting span hash does not match corpus")
+    if not split_pmids["development"].isdisjoint(split_pmids["holdout"]):
+        raise ValueError("frozen QA development and holdout supporting PMIDs overlap")
+    return Check("approved QA oracle", "PASS", "20 owner-approved cases (15/5); exact spans, hashes, and split PMID separation verified")
+
+
 def _rag_checks() -> list[Check]:
     manifests = sorted(SECTION5.glob("*.jsonl.manifest.json")) if SECTION5.is_dir() else []
-    if not manifests:
-        return [Check("RAG chunk artifacts", "TBD", "no checked-in chunk manifests")]
     checks: list[Check] = []
+    if not manifests:
+        checks.append(Check("RAG chunk artifacts", "TBD", "no checked-in chunk manifests"))
     corpus_hash = sha256(CORPUS)
     for manifest_path in manifests:
         try:
@@ -201,11 +258,14 @@ def _rag_checks() -> list[Check]:
             checks.append(Check(f"RAG {chunks.name}", "PASS", "manifest binds chunk file and corpus"))
         except (OSError, ValueError) as exc:
             checks.append(Check(f"RAG {manifest_path.name}", "FAIL", str(exc)))
-    qa = ROOT / "data/qa.json"
-    if not qa.is_file():
-        checks.append(Check("approved QA / faithfulness evaluation", "TBD", "approved QA artifact and offline caches are not committed"))
+    if not QA.is_file():
+        checks.append(Check("approved QA oracle", "TBD", "approved QA artifact is not committed"))
     else:
-        checks.append(Check("approved QA / faithfulness evaluation", "TBD", "artifact present; release evaluator is pending human approval and credentials"))
+        try:
+            checks.append(_validate_frozen_qa(QA))
+        except (OSError, ValueError, TypeError) as exc:
+            checks.append(Check("approved QA oracle", "FAIL", str(exc)))
+    checks.append(Check("RAG faithfulness evaluation", "TBD", "embedding cache, selected retrieval configuration, and saved generator/judge outputs are pending"))
     return checks
 
 
@@ -215,7 +275,7 @@ def _live_eval() -> list[Check]:
     if not os.environ.get("OPENROUTER_API_KEY"):
         checks.append(Check("live-eval credentials", "TBD", "OPENROUTER_API_KEY is not set; no network call attempted"))
     else:
-        checks.append(Check("live-eval pipeline", "TBD", "credential detected, but approved QA, cached embeddings, and release evaluator are incomplete; no paid call attempted"))
+        checks.append(Check("live-eval pipeline", "TBD", "credential detected, but cached embeddings, selected retrieval configuration, and generator/judge artifacts are incomplete; no paid call attempted"))
     return checks
 
 
