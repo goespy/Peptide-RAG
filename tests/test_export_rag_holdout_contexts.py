@@ -45,7 +45,7 @@ def qa_packet():
 class ExportHoldoutContextsTests(unittest.TestCase):
     def test_gate_binds_qa_config_and_judge_to_bakeoff(self):
         config = {"status": "selected_and_frozen", "selected": True, "prompt": "p", "generation": {"temperature": 0, "max_tokens": 400}}
-        bakeoff = {"qa_sha256": "q", "config_sha256": "c", "outputs_sha256": "o", "selection": {"winner": "model"}}
+        bakeoff = {"qa_sha256": "q", "config_sha256": "c", "outputs_sha256": "o", "selection": {"winner": "model", "winner_status": "accepted_for_holdout"}}
         judge = {"passes": True, "source_outputs_sha256": "o"}
         self.assertEqual(validate_development_gates(qa_packet(), config, bakeoff, judge, qa_hash="q", config_hash="c"), "model")
         judge["source_outputs_sha256"] = "wrong"

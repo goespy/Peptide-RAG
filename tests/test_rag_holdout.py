@@ -22,7 +22,8 @@ class HoldoutTests(unittest.TestCase):
     def test_requires_exact_approved_holdout_and_winner(self):
         cases = holdout.holdout_cases(qa_packet())
         self.assertEqual(len(cases), 7)
-        self.assertEqual(holdout.winner_from({"selection": {"winner": "model"}}), "model")
+        self.assertEqual(holdout.winner_from({"selection": {"winner": "model", "winner_status": "accepted_for_holdout"}}), "model")
+        with self.assertRaises(holdout.HoldoutError): holdout.winner_from({"selection": {"winner": "model", "winner_status": "provisional_development_selection_pending_owner_judge_validation"}})
         with self.assertRaises(holdout.HoldoutError): holdout.winner_from({"selection": {"winner": None}})
 
     def test_saved_rows_bind_winner_contexts_and_citations(self):

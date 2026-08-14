@@ -17,6 +17,7 @@
 | 2026-08-13 | Claude Code, specification-only reviewer | Reviewed the frozen Section 4 methodology and aggregate outcomes without repository access. | Returned `CHANGES_REQUIRED` because holdout gains were small and Recall@5-focused while NDCG@3 declined. The concern was accepted and documented, but the configuration was not changed after holdout exposure. |
 | 2026-08-13 | Codex + three GPT-5.6 Terra subagents | Implemented bounded Section 5 packets for chunking/caches/retrieval, grounded generation/judging, local FastAPI service, and bake-off/judge-validation tooling; added the Section 6 offline runner and CI/report foundations. | The primary agent normalized the public QA schema, strengthened citation and medical-refusal validation, blocked use of unselected full abstracts as answer evidence, installed web dependencies, and exercised the rendered local app. QA approval, provider runs, judge labels, and deployment remain explicit gates. |
 | 2026-08-13 | Claude Opus, read-only implementation audit | Reviewed the bounded Section 5/6 code and tests after an initial broad attempt timed out without a verdict. The first completed audit returned `CHANGES_REQUIRED`; a focused re-review after fixes returned `PASS` with no blocking findings. | Codex fixed all three blockers and all follow-up suggestions, expanded the suite to 184 passing tests, and saved the audit trail in `artifacts/section6/claude_opus_review.md`. No corpus/chunk bodies were transmitted. |
+| 2026-08-14 | Codex + OpenRouter model bake-off + Claude Opus subscription review | Ran the owner-approved 13-case development bake-off under a `$0.86` ceiling, saved 39 generator/judge rows, replayed the result offline, and asked Opus to audit the selection and worksheet without holdout access. | The project owner approved the QA and spend but has not supplied judge-validation labels. Opus returned `CHANGES_REQUIRED`; Codex fixed the selector, accounting report, and evidence-bearing worksheet while preserving the weak run as a negative result. |
 
 Second required AI tool or integration: **Claude Code** (independent qrels review, distinct from the Codex/GPT-5.6 build agent — satisfies the "two tools" requirement and is a deliberate second-model check, not just a second interface).
 
@@ -62,6 +63,8 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **Observed limitation:** The initial RAG integration had three cross-module contract gaps: the frozen QA shape differed from the approved public schema, the app initially used untuned BM25/full abstracts for answer contexts, and generic saved-answer validation did not bind citations to stored chunks. Primary review and tests corrected all three before any paid run.
 - **Observed strength:** An independent Opus audit went beyond green tests and found evaluation-design defects: visible judge labels, oracle leakage into the judge prompt, and a release check that did not compare recomputed values with saved evidence.
 - **Observed limitation:** A later Opus review found that partial judge failures could silently shrink metric denominators, embedding caches trusted their own model labels, and a chunk without a fully containing gold span aborted comparison instead of receiving zero recall. Primary review reproduced and fixed each issue before generator evaluation.
+- **Observed limitation:** The first generator bake-off retrieved a full gold span for 9 of 10 answerable cases but produced only two answers across all three candidates. Qwen exhausted repeated constrained attempts, GPT-OSS refused every answerable case, and Gemma answered two; none is accepted for holdout.
+- **Observed strength:** The negative run was not hidden or rebranded as success. Immutable provider outputs were retained, actual spend was aggregated, the selection was marked provisional, and the holdout stayed closed.
 
 ## Oracle Catches
 
@@ -83,6 +86,8 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 - **2026-08-13 -- Opus caught a self-confirming judge gate:** The first worksheet placed the model judge's verdict beside the owner's blank label and exposed answerability to the judge. Tests proved schema validity but not independence. The worksheet is now blind, source-hash-bound, and rejoined to immutable verdicts only during validation; answerability never enters the model judge prompt.
 - **2026-08-13 -- Opus caught a false-green release check:** The offline runner labeled freshly computed metrics `PASS` without comparing them to the committed reports. It now compares complete per-query and aggregate results within `1e-9`; a regression test mutates a saved MRR and requires a failing release.
 - **2026-08-14 -- offline replay caught floating-point drift:** Development retrieval metrics and rankings matched, but the first saved contexts differed bytewise from a cache-only replay because the first run scored an in-memory normalized query vector while replay normalized the serialized vector. First-run evaluation now reloads the saved query cache before scoring; evaluation JSON, Markdown, frozen configuration, and contexts reproduce byte-for-byte without credentials.
+- **2026-08-14 -- first generator bake-off exposed a selector blind spot:** Qwen and GPT-OSS answered zero of ten answerable development cases, while Gemma answered two. The original citation metric was undefined for zero-answer candidates, removing them from eligibility and making Gemma look stronger than its `0.200` correct-answer rate. Opus independently flagged the problem. The offline reanalysis scores zero answers as citation correctness `0.0`, exposes answerable-case rates and denominators, and labels Gemma provisional rather than accepted.
+- **2026-08-14 -- the blind worksheet lacked the material needed to judge:** The first owner worksheet hid Claude's verdict but also omitted the question and retrieved chunks. An owner could not independently label faithfulness, relevance, or citations from the answer alone. Version 2 includes and hash-binds the question, target, answer, and five exact evidence chunks while keeping Claude's verdict hidden.
 - Add later retrieval incidents when a qrels metric, differential oracle, property test, or robustness test exposes them. Include the failing evidence, correction, and changed metric/test result.
 
 ## Key Learnings
@@ -102,6 +107,9 @@ Estimates must reflect the final reviewed repository, not prompt volume.
 
 | Provider/model | Input tokens | Output tokens | Calls | Cost |
 |---|---:|---:|---:|---:|
-| TBD | TBD | TBD | TBD | TBD |
+| OpenRouter `openai/text-embedding-3-small` | 2,321,629 | N/A | 93 | $0.046432580 |
+| Three generator candidates | 142,254 | 24,726 | 83 | $0.009190435 |
+| OpenRouter `anthropic/claude-sonnet-4.6` judge | 92,446 | 10,608 | 39 | $0.436458000 |
+| Claude Code Opus subscription review | unknown/not exposed | unknown/not exposed | 2 attempts | Subscription; marginal cost unknown/not exposed |
 
 Record actual development usage and assumptions for the required monthly 100/1K/10K/100K-user projection before final submission.

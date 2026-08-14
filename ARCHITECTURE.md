@@ -270,17 +270,34 @@ The three-model development bake-off requires identical stored contexts and
 hashes. A structurally invalid or incompletely judged model is disqualified
 before selection by faithfulness, refusal correctness, relevancy, citation
 correctness, actual provider-reported cost when available, and p95 latency.
-Every reported rate includes its denominator, and all expected outputs must
-have complete judge verdicts. Claude is the
+Every reported rate includes its denominator, all expected outputs must have
+complete judge verdicts, and a model that answers no cases receives citation
+correctness zero rather than an undefined score that removes it from the
+comparison. Reports separately expose answerable answer rate, correct-answer
+rate, correct-refusal rate, and overall answerability classification. A
+development winner is provisional and is not itself an acceptance gate. Claude is the
 different-family judge, but its verdict is unusable until a deterministic
 10-output sample reaches at least 80% owner agreement and Cohen's kappa 0.60.
 Undefined kappa remains inconclusive and is accompanied by the confusion
-matrix. The owner worksheet hides both the judge verdict and frozen
-answerability label. During validation it is SHA-256-bound back to the saved
-outputs, and the judge verdict is reloaded rather than trusted from the
-human-editable worksheet. Answerability never enters the LLM judge prompt;
-refusal correctness is calculated deterministically from the frozen QA label
-and returned answer status.
+matrix. The owner worksheet hides the judge verdict but displays the frozen
+question, answerability target, acceptable answer, returned answer, and exact
+five retrieved chunks required to make independent labels. Citation
+correctness may be marked not applicable for a refusal with no citations, and
+the smaller denominator is reported. During validation the worksheet is
+SHA-256-bound to the QA, contexts, and saved outputs; all displayed evidence is
+reconstructed and tamper-checked, and the judge verdict is reloaded rather than
+trusted from the human-editable worksheet. Answerability never enters the LLM
+judge prompt; refusal correctness is calculated deterministically from the
+frozen QA label and returned answer status.
+
+The first development bake-off is a retained negative result. Hybrid retrieval
+placed a full labeled support span in the top five for nine of ten answerable
+cases, but Qwen and GPT-OSS answered zero and Gemma answered two. The corrected
+offline report still identifies Gemma under the pre-registered lexicographic
+ordering, while explicitly marking it provisional and showing a correct-answer
+rate of `0.200`. No holdout case is exposed until the owner judge-validation
+gate passes and any generator revision is versioned rather than silently
+changing the post-result selection rule.
 
 ## Application and release boundary
 
@@ -303,6 +320,7 @@ rate-limiting claim.
 `python run_project.py` is the network-free release check. It validates the
 frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics,
 compares the complete per-query and aggregate reports with saved evidence, and
-validates committed chunk manifests. Until the approved QA, embedding caches,
-bake-off, human judge labels, and deployment artifacts exist, those checks are
-reported as `TBD`; they are not converted into zeros or passing claims.
+validates committed chunk manifests. The approved QA, retrieval caches, and
+first bake-off are saved evidence. Human judge labels, an accepted generator,
+QA holdout metrics, and deployment remain `TBD`; they are not converted into
+zeros or passing claims.

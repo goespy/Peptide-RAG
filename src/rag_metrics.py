@@ -39,15 +39,16 @@ def answer_is_structurally_valid(answer: Mapping[str, Any]) -> bool:
 def candidate_summary(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     saved = tuple(rows)
     valid = [row for row in saved if bool(row.get("structurally_valid"))]
-    def rate(name: str, *, subset: str = "all") -> float | None:
+    def rate(name: str, *, subset: str = "all", empty: float | None = None) -> float | None:
         selected = [
             row for row in valid
             if subset == "all"
             or (subset == "unanswerable" and row.get("answerability") == "unanswerable")
+            or (subset == "answerable" and row.get("answerability") == "answerable")
             or (subset == "answered" and isinstance(row.get("answer"), Mapping) and row["answer"].get("status") == "answered")
         ]
         if not selected:
-            return None
+            return empty
         values = [row.get("judge", {}).get(name) if isinstance(row.get("judge"), Mapping) else None for row in selected]
         return sum(value is True for value in values) / len(values) if all(isinstance(value, bool) for value in values) else None
     costs = [row.get("metadata", {}).get("cost_usd") for row in valid]
@@ -60,13 +61,24 @@ def candidate_summary(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
     denominators = {
         "all_valid": len(valid),
         "answered": sum(isinstance(row.get("answer"), Mapping) and row["answer"].get("status") == "answered" for row in valid),
+        "answerable": sum(row.get("answerability") == "answerable" for row in valid),
         "unanswerable": sum(row.get("answerability") == "unanswerable" for row in valid),
     }
+    answerable = [row for row in valid if row.get("answerability") == "answerable"]
     return {
         "outputs": len(saved), "valid_outputs": len(valid), "judged_outputs": len(judged), "denominators": denominators,
         "structural_validity": len(valid) / len(saved) if saved else 0.0,
         "faithfulness": rate("faithful"), "correct_refusal": rate("refusal_correct", subset="unanswerable"),
-        "relevancy": rate("relevant"), "citation_correctness": rate("citations_correct", subset="answered"),
+        "correct_answer": rate("refusal_correct", subset="answerable"),
+        "answerable_answer_rate": (
+            sum(isinstance(row.get("answer"), Mapping) and row["answer"].get("status") == "answered" for row in answerable) / len(answerable)
+            if answerable else None
+        ),
+        "answerability_classification": rate("refusal_correct"),
+        "relevancy": rate("relevant"),
+        # A candidate that never answers receives zero, not an undefined value
+        # that silently removes it from the comparison.
+        "citation_correctness": rate("citations_correct", subset="answered", empty=0.0),
         "cost_usd": sum(exposed_costs) if len(exposed_costs) == len(valid) else None,
         "p95_latency_ms": percentile95(row.get("metadata", {}).get("latency_ms") for row in valid if isinstance(row.get("metadata", {}).get("latency_ms"), (int, float))),
     }
@@ -88,7 +100,13 @@ def select_winner(rows_by_model: Mapping[str, Iterable[Mapping[str, Any]]], expe
         model, value = item
         return (-value["structural_validity"], -value["faithfulness"], -value["correct_refusal"], -value["relevancy"], -value["citation_correctness"], value["cost_usd"] if value["cost_usd"] is not None else float("inf"), value["p95_latency_ms"] if value["p95_latency_ms"] is not None else float("inf"), model)
     winner = min(eligible.items(), key=key)[0]
-    return {"winner": winner, "reason": "schema/citation validity, faithfulness, refusal, relevancy, citation correctness, cost, p95 latency", "candidates": summaries}
+    return {
+        "winner": winner,
+        "winner_status": "provisional_development_selection_pending_owner_judge_validation",
+        "reason": "schema/citation validity, faithfulness, refusal, relevancy, citation correctness, cost, p95 latency",
+        "warning": "Inspect answerable_answer_rate and correct_answer before any holdout run; selection alone is not an acceptance gate.",
+        "candidates": summaries,
+    }
 
 
 def binary_agreement(pairs: Iterable[tuple[bool, bool]]) -> dict[str, Any]:

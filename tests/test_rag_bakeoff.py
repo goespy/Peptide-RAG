@@ -45,10 +45,36 @@ class BakeoffTests(unittest.TestCase):
 
     def test_refusal_rate_uses_only_unanswerable_cases(self):
         rows = [
-            {"structurally_valid": True, "answerability": "answerable", "answer": {"status": "answered"}, "judge": {"faithful": True, "relevant": True, "citations_correct": True, "refusal_correct": False}, "metadata": {"latency_ms": 1, "cost_usd": 0}},
+            {"structurally_valid": True, "answerability": "answerable", "answer": {"status": "answered"}, "judge": {"faithful": True, "relevant": True, "citations_correct": True, "refusal_correct": True}, "metadata": {"latency_ms": 1, "cost_usd": 0}},
             {"structurally_valid": True, "answerability": "unanswerable", "answer": {"status": "insufficient_evidence"}, "judge": {"faithful": True, "relevant": True, "citations_correct": True, "refusal_correct": True}, "metadata": {"latency_ms": 1, "cost_usd": 0}},
         ]
-        self.assertEqual(bakeoff.select_winner({"model": rows}, 2)["candidates"]["model"]["correct_refusal"], 1.0)
+        metrics = bakeoff.select_winner({"model": rows}, 2)["candidates"]["model"]
+        self.assertEqual(metrics["correct_refusal"], 1.0)
+        self.assertEqual(metrics["correct_answer"], 1.0)
+        self.assertEqual(metrics["answerable_answer_rate"], 1.0)
+
+    def test_never_answering_scores_zero_instead_of_becoming_ineligible(self):
+        rows = []
+        for index in range(13):
+            answerability = "answerable" if index < 10 else "unanswerable"
+            rows.append({
+                "structurally_valid": True,
+                "answerability": answerability,
+                "answer": {"status": "insufficient_evidence"},
+                "judge": {
+                    "faithful": index >= 10,
+                    "relevant": True,
+                    "citations_correct": True,
+                    "refusal_correct": index >= 10,
+                },
+                "metadata": {"latency_ms": 1, "cost_usd": 0},
+            })
+        selection = bakeoff.select_winner({"model": rows}, 13)
+        metrics = selection["candidates"]["model"]
+        self.assertEqual(selection["winner"], "model")
+        self.assertEqual(metrics["citation_correctness"], 0.0)
+        self.assertEqual(metrics["correct_answer"], 0.0)
+        self.assertEqual(metrics["answerable_answer_rate"], 0.0)
 
     def test_partial_judge_failure_disqualifies_candidate(self):
         rows = []
@@ -110,3 +136,43 @@ class BakeoffTests(unittest.TestCase):
         self.assertEqual(estimate["maximum_provider_calls"], 195)
         self.assertGreater(estimate["estimated_max_cost_usd"], 0)
         self.assertEqual(len(estimate["generation"]), 3)
+
+    def test_combined_usage_includes_generator_and_judge(self):
+        usage = bakeoff.combined_usage(
+            {"provider_calls": 2, "input_tokens": 100, "output_tokens": 20, "cost_usd": .01},
+            {"provider_calls": 1, "input_tokens": 50, "output_tokens": 10, "cost_usd": .02},
+            12.5,
+            7.5,
+        )
+        self.assertEqual(usage["provider_calls"], 3)
+        self.assertEqual(usage["input_tokens"], 150)
+        self.assertEqual(usage["output_tokens"], 30)
+        self.assertAlmostEqual(usage["cost_usd"], .03)
+        self.assertEqual(usage["latency_ms"], 20)
+        self.assertEqual(usage["token_cost_status"], "provider_reported")
+
+    def test_combined_usage_preserves_unknown_cost(self):
+        usage = bakeoff.combined_usage(
+            {"provider_calls": 1, "input_tokens": 100, "output_tokens": 20, "cost_usd": .01},
+            {"provider_calls": 1, "input_tokens": None, "output_tokens": None, "cost_usd": None},
+            1,
+            2,
+        )
+        self.assertEqual(usage["provider_calls"], 2)
+        self.assertIsNone(usage["input_tokens"])
+        self.assertIsNone(usage["cost_usd"])
+        self.assertEqual(usage["token_cost_status"], "unknown_not_exposed_by_provider")
+
+    def test_realized_usage_sums_all_saved_rows_and_preserves_unknowns(self):
+        grouped = {
+            "a": [{"metadata": {"provider_calls": 2, "input_tokens": 10, "output_tokens": 3, "cost_usd": .01}}],
+            "b": [{"metadata": {"provider_calls": 1, "input_tokens": 20, "output_tokens": 4, "cost_usd": .02}}],
+        }
+        usage = bakeoff.realized_usage(grouped)
+        self.assertEqual(usage["rows"], 2)
+        self.assertEqual(usage["provider_calls"], 3)
+        self.assertEqual(usage["input_tokens"], 30)
+        self.assertAlmostEqual(usage["cost_usd"], .03)
+        self.assertEqual(usage["status"], "provider_reported_complete")
+        grouped["b"][0]["metadata"]["cost_usd"] = None
+        self.assertIsNone(bakeoff.realized_usage(grouped)["cost_usd"])

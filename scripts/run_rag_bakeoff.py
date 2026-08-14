@@ -233,6 +233,66 @@ def structurally_valid_answer(payload: Any, contexts: tuple[RetrievedChunk, ...]
     answer = _saved_answer(payload)
     return answer is not None and answer_is_structurally_valid(payload) and validate_answer_result(answer, contexts)
 
+def combined_usage(
+    generator_usage: dict[str, object],
+    judge_usage: dict[str, object],
+    generator_latency_ms: float,
+    judge_latency_ms: float,
+) -> dict[str, object]:
+    """Combine generator and judge accounting without inventing missing values."""
+    combined: dict[str, object] = {
+        "provider": "OpenRouter",
+        "generator_latency_ms": generator_latency_ms,
+        "judge_latency_ms": judge_latency_ms,
+        "latency_ms": generator_latency_ms + judge_latency_ms,
+        "generator_usage": dict(generator_usage),
+        "judge_usage": dict(judge_usage),
+    }
+    integer_fields = ("provider_calls", "input_tokens", "output_tokens")
+    for field in integer_fields:
+        values = (generator_usage.get(field), judge_usage.get(field))
+        combined[field] = (
+            sum(values)
+            if all(isinstance(value, int) and not isinstance(value, bool) and value >= 0 for value in values)
+            else None
+        )
+    costs = (generator_usage.get("cost_usd"), judge_usage.get("cost_usd"))
+    combined["cost_usd"] = (
+        sum(float(value) for value in costs)
+        if all(isinstance(value, (int, float)) and not isinstance(value, bool) and value >= 0 for value in costs)
+        else None
+    )
+    combined["token_cost_status"] = (
+        "provider_reported"
+        if all(combined[field] is not None for field in ("input_tokens", "output_tokens", "cost_usd"))
+        else "unknown_not_exposed_by_provider"
+    )
+    return combined
+
+def realized_usage(grouped: dict[str, list[dict[str, Any]]]) -> dict[str, object]:
+    """Aggregate saved provider usage, preserving unknown totals as unknown."""
+    rows = [row for model_rows in grouped.values() for row in model_rows]
+    totals: dict[str, object] = {"rows": len(rows)}
+    for field in ("provider_calls", "input_tokens", "output_tokens"):
+        values = [row.get("metadata", {}).get(field) for row in rows]
+        totals[field] = (
+            sum(values)
+            if all(isinstance(value, int) and not isinstance(value, bool) and value >= 0 for value in values)
+            else None
+        )
+    costs = [row.get("metadata", {}).get("cost_usd") for row in rows]
+    totals["cost_usd"] = (
+        sum(float(value) for value in costs)
+        if all(isinstance(value, (int, float)) and not isinstance(value, bool) and value >= 0 for value in costs)
+        else None
+    )
+    totals["status"] = (
+        "provider_reported_complete"
+        if all(totals[field] is not None for field in ("provider_calls", "input_tokens", "output_tokens", "cost_usd"))
+        else "unknown_not_exposed_by_provider"
+    )
+    return totals
+
 def offline_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], config_hash: str, context_hash: str, models: Sequence[str] = MODELS) -> dict[str, list[dict[str, Any]]]:
     rows = outputs.get("outputs")
     if not isinstance(rows, list): raise BakeoffError("offline artifact needs an outputs list")
@@ -255,22 +315,13 @@ def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChu
     for model in models:
         client = GroundedAnswerClient(api_key=api_key, model=model)
         for case in cases:
-            started = time.perf_counter(); answer = client.answer(case["question"], contexts[case["id"]]); latency = (time.perf_counter() - started) * 1000
+            started = time.perf_counter(); answer = client.answer(case["question"], contexts[case["id"]]); generator_latency = (time.perf_counter() - started) * 1000
+            started = time.perf_counter()
             verdict = judge.judge(case["question"], answer, contexts[case["id"]], expected_answerable=case["answerability"] == "answerable")
+            judge_latency = (time.perf_counter() - started) * 1000
             answer_payload = {"status": answer.status, "text": answer.text, "citations": [item.__dict__ for item in answer.citations]}
             judge_payload = None if verdict is None else {"claims": [{"text": claim.text, "supported": claim.supported, "citation_ids": list(claim.citation_ids)} for claim in verdict.claims], **{key: getattr(verdict, key) for key in ("faithful", "relevant", "citations_correct", "refusal_correct")}}
-            usage = dict(client.last_metadata)
-            judge_usage = dict(judge.last_metadata)
-            usage.update({
-                "latency_ms": latency,
-                "generator_usage": dict(client.last_metadata),
-                "judge_usage": judge_usage,
-                "token_cost_status": (
-                    "provider_reported"
-                    if usage.get("input_tokens") is not None and usage.get("cost_usd") is not None
-                    else "unknown_not_exposed_by_provider"
-                ),
-            })
+            usage = combined_usage(dict(client.last_metadata), dict(judge.last_metadata), generator_latency, judge_latency)
             grouped[model].append({"model": model, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": structurally_valid_answer(answer_payload, contexts[case["id"]]), "metadata": usage})
     return grouped
 
@@ -305,7 +356,20 @@ def main(argv: Sequence[str] | None = None) -> int:
             grouped = run_live(cases, contexts, config_hash, context_hash, api_key, models, judge_model=judge_model)
             write_json_atomic(args.outputs, {"outputs": [row for values in grouped.values() for row in values]}, overwrite=args.overwrite)
         else: grouped = offline_rows(load_json(args.outputs), cases, contexts, config_hash, context_hash, models)
-        result = {"qa_sha256": qa_hash, "config_sha256": config_hash, "contexts_sha256": context_hash, "model_catalog_sha256": hash_file(args.model_catalog), "models": list(models), "judge_model": judge_model, "cost_estimate": cost_estimate, "outputs_sha256": hash_file(args.outputs), "live_calls": args.live, "selection": select_winner(grouped, len(cases))}
+        result = {
+            "qa_sha256": qa_hash,
+            "config_sha256": config_hash,
+            "contexts_sha256": context_hash,
+            "model_catalog_sha256": hash_file(args.model_catalog),
+            "models": list(models),
+            "judge_model": judge_model,
+            "cost_estimate": cost_estimate,
+            "actual_usage": realized_usage(grouped),
+            "approved_max_cost_usd": args.max_cost_usd if args.live else None,
+            "outputs_sha256": hash_file(args.outputs),
+            "live_calls": args.live,
+            "selection": select_winner(grouped, len(cases)),
+        }
         write_json_atomic(args.result, result, overwrite=args.overwrite)
     except (BakeoffError, OSError, TypeError) as exc: print(f"Error: {exc}", file=sys.stderr); return 1
     print(json.dumps(result, sort_keys=True)); return 0

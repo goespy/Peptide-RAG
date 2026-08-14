@@ -19,11 +19,13 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from run_day1 import Day1Error, load_qrels, sha256, validate_corpus_binding
+from scripts.run_rag_bakeoff import BakeoffError, contexts_from, offline_rows, realized_usage, validate_qa
 from src.analysis import ANALYSIS_CONFIGS
 from src.bm25 import BM25Config, rank_bm25
 from src.boolean import search_boolean
 from src.index import InvertedIndex
 from src.metrics import evaluate_run
+from src.rag_metrics import select_winner
 
 
 ROOT = Path(__file__).resolve().parent
@@ -43,6 +45,9 @@ EMBEDDING_USAGE = SECTION5 / "embedding_usage.json"
 QUERY_EMBEDDING_USAGE = SECTION5 / "query_embeddings.npz.usage.json"
 QUERY_EMBEDDING_CACHE = SECTION5 / "query_embeddings.npz"
 RAG_DEVELOPMENT_CONTEXTS = ROOT / "data/rag_development_contexts.json"
+RAG_BAKEOFF_OUTPUTS = ROOT / "data/rag_bakeoff_outputs.json"
+RAG_BAKEOFF_REANALYSIS = ROOT / "data/rag_bakeoff_reanalysis.json"
+JUDGE_WORKSHEET = ROOT / "data/judge_validation_worksheet.json"
 
 
 @dataclass(frozen=True)
@@ -313,6 +318,73 @@ def _validate_rag_retrieval() -> Check:
     return Check("RAG retrieval evaluation", "PASS", "development-only chunk metrics, selected hybrid config, caches, contexts, and $0.04643258 usage ledger verified", True)
 
 
+def _validate_rag_bakeoff() -> Check:
+    required = (RAG_BAKEOFF_OUTPUTS, RAG_BAKEOFF_REANALYSIS, JUDGE_WORKSHEET)
+    missing = [path.relative_to(ROOT).as_posix() for path in required if not path.is_file()]
+    if missing:
+        return Check("RAG development bake-off evidence", "TBD", f"missing saved development artifacts: {', '.join(missing)}")
+    qa_packet = _json(QA)
+    context_packet = _json(RAG_DEVELOPMENT_CONTEXTS)
+    output_packet = _json(RAG_BAKEOFF_OUTPUTS)
+    reanalysis = _json(RAG_BAKEOFF_REANALYSIS)
+    worksheet = _json(JUDGE_WORKSHEET)
+    models = reanalysis.get("models")
+    if not isinstance(models, list) or len(models) != 3 or any(not isinstance(model, str) for model in models):
+        raise ValueError("bake-off reanalysis must name three models")
+    qa_hash = sha256(QA)
+    config_hash = sha256(FROZEN_RAG_CONFIG)
+    contexts_hash = sha256(RAG_DEVELOPMENT_CONTEXTS)
+    outputs_hash = sha256(RAG_BAKEOFF_OUTPUTS)
+    if (
+        reanalysis.get("qa_sha256") != qa_hash
+        or reanalysis.get("config_sha256") != config_hash
+        or reanalysis.get("contexts_sha256") != contexts_hash
+        or reanalysis.get("outputs_sha256") != outputs_hash
+    ):
+        raise ValueError("bake-off reanalysis is not bound to the frozen QA, config, contexts, and outputs")
+    cases = validate_qa(qa_packet)
+    contexts = contexts_from(context_packet, cases, qa_hash=qa_hash, config_hash=config_hash)
+    grouped = offline_rows(output_packet, cases, contexts, config_hash, contexts_hash, tuple(models))
+    expected_selection = select_winner(grouped, len(cases))
+    if reanalysis.get("selection") != expected_selection:
+        raise ValueError("bake-off selection does not match the complete offline recomputation")
+    expected_usage = realized_usage(grouped)
+    if reanalysis.get("actual_usage") != expected_usage:
+        raise ValueError("bake-off actual usage does not equal the 39 saved rows")
+    if expected_usage.get("rows") != 39 or expected_usage.get("status") != "provider_reported_complete":
+        raise ValueError("bake-off usage is incomplete")
+    if (
+        worksheet.get("version") != 2
+        or worksheet.get("source_outputs_sha256") != outputs_hash
+        or worksheet.get("qa_sha256") != qa_hash
+        or worksheet.get("contexts_sha256") != contexts_hash
+        or not isinstance(worksheet.get("sample"), list)
+        or len(worksheet["sample"]) != 10
+    ):
+        raise ValueError("judge worksheet is not bound to the saved development evidence")
+    for item in worksheet["sample"]:
+        if (
+            not isinstance(item, dict)
+            or "judge" in item
+            or not isinstance(item.get("question"), str)
+            or item.get("answerability") not in {"answerable", "unanswerable"}
+            or not isinstance(item.get("retrieved_evidence"), list)
+            or len(item["retrieved_evidence"]) != 5
+            or not isinstance(item.get("owner_label"), dict)
+        ):
+            raise ValueError("judge worksheet sample is malformed or leaks the judge verdict")
+    winner = expected_selection.get("winner")
+    winner_metrics = expected_selection.get("candidates", {}).get(winner, {})
+    if expected_selection.get("winner_status") != "provisional_development_selection_pending_owner_judge_validation":
+        raise ValueError("development winner is not marked provisional")
+    return Check(
+        "RAG development bake-off evidence",
+        "PASS",
+        f"39 outputs replay exactly; ${expected_usage['cost_usd']:.9f} provider spend; provisional {winner} answered {winner_metrics.get('denominators', {}).get('answered')}/10 answerable cases; worksheet is evidence-bound",
+        True,
+    )
+
+
 def _rag_checks() -> list[Check]:
     manifests = sorted(SECTION5.glob("*.jsonl.manifest.json")) if SECTION5.is_dir() else []
     checks: list[Check] = []
@@ -347,17 +419,21 @@ def _rag_checks() -> list[Check]:
         checks.append(_validate_rag_retrieval())
     except (Day1Error, OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("RAG retrieval evaluation", "FAIL", str(exc), True))
-    checks.append(Check("RAG faithfulness evaluation", "TBD", "generator bake-off, owner-validated judge, and holdout outputs are pending"))
+    try:
+        checks.append(_validate_rag_bakeoff())
+    except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
+        checks.append(Check("RAG development bake-off evidence", "FAIL", str(exc), True))
+    checks.append(Check("RAG faithfulness evaluation", "TBD", "development bake-off is preserved as a weak negative result; owner judge validation, an accepted generator, and holdout outputs are pending"))
     return checks
 
 
 def _live_eval() -> list[Check]:
     # Never guess provider pricing or send a request from a release check.
-    checks = [Check("live-eval cost estimate", "TBD", "embedding spend is recorded; generation/judge maximum requires a fresh model catalog and explicit confirmation")]
+    checks = [Check("live-eval cost estimate", "TBD", "first development spend is recorded; any new generator or holdout run requires a fresh model catalog, estimate, and explicit approval")]
     if not os.environ.get("OPENROUTER_API_KEY"):
         checks.append(Check("live-eval credentials", "TBD", "OPENROUTER_API_KEY is not set; no network call attempted"))
     else:
-        checks.append(Check("live-eval pipeline", "TBD", "credential detected and retrieval is frozen, but generator/judge artifacts are incomplete; no paid call attempted"))
+        checks.append(Check("live-eval pipeline", "TBD", "credential detected, but owner judge validation and an accepted generator are pending; no paid call attempted"))
     return checks
 
 

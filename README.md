@@ -22,7 +22,8 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Section 5 RAG foundations: approved QA oracle, chunk artifacts, retrieval contracts, grounded-answer validation, and local web shell
 - [x] Project-owner approval of the 20-case QA oracle
 - [x] Paid semantic/chunk development evaluation and frozen hybrid retrieval configuration
-- [ ] Model bake-off, judge validation, untouched QA holdout, and Railway deployment
+- [x] Three-model development bake-off saved and reanalyzed offline
+- [ ] Owner validation of the Claude judge, generator revision, untouched QA holdout, and Railway deployment
 - [x] Section 6 offline release-check, CI, self-evaluation, cost, and deployment-document foundations
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
@@ -161,9 +162,10 @@ python run_project.py
 
 It makes no network or paid calls. It verifies the frozen core hashes, rebuilds
 the index, recomputes Boolean/BM25 metrics, validates every committed chunk
-manifest, and labels unavailable RAG evidence as `TBD` instead of inventing a
-pass. `python run_project.py --live-eval` is currently a readiness check only;
-it does not call a provider while the QA and embedding gates are incomplete.
+manifest, replays the development bake-off from saved outputs, and labels the
+owner-validation/holdout gate as `TBD` instead of inventing a pass. `python
+run_project.py --live-eval` is a readiness check only; it never calls a
+provider.
 
 ## Section 5 RAG workflow
 
@@ -198,7 +200,7 @@ python scripts/embed_chunks.py --chunks artifacts/section5/chunks_512_128.jsonl 
 python scripts/evaluate_chunks.py --candidate 128_32 artifacts/section5/chunks_128_32.jsonl artifacts/section5/chunks_128_32.jsonl.manifest.json artifacts/section5/embeddings_128_32.npz --candidate 256_64 artifacts/section5/chunks_256_64.jsonl artifacts/section5/chunks_256_64.jsonl.manifest.json artifacts/section5/embeddings_256_64.npz --candidate 512_128 artifacts/section5/chunks_512_128.jsonl artifacts/section5/chunks_512_128.jsonl.manifest.json artifacts/section5/embeddings_512_128.npz --embedding-model openai/text-embedding-3-small --query-cache artifacts/section5/query_embeddings.npz --output-json artifacts/section5/chunk_evaluation.json --output-md artifacts/section5/chunk_evaluation.md --frozen-config artifacts/section5/frozen_config.json --contexts-output data/rag_development_contexts.json
 ```
 
-Immediately before the paid bake-off, create `data/model_candidates.json` from
+Immediately before a paid bake-off, create `data/model_candidates.json` from
 current OpenRouter model pages/API metadata. It must record one available Qwen,
 OpenAI, and Google-family candidate plus a different-family Anthropic judge,
 structured-JSON support, context length, input/output price, check timestamp,
@@ -206,15 +208,24 @@ and direct sources. Live execution rejects a catalog older than 24 hours. It
 also requires an explicit user-supplied cost bound and confirmation:
 
 ```bash
-python scripts/run_rag_bakeoff.py --live --max-cost-usd 2.00 --confirm-cost
+python scripts/run_rag_bakeoff.py --live --max-cost-usd 0.86 --confirm-cost
 python scripts/validate_judge.py
-# Blindly label the 10 outputs; judge verdicts and answerability are hidden.
+# Label the 10 outputs from their frozen question, target, and retrieved evidence.
+# Claude verdicts remain hidden; no holdout case appears in this worksheet.
 python scripts/validate_judge.py --validate
 python scripts/export_rag_holdout_contexts.py --cache <selected-cache.npz> --max-cost-usd 0.25 --confirm-cost
 python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
 ```
 
-The final command freezes a generator only when all seven holdout outputs are
+The first paid development run is preserved as a negative result. All 39 rows
+were structurally valid and judged, but Qwen and GPT-OSS answered none of the
+10 answerable questions and Gemma answered only two. The corrected offline
+reanalysis therefore marks Gemma as a provisional lexicographic selection,
+not an accepted generator. The holdout remains untouched. Claude Opus's
+independent findings and the fixes are recorded in
+[`artifacts/section5/claude_bakeoff_review.md`](artifacts/section5/claude_bakeoff_review.md).
+
+The holdout command freezes a generator only when all seven outputs are
 structurally valid and judged. Offline reruns use the saved outputs and make no
 provider calls. The independent Section 5/6 code audit and resolution trail is
 saved in [`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md).
@@ -246,14 +257,22 @@ in [`artifacts/section5/chunk_evaluation.json`](artifacts/section5/chunk_evaluat
 | Semantic chunks | 0.350 | 0.690 | 0.710 | 0.730 | 0.800 |
 | Hybrid chunks | 0.520 | 0.590 | 0.810 | 0.900 | 0.900 |
 
-| Generator | Faithfulness | Correct refusal | Relevancy | Citation correctness | Status |
-|---|---:|---:|---:|---:|---|
-| Qwen candidate | TBD | TBD | TBD | TBD | Not run |
-| OpenAI candidate | TBD | TBD | TBD | TBD | Not run |
-| Google candidate | TBD | TBD | TBD | TBD | Not run |
+| Generator | Answered / 10 | Correct answer | Faithfulness | Correct refusal | Relevancy | Citation correctness | Cost | Status |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| `qwen/qwen3.7-flash` | 0 | 0.000 | 0.308 | 1.000 | 0.846 | 0.000 | $0.154619640 | Development failure |
+| `openai/gpt-oss-20b` | 0 | 0.000 | 0.308 | 1.000 | 0.846 | 0.000 | $0.142342395 | Development failure |
+| `google/gemma-3-12b-it` | 2 | 0.200 | 0.385 | 1.000 | 0.769 | 1.000 on 2 answers | $0.148686400 | Provisional selection only |
 
-Generator fields remain `TBD` until the three-model development bake-off and
-human validation of the Claude judge. See
+These are Claude-judge development scores, not human-validated or holdout
+scores. Citation correctness for Gemma has a denominator of only two answers;
+it does not erase eight missed answerable questions. Total provider-reported
+bake-off spend was `$0.445648435` across 122 calls, 234,700 input tokens, and
+35,334 output tokens, below the approved `$0.86` ceiling. The immutable live
+outputs and corrected offline reanalysis are saved in
+`data/rag_bakeoff_outputs.json` and `data/rag_bakeoff_reanalysis.json`.
+
+Generator acceptance and holdout metrics remain `TBD` until owner validation
+of the Claude judge and a versioned response-quality decision. See
 [`SELF-EVALUATION.md`](SELF-EVALUATION.md) for the live gate status and
 [`COST-REPORT.md`](COST-REPORT.md) for measured embedding spend.
 

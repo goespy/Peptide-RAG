@@ -8,7 +8,7 @@ from typing import Any, Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.run_rag_bakeoff import (BakeoffError, contexts_from, hash_file, load_json, structurally_valid_answer, validate_config, validate_live_cost, write_json_atomic)  # noqa: E402
+from scripts.run_rag_bakeoff import (BakeoffError, combined_usage, contexts_from, hash_file, load_json, structurally_valid_answer, validate_config, validate_live_cost, write_json_atomic)  # noqa: E402
 from src.generation import GroundedAnswerClient  # noqa: E402
 from src.judge import AnswerJudge  # noqa: E402
 from src.rag_metrics import candidate_summary  # noqa: E402
@@ -31,7 +31,10 @@ def holdout_cases(packet: dict[str, Any]) -> list[dict[str, Any]]:
     return sorted(saved, key=lambda item: item["id"])
 
 def winner_from(bakeoff: dict[str, Any]) -> str:
-    winner = bakeoff.get("selection", {}).get("winner") if isinstance(bakeoff.get("selection"), dict) else None
+    selection = bakeoff.get("selection")
+    if not isinstance(selection, dict) or selection.get("winner_status") != "accepted_for_holdout":
+        raise HoldoutError("holdout requires an explicitly accepted, non-provisional generator selection")
+    winner = selection.get("winner")
     if not isinstance(winner, str) or not winner.strip(): raise HoldoutError("holdout requires a frozen bake-off summary winner")
     return winner
 
@@ -55,12 +58,12 @@ def saved_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts: d
 def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], winner: str, judge_model: str, config_hash: str, context_hash: str, api_key: str) -> list[dict[str, Any]]:
     generator, judge, result = GroundedAnswerClient(api_key=api_key, model=winner), AnswerJudge(api_key=api_key, model=judge_model), []
     for case in cases:
-        started = time.perf_counter(); answer = generator.answer(case["question"], contexts[case["id"]]); latency = (time.perf_counter() - started) * 1000
+        started = time.perf_counter(); answer = generator.answer(case["question"], contexts[case["id"]]); generator_latency = (time.perf_counter() - started) * 1000
+        started = time.perf_counter()
         verdict = judge.judge(case["question"], answer, contexts[case["id"]], expected_answerable=case["answerability"] == "answerable")
+        judge_latency = (time.perf_counter() - started) * 1000
         judge_payload = None if verdict is None else {"claims": [{"text": claim.text, "supported": claim.supported, "citation_ids": list(claim.citation_ids)} for claim in verdict.claims], **{key: getattr(verdict, key) for key in ("faithful", "relevant", "citations_correct", "refusal_correct")}}
-        usage = dict(generator.last_metadata)
-        judge_usage = dict(judge.last_metadata)
-        usage.update({"latency_ms": latency, "generator_usage": dict(generator.last_metadata), "judge_usage": judge_usage, "token_cost_status": "provider_reported" if usage.get("input_tokens") is not None and usage.get("cost_usd") is not None else "unknown_not_exposed_by_provider"})
+        usage = combined_usage(dict(generator.last_metadata), dict(judge.last_metadata), generator_latency, judge_latency)
         answer_payload = {"status": answer.status, "text": answer.text, "citations": [item.__dict__ for item in answer.citations]}
         result.append({"model": winner, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": structurally_valid_answer(answer_payload, contexts[case["id"]]), "metadata": usage})
     return result

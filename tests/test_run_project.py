@@ -90,3 +90,14 @@ class RunProjectTests(unittest.TestCase):
                 checks, failed = run_project.run()
         self.assertTrue(failed)
         self.assertTrue(any(check.name == "RAG retrieval evaluation" and check.state == "FAIL" for check in checks))
+
+    def test_bakeoff_usage_drift_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "rag_bakeoff_reanalysis.json"
+            payload = json.loads(run_project.RAG_BAKEOFF_REANALYSIS.read_text(encoding="utf-8"))
+            payload["actual_usage"]["cost_usd"] += 0.01
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "RAG_BAKEOFF_REANALYSIS", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(check.name == "RAG development bake-off evidence" and check.state == "FAIL" for check in checks))
