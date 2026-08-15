@@ -258,7 +258,7 @@ def combined_usage(
         )
     costs = (generator_usage.get("cost_usd"), judge_usage.get("cost_usd"))
     combined["cost_usd"] = (
-        sum(float(value) for value in costs)
+        math.fsum(float(value) for value in costs)
         if all(isinstance(value, (int, float)) and not isinstance(value, bool) and value >= 0 for value in costs)
         else None
     )
@@ -282,7 +282,7 @@ def realized_usage(grouped: dict[str, list[dict[str, Any]]]) -> dict[str, object
         )
     costs = [row.get("metadata", {}).get("cost_usd") for row in rows]
     totals["cost_usd"] = (
-        sum(float(value) for value in costs)
+        math.fsum(float(value) for value in costs)
         if all(isinstance(value, (int, float)) and not isinstance(value, bool) and value >= 0 for value in costs)
         else None
     )

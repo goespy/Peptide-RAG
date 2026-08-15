@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass
+import math
 from typing import Any, Iterable, Mapping
 
 
@@ -79,7 +80,7 @@ def candidate_summary(rows: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
         # A candidate that never answers receives zero, not an undefined value
         # that silently removes it from the comparison.
         "citation_correctness": rate("citations_correct", subset="answered", empty=0.0),
-        "cost_usd": sum(exposed_costs) if len(exposed_costs) == len(valid) else None,
+        "cost_usd": math.fsum(exposed_costs) if len(exposed_costs) == len(valid) else None,
         "p95_latency_ms": percentile95(row.get("metadata", {}).get("latency_ms") for row in valid if isinstance(row.get("metadata", {}).get("latency_ms"), (int, float))),
     }
 

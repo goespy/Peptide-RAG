@@ -176,3 +176,12 @@ class BakeoffTests(unittest.TestCase):
         self.assertEqual(usage["status"], "provider_reported_complete")
         grouped["b"][0]["metadata"]["cost_usd"] = None
         self.assertIsNone(bakeoff.realized_usage(grouped)["cost_usd"])
+
+    def test_cost_aggregation_is_stable_across_python_sum_implementations(self):
+        grouped = {
+            "model": [
+                {"metadata": {"provider_calls": 1, "input_tokens": 1, "output_tokens": 1, "cost_usd": 0.1}}
+                for _ in range(10)
+            ]
+        }
+        self.assertEqual(bakeoff.realized_usage(grouped)["cost_usd"], 1.0)
