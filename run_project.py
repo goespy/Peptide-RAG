@@ -19,7 +19,8 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from run_day1 import Day1Error, load_qrels, sha256, validate_corpus_binding
-from scripts.run_rag_bakeoff import BakeoffError, contexts_from, offline_rows, realized_usage, validate_qa
+from scripts.run_generator_diagnostic import summarize as summarize_generator
+from scripts.run_rag_bakeoff import BakeoffError, contexts_from, offline_rows, realized_usage, validate_config, validate_qa
 from src.analysis import ANALYSIS_CONFIGS
 from src.bm25 import BM25Config, rank_bm25
 from src.boolean import search_boolean
@@ -48,6 +49,18 @@ RAG_DEVELOPMENT_CONTEXTS = ROOT / "data/rag_development_contexts.json"
 RAG_BAKEOFF_OUTPUTS = ROOT / "data/rag_bakeoff_outputs.json"
 RAG_BAKEOFF_REANALYSIS = ROOT / "data/rag_bakeoff_reanalysis.json"
 JUDGE_WORKSHEET = ROOT / "data/judge_validation_worksheet.json"
+MODEL_CATALOG_REFRESH = SECTION5 / "model_candidates_refresh.json"
+GENERATOR_V2_2_CONFIG = SECTION5 / "generator_v2_2_config.json"
+GENERATOR_V2_2_OUTPUTS = ROOT / "data/rag_generator_v2_2_outputs.json"
+GENERATOR_V2_2_SUMMARY = ROOT / "data/rag_generator_v2_2_summary.json"
+GENERATOR_V2_3_CONFIG = SECTION5 / "generator_v2_3_config.json"
+GENERATOR_V2_3_OUTPUTS = ROOT / "data/rag_generator_v2_3_outputs.json"
+GENERATOR_V2_3_SUMMARY = ROOT / "data/rag_generator_v2_3_summary.json"
+GENERATOR_V2_4_CONFIG = SECTION5 / "generator_v2_4_config.json"
+GENERATOR_V2_4_OUTPUTS = ROOT / "data/rag_generator_v2_4_outputs.json"
+GENERATOR_V2_4_SUMMARY = ROOT / "data/rag_generator_v2_4_summary.json"
+GENERATOR_V2_3_DIAGNOSIS = SECTION5 / "generator_v2_3_diagnosis.json"
+GENERATOR_V2_3_REVIEW = SECTION5 / "claude_generator_v2_3_review.md"
 
 
 @dataclass(frozen=True)
@@ -385,6 +398,123 @@ def _validate_rag_bakeoff() -> Check:
     )
 
 
+def _validate_generator_diagnostic(
+    label: str,
+    config_path: Path,
+    outputs_path: Path,
+    summary_path: Path,
+) -> Check:
+    config = _json(config_path)
+    validate_config(config)
+    outputs = _json(outputs_path)
+    summary = _json(summary_path)
+    qa_hash = sha256(QA)
+    contexts_hash = sha256(RAG_DEVELOPMENT_CONTEXTS)
+    config_hash = sha256(config_path)
+    outputs_hash = sha256(outputs_path)
+    if (
+        config.get("qa_sha256") != qa_hash
+        or config.get("contexts_sha256") != contexts_hash
+        or config.get("model_catalog_sha256") != sha256(MODEL_CATALOG_REFRESH)
+        or summary.get("qa_sha256") != qa_hash
+        or summary.get("contexts_sha256") != contexts_hash
+        or summary.get("config_sha256") != config_hash
+        or summary.get("outputs_sha256") != outputs_hash
+        or summary.get("model_catalog_sha256") != sha256(MODEL_CATALOG_REFRESH)
+        or summary.get("live_calls") is not True
+    ):
+        raise ValueError(f"{label} hashes do not bind the frozen development inputs")
+    artifact_paths = config.get("artifact_paths")
+    if not isinstance(artifact_paths, dict) or any(
+        (ROOT / artifact_paths.get(field, "")).resolve() != path.resolve()
+        for field, path in (("outputs", outputs_path), ("summary", summary_path))
+    ):
+        raise ValueError(f"{label} output paths do not match its frozen config")
+    models = config.get("generator_candidates")
+    if not isinstance(models, list) or not models or any(not isinstance(model, str) for model in models):
+        raise ValueError(f"{label} has no frozen generator candidates")
+    qa_packet = _json(QA)
+    context_packet = _json(RAG_DEVELOPMENT_CONTEXTS)
+    cases = validate_qa(qa_packet)
+    contexts = contexts_from(
+        context_packet,
+        cases,
+        qa_hash=qa_hash,
+        config_hash=config.get("retriever_config_sha256", config_hash),
+    )
+    grouped = offline_rows(outputs, cases, contexts, config_hash, contexts_hash, tuple(models))
+    expected_diagnostic = summarize_generator(grouped)
+    if summary.get("diagnostic") != expected_diagnostic:
+        raise ValueError(f"{label} diagnostic counts do not match its saved outputs")
+    actual_usage = summary.get("actual_usage")
+    aggregate = actual_usage.get("aggregate") if isinstance(actual_usage, dict) else None
+    if aggregate != realized_usage(grouped):
+        raise ValueError(f"{label} usage does not equal its saved output rows")
+    candidate = expected_diagnostic["candidates"].get(models[0], {})
+    return Check(
+        f"RAG {label} generator evidence",
+        "PASS",
+        f"{len(models) * len(cases)} outputs replay; first candidate {candidate.get('answerable_answer_count')}/10 answerable, "
+        f"{candidate.get('unanswerable_correct_system_refusal_count')}/3 refusals; ready={candidate.get('ready_for_paid_judging')}",
+        True,
+    )
+
+
+def _validate_versioned_generator_evidence() -> list[Check]:
+    checks = [
+        _validate_generator_diagnostic(
+            "GPT v2.2", GENERATOR_V2_2_CONFIG, GENERATOR_V2_2_OUTPUTS, GENERATOR_V2_2_SUMMARY
+        ),
+        _validate_generator_diagnostic(
+            "GPT v2.3", GENERATOR_V2_3_CONFIG, GENERATOR_V2_3_OUTPUTS, GENERATOR_V2_3_SUMMARY
+        ),
+    ]
+    v2_4 = _json(GENERATOR_V2_4_CONFIG)
+    validate_config(v2_4)
+    expected_parent_hashes = {
+        "parent_config_sha256": sha256(GENERATOR_V2_3_CONFIG),
+        "parent_diagnosis_sha256": sha256(GENERATOR_V2_3_DIAGNOSIS),
+        "parent_outputs_sha256": sha256(GENERATOR_V2_3_OUTPUTS),
+        "parent_review_sha256": sha256(GENERATOR_V2_3_REVIEW),
+        "parent_summary_sha256": sha256(GENERATOR_V2_3_SUMMARY),
+    }
+    if (
+        v2_4.get("qa_sha256") != sha256(QA)
+        or v2_4.get("contexts_sha256") != sha256(RAG_DEVELOPMENT_CONTEXTS)
+        or v2_4.get("model_catalog_sha256") != sha256(MODEL_CATALOG_REFRESH)
+        or v2_4.get("holdout_status") != "untouched"
+        or v2_4.get("qa_or_retrieval_changes") is not False
+        or any(v2_4.get(field) != value for field, value in expected_parent_hashes.items())
+    ):
+        raise ValueError("GPT v2.4 config is not bound to the measured v2.3 evidence")
+    present = (GENERATOR_V2_4_OUTPUTS.is_file(), GENERATOR_V2_4_SUMMARY.is_file())
+    if present == (False, False):
+        checks.append(
+            Check(
+                "RAG GPT v2.4 generator gate",
+                "TBD",
+                "frozen general reconsideration experiment is tested; paid development rerun not yet approved/run",
+            )
+        )
+    elif present != (True, True):
+        raise ValueError("GPT v2.4 has only one of its required output/summary artifacts")
+    else:
+        evidence = _validate_generator_diagnostic(
+            "GPT v2.4", GENERATOR_V2_4_CONFIG, GENERATOR_V2_4_OUTPUTS, GENERATOR_V2_4_SUMMARY
+        )
+        checks.append(evidence)
+        summary = _json(GENERATOR_V2_4_SUMMARY)
+        candidate = summary.get("diagnostic", {}).get("candidates", {}).get("openai/gpt-oss-20b", {})
+        checks.append(
+            Check(
+                "RAG GPT v2.4 generator gate",
+                "PASS" if candidate.get("ready_for_paid_judging") is True else "TBD",
+                "10/10, 3/3, and 13/13 gate passed" if candidate.get("ready_for_paid_judging") is True else "measured development run did not open paid judging",
+            )
+        )
+    return checks
+
+
 def _rag_checks() -> list[Check]:
     manifests = sorted(SECTION5.glob("*.jsonl.manifest.json")) if SECTION5.is_dir() else []
     checks: list[Check] = []
@@ -423,6 +553,10 @@ def _rag_checks() -> list[Check]:
         checks.append(_validate_rag_bakeoff())
     except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("RAG development bake-off evidence", "FAIL", str(exc), True))
+    try:
+        checks.extend(_validate_versioned_generator_evidence())
+    except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
+        checks.append(Check("RAG GPT generator diagnostics", "FAIL", str(exc), True))
     checks.append(Check("RAG faithfulness evaluation", "TBD", "development bake-off is preserved as a weak negative result; owner judge validation, an accepted generator, and holdout outputs are pending"))
     return checks
 

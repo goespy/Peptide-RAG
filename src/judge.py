@@ -49,11 +49,30 @@ def validate_verdict(verdict: JudgeVerdict, contexts: Sequence[RetrievedChunk]) 
 class AnswerJudge:
     """Conservative judge; invalid/provider responses produce no verdict."""
 
-    def __init__(self, *, api_key: str | None = None, model: str = DEFAULT_JUDGE_MODEL, timeout: float = 30.0, session: requests.Session | None = None) -> None:
-        if not isinstance(model, str) or not model or timeout <= 0:
-            raise ValueError("model must be non-empty and timeout must be positive")
+    def __init__(
+        self,
+        *,
+        api_key: str | None = None,
+        model: str = DEFAULT_JUDGE_MODEL,
+        timeout: float = 30.0,
+        max_tokens: int = 600,
+        require_supported_parameters: bool = False,
+        session: requests.Session | None = None,
+    ) -> None:
+        if (
+            not isinstance(model, str)
+            or not model
+            or timeout <= 0
+            or isinstance(max_tokens, bool)
+            or not isinstance(max_tokens, int)
+            or max_tokens <= 0
+            or not isinstance(require_supported_parameters, bool)
+        ):
+            raise ValueError("invalid judge model, timeout, token cap, or provider configuration")
         self.api_key = api_key if api_key is not None else os.environ.get("OPENROUTER_API_KEY")
         self.model, self.timeout = model, timeout
+        self.max_tokens = max_tokens
+        self.require_supported_parameters = require_supported_parameters
         self.session = session if session is not None else requests.Session()
         self.last_metadata: dict[str, object] = {}
 
@@ -118,7 +137,10 @@ class AnswerJudge:
     ) -> dict[str, object]:
         evidence = "\n\n".join(f"[{i}] PMID {chunk.pmid} | {chunk.title}\n{chunk.text}" for i, chunk in enumerate(contexts, 1))
         schema = {"name": "faithfulness_verdict", "strict": True, "schema": {"type": "object", "additionalProperties": False, "required": ["claims", "faithful", "relevant", "citations_correct"], "properties": {"claims": {"type": "array", "items": {"type": "object", "additionalProperties": False, "required": ["text", "supported", "citation_ids"], "properties": {"text": {"type": "string"}, "supported": {"type": "boolean"}, "citation_ids": {"type": "array", "items": {"type": "integer"}}}}}, "faithful": {"type": "boolean"}, "relevant": {"type": "boolean"}, "citations_correct": {"type": "boolean"}}}}
-        return {"model": self.model, "temperature": 0, "max_tokens": 600, "response_format": {"type": "json_schema", "json_schema": schema}, "messages": [{"role": "system", "content": "Judge only supplied evidence. Extract atomic claims and mark support. Do not infer missing facts. Evaluate faithfulness, relevance, and citation correctness only; refusal correctness is computed outside the model."}, {"role": "user", "content": f"Question: {query}\nAnswer status: {answer.status}\nAnswer: {answer.text}\nCitations: {tuple((c.citation_id, c.pmid, c.chunk_id) for c in answer.citations)}\n\nEvidence:\n{evidence}"}]}
+        payload: dict[str, object] = {"model": self.model, "temperature": 0, "max_tokens": self.max_tokens, "response_format": {"type": "json_schema", "json_schema": schema}, "messages": [{"role": "system", "content": "Judge only supplied evidence. Extract atomic claims and mark support. Do not infer missing facts. Evaluate faithfulness, relevance, and citation correctness only; refusal correctness is computed outside the model."}, {"role": "user", "content": f"Question: {query}\nAnswer status: {answer.status}\nAnswer: {answer.text}\nCitations: {tuple((c.citation_id, c.pmid, c.chunk_id) for c in answer.citations)}\n\nEvidence:\n{evidence}"}]}
+        if self.require_supported_parameters:
+            payload["provider"] = {"require_parameters": True}
+        return payload
 
     @staticmethod
     def _parse(payload: object, *, refusal_correct: bool) -> JudgeVerdict:

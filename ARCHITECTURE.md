@@ -257,17 +257,26 @@ byte-identical. Query vectors and cached document vectors use brute-force cosine
 similarity. Production retrieval and RRF are hand-built; there is no vector
 database or semantic retrieval library.
 
-Grounded generation sends at most five numbered chunks at temperature zero and
-a 400-token cap. Structured output must either be `answered` with an exact set
-of supplied citation IDs or `insufficient_evidence` with no citations. Every
-substantive factual sentence needs a citation marker. Unknown IDs, unused
-declared citations, uncited sentences, malformed output, missing evidence, and
-provider failures fail closed. One schema repair is permitted. Personalized or
-prescriptive dosing requests are rejected deterministically before a provider
-call; questions about doses reported in a named study remain research queries.
+Grounded generation sends at most five numbered chunks at temperature zero. The
+original bake-off used a 400-token cap and declared citation IDs. Measured
+failures led to a versioned 800-token GPT diagnostic with citation identities
+derived locally from visible `[n]` markers and low reasoning effort; the QA,
+retrieved contexts, and holdout did not change. Structured output must either be
+`answered` with markers bound to supplied chunks or `insufficient_evidence`
+with no citations. Every substantive factual sentence needs a citation marker.
+Unknown IDs, uncited sentences, malformed output, missing evidence, and
+provider failures fail closed. One secondary attempt is permitted: invalid
+output receives a structural repair, while an initially valid refusal can use
+that same single budget for a general recheck of all five passages. The two
+paths cannot both execute for one case. Personalized or prescriptive dosing
+requests are rejected deterministically before a provider call; questions
+about doses reported in a named study remain research queries.
 
-The three-model development bake-off requires identical stored contexts and
-hashes. A structurally invalid or incompletely judged model is disqualified
+The historical three-model development bake-off required identical stored
+contexts and hashes. After Qwen/Gemma provider failures and insufficient GPT
+answer coverage, the project owner selected GPT-OSS as the sole continuing
+generator while retaining all losing artifacts. A structurally invalid or
+incompletely judged model is disqualified
 before selection by faithfulness, refusal correctness, relevancy, citation
 correctness, actual provider-reported cost when available, and p95 latency.
 Every reported rate includes its denominator, all expected outputs must have
@@ -290,6 +299,14 @@ trusted from the human-editable worksheet. Answerability never enters the LLM
 judge prompt; refusal correctness is calculated deterministically from the
 frozen QA label and returned answer status.
 
+The current judge-only runner cannot regenerate an answer or retrieve a new
+context. It opens only when the bound GPT development artifact measures 10/10
+answerable answers, 3/3 correct system refusals, and 13/13 structurally valid
+outputs. It then makes exactly 13 different-family Claude judge calls. For the
+single-generator run, the deterministic human worksheet contains seven
+answerable outputs and all three unique unanswerable outputs. A separate cost
+estimate and owner approval are required before judging.
+
 The first development bake-off is a retained negative result. Hybrid retrieval
 placed a full labeled support span in the top five for nine of ten answerable
 cases, but Qwen and GPT-OSS answered zero and Gemma answered two. The corrected
@@ -298,6 +315,12 @@ ordering, while explicitly marking it provisional and showing a correct-answer
 rate of `0.200`. No holdout case is exposed until the owner judge-validation
 gate passes and any generator revision is versioned rather than silently
 changing the post-result selection rule.
+
+Later GPT-only generator evidence is also preserved: v2.2 measured 8/10
+answerable cases and 2/3 correct refusals; v2.3 measured 9/10, 3/3, and 13/13
+structural validity. The final v2.3 miss was a refusal despite direct human
+evidence at context rank 5, so v2.4 tests a general refusal-reconsideration
+stage. It contains no QA ID, expected answer, PMID, or question-specific hint.
 
 ## Application and release boundary
 
@@ -321,6 +344,10 @@ rate-limiting claim.
 frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics,
 compares the complete per-query and aggregate reports with saved evidence, and
 validates committed chunk manifests. The approved QA, retrieval caches, and
-first bake-off are saved evidence. Human judge labels, an accepted generator,
-QA holdout metrics, and deployment remain `TBD`; they are not converted into
-zeros or passing claims.
+first bake-off plus GPT v2.2/v2.3 diagnostics are saved evidence. The runner
+replays their output counts and usage and validates the frozen v2.4 parent
+hashes. Human judge labels, an accepted generator, QA holdout metrics, and a
+public deployment remain `TBD`; they are not converted into zeros or passing
+claims. Railway config-as-code is checked in with Railpack, Python 3.11, a
+`$PORT`-aware Uvicorn start command, `/healthz`, and bounded restart behavior;
+this packaging is not represented as a completed deployment.

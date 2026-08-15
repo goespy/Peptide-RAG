@@ -38,6 +38,21 @@ class JudgeValidationTests(unittest.TestCase):
         self.assertTrue(all(item["question"] and item["retrieved_evidence"] for item in first["sample"]))
         self.assertEqual(len({item["qa_id"] for item in first["sample"] if item["answerability"] == "answerable"}), 6)
 
+    def test_single_generator_sample_uses_seven_answerable_and_all_three_unanswerable(self):
+        cases, contexts = material()
+        single_model = [row for row in rows() if row["model"] == "a"]
+        packet = judge_validation.worksheet(single_model, cases, contexts)
+        self.assertEqual(len(packet["sample"]), 10)
+        self.assertEqual(
+            sum(item["answerability"] == "answerable" for item in packet["sample"]),
+            7,
+        )
+        self.assertEqual(
+            sum(item["answerability"] == "unanswerable" for item in packet["sample"]),
+            3,
+        )
+        self.assertEqual(len({item["sample_id"] for item in packet["sample"]}), 10)
+
     def test_labels_are_required_and_kappa_is_honestly_undefined(self):
         cases, contexts = material()
         packet = judge_validation.worksheet(rows(), cases, contexts)

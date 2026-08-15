@@ -1,10 +1,13 @@
 import importlib.util
+import hashlib
 import json
+import math
 import tempfile
 import unittest
 from pathlib import Path
 
 from src.chunks import Chunk
+from src.generation import SYSTEM_PROMPT_V3
 from src.retrieval import RetrievedChunk
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,6 +36,73 @@ class BakeoffTests(unittest.TestCase):
         self.assertEqual(len(bakeoff.validate_qa(approved_qa())), 13)
         self.assertEqual(bakeoff.validate_model_catalog(catalog()), bakeoff.MODELS)
         self.assertEqual(bakeoff.validate_judge_catalog(catalog()), "anthropic/judge")
+
+    def test_versioned_generator_config_is_frozen_and_hashes_its_prompt(self):
+        path = ROOT / "artifacts/section5/generator_v2_config.json"
+        packet = json.loads(path.read_text(encoding="utf-8"))
+        generation = bakeoff.validate_config(packet)
+        self.assertEqual(generation["max_tokens"], 800)
+        self.assertEqual(
+            packet["prompt_sha256"],
+            hashlib.sha256(packet["prompt"].encode("utf-8")).hexdigest().upper(),
+        )
+
+    def test_v2_1_config_binds_parent_catalog_and_derived_citation_contract(self):
+        path = ROOT / "artifacts/section5/generator_v2_1_config.json"
+        packet = json.loads(path.read_text(encoding="utf-8"))
+        generation = bakeoff.validate_config(packet)
+        self.assertEqual(generation["citation_mode"], "derived_from_text_markers")
+        self.assertTrue(generation["require_supported_parameters"])
+        catalog_path = ROOT / "artifacts/section5/model_candidates_refresh.json"
+        self.assertEqual(packet["model_catalog_sha256"], bakeoff.hash_file(catalog_path))
+        selected = bakeoff.validate_model_catalog(json.loads(catalog_path.read_text(encoding="utf-8")))
+        self.assertEqual(tuple(packet["generator_candidates"]), selected)
+        self.assertEqual(packet["parent_outputs_sha256"], bakeoff.hash_file(ROOT / "data/rag_generator_v2_outputs.json"))
+
+    def test_v2_2_config_freezes_owner_selected_gpt_only_diagnostic(self):
+        path = ROOT / "artifacts/section5/generator_v2_2_config.json"
+        packet = json.loads(path.read_text(encoding="utf-8"))
+        generation = bakeoff.validate_config(packet)
+        self.assertEqual(packet["generator_candidates"], ["openai/gpt-oss-20b"])
+        self.assertEqual(generation["citation_mode"], "derived_from_text_markers")
+        self.assertTrue(generation["require_supported_parameters"])
+        self.assertEqual(packet["generator_diagnostic"]["hard_cost_cap_usd"], 0.02)
+        self.assertEqual(
+            packet["parent_config_sha256"],
+            bakeoff.hash_file(ROOT / "artifacts/section5/generator_v2_1_config.json"),
+        )
+
+    def test_v2_3_config_freezes_measured_scope_and_reasoning_changes(self):
+        path = ROOT / "artifacts/section5/generator_v2_3_config.json"
+        packet = json.loads(path.read_text(encoding="utf-8"))
+        generation = bakeoff.validate_config(packet)
+        self.assertEqual(packet["generator_candidates"], ["openai/gpt-oss-20b"])
+        self.assertEqual(packet["prompt"], SYSTEM_PROMPT_V3)
+        self.assertEqual(generation["reasoning_effort"], "low")
+        self.assertTrue(generation["exclude_reasoning"])
+        self.assertEqual(packet["generator_diagnostic"]["judge_calls"], 0)
+        self.assertEqual(
+            packet["parent_diagnosis_sha256"],
+            bakeoff.hash_file(ROOT / "artifacts/section5/generator_v2_2_diagnosis.json"),
+        )
+
+    def test_v2_4_config_freezes_general_refusal_reconsideration(self):
+        path = ROOT / "artifacts/section5/generator_v2_4_config.json"
+        packet = json.loads(path.read_text(encoding="utf-8"))
+        generation = bakeoff.validate_config(packet)
+        self.assertEqual(packet["generator_candidates"], ["openai/gpt-oss-20b"])
+        self.assertEqual(packet["prompt"], SYSTEM_PROMPT_V3)
+        self.assertTrue(generation["reconsider_insufficient_evidence"])
+        self.assertFalse(packet["qa_or_retrieval_changes"])
+        self.assertEqual(packet["holdout_status"], "untouched")
+        self.assertEqual(
+            packet["parent_diagnosis_sha256"],
+            bakeoff.hash_file(ROOT / "artifacts/section5/generator_v2_3_diagnosis.json"),
+        )
+        self.assertEqual(
+            packet["parent_outputs_sha256"],
+            bakeoff.hash_file(ROOT / "data/rag_generator_v2_3_outputs.json"),
+        )
 
     def test_selection_disqualifies_missing_or_invalid_rows(self):
         rows = {model: [] for model in bakeoff.MODELS}
@@ -136,6 +206,69 @@ class BakeoffTests(unittest.TestCase):
         self.assertEqual(estimate["maximum_provider_calls"], 195)
         self.assertGreater(estimate["estimated_max_cost_usd"], 0)
         self.assertEqual(len(estimate["generation"]), 3)
+
+    def test_cost_estimate_uses_larger_refusal_reconsideration_branch(self):
+        cases = bakeoff.validate_qa(approved_qa())
+        context = RetrievedChunk(
+            Chunk("1:c0001", "1", "title", "evidence", 0, 8, 1), 1.0, "stored"
+        )
+        contexts = {case["id"]: (context,) for case in cases}
+        settings = {
+            "temperature": 0,
+            "max_tokens": 400,
+            "prompt": SYSTEM_PROMPT_V3,
+            "citation_mode": "derived_from_text_markers",
+            "require_supported_parameters": True,
+            "reasoning_effort": "low",
+            "exclude_reasoning": True,
+            "reconsider_insufficient_evidence": True,
+            "repair_attempts": 1,
+        }
+        estimate = bakeoff.estimate_bakeoff_cost(
+            cases,
+            contexts,
+            catalog(),
+            (bakeoff.MODELS[0],),
+            "anthropic/judge",
+            settings,
+        )
+        client = bakeoff.GroundedAnswerClient(
+            api_key="cost-estimate",
+            model=bakeoff.MODELS[0],
+            max_tokens=400,
+            system_prompt=SYSTEM_PROMPT_V3,
+            citation_mode="derived_from_text_markers",
+            require_supported_parameters=True,
+            reasoning_effort="low",
+            exclude_reasoning=True,
+            reconsider_insufficient_evidence=True,
+        )
+        expected_input_tokens = 0
+        for case in cases:
+            initial = client._payload(case["question"], contexts[case["id"]])
+            previous = "x" * 1_600
+            repair = client._payload(
+                case["question"],
+                contexts[case["id"]],
+                repair=True,
+                previous_output=previous,
+                validation_error="conservative_repair_estimate",
+            )
+            reconsideration = client._payload(
+                case["question"],
+                contexts[case["id"]],
+                reconsider_refusal=True,
+                previous_output=previous,
+            )
+            encoded = lambda payload: json.dumps(payload, ensure_ascii=False, sort_keys=True)
+            self.assertGreater(len(encoded(reconsideration)), len(encoded(repair)))
+            expected_input_tokens += (
+                math.ceil(len(encoded(initial)) / 3)
+                + math.ceil(len(encoded(reconsideration)) / 3)
+            ) * 2
+        generation = estimate["generation"][0]
+        self.assertEqual(generation["conservative_input_tokens"], expected_input_tokens)
+        self.assertEqual(generation["provider_calls"], len(cases) * 2 * 2)
 
     def test_combined_usage_includes_generator_and_judge(self):
         usage = bakeoff.combined_usage(

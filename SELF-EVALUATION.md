@@ -12,11 +12,12 @@
 | Property, deletion, robustness, performance | index/BM25 tests; `artifacts/section4/benchmark_lexical.json` | Pass |
 | QA oracle and evidence spans | `QA-REVIEW.md`; `data/qa.json`; `scripts/freeze_qa.py` | Pass: 20 owner-approved cases |
 | Lexical/semantic/hybrid chunk metrics | `artifacts/section5/chunk_evaluation.json`; `scripts/evaluate_chunks.py` | Pass on development split; hybrid Recall@5 0.810 |
-| Grounded answers, citations, refusal | `src/generation.py`; `data/rag_bakeoff_outputs.json` | Contract passes; first live development quality is insufficient |
-| Three-model bake-off and judge validation | `data/rag_bakeoff_reanalysis.json`; `data/judge_validation_worksheet.json` | Bake-off complete; owner judge labels pending; holdout untouched |
+| Grounded answers, citations, refusal | `src/generation.py`; versioned generator diagnostics | Contract passes; GPT v2.3 measured 9/10 answers, 3/3 refusals, 13/13 structure; v2.4 pending |
+| Generator selection and judge validation | `data/rag_bakeoff_reanalysis.json`; `data/rag_generator_v2_3_summary.json`; judge-only scripts | Three-model negative result and GPT diagnostics preserved; accepted generator and owner judge labels pending; holdout untouched |
 | Independent implementation review | `artifacts/section6/claude_opus_review.md` | Opus re-review passed after fixes |
-| Public deployment | `app.py`; `DEPLOYMENT.md` | Local shell implemented; Railway pending |
-| Cost report | `COST-REPORT.md` | Embedding and first bake-off spend measured; Railway/projections pending |
+| Generator-v2.4 independent review | `artifacts/section5/claude_generator_v2_4_review.md` | Initial Opus review found a gate bug; fixed with tests; resolution review unavailable due session limit, not claimed as pass |
+| Public deployment | `app.py`; `railway.json`; `DEPLOYMENT.md` | Local shell and Railway packaging implemented; project/domain/secrets/deploy pending |
+| Cost report | `COST-REPORT.md` | Embedding, bake-off, and later GPT costs measured where exposed; Railway/projections pending |
 | Demo and social evidence | `DEMO-SCRIPT.md`; `SOCIAL-POST.md` | Draft only |
 
 ## Complete, reproducible evidence
@@ -34,5 +35,5 @@
 
 ## Pending credentials / deployment
 
-- A second generator experiment or the final holdout requires configured provider credentials and a separately approved paid-run budget.
+- GPT v2.4, Claude judging, and the final holdout each require configured provider credentials and a separately approved paid-run budget.
 - Deployment is not represented as complete. See [DEPLOYMENT.md](DEPLOYMENT.md) for the explicit release gates.

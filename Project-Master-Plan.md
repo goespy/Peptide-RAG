@@ -310,7 +310,25 @@ Revalidate availability, context, structured output, and price. If unavailable, 
 
 Run all candidates with identical development questions, prompts, contexts, temperature, and token cap. Select by schema/citation validity, faithfulness, correct refusal, relevancy, citation correctness, cost, and p95 latency.
 
-Use Claude as the different-family judge. It identifies atomic claims, evidence, unsupported claims, relevance, citation correctness, and refusal correctness. Before using its results, deterministically sample 10 outputs across models and answerability classes for project-owner labels. Require at least 80% agreement and Cohen's kappa of 0.60; when kappa is undefined, report raw agreement and the confusion matrix. If validation fails, revise the rubric and use a disjoint sample.
+Measured deviation after the initial bake-off: Qwen and Gemma produced no
+usable structured development answers, while generator-v2 moved GPT-OSS to
+9/10 answerable cases. The project owner therefore froze GPT-OSS as the sole
+generator candidate for v2.2. The failed multi-model artifacts remain in the
+repository, and the narrowing is treated as an evidence-backed human decision,
+not as deletion of losing results. GPT-OSS must still pass 10/10 answerable and
+3/3 correct-refusal development gates before Claude judging or holdout access.
+
+Subsequent frozen diagnostics remained development-only. v2.2 measured 8/10
+answerable and 2/3 correct refusals; v2.3 measured 9/10, 3/3, and 13/13
+structural validity. v2.3 exposed one model refusal even though direct human
+evidence appeared at context rank 5. The planned v2.4 response is a single
+general refusal-reconsideration stage that rechecks all supplied passages; it
+does not encode a QA ID, expected answer, PMID, or question-specific hint and
+does not alter QA, retrieval, or holdout. Correct refusals remain valid,
+failed-closed attempts do not count as correct refusals, and the generator still
+must meet 10/10, 3/3, and 13/13 before the judge-only pipeline can run.
+
+Use Claude as the different-family judge. It identifies atomic claims, evidence, unsupported claims, relevance, citation correctness, and refusal correctness. The judge-only runner consumes the accepted generator artifact and is prohibited from regenerating answers, retrieving new contexts, or opening holdout. Before using its results, deterministically sample 10 unique outputs across answerability classes for project-owner labels. With the owner-selected single generator, the sample contains seven answerable outputs and all three unanswerable outputs. Require at least 80% agreement and Cohen's kappa of 0.60; when kappa is undefined, report raw agreement and the confusion matrix. If validation fails, revise the rubric and use a disjoint sample.
 
 ## 5.7 Public FastAPI application
 

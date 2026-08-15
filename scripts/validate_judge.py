@@ -35,7 +35,12 @@ def sample_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Stable, model-balanced sample with diverse questions where possible."""
     valid = [row for row in rows if isinstance(row, dict) and isinstance(row.get("model"), str) and row.get("answerability") in {"answerable", "unanswerable"} and isinstance(row.get("judge"), dict)]
     selected: list[dict[str, Any]] = []
-    for kind, target in (("answerable", 6), ("unanswerable", 4)):
+    unanswerable_available = sum(row["answerability"] == "unanswerable" for row in valid)
+    unanswerable_target = min(4, unanswerable_available)
+    answerable_target = 10 - unanswerable_target
+    if unanswerable_target == 0:
+        raise JudgeValidationError("judge validation needs at least one unanswerable output")
+    for kind, target in (("answerable", answerable_target), ("unanswerable", unanswerable_target)):
         by_model: dict[str, list[dict[str, Any]]] = {}
         for row in sorted((row for row in valid if row["answerability"] == kind), key=lambda row: (row["model"], row.get("qa_id", ""))): by_model.setdefault(row["model"], []).append(row)
         models = sorted(by_model)
@@ -46,9 +51,11 @@ def sample_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             model, preferred_qa = models[index % len(models)], qa_ids[index % len(qa_ids)]
             choices = by_model[model]
             position = next((i for i, row in enumerate(choices) if row.get("qa_id") == preferred_qa), 0 if choices else -1)
-            if position < 0:
+            if position < 0 or not choices:
                 raise JudgeValidationError(f"need at least {target} judge outputs for {kind}")
             selected.append(choices.pop(position))
+    if len({f"{row['model']}:{row.get('qa_id')}" for row in selected}) != 10:
+        raise JudgeValidationError("judge worksheet requires ten unique outputs")
     return selected
 
 def review_material(qa: dict[str, Any], context_packet: dict[str, Any]) -> tuple[dict[str, dict[str, Any]], dict[str, list[dict[str, Any]]]]:
@@ -167,7 +174,7 @@ def validate_labels(packet: dict[str, Any], rows: list[dict[str, Any]], cases: d
     return report
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_bakeoff_outputs.json"); parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json"); parser.add_argument("--worksheet", type=Path, default=ROOT / "data/judge_validation_worksheet.json"); parser.add_argument("--report", type=Path, default=ROOT / "data/judge_validation_report.json"); parser.add_argument("--validate", action="store_true"); parser.add_argument("--overwrite", action="store_true")
+    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_generator_v2_4_judged_outputs.json"); parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json"); parser.add_argument("--worksheet", type=Path, default=ROOT / "data/judge_validation_v2_4_worksheet.json"); parser.add_argument("--report", type=Path, default=ROOT / "data/judge_validation_v2_4_report.json"); parser.add_argument("--validate", action="store_true"); parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
     try:
         output_packet, qa, context_packet = load(args.outputs), load(args.qa), load(args.contexts); outputs = output_packet.get("outputs")

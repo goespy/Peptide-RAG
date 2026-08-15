@@ -23,12 +23,22 @@ ceiling. The immutable provider responses report:
 | Three generator candidates | 142,254 | 24,726 | 83 | $0.009190435 |
 | Claude Sonnet 4.6 judge | 92,446 | 10,608 | 39 | $0.436458000 |
 | **Bake-off total** | **234,700** | **35,334** | **122** | **$0.445648435** |
-| **Recorded OpenRouter development total** | **2,556,329** | **35,334** | **215** | **$0.492081015** |
+| GPT-only v2.2 diagnostic | 26,969 | 3,916 | 14 | $0.001690265 |
+| GPT-only v2.3 diagnostic | 24,273 | 851 | 12 | $0.001138185 |
+| **Known OpenRouter development total** | **2,607,571** | **40,101** | **241** | **$0.494909465** |
 
 The generator/judge total is recomputed from all 39 saved rows in
 `data/rag_bakeoff_outputs.json` and bound in
 `data/rag_bakeoff_reanalysis.json`. Railway usage and coding-agent subscription
 tokens remain `TBD` or `unknown/not exposed`; they are not represented as zero.
+
+Generator-v2 made 123 provider calls under an approved `$0.04` ceiling and a
+`$0.03457764` conservative estimate, but the saved provider responses did not
+expose complete token or cost fields. Its actual spend is therefore recorded as
+`unknown/not exposed` and is not silently included as zero in the known total.
+The frozen but unrun v2.4 generator-only estimate is `$0.0115379` under a
+`$0.02` hard cap; its actual cost remains `TBD`. Claude judging and holdout have
+not been opened for v2.4.
 
 ## Production projection
 
@@ -64,6 +74,7 @@ testing and distributed limits before the single-instance architecture can be
 claimed to support them.
 
 `python run_project.py --live-eval` remains a readiness check and makes no paid
-calls. A second development run requires a versioned experiment, a fresh price
-check, and explicit owner cost approval. The untouched holdout remains blocked
-on owner validation of the judge and an accepted generator.
+calls. Each generator, judge, and holdout stage requires its own versioned
+experiment, fresh price check, and explicit owner cost approval. The untouched
+holdout remains blocked on owner validation of the judge and an accepted
+generator.

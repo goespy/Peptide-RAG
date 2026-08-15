@@ -11,19 +11,29 @@ python run_project.py
 It validates frozen core hashes, builds the index, runs Boolean and BM25
 evaluation, and validates the approved QA set, chunk manifests, embedding
 ledger, selected hybrid configuration, and development contexts. Corruption
-exits nonzero. Generator/judge/holdout gates remain `TBD` until their evidence
-exists.
+exits nonzero. Generator acceptance, judge validation, and holdout gates remain
+`TBD` until their evidence exists. The measured GPT-only v2.3 development run
+reached 9/10 answerable cases, 3/3 correct refusals, and 13/13 structurally
+valid outputs; it is preserved as a failed gate rather than promoted.
 
 ## Pending human validation
 
 The 20-case QA set and evidence spans are approved. Before a RAG release, run
-the three-model development bake-off, manually label the blinded 10-output
-judge worksheet, validate agreement, and run the untouched seven-case holdout.
-Commit the reproducible generation, judge, and citation artifacts.
+the separately approved GPT-only v2.4 development diagnostic. Only a measured
+10/10 answerable, 3/3 correct-refusal, 13/13 structural result can open the
+judge-only runner. Then run the different-family Claude judge, manually label
+the blinded 10-output worksheet (seven answerable plus all three unanswerable
+outputs for the single-generator run), validate agreement, and run the
+untouched seven-case holdout exactly once. Commit every reproducible generator,
+judge, worksheet, citation, usage, and negative-result artifact.
 
 ## Pending credentials and deployment
 
-Set `OPENROUTER_API_KEY` only in the deployment environment after a paid-run budget and model pricing are approved. `--live-eval` reports cost/readiness only while the RAG gates are incomplete; it does not make a request. Hosting, secret management, monitoring, and a production endpoint are not yet deployed or approved.
+Set `OPENROUTER_API_KEY` only in the deployment environment after the RAG
+release gates pass. The repository now includes `railway.json` and pins Python
+3.11, but no Railway project, domain, secret, or paid deployment has been
+created. Railway config-as-code overrides dashboard build/deploy settings, so
+review the deployment details before activation.
 
 ### Planned Railway environment
 
@@ -37,6 +47,14 @@ Planned start command:
 ```text
 python -m uvicorn app:app --host 0.0.0.0 --port $PORT
 ```
+
+The checked-in config uses Railpack, `/healthz`, a 120-second deployment
+healthcheck, and an `ON_FAILURE` restart policy capped at ten retries. Railway
+injects `PORT`; the application must listen on `0.0.0.0:$PORT`. The healthcheck
+is a deployment-readiness gate, not continuous monitoring. See Railway's
+[config-as-code reference](https://docs.railway.com/config-as-code/reference),
+[public networking guide](https://docs.railway.com/public-networking), and
+[healthcheck documentation](https://docs.railway.com/deployments/healthchecks).
 
 Before release, configure Railway usage controls and optional sleeping, measure
 actual memory with the selected embedding cache loaded, and keep hosting costs

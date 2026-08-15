@@ -38,10 +38,29 @@ class JudgeTests(unittest.TestCase):
         self.assertTrue(verdict.refusal_correct)
         self.assertTrue(validate_verdict(verdict, [item]))
         self.assertEqual(session.post.call_args.kwargs["json"]["temperature"], 0)
+        self.assertEqual(session.post.call_args.kwargs["json"]["max_tokens"], 600)
         prompt = session.post.call_args.kwargs["json"]["messages"][1]["content"]
         self.assertNotIn("Oracle answerability", prompt)
         schema = session.post.call_args.kwargs["json"]["response_format"]["json_schema"]["schema"]
         self.assertNotIn("refusal_correct", schema["properties"])
+
+    def test_frozen_token_cap_and_supported_parameter_routing(self):
+        client = AnswerJudge(
+            api_key="key",
+            model="anthropic/test",
+            max_tokens=500,
+            require_supported_parameters=True,
+        )
+        payload = client._payload(
+            "question",
+            AnswerResult("insufficient_evidence", "Insufficient evidence.", ()),
+            [context()],
+        )
+        self.assertEqual(payload["max_tokens"], 500)
+        self.assertEqual(payload["provider"], {"require_parameters": True})
+        for invalid in (0, -1, True, 1.5):
+            with self.subTest(max_tokens=invalid), self.assertRaises(ValueError):
+                AnswerJudge(api_key="key", max_tokens=invalid)
 
     def test_invalid_schema_and_provider_error_return_none(self):
         session = Mock()

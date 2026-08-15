@@ -18,6 +18,8 @@ class RunProjectTests(unittest.TestCase):
         self.assertTrue(any(check.name == "Section 4 experiment provenance" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "approved QA oracle" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG retrieval evaluation" and check.state == "PASS" for check in checks))
+        self.assertTrue(any(check.name == "RAG GPT v2.3 generator evidence" and check.state == "PASS" for check in checks))
+        self.assertTrue(any(check.name == "RAG GPT v2.4 generator gate" and check.state == "TBD" for check in checks))
 
     def test_missing_required_core_artifact_fails_only_core(self) -> None:
         with patch.object(run_project, "BASELINE", run_project.ROOT / "missing.json"):
@@ -101,3 +103,18 @@ class RunProjectTests(unittest.TestCase):
                 checks, failed = run_project.run()
         self.assertTrue(failed)
         self.assertTrue(any(check.name == "RAG development bake-off evidence" and check.state == "FAIL" for check in checks))
+
+    def test_generator_diagnostic_count_drift_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "rag_generator_v2_3_summary.json"
+            payload = json.loads(run_project.GENERATOR_V2_3_SUMMARY.read_text(encoding="utf-8"))
+            payload["diagnostic"]["candidates"]["openai/gpt-oss-20b"][
+                "answerable_answer_count"
+            ] = 10
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "GENERATOR_V2_3_SUMMARY", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(
+            any(check.name == "RAG GPT generator diagnostics" and check.state == "FAIL" for check in checks)
+        )

@@ -1,0 +1,1000 @@
+{
+  "cases": [
+    {
+      "gold_chunk_ids": [
+        "7901724:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "7901724:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 82,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "7901724:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2402
+        },
+        "semantic": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "7901724:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "40005408:c0001",
+        "36228773:c0001",
+        "40005408:c0002",
+        "9403790:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "7901724:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 1,
+          "pmid": "7901724",
+          "rank": 1,
+          "semantic_rank": 1,
+          "title": "Hepatoprotective effect of BPC 157, a 15-amino acid peptide, on liver lesions induced by either restraint stress or bile duct and hepatic artery ligation or CCl4 administration. A comparative study with dopamine agonists and somatostatin."
+        },
+        {
+          "chunk_id": "40005408:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 4,
+          "pmid": "40005408",
+          "rank": 2,
+          "semantic_rank": 3,
+          "title": "Protective Effects of BPC 157 on Liver, Kidney, and Lung Distant Organ Damage in Rats with Experimental Lower-Extremity Ischemia-Reperfusion Injury."
+        },
+        {
+          "chunk_id": "36228773:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 3,
+          "pmid": "36228773",
+          "rank": 3,
+          "semantic_rank": 7,
+          "title": "Pentadecapeptide BPC 157 efficiently reduces radiation-induced liver injury and lipid accumulation through Kruppel-like factor 4 upregulation both in vivo and in vitro."
+        },
+        {
+          "chunk_id": "40005408:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 14,
+          "pmid": "40005408",
+          "rank": 4,
+          "semantic_rank": 2,
+          "title": "Protective Effects of BPC 157 on Liver, Kidney, and Lung Distant Organ Damage in Rats with Experimental Lower-Extremity Ischemia-Reperfusion Injury."
+        },
+        {
+          "chunk_id": "9403790:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 21,
+          "pmid": "9403790",
+          "rank": 5,
+          "semantic_rank": 8,
+          "title": "BPC 157's effect on healing."
+        }
+      ],
+      "qa_id": "qa01",
+      "question": "What effect did BPC-157 have on liver injury in the reported rat models?",
+      "relevant_pmids": [
+        "7901724"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "27489425:c0001",
+        "38026438:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 4,
+          "gold_chunk_ranks": {
+            "27489425:c0001": 9,
+            "38026438:c0001": 4
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 68,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 3,
+          "gold_chunk_ranks": {
+            "27489425:c0001": 10,
+            "38026438:c0001": 3
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 1131
+        },
+        "semantic": {
+          "best_gold_rank": 16,
+          "gold_chunk_ranks": {
+            "27489425:c0001": 22,
+            "38026438:c0001": 16
+          },
+          "gold_hit_at_5": false,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "18644225:c0001",
+        "41997403:c0001",
+        "23019153:c0001",
+        "25731775:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "18644225:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 2,
+          "pmid": "18644225",
+          "rank": 1,
+          "semantic_rank": 3,
+          "title": "The human tri-peptide GHK and tissue remodeling."
+        },
+        {
+          "chunk_id": "41997403:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 1,
+          "pmid": "41997403",
+          "rank": 2,
+          "semantic_rank": 13,
+          "title": "Glycyl-L-histidyl-L-lysine-Cu2+ (GHK-Cu) Attenuates CuSO4 or LPS induced-inflammation in Zebrafish larvae model."
+        },
+        {
+          "chunk_id": "23019153:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 16,
+          "pmid": "23019153",
+          "rank": 3,
+          "semantic_rank": 1,
+          "title": "Stem cell recovering effect of copper-free GHK in skin."
+        },
+        {
+          "chunk_id": "38026438:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 3,
+          "pmid": "38026438",
+          "rank": 4,
+          "semantic_rank": 16,
+          "title": "Thermodynamically stable ionic liquid microemulsions pioneer pathways for topical delivery and peptide application."
+        },
+        {
+          "chunk_id": "25731775:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 8,
+          "pmid": "25731775",
+          "rank": 5,
+          "semantic_rank": 15,
+          "title": "Tripeptide-copper complex GHK-Cu (II) transiently improved healing outcome in a rat model of ACL reconstruction."
+        }
+      ],
+      "qa_id": "qa02",
+      "question": "Does GHK or GHK-Cu help regrow hair?",
+      "relevant_pmids": [
+        "27489425",
+        "38026438"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "38382158:c0001",
+        "38382158:c0002",
+        "41476424:c0001",
+        "41476424:c0002",
+        "42542926:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "38382158:c0001": 3,
+            "38382158:c0002": 4,
+            "41476424:c0001": 8,
+            "41476424:c0002": 9,
+            "42542926:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 88,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "38382158:c0001": 5,
+            "38382158:c0002": 8,
+            "41476424:c0001": 1,
+            "41476424:c0002": 31,
+            "42542926:c0001": 3
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 1106
+        },
+        "semantic": {
+          "best_gold_rank": 2,
+          "gold_chunk_ranks": {
+            "38382158:c0001": 3,
+            "38382158:c0002": 5,
+            "41476424:c0001": 39,
+            "41476424:c0002": 10,
+            "42542926:c0001": 2
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "42542926:c0002",
+        "20536458:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "42542926:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 3,
+          "pmid": "42542926",
+          "rank": 1,
+          "semantic_rank": 2,
+          "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+        },
+        {
+          "chunk_id": "42542926:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 6,
+          "pmid": "42542926",
+          "rank": 2,
+          "semantic_rank": 1,
+          "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+        },
+        {
+          "chunk_id": "38382158:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 5,
+          "pmid": "38382158",
+          "rank": 3,
+          "semantic_rank": 3,
+          "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+        },
+        {
+          "chunk_id": "38382158:c0002",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 8,
+          "pmid": "38382158",
+          "rank": 4,
+          "semantic_rank": 5,
+          "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+        },
+        {
+          "chunk_id": "20536458:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 12,
+          "pmid": "20536458",
+          "rank": 5,
+          "semantic_rank": 7,
+          "title": "Thymosin beta4 enhances repair by organizing connective tissue and preventing the appearance of myofibroblasts."
+        }
+      ],
+      "qa_id": "qa03",
+      "question": "Does TB-500 help injuries or wounds heal?",
+      "relevant_pmids": [
+        "42542926",
+        "38382158",
+        "41476424"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "10496658:c0001",
+        "9849822:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "10496658:c0001": 5,
+            "9849822:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 67,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 4,
+          "gold_chunk_ranks": {
+            "10496658:c0001": 11,
+            "9849822:c0001": 4
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 811
+        },
+        "semantic": {
+          "best_gold_rank": 2,
+          "gold_chunk_ranks": {
+            "10496658:c0001": 3,
+            "9849822:c0001": 2
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "10373343:c0001",
+        "12168778:c0001",
+        "11162489:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "9849822:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 4,
+          "pmid": "9849822",
+          "rank": 1,
+          "semantic_rank": 2,
+          "title": "Ipamorelin, the first selective growth hormone secretagogue."
+        },
+        {
+          "chunk_id": "10373343:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 9,
+          "pmid": "10373343",
+          "rank": 2,
+          "semantic_rank": 1,
+          "title": "Ipamorelin, a new growth-hormone-releasing peptide, induces longitudinal bone growth in rats."
+        },
+        {
+          "chunk_id": "12168778:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 5,
+          "pmid": "12168778",
+          "rank": 3,
+          "semantic_rank": 7,
+          "title": "Influence of chronic treatment with the growth hormone secretagogue Ipamorelin, in young female rats: somatotroph response in vitro."
+        },
+        {
+          "chunk_id": "11162489:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 1,
+          "pmid": "11162489",
+          "rank": 4,
+          "semantic_rank": 12,
+          "title": "Growth hormone (GH)-independent stimulation of adiposity by GH secretagogues."
+        },
+        {
+          "chunk_id": "10496658:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 11,
+          "pmid": "10496658",
+          "rank": 5,
+          "semantic_rank": 3,
+          "title": "Pharmacokinetic-pharmacodynamic modeling of ipamorelin, a growth hormone releasing peptide, in human volunteers."
+        }
+      ],
+      "qa_id": "qa04",
+      "question": "Does ipamorelin increase growth hormone?",
+      "relevant_pmids": [
+        "10496658",
+        "9849822"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "20101189:c0001",
+        "20101189:c0002"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "20101189:c0001": 5,
+            "20101189:c0002": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 66,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "20101189:c0001": 1,
+            "20101189:c0002": 2
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 296
+        },
+        "semantic": {
+          "best_gold_rank": 2,
+          "gold_chunk_ranks": {
+            "20101189:c0001": 14,
+            "20101189:c0002": 2
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "20554713:c0002",
+        "30764032:c0001",
+        "22050344:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "20101189:c0002",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 2,
+          "pmid": "20101189",
+          "rank": 1,
+          "semantic_rank": 2,
+          "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension."
+        },
+        {
+          "chunk_id": "20554713:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 4,
+          "pmid": "20554713",
+          "rank": 2,
+          "semantic_rank": 1,
+          "title": "Effects of tesamorelin (TH9507), a growth hormone-releasing factor analog, in human immunodeficiency virus-infected patients with excess abdominal fat: a pooled analysis of two multicenter, double-blind placebo-controlled phase 3 trials with safety extension data."
+        },
+        {
+          "chunk_id": "30764032:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 3,
+          "pmid": "30764032",
+          "rank": 3,
+          "semantic_rank": 8,
+          "title": "Tesamorelin for the treatment of excess abdominal fat in HIV-1-infected patients with lipodystrophy."
+        },
+        {
+          "chunk_id": "22050344:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 5,
+          "pmid": "22050344",
+          "rank": 4,
+          "semantic_rank": 6,
+          "title": "Spotlight on tesamorelin in HIV-associated lipodystrophy."
+        },
+        {
+          "chunk_id": "20101189:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 1,
+          "pmid": "20101189",
+          "rank": 5,
+          "semantic_rank": 14,
+          "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension."
+        }
+      ],
+      "qa_id": "qa05",
+      "question": "Does tesamorelin reduce belly fat?",
+      "relevant_pmids": [
+        "20101189"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "11087911:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "11087911:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 80,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "11087911:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2291
+        },
+        "semantic": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "11087911:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "16634527:c0001",
+        "15909815:c0001",
+        "35413689:c0001",
+        "14501183:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "11087911:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 1,
+          "pmid": "11087911",
+          "rank": 1,
+          "semantic_rank": 1,
+          "title": "Effect of epitalon on the lifespan increase in Drosophila melanogaster."
+        },
+        {
+          "chunk_id": "16634527:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 5,
+          "pmid": "16634527",
+          "rank": 2,
+          "semantic_rank": 10,
+          "title": "Effect of the synthetic pineal peptide epitalon on spontaneous carcinogenesis in female C3H/He mice."
+        },
+        {
+          "chunk_id": "15909815:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 9,
+          "pmid": "15909815",
+          "rank": 3,
+          "semantic_rank": 7,
+          "title": "[Effect of epitalon and melatonin on life span and spontaneous carcinogenesis in senescence accelerated mice (SAM)]."
+        },
+        {
+          "chunk_id": "35413689:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 16,
+          "pmid": "35413689",
+          "rank": 4,
+          "semantic_rank": 4,
+          "title": "Epitalon protects against post-ovulatory aging-related damage of mouse oocytes in vitro."
+        },
+        {
+          "chunk_id": "14501183:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 19,
+          "pmid": "14501183",
+          "rank": 5,
+          "semantic_rank": 3,
+          "title": "Effect of Epitalon on biomarkers of aging, life span and spontaneous tumor incidence in female Swiss-derived SHR mice."
+        }
+      ],
+      "qa_id": "qa06",
+      "question": "What effect did developmental exposure to Epitalon have on adult fruit-fly lifespan?",
+      "relevant_pmids": [
+        "11087911"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "25738459:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 46,
+          "gold_chunk_ranks": {
+            "25738459:c0001": 46
+          },
+          "gold_hit_at_5": false,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 79,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 296,
+          "gold_chunk_ranks": {
+            "25738459:c0001": 296
+          },
+          "gold_hit_at_5": false,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2127
+        },
+        "semantic": {
+          "best_gold_rank": 24,
+          "gold_chunk_ranks": {
+            "25738459:c0001": 24
+          },
+          "gold_hit_at_5": false,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "41551324:c0001",
+        "41551324:c0002",
+        "31293078:c0001",
+        "34520826:c0002",
+        "42266945:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "41551324:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 1,
+          "pmid": "41551324",
+          "rank": 1,
+          "semantic_rank": 6,
+          "title": "Systemic MOTS-c levels are increased in adults with obesity in association with metabolic dysregulation and remain unchanged after weight loss."
+        },
+        {
+          "chunk_id": "41551324:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 3,
+          "pmid": "41551324",
+          "rank": 2,
+          "semantic_rank": 4,
+          "title": "Systemic MOTS-c levels are increased in adults with obesity in association with metabolic dysregulation and remain unchanged after weight loss."
+        },
+        {
+          "chunk_id": "31293078:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 10,
+          "pmid": "31293078",
+          "rank": 3,
+          "semantic_rank": 1,
+          "title": "The mitochondrial-derived peptide MOTS-c is a regulator of plasma metabolites and enhances insulin sensitivity."
+        },
+        {
+          "chunk_id": "34520826:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 4,
+          "pmid": "34520826",
+          "rank": 4,
+          "semantic_rank": 7,
+          "title": "Mitochondrial-derived peptides and exercise."
+        },
+        {
+          "chunk_id": "42266945:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 2,
+          "pmid": "42266945",
+          "rank": 5,
+          "semantic_rank": 10,
+          "title": "MOTS-c partially protects against skeletal muscle deterioration in C26 cachexia."
+        }
+      ],
+      "qa_id": "qa07",
+      "question": "Does MOTS-c help with weight loss or metabolism?",
+      "relevant_pmids": [
+        "25738459"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "14963471:c0001",
+        "14999221:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 2,
+          "gold_chunk_ranks": {
+            "14963471:c0001": 2,
+            "14999221:c0001": 4
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 87,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 4,
+          "gold_chunk_ranks": {
+            "14963471:c0001": 4,
+            "14999221:c0001": 6
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 1923
+        },
+        "semantic": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "14963471:c0001": 1,
+            "14999221:c0001": 2
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "15833522:c0001",
+        "12851303:c0001",
+        "15134289:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "15833522:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 1,
+          "pmid": "15833522",
+          "rank": 1,
+          "semantic_rank": 3,
+          "title": "Co-administration of low doses of intranasal PT-141, a melanocortin receptor agonist, and sildenafil to men with erectile dysfunction results in an enhanced erectile response."
+        },
+        {
+          "chunk_id": "14963471:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 4,
+          "pmid": "14963471",
+          "rank": 2,
+          "semantic_rank": 1,
+          "title": "Double-blind, placebo-controlled evaluation of the safety, pharmacokinetic properties and pharmacodynamic effects of intranasal PT-141, a melanocortin receptor agonist, in healthy males and patients with mild-to-moderate erectile dysfunction."
+        },
+        {
+          "chunk_id": "12851303:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 2,
+          "pmid": "12851303",
+          "rank": 3,
+          "semantic_rank": 4,
+          "title": "PT-141: a melanocortin agonist for the treatment of sexual dysfunction."
+        },
+        {
+          "chunk_id": "14999221:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 6,
+          "pmid": "14999221",
+          "rank": 4,
+          "semantic_rank": 2,
+          "title": "Evaluation of the safety, pharmacokinetics and pharmacodynamic effects of subcutaneously administered PT-141, a melanocortin receptor agonist, in healthy male subjects and in patients with an inadequate response to Viagra."
+        },
+        {
+          "chunk_id": "15134289:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 5,
+          "pmid": "15134289",
+          "rank": 5,
+          "semantic_rank": 5,
+          "title": "PT-141 Palatin."
+        }
+      ],
+      "qa_id": "qa08",
+      "question": "Does PT-141 help with erectile dysfunction?",
+      "relevant_pmids": [
+        "14963471",
+        "14999221"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "7904712:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "7904712:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 77,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "7904712:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2409
+        },
+        "semantic": {
+          "best_gold_rank": 2,
+          "gold_chunk_ranks": {
+            "7904712:c0001": 2
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "17116974:c0001",
+        "17116974:c0002",
+        "15052688:c0001",
+        "15052688:c0002"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "7904712:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 1,
+          "pmid": "7904712",
+          "rank": 1,
+          "semantic_rank": 2,
+          "title": "The beneficial effect of BPC 157, a 15 amino acid peptide BPC fragment, on gastric and duodenal lesions induced by restraint stress, cysteamine and 96% ethanol in rats. A comparative study with H2 receptor antagonists, dopamine promotors and gut peptides."
+        },
+        {
+          "chunk_id": "17116974:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 2,
+          "pmid": "17116974",
+          "rank": 2,
+          "semantic_rank": 10,
+          "title": "An experimental model of prolonged esophagitis with sphincter failure in the rat and the therapeutic potential of gastric pentadecapeptide BPC 157."
+        },
+        {
+          "chunk_id": "17116974:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 17,
+          "pmid": "17116974",
+          "rank": 3,
+          "semantic_rank": 7,
+          "title": "An experimental model of prolonged esophagitis with sphincter failure in the rat and the therapeutic potential of gastric pentadecapeptide BPC 157."
+        },
+        {
+          "chunk_id": "15052688:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 26,
+          "pmid": "15052688",
+          "rank": 4,
+          "semantic_rank": 3,
+          "title": "Protective effects of pentadecapeptide BPC 157 on gastric ulcer in rats."
+        },
+        {
+          "chunk_id": "15052688:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 32,
+          "pmid": "15052688",
+          "rank": 5,
+          "semantic_rank": 1,
+          "title": "Protective effects of pentadecapeptide BPC 157 on gastric ulcer in rats."
+        }
+      ],
+      "qa_id": "qa09",
+      "question": "What did the rat study report about BPC-157 in experimental stomach and duodenal ulcer models?",
+      "relevant_pmids": [
+        "7904712"
+      ]
+    },
+    {
+      "gold_chunk_ids": [
+        "25731775:c0001"
+      ],
+      "modes": {
+        "hybrid": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "25731775:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "maximum_rrf_union_size": 100,
+          "measured_rank_window": 78,
+          "rrf_source_candidate_limit": 50
+        },
+        "lexical": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "25731775:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2377
+        },
+        "semantic": {
+          "best_gold_rank": 1,
+          "gold_chunk_ranks": {
+            "25731775:c0001": 1
+          },
+          "gold_hit_at_5": true,
+          "gold_in_measured_rank_window": true,
+          "measured_rank_window": 2440
+        }
+      },
+      "non_gold_top_five_require_human_relevance_review": [
+        "8842360:c0001",
+        "28370978:c0001",
+        "40672369:c0002",
+        "18644225:c0001"
+      ],
+      "production_hybrid_top_five": [
+        {
+          "chunk_id": "25731775:c0001",
+          "is_exact_gold_chunk": true,
+          "lexical_rank": 1,
+          "pmid": "25731775",
+          "rank": 1,
+          "semantic_rank": 1,
+          "title": "Tripeptide-copper complex GHK-Cu (II) transiently improved healing outcome in a rat model of ACL reconstruction."
+        },
+        {
+          "chunk_id": "8842360:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 9,
+          "pmid": "8842360",
+          "rank": 2,
+          "semantic_rank": 3,
+          "title": "Morphological features of bone healing under the effect of collagen-graft-glycosaminoglycan copolymer supplemented with the tripeptide Gly-His-Lys."
+        },
+        {
+          "chunk_id": "28370978:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 6,
+          "pmid": "28370978",
+          "rank": 3,
+          "semantic_rank": 11,
+          "title": "GHK-Cu-liposomes accelerate scald wound healing in mice by promoting cell proliferation and angiogenesis."
+        },
+        {
+          "chunk_id": "40672369:c0002",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 5,
+          "pmid": "40672369",
+          "rank": 4,
+          "semantic_rank": 17,
+          "title": "Exploring the beneficial effects of GHK-Cu on an experimental model of colitis and the underlying mechanisms."
+        },
+        {
+          "chunk_id": "18644225:c0001",
+          "is_exact_gold_chunk": false,
+          "lexical_rank": 13,
+          "pmid": "18644225",
+          "rank": 5,
+          "semantic_rank": 9,
+          "title": "The human tri-peptide GHK and tissue remodeling."
+        }
+      ],
+      "qa_id": "qa10",
+      "question": "How did intra-articular GHK-Cu affect graft healing after ACL reconstruction in rats?",
+      "relevant_pmids": [
+        "25731775"
+      ]
+    }
+  ],
+  "chunks_sha256": "85B62B8AF56DAFD6AE4A1D1B5C87DA950828BB767FDDF9633445E53CA5567B9C",
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "embedding_cache_sha256": "8811AA37E3ACA4897DB73D8D3AC0B097C3BCC06972B457123D241A10724E9FE5",
+  "frozen_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "interpretation_rule": "An exact-gold miss is not automatically a chunking failure or a topical retrieval failure; non-gold retrieved evidence requires independent human relevance review. Hybrid absence means absence from the explicitly recorded weighted-RRF candidate window, not absence from the corpus.",
+  "measurement_scope": "approved answerable development QA only",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "query_cache_sha256": "CAF4C172B66E209D5CD448DDF41B1D7ED4B8DD8EBC105939C94873A589323668",
+  "schema_version": 1,
+  "summary": {
+    "hybrid": {
+      "case_count": 10,
+      "exact_gold_hit_at_5_count": 9
+    },
+    "lexical": {
+      "case_count": 10,
+      "exact_gold_hit_at_5_count": 9
+    },
+    "semantic": {
+      "case_count": 10,
+      "exact_gold_hit_at_5_count": 8
+    }
+  }
+}

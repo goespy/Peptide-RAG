@@ -1,0 +1,46 @@
+{
+  "actual_usage": {
+    "cost_usd": 0.001690265,
+    "input_tokens": 26969,
+    "output_tokens": 3916,
+    "provider_calls": 14,
+    "status": "provider_reported_complete"
+  },
+  "acceptance_result": {
+    "answerable_answers": "8/10",
+    "correct_system_refusals": "2/3",
+    "ready_for_paid_judging": false,
+    "structurally_valid_rows": "13/13"
+  },
+  "case_findings": [
+    {
+      "classification": "generation_validation_and_repair_budget_failure_not_retrieval",
+      "evidence": "The exact owner-approved PMID 7901724 chunk was hybrid rank 1. The initial 388-character response stopped normally but failed uncited_factual_sentence; the repair exhausted the 800-token output budget and returned no message content.",
+      "qa_id": "qa01"
+    },
+    {
+      "classification": "model_over_refusal_with_plausibly_sufficient_alternative_evidence",
+      "evidence": "The supplied top five included PMID 31293078, which directly reports improved insulin sensitivity, reduced body weight, and reduced fatty liver in obese mice. GPT-OSS returned insufficient_evidence. This alternative PMID is not silently added to the frozen QA oracle and remains subject to owner review if the oracle is versioned later.",
+      "qa_id": "qa07"
+    },
+    {
+      "classification": "human_scope_refusal_failure",
+      "evidence": "The question explicitly asks about recovery after surgery in humans, while all supplied support is rat, in-vitro, or equine evidence. GPT-OSS summarized the rat result instead of refusing.",
+      "qa_id": "qa18"
+    }
+  ],
+  "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+  "experiment": "generator-v2.2-gpt-only-derived-citations",
+  "holdout_status": "untouched",
+  "judge_calls": 0,
+  "outputs_sha256": "08983F55489ABB8C9975E43CC7AB8DF917E77DB6B96D5463008E4178A020068C",
+  "proposed_next_changes": [
+    "Set GPT-OSS reasoning effort to low so the output ceiling leaves room for the required JSON answer and repair.",
+    "Require refusal when a question explicitly asks for human efficacy or recovery but the supplied evidence is nonhuman only.",
+    "Require a species-limited answer rather than refusal when a general question is directly supported by animal evidence.",
+    "Prefer one concise factual sentence when possible and require a marker on every factual sentence."
+  ],
+  "qa_and_retrieval_artifacts_changed": false,
+  "schema_version": 1,
+  "summary_sha256": "33F4380D088D3DE3C975EB773A0ED013B6C3E1AD9047EA36B01425F91B5D63C7"
+}

@@ -12,7 +12,7 @@ MODELS = ("qwen/qwen3.7-flash", "openai/gpt-oss-20b", "google/gemma-3-12b-it")
 MODEL_FAMILIES = ("qwen", "openai", "google")
 
 sys.path.insert(0, str(ROOT))
-from src.generation import AnswerResult, Citation, GENERATION_MAX_TOKENS, GroundedAnswerClient, validate_answer_result  # noqa: E402
+from src.generation import AnswerResult, Citation, GroundedAnswerClient, validate_answer_result  # noqa: E402
 from src.judge import AnswerJudge  # noqa: E402
 from src.chunks import Chunk  # noqa: E402
 from src.retrieval import RetrievedChunk  # noqa: E402
@@ -71,13 +71,62 @@ def validate_qa(packet: dict[str, Any]) -> list[dict[str, Any]]:
     if len(development) != 13 or sum(case["answerability"] == "answerable" for case in development) != 10 or sum(case["answerability"] == "unanswerable" for case in development) != 3: raise BakeoffError("approved QA set must contain the fixed 13-question (10 answerable/3 unanswerable) development split")
     return sorted(development, key=lambda case: case["id"])
 
-def validate_config(config: dict[str, Any]) -> None:
-    if config.get("status") not in {"frozen", "selected_and_frozen", "frozen_before_generator_bakeoff"} or config.get("selected") is not True:
+def validate_config(config: dict[str, Any]) -> dict[str, Any]:
+    if config.get("status") not in {
+        "frozen",
+        "selected_and_frozen",
+        "frozen_before_generator_bakeoff",
+        "frozen_generator_v2_before_development_rerun",
+        "frozen_generator_v2_1_before_development_rerun",
+        "frozen_generator_v2_2_before_development_rerun",
+        "frozen_generator_v2_3_before_development_rerun",
+        "frozen_generator_v2_4_before_development_rerun",
+    } or config.get("selected") is not True:
         raise BakeoffError("selected RAG configuration is not frozen")
     if not isinstance(config.get("prompt"), str) or not config["prompt"].strip() or not isinstance(config.get("generation"), dict):
         raise BakeoffError("frozen RAG config must record prompt and generation settings")
-    if config["generation"].get("temperature") != 0 or config["generation"].get("max_tokens") != 400:
-        raise BakeoffError("bake-off requires frozen temperature 0 and a 400-token cap")
+    generation = config["generation"]
+    max_tokens = generation.get("max_tokens")
+    citation_mode = generation.get("citation_mode", "declared")
+    require_supported_parameters = generation.get("require_supported_parameters", False)
+    reasoning_effort = generation.get("reasoning_effort")
+    exclude_reasoning = generation.get("exclude_reasoning", False)
+    reconsider_insufficient_evidence = generation.get("reconsider_insufficient_evidence", False)
+    repair_attempts = generation.get("repair_attempts", 1)
+    if (
+        generation.get("temperature") != 0
+        or isinstance(max_tokens, bool)
+        or not isinstance(max_tokens, int)
+        or not 1 <= max_tokens <= 2_000
+        or citation_mode not in {"declared", "derived_from_text_markers"}
+        or not isinstance(require_supported_parameters, bool)
+        or reasoning_effort
+        not in {None, "none", "minimal", "low", "medium", "high", "xhigh", "max"}
+        or not isinstance(exclude_reasoning, bool)
+        or (reasoning_effort is None and exclude_reasoning)
+        or not isinstance(reconsider_insufficient_evidence, bool)
+        or isinstance(repair_attempts, bool)
+        or repair_attempts != 1
+    ):
+        raise BakeoffError("bake-off requires frozen temperature 0 and a 1--2000 output-token cap")
+    retriever_hash = config.get("retriever_config_sha256")
+    if retriever_hash is not None and (
+        not isinstance(retriever_hash, str)
+        or len(retriever_hash) != 64
+        or any(character not in "0123456789ABCDEF" for character in retriever_hash.upper())
+    ):
+        raise BakeoffError("versioned generator experiments require a valid retriever_config_sha256")
+    return {
+        "temperature": 0,
+        "max_tokens": max_tokens,
+        "prompt": config["prompt"],
+        "citation_mode": citation_mode,
+        "require_supported_parameters": require_supported_parameters,
+        "reasoning_effort": reasoning_effort,
+        "exclude_reasoning": exclude_reasoning,
+        "reconsider_insufficient_evidence": reconsider_insufficient_evidence,
+        "repair_attempts": 1,
+    }
 
 def validate_model_catalog(catalog: dict[str, Any], *, max_age_hours: float | None = None) -> tuple[str, ...]:
     models = catalog.get("models")
@@ -134,6 +183,7 @@ def estimate_bakeoff_cost(
     catalog: dict[str, Any],
     models: Sequence[str],
     judge_model: str,
+    generation: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Conservatively estimate the fixed development bake-off from frozen payloads."""
 
@@ -143,6 +193,16 @@ def estimate_bakeoff_cost(
     judge_catalog = catalog.get("judge")
     if not isinstance(judge_catalog, dict) or judge_catalog.get("id") != judge_model:
         raise BakeoffError("judge pricing is missing from the validated model catalog")
+    settings = generation or {
+        "temperature": 0,
+        "max_tokens": 400,
+        "prompt": "cost-estimate",
+        "citation_mode": "declared",
+        "require_supported_parameters": False,
+        "reasoning_effort": None,
+        "exclude_reasoning": False,
+        "reconsider_insufficient_evidence": False,
+    }
     generation_rows: list[dict[str, Any]] = []
     total_cost = 0.0
     total_calls = 0
@@ -150,16 +210,50 @@ def estimate_bakeoff_cost(
         pricing = catalog_models.get(model)
         if not isinstance(pricing, dict):
             raise BakeoffError(f"pricing is missing for {model}")
-        client = GroundedAnswerClient(api_key="cost-estimate", model=model)
+        client = GroundedAnswerClient(
+            api_key="cost-estimate",
+            model=model,
+            max_tokens=int(settings["max_tokens"]),
+            temperature=float(settings["temperature"]),
+            system_prompt=str(settings["prompt"]),
+            citation_mode=str(settings.get("citation_mode", "declared")),
+            require_supported_parameters=bool(settings.get("require_supported_parameters", False)),
+            reasoning_effort=settings.get("reasoning_effort"),
+            exclude_reasoning=bool(settings.get("exclude_reasoning", False)),
+            reconsider_insufficient_evidence=bool(
+                settings.get("reconsider_insufficient_evidence", False)
+            ),
+        )
         input_tokens = output_tokens = calls = 0
         for case in cases:
             selected = contexts[case["id"]]
-            for repair in (False, True):
-                payload = client._payload(case["question"], selected, repair=repair)
+            previous_output = "x" * (int(settings["max_tokens"]) * 4)
+            payloads = [client._payload(case["question"], selected)]
+            repair_payload = client._payload(
+                case["question"],
+                selected,
+                repair=True,
+                previous_output=previous_output,
+                validation_error="conservative_repair_estimate",
+            )
+            secondary_payload = repair_payload
+            if settings.get("reconsider_insufficient_evidence", False):
+                reconsideration_payload = client._payload(
+                    case["question"],
+                    selected,
+                    reconsider_refusal=True,
+                    previous_output=previous_output,
+                )
+                if len(json.dumps(reconsideration_payload, ensure_ascii=False, sort_keys=True)) > len(
+                    json.dumps(repair_payload, ensure_ascii=False, sort_keys=True)
+                ):
+                    secondary_payload = reconsideration_payload
+            payloads.append(secondary_payload)
+            for payload in payloads:
                 conservative_input = math.ceil(len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3)
                 attempts = client.retries + 1
                 input_tokens += conservative_input * attempts
-                output_tokens += GENERATION_MAX_TOKENS * attempts
+                output_tokens += int(settings["max_tokens"]) * attempts
                 calls += attempts
         cost = (
             input_tokens * float(pricing["input_cost_per_million"])
@@ -173,7 +267,7 @@ def estimate_bakeoff_cost(
         for case in cases:
             selected = contexts[case["id"]]
             citations = tuple(Citation(index, chunk.pmid, chunk.chunk_id, chunk.title) for index, chunk in enumerate(selected[:5], 1))
-            worst_answer = AnswerResult("answered", ("evidence " * GENERATION_MAX_TOKENS).strip() + " [1].", citations)
+            worst_answer = AnswerResult("answered", ("evidence " * int(settings["max_tokens"])).strip() + " [1].", citations)
             payload = judge._payload(case["question"], worst_answer, selected)
             judge_input += math.ceil(len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3)
     judge_calls = len(cases) * len(models)
@@ -309,11 +403,44 @@ def offline_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts:
             raise BakeoffError(f"{model} does not contain exactly one output for each development question")
     return grouped
 
-def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], config_hash: str, context_hash: str, api_key: str, models: Sequence[str] = MODELS, *, judge_model: str) -> dict[str, list[dict[str, Any]]]:
+def run_live(
+    cases: list[dict[str, Any]],
+    contexts: dict[str, tuple[RetrievedChunk, ...]],
+    config_hash: str,
+    context_hash: str,
+    api_key: str,
+    models: Sequence[str] = MODELS,
+    *,
+    judge_model: str,
+    generation: dict[str, Any] | None = None,
+) -> dict[str, list[dict[str, Any]]]:
     """Explicit paid path: every generator sees the same frozen contexts."""
+    settings = generation or {
+        "temperature": 0,
+        "max_tokens": 400,
+        "prompt": "Use only supplied evidence.",
+        "citation_mode": "declared",
+        "require_supported_parameters": False,
+        "reasoning_effort": None,
+        "exclude_reasoning": False,
+        "reconsider_insufficient_evidence": False,
+    }
     grouped = {model: [] for model in models}; judge = AnswerJudge(api_key=api_key, model=judge_model)
     for model in models:
-        client = GroundedAnswerClient(api_key=api_key, model=model)
+        client = GroundedAnswerClient(
+            api_key=api_key,
+            model=model,
+            max_tokens=int(settings["max_tokens"]),
+            temperature=float(settings["temperature"]),
+            system_prompt=str(settings["prompt"]),
+            citation_mode=str(settings.get("citation_mode", "declared")),
+            require_supported_parameters=bool(settings.get("require_supported_parameters", False)),
+            reasoning_effort=settings.get("reasoning_effort"),
+            exclude_reasoning=bool(settings.get("exclude_reasoning", False)),
+            reconsider_insufficient_evidence=bool(
+                settings.get("reconsider_insufficient_evidence", False)
+            ),
+        )
         for case in cases:
             started = time.perf_counter(); answer = client.answer(case["question"], contexts[case["id"]]); generator_latency = (time.perf_counter() - started) * 1000
             started = time.perf_counter()
@@ -343,8 +470,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         judge_model = validate_judge_catalog(model_catalog)
         config_hash, context_hash = hash_file(args.config), hash_file(args.contexts)
         qa_hash = hash_file(args.qa)
-        cases = validate_qa(qa); validate_config(config); contexts = contexts_from(context_packet, cases, qa_hash=qa_hash, config_hash=config_hash)
-        cost_estimate = estimate_bakeoff_cost(cases, contexts, model_catalog, models, judge_model)
+        cases = validate_qa(qa)
+        generation = validate_config(config)
+        retriever_config_hash = config.get("retriever_config_sha256", config_hash)
+        contexts = contexts_from(
+            context_packet,
+            cases,
+            qa_hash=qa_hash,
+            config_hash=retriever_config_hash,
+        )
+        cost_estimate = estimate_bakeoff_cost(cases, contexts, model_catalog, models, judge_model, generation)
         if args.estimate_only:
             print(json.dumps(cost_estimate, indent=2, sort_keys=True))
             return 0
@@ -353,7 +488,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             if not args.confirm_cost: raise BakeoffError("--live requires --confirm-cost after reviewing the maximum-cost status")
             api_key = os.environ.get("OPENROUTER_API_KEY")
             if not api_key: raise BakeoffError("--live requires OPENROUTER_API_KEY; no provider call was made")
-            grouped = run_live(cases, contexts, config_hash, context_hash, api_key, models, judge_model=judge_model)
+            grouped = run_live(
+                cases,
+                contexts,
+                config_hash,
+                context_hash,
+                api_key,
+                models,
+                judge_model=judge_model,
+                generation=generation,
+            )
             write_json_atomic(args.outputs, {"outputs": [row for values in grouped.values() for row in values]}, overwrite=args.overwrite)
         else: grouped = offline_rows(load_json(args.outputs), cases, contexts, config_hash, context_hash, models)
         result = {

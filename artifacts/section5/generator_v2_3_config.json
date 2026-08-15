@@ -1,0 +1,61 @@
+{
+  "acceptance_target": {
+    "answerable_answer_rate": "10/10 development cases",
+    "citation_structure": "100% valid with identities derived from visible [n] markers",
+    "faithfulness": "every factual claim must later pass the independent Claude judge and owner validation gates",
+    "unanswerable_system_refusal_rate": "3/3 development cases, reported separately as model or deterministic safety-policy refusals"
+  },
+  "artifact_paths": {
+    "outputs": "data/rag_generator_v2_3_outputs.json",
+    "summary": "data/rag_generator_v2_3_summary.json"
+  },
+  "changes_from_v2_2": [
+    "Set GPT-OSS reasoning effort to low and exclude the returned reasoning trace while retaining the 800-token total output ceiling.",
+    "Clarify that explicitly human questions require directly supplied human evidence.",
+    "Clarify that general questions should summarize directly relevant animal or in-vitro findings with an explicit species limitation rather than refusing solely because the evidence is nonhuman.",
+    "Prefer one concise factual sentence and explicitly require citations on every factual or limitation sentence."
+  ],
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "experiment_id": "generator-v2.3-gpt-scope-and-reasoning-control",
+  "generation": {
+    "citation_mode": "derived_from_text_markers",
+    "exclude_reasoning": true,
+    "max_tokens": 800,
+    "reasoning_effort": "low",
+    "repair_attempts": 1,
+    "require_supported_parameters": true,
+    "temperature": 0
+  },
+  "generator_candidates": [
+    "openai/gpt-oss-20b"
+  ],
+  "generator_diagnostic": {
+    "hard_cost_cap_usd": 0.02,
+    "judge_calls": 0
+  },
+  "holdout_status": "untouched",
+  "hypotheses": [
+    "Low reasoning effort will prevent QA01's repair from consuming the entire output budget before returning JSON.",
+    "The general-question rule will produce a species-limited answer for QA07 from directly relevant supplied mouse evidence.",
+    "The explicit-human rule will correctly refuse QA18 because the supplied evidence is nonhuman."
+  ],
+  "model_catalog_sha256": "8873788CDDED3CFF2003CE2A8EB78984CE38EA619D81EAE24F1DCEE9B50AFA00",
+  "parent_config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+  "parent_diagnosis_sha256": "8B55BF61EEB9B15B1740B997371560089CD903C755A601AE7A5E36CE27C63B5C",
+  "parent_outputs_sha256": "08983F55489ABB8C9975E43CC7AB8DF917E77DB6B96D5463008E4178A020068C",
+  "parent_review_sha256": "B83B86436519478ACDF7E1F20F235983F6A394D6E94A7D473BF1F63AFD5E5C0D",
+  "parent_summary_sha256": "33F4380D088D3DE3C975EB773A0ED013B6C3E1AD9047EA36B01425F91B5D63C7",
+  "prompt": "You are a research-literature assistant. Use only the supplied PubMed abstract evidence. Classify the question's evidence scope before answering. If the question explicitly asks about humans, human recovery, human effectiveness, safety in humans, or clinical use, answer only when at least one supplied passage directly reports evidence in humans; animal, in-vitro, or equine evidence alone requires insufficient_evidence. If the question is general and a supplied animal or in-vitro passage directly reports a relevant finding, answer with the species or model and explicitly state that it is not proof of human efficacy; do not refuse solely because the evidence is nonhuman. Answer whenever at least one supplied passage directly reports a finding relevant to the question. State the study population or species and preserve uncertainty. Do not give personalized medical, treatment, or dosing advice. Return insufficient_evidence only when the passages do not support an answer, materially conflict, the explicitly requested human evidence is absent, or the question requests personalized medical or dosing advice. Prefer one concise factual sentence and use no more than three. Every sentence containing a study fact, outcome, number, mechanism, or limitation must include one or more [citation_id] markers. Return only the required JSON object.",
+  "prompt_sha256": "699282210B3910D2BAA054678AC7A4DC4DC72E070977B4250E3E2A65FDC569D6",
+  "provider_parameter_sources": [
+    "https://openrouter.ai/docs/guides/best-practices/reasoning-tokens",
+    "https://openrouter.ai/openai/gpt-oss-20b/pricing"
+  ],
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "qa_or_retrieval_changes": false,
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 5,
+  "selected": true,
+  "selection_scope": "approved 13-case development split only; no holdout access",
+  "status": "frozen_generator_v2_3_before_development_rerun"
+}
