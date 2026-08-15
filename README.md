@@ -23,9 +23,9 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Project-owner approval of the 20-case QA oracle
 - [x] Paid semantic/chunk development evaluation and frozen hybrid retrieval configuration
 - [x] Three-model development bake-off preserved and reanalyzed as a negative result
-- [x] GPT-only v2.2 and v2.3 diagnostics measured; v2.3 reached 9/10 answerable and 3/3 correct refusals
-- [x] General v2.4 refusal-reconsideration experiment, judge-only runner, and blind-label workflow prepared and tested
-- [ ] Owner-approved v2.4 run, Claude judge validation, untouched QA holdout, and public Railway deployment
+- [x] GPT-only v2.2, v2.3, and v2.4 diagnostics measured; v2.4 reached 10/10 answerable, 3/3 correct refusals, and 13/13 structural validity
+- [x] General v2.4 refusal-reconsideration experiment passed its generator gate; judge-only runner and blind-label workflow are frozen and tested
+- [ ] Claude judge validation, owner labeling, untouched QA holdout, and public Railway deployment
 - [x] Section 6 offline release-check, CI, self-evaluation, cost, and Railway config foundations
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
@@ -212,10 +212,10 @@ each paid stage:
 
 ```bash
 python scripts/run_generator_diagnostic.py --estimate-only
-# After explicit approval of the displayed v2.4 generator-only maximum:
+# The owner-approved v2.4 run used this command and stayed below the bound:
 python scripts/run_generator_diagnostic.py --live --max-cost-usd 0.02 --confirm-cost
 
-# These commands remain closed unless v2.4 measures 10/10, 3/3, and 13/13:
+# v2.4 passed 10/10, 3/3, and 13/13, so the judge config is now frozen:
 python scripts/freeze_generator_judge_config.py --hard-cost-cap-usd 0.25
 python scripts/run_generator_judge.py --estimate-only
 # After a separate approval of the displayed judge-only maximum:
@@ -237,16 +237,18 @@ not an accepted generator. The holdout remains untouched. Claude Opus's
 independent findings and the fixes are recorded in
 [`artifacts/section5/claude_bakeoff_review.md`](artifacts/section5/claude_bakeoff_review.md).
 
-Two later GPT-only generator diagnostics changed neither QA nor retrieval and
+Three later GPT-only generator diagnostics changed neither QA nor retrieval and
 made no judge or holdout calls. v2.2 measured 8/10 answerable and 2/3 correct
 refusals for `$0.001690265`; v2.3 measured 9/10, 3/3, and 13/13 structural
 validity for `$0.001138185`. v2.3's remaining QA04 failure is documented as a
 model refusal despite direct supplied human evidence at context rank 5. v2.4
 uses one general refusal-reconsideration stage, contains no QA ID or expected
-answer, and remains unpaid until separately approved. Claude Opus's initial
-v2.4 audit found and caused a diagnostic-gate fix; its resolution review was
-unavailable due to the subscription session limit and is not presented as a
-PASS.
+answer, and measured 10/10 answerable, 3/3 correct refusals, and 13/13
+structurally valid for `$0.001276115`. QA04 was answered only after the general
+reconsideration, showing that its prior miss was synthesis behavior rather than
+missing retrieved evidence. Claude Opus's initial v2.4 audit found and caused a
+diagnostic-gate fix; its resolution review was unavailable due to the
+subscription session limit and is not presented as a PASS.
 
 The holdout command freezes a generator only when all seven outputs are
 structurally valid and judged. Offline reruns use the saved outputs and make no
@@ -305,7 +307,7 @@ not entered the Claude judge:
 |---|---:|---:|---:|---:|---|
 | GPT v2.2 | 8 | 2 | 13 | $0.001690265 | Not opened |
 | GPT v2.3 | 9 | 3 | 13 | $0.001138185 | Not opened |
-| GPT v2.4 | TBD | TBD | TBD | TBD | Closed pending generator gate |
+| GPT v2.4 | 10 | 3 | 13 | $0.001276115 | Generator gate passed; paid judge separately gated |
 
 Generator acceptance and holdout metrics remain `TBD` until owner validation
 of the Claude judge and a versioned response-quality decision. See

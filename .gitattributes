@@ -10,5 +10,8 @@
 *.example text eol=lf
 *.excalidraw text eol=lf
 
+# Frozen provenance artifact: preserve the exact reviewed bytes, including Markdown hard breaks.
+artifacts/section5/claude_generator_v2_3_review.md whitespace=-blank-at-eol
+
 *.npz binary
 *.png binary

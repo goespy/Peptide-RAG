@@ -19,7 +19,7 @@ flowchart LR
 | 2. Oracle and Boolean MVP | Complete |
 | 3. BM25 and full IR evaluation | Complete |
 | 4. Retrieval tuning and hardening | Complete |
-| 5. RAG and hybrid retrieval | In progress: retrieval frozen; first generator bake-off preserved as a negative development result; owner judge validation and holdout pending |
+| 5. RAG and hybrid retrieval | In progress: retrieval frozen; GPT v2.4 passed its 10/10 generator gate; Claude judge validation, owner labels, and holdout pending |
 | 6. Final evaluation and submission | In progress: offline runner, CI, and report foundations complete; final measured artifacts/deployment pending |
 
 The frozen corpus contains 2,000 PubMed records and has SHA-256 `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. The frozen qrels v2 contains 75 graded judgments across 15 queries. Neither artifact may be silently changed.
@@ -321,12 +321,15 @@ not as deletion of losing results. GPT-OSS must still pass 10/10 answerable and
 Subsequent frozen diagnostics remained development-only. v2.2 measured 8/10
 answerable and 2/3 correct refusals; v2.3 measured 9/10, 3/3, and 13/13
 structural validity. v2.3 exposed one model refusal even though direct human
-evidence appeared at context rank 5. The planned v2.4 response is a single
+evidence appeared at context rank 5. The measured v2.4 response used a single
 general refusal-reconsideration stage that rechecks all supplied passages; it
 does not encode a QA ID, expected answer, PMID, or question-specific hint and
 does not alter QA, retrieval, or holdout. Correct refusals remain valid,
 failed-closed attempts do not count as correct refusals, and the generator still
-must meet 10/10, 3/3, and 13/13 before the judge-only pipeline can run.
+had to meet 10/10, 3/3, and 13/13 before the judge-only pipeline could open.
+It passed that gate for `$0.001276115`; QA04 was recovered by the general
+reconsideration. The separately frozen judge stage remains owner-approved and
+cost-gated, and the holdout remains untouched.
 
 Use Claude as the different-family judge. It identifies atomic claims, evidence, unsupported claims, relevance, citation correctness, and refusal correctness. The judge-only runner consumes the accepted generator artifact and is prohibited from regenerating answers, retrieving new contexts, or opening holdout. Before using its results, deterministically sample 10 unique outputs across answerability classes for project-owner labels. With the owner-selected single generator, the sample contains seven answerable outputs and all three unanswerable outputs. Require at least 80% agreement and Cohen's kappa of 0.60; when kappa is undefined, report raw agreement and the confusion matrix. If validation fails, revise the rubric and use a disjoint sample.
 

@@ -11,17 +11,17 @@ python run_project.py
 It validates frozen core hashes, builds the index, runs Boolean and BM25
 evaluation, and validates the approved QA set, chunk manifests, embedding
 ledger, selected hybrid configuration, and development contexts. Corruption
-exits nonzero. Generator acceptance, judge validation, and holdout gates remain
-`TBD` until their evidence exists. The measured GPT-only v2.3 development run
-reached 9/10 answerable cases, 3/3 correct refusals, and 13/13 structurally
-valid outputs; it is preserved as a failed gate rather than promoted.
+exits nonzero. Judge validation and holdout gates remain `TBD` until their
+evidence exists. The measured GPT-only v2.4 development run reached 10/10
+answerable cases, 3/3 correct refusals, and 13/13 structurally valid outputs;
+it opens only the separately approved judge stage, not the holdout.
 
 ## Pending human validation
 
-The 20-case QA set and evidence spans are approved. Before a RAG release, run
-the separately approved GPT-only v2.4 development diagnostic. Only a measured
-10/10 answerable, 3/3 correct-refusal, 13/13 structural result can open the
-judge-only runner. Then run the different-family Claude judge, manually label
+The 20-case QA set and evidence spans are approved. The separately approved
+GPT-only v2.4 development diagnostic passed its 10/10 answerable, 3/3
+correct-refusal, and 13/13 structural gate. After a separate judge-cost
+approval, run the different-family Claude judge, manually label
 the blinded 10-output worksheet (seven answerable plus all three unanswerable
 outputs for the single-generator run), validate agreement, and run the
 untouched seven-case holdout exactly once. Commit every reproducible generator,

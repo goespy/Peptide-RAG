@@ -19,7 +19,7 @@ class RunProjectTests(unittest.TestCase):
         self.assertTrue(any(check.name == "approved QA oracle" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG retrieval evaluation" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG GPT v2.3 generator evidence" and check.state == "PASS" for check in checks))
-        self.assertTrue(any(check.name == "RAG GPT v2.4 generator gate" and check.state == "TBD" for check in checks))
+        self.assertTrue(any(check.name == "RAG GPT v2.4 generator gate" and check.state == "PASS" for check in checks))
 
     def test_missing_required_core_artifact_fails_only_core(self) -> None:
         with patch.object(run_project, "BASELINE", run_project.ROOT / "missing.json"):

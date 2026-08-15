@@ -321,6 +321,10 @@ answerable cases and 2/3 correct refusals; v2.3 measured 9/10, 3/3, and 13/13
 structural validity. The final v2.3 miss was a refusal despite direct human
 evidence at context rank 5, so v2.4 tests a general refusal-reconsideration
 stage. It contains no QA ID, expected answer, PMID, or question-specific hint.
+The measured run reached 10/10 answerable cases, 3/3 correct refusals, and
+13/13 structurally valid outputs. QA04 was answered after reconsideration from
+the unchanged rank-five evidence, so the improvement is attributed to the
+answer-synthesis policy rather than retrieval or chunk changes.
 
 ## Application and release boundary
 
@@ -344,9 +348,9 @@ rate-limiting claim.
 frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics,
 compares the complete per-query and aggregate reports with saved evidence, and
 validates committed chunk manifests. The approved QA, retrieval caches, and
-first bake-off plus GPT v2.2/v2.3 diagnostics are saved evidence. The runner
-replays their output counts and usage and validates the frozen v2.4 parent
-hashes. Human judge labels, an accepted generator, QA holdout metrics, and a
+first bake-off plus GPT v2.2/v2.3/v2.4 diagnostics are saved evidence. The
+runner replays their output counts and usage and validates their frozen hashes.
+Human judge labels, an independently accepted generator, QA holdout metrics, and a
 public deployment remain `TBD`; they are not converted into zeros or passing
 claims. Railway config-as-code is checked in with Railpack, Python 3.11, a
 `$PORT`-aware Uvicorn start command, `/healthz`, and bounded restart behavior;

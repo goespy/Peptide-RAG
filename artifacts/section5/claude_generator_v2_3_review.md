@@ -1,7 +1,7 @@
 # Claude Opus Generator-v2.3 Review
 
-Date: 2026-08-14
-Review method: Claude Code subscription, `--model opus`, read-only `Read` and `Grep` tools
+Date: 2026-08-14  
+Review method: Claude Code subscription, `--model opus`, read-only `Read` and `Grep` tools  
 Scope excluded: secrets, `.env`, QA/holdout contents, provider calls, paid judging, and file modification
 
 ## Audit trail

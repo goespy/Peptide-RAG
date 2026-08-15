@@ -25,7 +25,8 @@ ceiling. The immutable provider responses report:
 | **Bake-off total** | **234,700** | **35,334** | **122** | **$0.445648435** |
 | GPT-only v2.2 diagnostic | 26,969 | 3,916 | 14 | $0.001690265 |
 | GPT-only v2.3 diagnostic | 24,273 | 851 | 12 | $0.001138185 |
-| **Known OpenRouter development total** | **2,607,571** | **40,101** | **241** | **$0.494909465** |
+| GPT-only v2.4 diagnostic | 30,697 | 1,132 | 15 | $0.001276115 |
+| **Known OpenRouter development total** | **2,638,268** | **41,233** | **256** | **$0.496185580** |
 
 The generator/judge total is recomputed from all 39 saved rows in
 `data/rag_bakeoff_outputs.json` and bound in
@@ -36,9 +37,11 @@ Generator-v2 made 123 provider calls under an approved `$0.04` ceiling and a
 `$0.03457764` conservative estimate, but the saved provider responses did not
 expose complete token or cost fields. Its actual spend is therefore recorded as
 `unknown/not exposed` and is not silently included as zero in the known total.
-The frozen but unrun v2.4 generator-only estimate is `$0.0115379` under a
-`$0.02` hard cap; its actual cost remains `TBD`. Claude judging and holdout have
-not been opened for v2.4.
+The owner-approved v2.4 run stayed below its `$0.02` cap and cost
+`$0.001276115`. Its generator gate passed at 10/10 answerable, 3/3 correct
+refusals, and 13/13 structurally valid. The separately gated 13-call Claude
+Sonnet 4.6 judge has a conservative maximum of `$0.230508` under a frozen
+`$0.25` cap. Claude judging and holdout have not yet been opened for v2.4.
 
 ## Production projection
 
