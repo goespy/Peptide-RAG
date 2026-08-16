@@ -52,19 +52,25 @@ class RunProjectTests(unittest.TestCase):
         ))
 
     def test_owner_worksheet_oracle_leak_fails_release(self) -> None:
-        with TemporaryDirectory() as temp:
-            altered = Path(temp) / "worksheet.json"
-            payload = json.loads(run_project.GENERATOR_V2_4_JUDGE_WORKSHEET.read_text(encoding="utf-8"))
-            payload["sample"][0]["acceptable_answer"] = "leaked oracle"
-            altered.write_text(json.dumps(payload), encoding="utf-8")
-            with patch.object(run_project, "GENERATOR_V2_4_JUDGE_WORKSHEET", altered):
-                checks, failed = run_project.run()
-        self.assertTrue(failed)
-        self.assertTrue(any(
-            check.name == "RAG GPT generator diagnostics" and check.state == "FAIL"
-            and "leaks" in check.detail
-            for check in checks
-        ))
+        for leaked_field, leaked_value in (
+            ("acceptable_answer", "leaked oracle"),
+            ("answerability", "answerable"),
+            ("judge", {}),
+            ("gold_answer", "renamed leak"),
+        ):
+            with self.subTest(leaked_field=leaked_field), TemporaryDirectory() as temp:
+                altered = Path(temp) / "worksheet.json"
+                payload = json.loads(run_project.GENERATOR_V2_4_JUDGE_WORKSHEET.read_text(encoding="utf-8"))
+                payload["sample"][0][leaked_field] = leaked_value
+                altered.write_text(json.dumps(payload), encoding="utf-8")
+                with patch.object(run_project, "GENERATOR_V2_4_JUDGE_WORKSHEET", altered):
+                    checks, failed = run_project.run()
+            self.assertTrue(failed)
+            self.assertTrue(any(
+                check.name == "RAG GPT generator diagnostics" and check.state == "FAIL"
+                and "leaks" in check.detail
+                for check in checks
+            ))
 
     def test_judge_cost_estimate_drift_fails_release(self) -> None:
         with TemporaryDirectory() as temp:
@@ -78,6 +84,36 @@ class RunProjectTests(unittest.TestCase):
         self.assertTrue(any(
             check.name == "RAG GPT generator diagnostics" and check.state == "FAIL"
             and "judge cost estimate" in check.detail
+            for check in checks
+        ))
+
+    def test_owner_worksheet_duplicate_sample_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "worksheet.json"
+            payload = json.loads(run_project.GENERATOR_V2_4_JUDGE_WORKSHEET.read_text(encoding="utf-8"))
+            payload["sample"][-1] = json.loads(json.dumps(payload["sample"][0]))
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "GENERATOR_V2_4_JUDGE_WORKSHEET", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(
+            check.name == "RAG GPT generator diagnostics" and check.state == "FAIL"
+            and "exactly once" in check.detail
+            for check in checks
+        ))
+
+    def test_owner_worksheet_root_leak_fails_while_labels_are_empty(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "worksheet.json"
+            payload = json.loads(run_project.GENERATOR_V2_4_JUDGE_WORKSHEET.read_text(encoding="utf-8"))
+            payload["expected_verdicts"] = [True]
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "GENERATOR_V2_4_JUDGE_WORKSHEET", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(
+            check.name == "RAG GPT generator diagnostics" and check.state == "FAIL"
+            and "root field" in check.detail
             for check in checks
         ))
 

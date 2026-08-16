@@ -795,6 +795,16 @@ def _validate_frozen_judge_config(
         cases_by_id,
         contexts_by_id,
     )
+    if set(worksheet_packet) != {
+        "version",
+        "purpose",
+        "rubric",
+        "sample",
+        "source_outputs_sha256",
+        "qa_sha256",
+        "contexts_sha256",
+    }:
+        raise ValueError(f"{label} owner worksheet leaks or adds an unexpected root field")
     if (
         worksheet_packet.get("source_outputs_sha256") != judged_outputs_hash
         or worksheet_packet.get("qa_sha256") != hashes["qa_sha256"]
@@ -811,13 +821,23 @@ def _validate_frozen_judge_config(
     }
     if not isinstance(sample, list) or len(sample) != 10:
         raise ValueError(f"{label} owner worksheet must contain ten outputs")
+    sample_ids = [item.get("sample_id") for item in sample if isinstance(item, dict)]
+    if (
+        len(sample_ids) != len(sample)
+        or not all(isinstance(sample_id, str) for sample_id in sample_ids)
+        or len(set(sample_ids)) != len(sample_ids)
+        or set(sample_ids) != set(expected_sample)
+    ):
+        raise ValueError(f"{label} owner worksheet must cover each sampled output exactly once")
     label_states: list[str] = []
     for item in sample:
         if not isinstance(item, dict) or item.get("sample_id") not in expected_sample:
             raise ValueError(f"{label} owner worksheet contains an unknown output")
-        if "judge" in item or "acceptable_answer" in item:
+        if any(field in item for field in ("judge", "acceptable_answer", "answerability")):
             raise ValueError(f"{label} owner worksheet leaks a judge or oracle label")
         expected_item = expected_sample[item["sample_id"]]
+        if set(item) != set(expected_item):
+            raise ValueError(f"{label} owner worksheet leaks or adds an unexpected field")
         if any(
             item.get(field) != value
             for field, value in expected_item.items()
@@ -825,7 +845,11 @@ def _validate_frozen_judge_config(
         ):
             raise ValueError(f"{label} owner worksheet evidence was modified")
         owner_label = item.get("owner_label")
-        if not isinstance(owner_label, dict) or not isinstance(owner_label.get("reviewer"), str):
+        if (
+            not isinstance(owner_label, dict)
+            or set(owner_label) != {"reviewer", "faithful", "relevant", "citations_correct", "refusal_correct"}
+            or not isinstance(owner_label.get("reviewer"), str)
+        ):
             raise ValueError(f"{label} owner worksheet has a malformed owner label")
         values = [owner_label.get(name) for name in ("faithful", "relevant", "citations_correct", "refusal_correct")]
         is_refusal = item.get("answer", {}).get("status") == "insufficient_evidence"
@@ -852,7 +876,7 @@ def _validate_frozen_judge_config(
     checks.append(Check(
         f"RAG {label} owner worksheet",
         "PASS",
-        "10 blind, evidence-bound outputs; oracle answers and Claude verdicts absent; "
+        "10 blind, evidence-bound outputs; oracle answers, answerability targets, and Claude verdicts absent; "
         + ("owner labels pending" if state == "empty" else "owner labels complete"),
         True,
     ))

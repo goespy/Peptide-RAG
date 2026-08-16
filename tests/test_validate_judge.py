@@ -1,3 +1,4 @@
+import copy
 import importlib.util
 import unittest
 from pathlib import Path
@@ -32,34 +33,42 @@ class JudgeValidationTests(unittest.TestCase):
         second = judge_validation.worksheet(list(reversed(rows())), cases, contexts)
         self.assertEqual(first, second)
         self.assertEqual(len(first["sample"]), 10)
-        source = {f"{row['model']}:{row['qa_id']}": row for row in rows()}
+        source = {judge_validation.blind_sample_id(row["model"], row["qa_id"]): row for row in rows()}
         self.assertEqual(sum(source[item["sample_id"]]["answerability"] == "answerable" for item in first["sample"]), 6)
         self.assertTrue(all("judge" not in item for item in first["sample"]))
         self.assertTrue(all("acceptable_answer" not in item for item in first["sample"]))
+        self.assertTrue(all("answerability" not in item for item in first["sample"]))
+        self.assertTrue(all("qa_id" not in item and "model" not in item for item in first["sample"]))
         self.assertTrue(all(item["question"] and item["retrieved_evidence"] for item in first["sample"]))
-        self.assertEqual(len({item["qa_id"] for item in first["sample"] if item["answerability"] == "answerable"}), 6)
+        self.assertEqual(
+            len({source[item["sample_id"]]["qa_id"] for item in first["sample"] if source[item["sample_id"]]["answerability"] == "answerable"}),
+            6,
+        )
 
     def test_single_generator_sample_uses_seven_answerable_and_all_three_unanswerable(self):
         cases, contexts = material()
         single_model = [row for row in rows() if row["model"] == "a"]
         packet = judge_validation.worksheet(single_model, cases, contexts)
+        source = {judge_validation.blind_sample_id(row["model"], row["qa_id"]): row for row in single_model}
         self.assertEqual(len(packet["sample"]), 10)
         self.assertEqual(
-            sum(item["answerability"] == "answerable" for item in packet["sample"]),
+            sum(source[item["sample_id"]]["answerability"] == "answerable" for item in packet["sample"]),
             7,
         )
         self.assertEqual(
-            sum(item["answerability"] == "unanswerable" for item in packet["sample"]),
+            sum(source[item["sample_id"]]["answerability"] == "unanswerable" for item in packet["sample"]),
             3,
         )
         self.assertEqual(len({item["sample_id"] for item in packet["sample"]}), 10)
+        ordered_kinds = [source[item["sample_id"]]["answerability"] for item in packet["sample"]]
+        self.assertNotEqual(ordered_kinds, ["answerable"] * 7 + ["unanswerable"] * 3)
 
     def test_labels_are_required_and_kappa_is_honestly_undefined(self):
         cases, contexts = material()
         packet = judge_validation.worksheet(rows(), cases, contexts)
         saved = rows()
         with self.assertRaises(judge_validation.JudgeValidationError): judge_validation.validate_labels(packet, saved, cases, contexts)
-        source = {f"{row['model']}:{row['qa_id']}": row for row in saved}
+        source = {judge_validation.blind_sample_id(row["model"], row["qa_id"]): row for row in saved}
         for item in packet["sample"]:
             verdict = source[item["sample_id"]]["judge"]
             refusal = item["answer"]["status"] == "insufficient_evidence"
@@ -72,5 +81,15 @@ class JudgeValidationTests(unittest.TestCase):
         self.assertTrue(report["passes"])
 
         packet["sample"][0]["retrieved_evidence"][0]["text"] = "edited"
+        with self.assertRaises(judge_validation.JudgeValidationError):
+            judge_validation.validate_labels(packet, saved, cases, contexts)
+
+        packet = judge_validation.worksheet(saved, cases, contexts)
+        packet["gold_answer"] = "leak"
+        with self.assertRaises(judge_validation.JudgeValidationError):
+            judge_validation.validate_labels(packet, saved, cases, contexts)
+
+        packet = judge_validation.worksheet(saved, cases, contexts)
+        packet["sample"][-1] = copy.deepcopy(packet["sample"][0])
         with self.assertRaises(judge_validation.JudgeValidationError):
             judge_validation.validate_labels(packet, saved, cases, contexts)

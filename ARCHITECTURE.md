@@ -289,9 +289,15 @@ different-family judge, but its verdict is unusable until a deterministic
 10-output sample reaches at least 80% owner agreement and Cohen's kappa 0.60.
 When kappa is undefined because one side has no label variation, at least 80%
 raw agreement plus the confusion matrix is the disclosed fallback rather than
-an impossible gate. The owner worksheet hides both the judge verdict and oracle
-acceptable answer, but displays the frozen question, returned answer, and exact
-five retrieved chunks required to make independent labels. Citation
+an impossible gate. The owner worksheet hides the judge verdict, oracle
+acceptable answer, and frozen answerability target, but displays the frozen
+question, returned answer, and exact five retrieved chunks required to make
+independent labels. Samples use deterministic hash-mixed order and opaque review
+IDs so position and raw QA identifiers do not reveal the target. Both validation
+paths require exact one-time coverage of the frozen ten-case sample and exact
+root/nested field allowlists. The IDs provide procedural, not cryptographic,
+blinding because their deterministic construction is public; the owner must use
+only the rendered review packet until labels are frozen. Citation
 correctness may be marked not applicable for a refusal with no citations, and
 the smaller denominator is reported. During validation the worksheet is
 SHA-256-bound to the QA, contexts, and saved outputs; all displayed evidence is

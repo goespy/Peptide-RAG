@@ -25,7 +25,7 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Three-model development bake-off preserved and reanalyzed as a negative result
 - [x] GPT-only v2.2 through v2.5 diagnostics measured; v2.4 and v2.5 reached 10/10 answerable, 3/3 correct refusals, and 13/13 structural validity
 - [x] Claude judge-v2 development run completed for v2.5: 0.900 answered-only faithfulness, 1.000 relevancy, 0.900 citation correctness, and 1.000 correct refusal
-- [x] Blind, evidence-bound 10-output owner worksheet frozen with oracle answers and Claude verdicts hidden
+- [x] Blind, evidence-bound 10-output owner worksheet frozen with oracle answers, answerability targets, and Claude verdicts hidden
 - [ ] Owner judge labeling, untouched QA holdout, and public Railway deployment
 - [x] Section 6 offline release-check, CI, self-evaluation, cost, and Railway config foundations
 
@@ -222,13 +222,19 @@ python scripts/run_generator_judge.py --estimate-only
 # After a separate approval of the displayed judge-only maximum:
 python scripts/run_generator_judge.py --live --max-cost-usd 0.25 --confirm-cost
 python scripts/validate_judge.py
-# Label the 10 unique outputs from their frozen question, target, and evidence.
+python scripts/render_judge_validation.py
+# Label the 10 unique outputs from their frozen question, response, and evidence.
 # The GPT-only worksheet contains 7 answerable and all 3 unanswerable cases.
-# Claude verdicts remain hidden; no holdout case appears in this worksheet.
+# Oracle answers, answerability targets, and Claude verdicts remain hidden;
+# no holdout case appears in this worksheet.
 python scripts/validate_judge.py --validate
 python scripts/export_rag_holdout_contexts.py --cache <selected-cache.npz> --max-cost-usd 0.25 --confirm-cost
 python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
 ```
+
+The readable packet is [`JUDGE-VALIDATION-REVIEW.md`](JUDGE-VALIDATION-REVIEW.md).
+Its cases use opaque, hash-mixed IDs. For a valid blind review, do not consult
+`data/qa.json` or the judged-output JSON until all owner labels are frozen.
 
 The first paid development run is preserved as a negative result. All 39 rows
 were structurally valid and judged, but Qwen and GPT-OSS answered none of the

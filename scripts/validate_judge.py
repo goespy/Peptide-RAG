@@ -12,6 +12,37 @@ from src.rag_metrics import DIMENSIONS, binary_agreement  # noqa: E402
 
 class JudgeValidationError(RuntimeError): pass
 
+PACKET_FIELDS = {"version", "purpose", "rubric", "sample"}
+PROVENANCE_FIELDS = {"source_outputs_sha256", "qa_sha256", "contexts_sha256"}
+ANSWER_FIELDS = {"status", "text", "citations"}
+CITATION_FIELDS = {"citation_id", "pmid", "chunk_id", "title"}
+OWNER_LABEL_FIELDS = {"reviewer", *DIMENSIONS}
+
+def blind_sample_id(model: str, qa_id: str) -> str:
+    digest = hashlib.sha256(f"{model}:{qa_id}".encode("utf-8")).hexdigest().upper()
+    return f"review-{digest[:16]}"
+
+def blind_answer(value: Any) -> dict[str, Any]:
+    if not isinstance(value, dict) or set(value) != ANSWER_FIELDS:
+        raise JudgeValidationError("source answer has unexpected fields")
+    status, text, citations = value.get("status"), value.get("text"), value.get("citations")
+    if status not in {"answered", "insufficient_evidence"} or not isinstance(text, str) or not isinstance(citations, list):
+        raise JudgeValidationError("source answer is malformed")
+    projected = []
+    for citation in citations:
+        if not isinstance(citation, dict) or set(citation) != CITATION_FIELDS:
+            raise JudgeValidationError("source citation has unexpected fields")
+        citation_id = citation.get("citation_id")
+        if (
+            isinstance(citation_id, bool)
+            or not isinstance(citation_id, int)
+            or citation_id < 1
+            or not all(isinstance(citation.get(field), str) for field in ("pmid", "chunk_id", "title"))
+        ):
+            raise JudgeValidationError("source citation is malformed")
+        projected.append({field: citation[field] for field in ("citation_id", "pmid", "chunk_id", "title")})
+    return {"status": status, "text": text, "citations": projected}
+
 def write_atomic(path: Path, payload: dict[str, Any], *, overwrite: bool) -> None:
     if path.exists() and not overwrite: raise JudgeValidationError(f"refusing to overwrite existing report: {path}; pass --overwrite")
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -33,7 +64,7 @@ def load(path: Path) -> dict[str, Any]:
 
 def sample_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Stable, model-balanced sample with diverse questions where possible."""
-    valid = [row for row in rows if isinstance(row, dict) and isinstance(row.get("model"), str) and row.get("answerability") in {"answerable", "unanswerable"} and isinstance(row.get("judge"), dict)]
+    valid = [row for row in rows if isinstance(row, dict) and isinstance(row.get("model"), str) and isinstance(row.get("qa_id"), str) and row.get("answerability") in {"answerable", "unanswerable"} and isinstance(row.get("judge"), dict)]
     selected: list[dict[str, Any]] = []
     unanswerable_available = sum(row["answerability"] == "unanswerable" for row in valid)
     unanswerable_target = min(4, unanswerable_available)
@@ -54,7 +85,8 @@ def sample_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             if position < 0 or not choices:
                 raise JudgeValidationError(f"need at least {target} judge outputs for {kind}")
             selected.append(choices.pop(position))
-    if len({f"{row['model']}:{row.get('qa_id')}" for row in selected}) != 10:
+    selected.sort(key=lambda row: blind_sample_id(row["model"], row["qa_id"]))
+    if len({blind_sample_id(row["model"], row["qa_id"]) for row in selected}) != 10:
         raise JudgeValidationError("judge worksheet requires ten unique outputs")
     return selected
 
@@ -113,38 +145,47 @@ def worksheet(rows: list[dict[str, Any]], cases: dict[str, dict[str, Any]], cont
         if qa_id not in cases or row.get("answerability") != cases[qa_id]["answerability"]:
             raise JudgeValidationError("source output does not match the approved QA answerability")
         sample.append({
-            "sample_id": f"{row['model']}:{qa_id}",
-            "model": row["model"],
-            "qa_id": qa_id,
-            **cases[qa_id],
+            "sample_id": blind_sample_id(row["model"], qa_id),
+            "question": cases[qa_id]["question"],
             "retrieved_evidence": [dict(chunk) for chunk in contexts[qa_id]],
-            "answer": row.get("answer"),
+            "answer": blind_answer(row.get("answer")),
             "owner_label": {"reviewer": "", **{dimension: None for dimension in DIMENSIONS}},
         })
     return {
-        "version": 3,
+        "version": 4,
         "purpose": "Blind project-owner labels for deterministic judge validation",
         "rubric": {
             "faithful": "Every factual claim in an answered response is supported by the displayed evidence; use null for a refusal, which is scored separately.",
             "relevant": "The response directly and usefully addresses the displayed question.",
             "citations_correct": "For an answered response, cited evidence supports the associated claims; use null when the response is a refusal with no citations.",
-            "refusal_correct": "The answer/refusal status matches the displayed frozen answerability label.",
+            "refusal_correct": "Based only on the displayed question and evidence, the system was right to answer or refuse.",
         },
         "sample": sample,
     }
 
 def validate_labels(packet: dict[str, Any], rows: list[dict[str, Any]], cases: dict[str, dict[str, Any]], contexts: dict[str, list[dict[str, Any]]]) -> dict[str, Any]:
+    packet_fields = frozenset(packet)
+    if packet_fields not in {frozenset(PACKET_FIELDS), frozenset(PACKET_FIELDS | PROVENANCE_FIELDS)}:
+        raise JudgeValidationError("worksheet contains unexpected root fields")
     sample = packet.get("sample")
     if not isinstance(sample, list) or len(sample) != 10: raise JudgeValidationError("worksheet must contain exactly ten sampled outputs")
     expected_packet = worksheet(rows, cases, contexts)
     if any(packet.get(key) != expected_packet.get(key) for key in ("version", "purpose", "rubric")):
         raise JudgeValidationError("worksheet rubric or version changed")
     expected_sample = {item["sample_id"]: item for item in expected_packet["sample"]}
+    actual_ids = [item.get("sample_id") for item in sample if isinstance(item, dict)]
+    if (
+        len(actual_ids) != len(sample)
+        or not all(isinstance(sample_id, str) for sample_id in actual_ids)
+        or len(set(actual_ids)) != len(actual_ids)
+        or set(actual_ids) != set(expected_sample)
+    ):
+        raise JudgeValidationError("worksheet must cover each sampled output exactly once")
     source: dict[str, dict[str, Any]] = {}
     for row in rows:
         if not isinstance(row, dict) or not isinstance(row.get("model"), str) or not isinstance(row.get("qa_id"), str):
             continue
-        sample_id = f"{row['model']}:{row['qa_id']}"
+        sample_id = blind_sample_id(row["model"], row["qa_id"])
         if sample_id in source: raise JudgeValidationError(f"duplicate source output: {sample_id}")
         source[sample_id] = row
     report: dict[str, Any] = {"n": 10, "dimensions": {}}
@@ -155,10 +196,14 @@ def validate_labels(packet: dict[str, Any], rows: list[dict[str, Any]], cases: d
                 raise JudgeValidationError("worksheet sample is not present in the source outputs")
             saved = source[item["sample_id"]]
             expected = expected_sample.get(item["sample_id"])
-            if expected is None or any(item.get(key) != expected.get(key) for key in expected if key != "owner_label"):
+            if (
+                expected is None
+                or set(item) != set(expected)
+                or any(item.get(key) != expected.get(key) for key in expected if key != "owner_label")
+            ):
                 raise JudgeValidationError(f"worksheet evidence changed for {item['sample_id']}")
             owner, judge = item.get("owner_label"), saved.get("judge")
-            if not isinstance(owner, dict) or not isinstance(owner.get("reviewer"), str) or not owner["reviewer"].strip():
+            if not isinstance(owner, dict) or set(owner) != OWNER_LABEL_FIELDS or not isinstance(owner.get("reviewer"), str) or not owner["reviewer"].strip():
                 raise JudgeValidationError(f"owner label and reviewer required for {dimension}")
             owner_value = owner.get(dimension)
             if dimension in {"faithful", "citations_correct"} and saved.get("answer", {}).get("status") == "insufficient_evidence" and owner_value is None:
