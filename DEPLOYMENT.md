@@ -27,6 +27,23 @@ unanswerable outputs), validate agreement, and only then run the untouched
 seven-case holdout exactly once. Commit every reproducible generator, judge,
 worksheet, citation, usage, and negative-result artifact.
 
+After the labels pass, the release sequence is intentionally gated:
+
+```text
+python scripts/freeze_generator_selection.py
+python scripts/export_rag_holdout_contexts.py --cache artifacts/section5/embeddings_256_64.npz --max-cost-usd 0.01 --confirm-cost
+python scripts/refresh_model_catalog.py --output artifacts/section5/holdout_model_catalog.json
+python scripts/run_rag_holdout.py --estimate-only
+python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
+python run_project.py
+```
+
+The context and holdout targets are one-shot artifacts and have no overwrite
+path. If provider calls finish but summary finalization is interrupted, use
+`python scripts/run_rag_holdout.py --finalize-saved`; it validates the saved
+rows and makes no provider request. Railway deployment remains closed until the
+holdout artifact is frozen and the offline release check passes.
+
 ## Pending credentials and deployment
 
 Set `OPENROUTER_API_KEY` only in the deployment environment after the RAG

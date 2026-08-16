@@ -19,7 +19,15 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from run_day1 import Day1Error, load_qrels, sha256, validate_corpus_binding
-from scripts.run_generator_diagnostic import summarize as summarize_generator
+from scripts.export_rag_holdout_contexts import (
+    EMBEDDING_HARD_CAP_USD,
+    embedding_cost_estimate,
+)
+from scripts.freeze_generator_selection import build_selection
+from scripts.run_generator_diagnostic import (
+    summarize as summarize_generator,
+    validate_selected_parameter_support,
+)
 from scripts.run_generator_judge import (
     estimate_judge_cost,
     judge_usage,
@@ -27,7 +35,26 @@ from scripts.run_generator_judge import (
     validate_generator_gate,
     validate_judge_config,
 )
-from scripts.run_rag_bakeoff import BakeoffError, contexts_from, offline_rows, realized_usage, validate_config, validate_qa
+from scripts.run_rag_bakeoff import (
+    BakeoffError,
+    contexts_from,
+    offline_rows,
+    realized_usage,
+    validate_config,
+    validate_judge_catalog,
+    validate_model_catalog,
+    validate_qa,
+)
+from scripts.run_rag_holdout import (
+    HOLDOUT_OUTPUT_FIELDS,
+    estimate_holdout_cost,
+    expected_final_config,
+    expected_summary,
+    holdout_cases,
+    saved_rows,
+    validate_context_provenance,
+    validate_selection_bindings,
+)
 from scripts.validate_judge import (
     review_material as judge_review_material,
     validate_labels as validate_judge_labels,
@@ -86,6 +113,12 @@ GENERATOR_V2_5_JUDGED_OUTPUTS = ROOT / "data/rag_generator_v2_5_judged_outputs.j
 GENERATOR_V2_5_JUDGE_SUMMARY = ROOT / "data/rag_generator_v2_5_judge_summary.json"
 GENERATOR_V2_5_JUDGE_WORKSHEET = ROOT / "data/judge_validation_v2_5_worksheet.json"
 GENERATOR_V2_5_JUDGE_REPORT = ROOT / "data/judge_validation_v2_5_report.json"
+ACCEPTED_GENERATOR_V2_5 = SECTION5 / "accepted_generator_v2_5.json"
+RAG_HOLDOUT_CONTEXTS = ROOT / "data/rag_holdout_contexts.json"
+RAG_HOLDOUT_MODEL_CATALOG = SECTION5 / "holdout_model_catalog.json"
+RAG_HOLDOUT_OUTPUTS = ROOT / "data/rag_holdout_outputs.json"
+RAG_HOLDOUT_SUMMARY = ROOT / "data/rag_holdout_summary.json"
+FINAL_GENERATOR_CONFIG = SECTION5 / "generator_config.json"
 GENERATOR_V2_3_DIAGNOSIS = SECTION5 / "generator_v2_3_diagnosis.json"
 GENERATOR_V2_3_REVIEW = SECTION5 / "claude_generator_v2_3_review.md"
 
@@ -908,6 +941,240 @@ def _validate_frozen_judge_config(
     return checks
 
 
+def _validate_rag_holdout() -> list[Check]:
+    """Replay optional accepted-selection and holdout artifacts without network calls."""
+
+    downstream = (
+        RAG_HOLDOUT_CONTEXTS,
+        RAG_HOLDOUT_OUTPUTS,
+        RAG_HOLDOUT_SUMMARY,
+        FINAL_GENERATOR_CONFIG,
+    )
+    if not ACCEPTED_GENERATOR_V2_5.is_file():
+        if any(path.exists() for path in downstream):
+            raise ValueError("holdout artifacts exist without an accepted generator selection")
+        return [Check(
+            "RAG accepted generator and QA holdout",
+            "TBD",
+            "blind owner validation, accepted selection, and seven-case holdout are pending",
+        )]
+    required_selection_inputs = (
+        QA,
+        FROZEN_RAG_CONFIG,
+        GENERATOR_V2_5_CONFIG,
+        GENERATOR_V2_5_OUTPUTS,
+        GENERATOR_V2_5_SUMMARY,
+        GENERATOR_V2_5_JUDGE_CONFIG,
+        GENERATOR_V2_5_JUDGED_OUTPUTS,
+        GENERATOR_V2_5_JUDGE_SUMMARY,
+        GENERATOR_V2_5_JUDGE_WORKSHEET,
+        GENERATOR_V2_5_JUDGE_REPORT,
+    )
+    if any(not path.is_file() for path in required_selection_inputs):
+        raise ValueError("accepted generator exists without its complete source evidence")
+    owner_report = _json(GENERATOR_V2_5_JUDGE_REPORT)
+    expected_selection = build_selection(
+        qa_hash=sha256(QA),
+        retriever_config_hash=sha256(FROZEN_RAG_CONFIG),
+        generator_config_hash=sha256(GENERATOR_V2_5_CONFIG),
+        generator_outputs_hash=sha256(GENERATOR_V2_5_OUTPUTS),
+        generator_summary_hash=sha256(GENERATOR_V2_5_SUMMARY),
+        judge_config_hash=sha256(GENERATOR_V2_5_JUDGE_CONFIG),
+        judge_outputs_hash=sha256(GENERATOR_V2_5_JUDGED_OUTPUTS),
+        judge_summary_hash=sha256(GENERATOR_V2_5_JUDGE_SUMMARY),
+        worksheet_hash=sha256(GENERATOR_V2_5_JUDGE_WORKSHEET),
+        report_hash=sha256(GENERATOR_V2_5_JUDGE_REPORT),
+        generator_config=_json(GENERATOR_V2_5_CONFIG),
+        generator_summary=_json(GENERATOR_V2_5_SUMMARY),
+        judge_config=_json(GENERATOR_V2_5_JUDGE_CONFIG),
+        judge_summary=_json(GENERATOR_V2_5_JUDGE_SUMMARY),
+        owner_report=owner_report,
+    )
+    accepted_selection = _json(ACCEPTED_GENERATOR_V2_5)
+    if accepted_selection != expected_selection:
+        raise ValueError("accepted generator selection does not replay from development evidence")
+    checks = [Check(
+        "RAG accepted generator selection",
+        "PASS",
+        "v2.5 10/3/13, judge-v2, and blind owner agreement hashes replay",
+        True,
+    )]
+    if not RAG_HOLDOUT_CONTEXTS.is_file():
+        if any(path.exists() for path in (RAG_HOLDOUT_OUTPUTS, RAG_HOLDOUT_SUMMARY, FINAL_GENERATOR_CONFIG)):
+            raise ValueError("holdout outputs exist without frozen holdout contexts")
+        checks.append(Check(
+            "RAG seven-case QA holdout",
+            "TBD",
+            "accepted selection exists; one-shot holdout contexts have not been exported",
+        ))
+        return checks
+
+    qa_packet = _json(QA)
+    cases = holdout_cases(qa_packet)
+    selection_hash = sha256(ACCEPTED_GENERATOR_V2_5)
+    retriever_config_hash = sha256(FROZEN_RAG_CONFIG)
+    qa_hash = sha256(QA)
+    context_packet = _json(RAG_HOLDOUT_CONTEXTS)
+    context_fields = {
+        "schema_version",
+        "qa_sha256",
+        "retriever_config_sha256",
+        "accepted_selection_sha256",
+        "selection_scope",
+        "embedding_usage",
+        "cost_estimate_usd",
+        "approved_max_cost_usd",
+        "contexts",
+    }
+    if set(context_packet) != context_fields or context_packet.get("schema_version") != 2:
+        raise ValueError("holdout context packet has unexpected fields")
+    validate_context_provenance(
+        context_packet,
+        retriever_config_hash,
+        qa_hash=qa_hash,
+        selection_hash=selection_hash,
+    )
+    context_estimate = embedding_cost_estimate(cases)
+    approved_embedding_cost = context_packet.get("approved_max_cost_usd")
+    if (
+        context_packet.get("cost_estimate_usd") != context_estimate
+        or isinstance(approved_embedding_cost, bool)
+        or not isinstance(approved_embedding_cost, (int, float))
+        or not math.isfinite(approved_embedding_cost)
+        or approved_embedding_cost < context_estimate
+        or approved_embedding_cost > EMBEDDING_HARD_CAP_USD
+        or not isinstance(context_packet.get("embedding_usage"), dict)
+    ):
+        raise ValueError("holdout context cost or usage evidence does not replay")
+    contexts = contexts_from(
+        context_packet,
+        cases,
+        qa_hash=qa_hash,
+        config_hash=retriever_config_hash,
+    )
+    checks.append(Check(
+        "RAG holdout contexts",
+        "PASS",
+        "seven one-shot top-five hybrid context lists replay under the $0.01 embedding cap",
+        True,
+    ))
+    if not RAG_HOLDOUT_OUTPUTS.is_file():
+        if RAG_HOLDOUT_SUMMARY.exists() or FINAL_GENERATOR_CONFIG.exists():
+            raise ValueError("holdout summary/final config exists without raw outputs")
+        checks.append(Check(
+            "RAG seven-case QA holdout",
+            "TBD",
+            "contexts are frozen; generation and judge-v2 holdout calls have not run",
+        ))
+        return checks
+    if not RAG_HOLDOUT_MODEL_CATALOG.is_file():
+        raise ValueError("holdout outputs exist without their frozen model catalog")
+
+    catalog = _json(RAG_HOLDOUT_MODEL_CATALOG)
+    catalog_hash = sha256(RAG_HOLDOUT_MODEL_CATALOG)
+    generator_config = _json(GENERATOR_V2_5_CONFIG)
+    judge_config = _json(GENERATOR_V2_5_JUDGE_CONFIG)
+    winner, generation, judge_settings, hard_cap = validate_selection_bindings(
+        accepted_selection,
+        owner_report,
+        generator_config,
+        judge_config,
+        qa_hash=qa_hash,
+        retriever_config_hash=retriever_config_hash,
+        selection_hash=selection_hash,
+        owner_report_hash=sha256(GENERATOR_V2_5_JUDGE_REPORT),
+        generator_config_hash=sha256(GENERATOR_V2_5_CONFIG),
+        judge_config_hash=sha256(GENERATOR_V2_5_JUDGE_CONFIG),
+    )
+    catalog_models = validate_model_catalog(catalog)
+    if winner not in catalog_models or validate_judge_catalog(catalog) != accepted_selection["judge_model"]:
+        raise ValueError("holdout catalog does not contain the accepted generator and judge")
+    validate_selected_parameter_support(catalog, [winner], generation)
+    cost_estimate = estimate_holdout_cost(
+        cases,
+        contexts,
+        catalog,
+        winner,
+        accepted_selection["judge_model"],
+        generation,
+        judge_settings,
+    )
+    output_packet = _json(RAG_HOLDOUT_OUTPUTS)
+    if set(output_packet) != HOLDOUT_OUTPUT_FIELDS or output_packet.get("schema_version") != 2:
+        raise ValueError("holdout output packet has unexpected fields")
+    expected_output_bindings = {
+        "selection_sha256": selection_hash,
+        "qa_sha256": qa_hash,
+        "retriever_config_sha256": retriever_config_hash,
+        "contexts_sha256": sha256(RAG_HOLDOUT_CONTEXTS),
+        "model_catalog_sha256": catalog_hash,
+        "cost_estimate": cost_estimate,
+    }
+    if any(output_packet.get(field) != value for field, value in expected_output_bindings.items()):
+        raise ValueError("holdout outputs are not bound to their frozen inputs")
+    approved_max = output_packet.get("approved_max_cost_usd")
+    if (
+        isinstance(approved_max, bool)
+        or not isinstance(approved_max, (int, float))
+        or not math.isfinite(approved_max)
+        or approved_max < cost_estimate["estimated_max_cost_usd"]
+        or approved_max > hard_cap
+    ):
+        raise ValueError("holdout approved cost does not cover the estimate within the frozen cap")
+    rows = saved_rows(
+        output_packet,
+        cases,
+        contexts,
+        winner,
+        selection_hash,
+        retriever_config_hash,
+        sha256(RAG_HOLDOUT_CONTEXTS),
+    )
+    expected = expected_summary(
+        rows=rows,
+        qa_hash=qa_hash,
+        retriever_config_hash=retriever_config_hash,
+        selection_hash=selection_hash,
+        owner_report_hash=sha256(GENERATOR_V2_5_JUDGE_REPORT),
+        contexts_hash=sha256(RAG_HOLDOUT_CONTEXTS),
+        outputs_hash=sha256(RAG_HOLDOUT_OUTPUTS),
+        catalog_hash=catalog_hash,
+        winner=winner,
+        judge_model=accepted_selection["judge_model"],
+        cost_estimate=cost_estimate,
+        approved_max_cost_usd=float(approved_max),
+    )
+    if not RAG_HOLDOUT_SUMMARY.is_file():
+        if FINAL_GENERATOR_CONFIG.exists():
+            raise ValueError("final generator config exists without a replayed holdout summary")
+        checks.append(Check(
+            "RAG seven-case QA holdout",
+            "TBD",
+            "raw one-shot outputs exist; run offline --finalize-saved recovery",
+        ))
+        return checks
+    if _json(RAG_HOLDOUT_SUMMARY) != expected:
+        raise ValueError("holdout summary does not replay from raw outputs")
+    if expected["passes"]:
+        if not FINAL_GENERATOR_CONFIG.is_file():
+            raise ValueError("passing holdout lacks the frozen final generator configuration")
+        expected_final = expected_final_config(expected, summary_hash=sha256(RAG_HOLDOUT_SUMMARY))
+        if _json(FINAL_GENERATOR_CONFIG) != expected_final:
+            raise ValueError("final generator configuration does not replay from the passing holdout")
+    elif FINAL_GENERATOR_CONFIG.exists():
+        raise ValueError("failed holdout cannot have a frozen final generator configuration")
+    metrics = expected["metrics"]
+    checks.append(Check(
+        "RAG seven-case QA holdout",
+        "PASS",
+        f"one-shot evidence replays; accepted={expected['passes']}; "
+        f"answered faithfulness={metrics['answered_faithfulness']:.3f}; "
+        f"citation correctness={metrics['citation_correctness']:.3f}",
+        True,
+    ))
+    return checks
+
+
 def _rag_checks() -> list[Check]:
     manifests = sorted(SECTION5.glob("*.jsonl.manifest.json")) if SECTION5.is_dir() else []
     checks: list[Check] = []
@@ -950,7 +1217,10 @@ def _rag_checks() -> list[Check]:
         checks.extend(_validate_versioned_generator_evidence())
     except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("RAG GPT generator diagnostics", "FAIL", str(exc), True))
-    checks.append(Check("RAG faithfulness evaluation", "TBD", "development bake-off is preserved as a weak negative result; owner judge validation, an accepted generator, and holdout outputs are pending"))
+    try:
+        checks.extend(_validate_rag_holdout())
+    except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
+        checks.append(Check("RAG accepted generator and QA holdout", "FAIL", str(exc), True))
     return checks
 
 

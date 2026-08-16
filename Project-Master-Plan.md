@@ -333,6 +333,17 @@ cost-gated, and the holdout remains untouched.
 
 Use Claude as the different-family judge. It identifies atomic claims, evidence, unsupported claims, relevance, citation correctness, and refusal correctness. The judge-only runner consumes the accepted generator artifact and is prohibited from regenerating answers, retrieving new contexts, or opening holdout. Before using its results, deterministically sample 10 unique outputs across answerability classes for project-owner labels. With the owner-selected single generator, the sample contains seven answerable outputs and all three unanswerable outputs. Require at least 80% agreement and Cohen's kappa of 0.60; when kappa is undefined, report raw agreement and the confusion matrix. If validation fails, revise the rubric and use a disjoint sample.
 
+After owner agreement passes, freeze a hash-bound accepted-selection artifact.
+Export the seven holdout context lists exactly once under a `$0.01` query-
+embedding ceiling. Before the single generation/judge run, print a conservative
+estimate and enforce the frozen `$0.50` maximum. The run must use the accepted
+v2.5 prompt and model, Claude judge-v2, and the frozen model catalog. Save all
+seven outputs even if the quality gate fails; prohibit overwriting them and
+permit only an offline `--finalize-saved` recovery. Accept the final generator
+only with 7/7 structural and judged rows, 5/5 answerable responses, 2/2 correct
+refusals, 1.0 relevancy, at least 0.80 answered-only faithfulness, and at least
+0.80 citation correctness. Do not tune after viewing holdout results.
+
 ## 5.7 Public FastAPI application
 
 Provide:

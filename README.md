@@ -228,7 +228,14 @@ python scripts/render_judge_validation.py
 # Oracle answers, answerability targets, and Claude verdicts remain hidden;
 # no holdout case appears in this worksheet.
 python scripts/validate_judge.py --validate
-python scripts/export_rag_holdout_contexts.py --cache <selected-cache.npz> --max-cost-usd 0.25 --confirm-cost
+# This creates the accepted-selection artifact only after the blind labels pass.
+python scripts/freeze_generator_selection.py
+# The seven query embeddings have their own frozen $0.01 hard ceiling.
+python scripts/export_rag_holdout_contexts.py --cache artifacts/section5/embeddings_256_64.npz --max-cost-usd 0.01 --confirm-cost
+# Freeze a fresh availability/price snapshot; it is separate from development.
+python scripts/refresh_model_catalog.py --output artifacts/section5/holdout_model_catalog.json
+# Inspect the frozen generator + Claude judge-v2 maximum before the one-shot run.
+python scripts/run_rag_holdout.py --estimate-only
 python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
 ```
 
@@ -264,10 +271,17 @@ not independently support every clause in a sentence also supported by
 citations 1 and 2. Claude Opus returned `PASS` on the corrected judge-v2 evidence
 chain before that paid run. Owner validation and holdout remain pending.
 
-The holdout command freezes a generator only when all seven outputs are
-structurally valid and judged. Offline reruns use the saved outputs and make no
-provider calls. The independent Section 5/6 code audit and resolution trail is
-saved in [`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md).
+The bridge to holdout is hash-bound end to end: the accepted-selection artifact
+requires the exact v2.5 10/3/13 generator result, complete judge-v2 evidence,
+and a passing blind owner report. Context export is one-shot and refuses an
+existing target. The holdout runner then requires that selection, its exact
+prompt/model/catalog hashes, and those frozen contexts; it has no overwrite
+mode. It saves all seven raw rows even when the preregistered quality thresholds
+fail, and only writes the final generator configuration after offline replay
+passes. A crashed post-call finalization can use `--finalize-saved` without
+making another paid call. Ordinary offline reruns make no provider calls. The
+independent Section 5/6 code audit and resolution trail is saved in
+[`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md).
 
 The local application is available without provider credentials:
 

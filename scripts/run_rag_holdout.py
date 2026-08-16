@@ -1,108 +1,724 @@
 #!/usr/bin/env python3
-"""Run the one-shot Section 5 holdout only after generator selection is frozen."""
+"""Run or replay the one-shot seven-case RAG holdout after owner validation."""
 from __future__ import annotations
 
-import argparse, json, os, sys, time
+import argparse
+import json
+import math
+import os
+import sys
+import time
 from pathlib import Path
 from typing import Any, Sequence
 
+
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-from scripts.run_rag_bakeoff import (BakeoffError, combined_usage, contexts_from, hash_file, load_json, structurally_valid_answer, validate_config, validate_live_cost, write_json_atomic)  # noqa: E402
-from src.generation import GroundedAnswerClient  # noqa: E402
-from src.judge import AnswerJudge  # noqa: E402
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.run_generator_diagnostic import validate_selected_parameter_support  # noqa: E402
+from scripts.run_rag_bakeoff import (  # noqa: E402
+    BakeoffError,
+    combined_usage,
+    contexts_from,
+    estimate_bakeoff_cost,
+    hash_file,
+    load_json,
+    structurally_valid_answer,
+    validate_config,
+    validate_judge_catalog,
+    validate_live_cost,
+    validate_model_catalog,
+    write_json_atomic,
+)
+from src.generation import AnswerResult, Citation, GroundedAnswerClient  # noqa: E402
+from src.judge import AnswerJudge, AtomicClaim, JudgeVerdict, validate_verdict  # noqa: E402
 from src.rag_metrics import candidate_summary  # noqa: E402
 from src.retrieval import RetrievedChunk  # noqa: E402
 
-class HoldoutError(BakeoffError): pass
+
+HOLDOUT_ROW_FIELDS = {
+    "model",
+    "qa_id",
+    "answerability",
+    "selection_sha256",
+    "config_sha256",
+    "contexts_sha256",
+    "answer",
+    "judge",
+    "structurally_valid",
+    "generator_metadata",
+    "judge_metadata",
+    "metadata",
+}
+HOLDOUT_OUTPUT_FIELDS = {
+    "schema_version",
+    "selection_sha256",
+    "qa_sha256",
+    "retriever_config_sha256",
+    "contexts_sha256",
+    "model_catalog_sha256",
+    "cost_estimate",
+    "approved_max_cost_usd",
+    "outputs",
+}
+
+
+class HoldoutError(BakeoffError):
+    """Raised when a holdout boundary or artifact invariant is violated."""
+
 
 def holdout_cases(packet: dict[str, Any]) -> list[dict[str, Any]]:
     questions = packet.get("questions")
-    if packet.get("status") != "approved" or not isinstance(questions, list): raise HoldoutError("holdout requires approved data/qa.json")
+    if packet.get("status") != "approved" or not isinstance(questions, list):
+        raise HoldoutError("holdout requires approved data/qa.json")
     saved = []
     for item in questions:
-        if not isinstance(item, dict) or item.get("split") != "holdout": continue
+        if not isinstance(item, dict) or item.get("split") != "holdout":
+            continue
         review = item.get("human_review")
-        if not isinstance(item.get("id"), str) or not isinstance(item.get("question"), str) or not isinstance(item.get("answerable"), bool) or not isinstance(review, dict) or review.get("approved") is not True or review.get("decision") != "approve" or not isinstance(review.get("reviewer"), str) or not review["reviewer"].strip(): raise HoldoutError("every holdout question requires frozen owner approval")
-        if item["answerable"] and (not item.get("relevant_pmids") or not item.get("supporting_spans")): raise HoldoutError("answerable holdout question lacks frozen support")
-        if not item["answerable"] and (item.get("relevant_pmids") or item.get("supporting_spans")): raise HoldoutError("unanswerable holdout question cannot contain support")
-        saved.append({"id": item["id"], "question": item["question"], "answerability": "answerable" if item["answerable"] else "unanswerable"})
-    if len(saved) != 7 or sum(item["answerability"] == "answerable" for item in saved) != 5 or sum(item["answerability"] == "unanswerable" for item in saved) != 2: raise HoldoutError("holdout must be the fixed seven questions (five answerable, two unanswerable)")
+        if (
+            not isinstance(item.get("id"), str)
+            or not isinstance(item.get("question"), str)
+            or not item["question"].strip()
+            or not isinstance(item.get("answerable"), bool)
+            or not isinstance(review, dict)
+            or review.get("approved") is not True
+            or review.get("decision") != "approve"
+            or not isinstance(review.get("reviewer"), str)
+            or not review["reviewer"].strip()
+        ):
+            raise HoldoutError("every holdout question requires frozen owner approval")
+        if item["answerable"] and (not item.get("relevant_pmids") or not item.get("supporting_spans")):
+            raise HoldoutError("answerable holdout question lacks frozen support")
+        if not item["answerable"] and (item.get("relevant_pmids") or item.get("supporting_spans")):
+            raise HoldoutError("unanswerable holdout question cannot contain support")
+        saved.append({
+            "id": item["id"],
+            "question": item["question"],
+            "answerability": "answerable" if item["answerable"] else "unanswerable",
+        })
+    if (
+        len(saved) != 7
+        or len({item["id"] for item in saved}) != 7
+        or sum(item["answerability"] == "answerable" for item in saved) != 5
+        or sum(item["answerability"] == "unanswerable" for item in saved) != 2
+    ):
+        raise HoldoutError("holdout must be the fixed seven questions (five answerable, two unanswerable)")
     return sorted(saved, key=lambda item: item["id"])
 
-def winner_from(bakeoff: dict[str, Any]) -> str:
-    selection = bakeoff.get("selection")
-    if not isinstance(selection, dict) or selection.get("winner_status") != "accepted_for_holdout":
+
+def winner_from(selection: dict[str, Any]) -> str:
+    if selection.get("status") != "accepted_for_holdout" or selection.get("holdout_status") != "untouched":
         raise HoldoutError("holdout requires an explicitly accepted, non-provisional generator selection")
     winner = selection.get("winner")
-    if not isinstance(winner, str) or not winner.strip(): raise HoldoutError("holdout requires a frozen bake-off summary winner")
+    if not isinstance(winner, str) or not winner.strip():
+        raise HoldoutError("holdout requires one frozen generator")
     return winner
 
-def validate_context_provenance(packet: dict[str, Any], config_hash: str) -> None:
-    actual = packet.get("retriever_config_sha256", packet.get("config_sha256"))
-    if actual != config_hash: raise HoldoutError("holdout contexts are not bound to the frozen retriever configuration")
 
-def saved_rows(outputs: dict[str, Any], cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], winner: str, config_hash: str, context_hash: str) -> list[dict[str, Any]]:
-    rows = outputs.get("outputs")
-    if not isinstance(rows, list) or len(rows) != len(cases): raise HoldoutError("holdout output must contain exactly seven records")
-    expected = {item["id"]: item for item in cases}; result = []
-    for row in rows:
-        if not isinstance(row, dict) or row.get("model") != winner or row.get("qa_id") not in expected or row.get("config_sha256") != config_hash or row.get("contexts_sha256") != context_hash: raise HoldoutError("holdout output provenance does not match the frozen winner/config/contexts")
-        copied = dict(row)
-        copied["answerability"] = expected[copied["qa_id"]]["answerability"]
-        copied["structurally_valid"] = structurally_valid_answer(copied.get("answer"), contexts[copied["qa_id"]])
-        result.append(copied)
-    if {row["qa_id"] for row in result} != set(expected): raise HoldoutError("holdout output must contain each frozen question once")
-    return result
+def validate_context_provenance(
+    packet: dict[str, Any],
+    config_hash: str,
+    *,
+    qa_hash: str | None = None,
+    selection_hash: str | None = None,
+) -> None:
+    if packet.get("retriever_config_sha256") != config_hash:
+        raise HoldoutError("holdout contexts are not bound to the frozen retriever configuration")
+    if qa_hash is not None and packet.get("qa_sha256") != qa_hash:
+        raise HoldoutError("holdout contexts are not bound to the frozen QA")
+    if selection_hash is not None and packet.get("accepted_selection_sha256") != selection_hash:
+        raise HoldoutError("holdout contexts are not bound to the accepted generator selection")
 
-def run_live(cases: list[dict[str, Any]], contexts: dict[str, tuple[RetrievedChunk, ...]], winner: str, judge_model: str, config_hash: str, context_hash: str, api_key: str) -> list[dict[str, Any]]:
-    generator, judge, result = GroundedAnswerClient(api_key=api_key, model=winner), AnswerJudge(api_key=api_key, model=judge_model), []
+
+def validate_selection_bindings(
+    selection: dict[str, Any],
+    owner_report: dict[str, Any],
+    generator_config: dict[str, Any],
+    judge_config: dict[str, Any],
+    *,
+    qa_hash: str,
+    retriever_config_hash: str,
+    selection_hash: str,
+    owner_report_hash: str,
+    generator_config_hash: str,
+    judge_config_hash: str,
+) -> tuple[str, dict[str, Any], dict[str, Any], float]:
+    winner = winner_from(selection)
+    generation = validate_config(generator_config)
+    if (
+        selection.get("qa_sha256") != qa_hash
+        or selection.get("retriever_config_sha256") != retriever_config_hash
+        or selection.get("owner_validation_report_sha256") != owner_report_hash
+        or selection.get("generator_config_sha256") != generator_config_hash
+        or selection.get("judge_config_sha256") != judge_config_hash
+        or selection.get("model_catalog_sha256") != generator_config.get("model_catalog_sha256")
+        or judge_config.get("model_catalog_sha256") != selection.get("model_catalog_sha256")
+        or selection.get("generation") != generation
+    ):
+        raise HoldoutError("accepted selection hashes or frozen generation settings drifted")
+    if (
+        owner_report.get("passes") is not True
+        or owner_report.get("source_outputs_sha256") != selection.get("judge_outputs_sha256")
+    ):
+        raise HoldoutError("holdout requires the passing owner-validation report used by selection")
+    if generator_config.get("generator_candidates") != [winner]:
+        raise HoldoutError("generator configuration does not contain only the accepted winner")
+    judge_settings = judge_config.get("judge")
+    if (
+        not isinstance(judge_settings, dict)
+        or judge_settings.get("model") != selection.get("judge_model")
+        or judge_settings.get("prompt_version") != selection.get("judge_prompt_version")
+        or judge_settings.get("prompt_version") != 2
+        or judge_config.get("holdout_status") != "untouched"
+    ):
+        raise HoldoutError("judge-v2 configuration differs from the accepted selection")
+    cost_caps = selection.get("holdout_cost_caps")
+    hard_cap = cost_caps.get("generation_and_judging_usd") if isinstance(cost_caps, dict) else None
+    if isinstance(hard_cap, bool) or not isinstance(hard_cap, (int, float)) or hard_cap != 0.50:
+        raise HoldoutError("accepted selection must freeze the $0.50 holdout hard cap")
+    if not selection_hash or len(selection_hash) != 64:
+        raise HoldoutError("accepted selection hash is malformed")
+    return winner, generation, judge_settings, float(hard_cap)
+
+
+def estimate_holdout_cost(
+    cases: list[dict[str, Any]],
+    contexts: dict[str, tuple[RetrievedChunk, ...]],
+    catalog: dict[str, Any],
+    winner: str,
+    judge_model: str,
+    generation: dict[str, Any],
+    judge_settings: dict[str, Any],
+) -> dict[str, Any]:
+    base = estimate_bakeoff_cost(cases, contexts, catalog, [winner], judge_model, generation)
+    generation_estimate = base["generation"][0]
+    judge_catalog = catalog.get("judge")
+    if not isinstance(judge_catalog, dict) or judge_catalog.get("id") != judge_model:
+        raise HoldoutError("judge pricing is absent from the frozen model catalog")
+    max_tokens = judge_settings.get("max_tokens")
+    if isinstance(max_tokens, bool) or not isinstance(max_tokens, int) or max_tokens <= 0:
+        raise HoldoutError("judge output cap is invalid")
+    judge = AnswerJudge(
+        api_key="cost-estimate",
+        model=judge_model,
+        max_tokens=max_tokens,
+        require_supported_parameters=bool(judge_settings.get("require_supported_parameters", False)),
+        prompt_version=2,
+    )
+    judge_input = 0
     for case in cases:
-        started = time.perf_counter(); answer = generator.answer(case["question"], contexts[case["id"]]); generator_latency = (time.perf_counter() - started) * 1000
+        selected = contexts[case["id"]]
+        citations = tuple(
+            Citation(index, chunk.pmid, chunk.chunk_id, chunk.title)
+            for index, chunk in enumerate(selected[:5], 1)
+        )
+        worst_answer = AnswerResult(
+            "answered",
+            ("evidence " * int(generation["max_tokens"])).strip() + " [1].",
+            citations,
+        )
+        payload = judge._payload(case["question"], worst_answer, selected)
+        judge_input += math.ceil(len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3)
+    judge_output = len(cases) * max_tokens
+    judge_cost = (
+        judge_input * float(judge_catalog["input_cost_per_million"])
+        + judge_output * float(judge_catalog["output_cost_per_million"])
+    ) / 1_000_000
+    total = float(generation_estimate["estimated_cost_usd"]) + judge_cost
+    return {
+        "method": "UTF-8 JSON characters/3; all generator retry/repair/reconsideration attempts; judge-v2 maximum output",
+        "generation": generation_estimate,
+        "judge": {
+            "model": judge_model,
+            "prompt_version": 2,
+            "provider_calls": len(cases),
+            "conservative_input_tokens": judge_input,
+            "maximum_output_tokens": judge_output,
+            "estimated_cost_usd": judge_cost,
+        },
+        "maximum_provider_calls": int(generation_estimate["provider_calls"]) + len(cases),
+        "estimated_max_cost_usd": total,
+    }
+
+
+def validate_holdout_cost_bound(max_cost_usd: float | None, estimate: float, hard_cap: float) -> str:
+    if not math.isfinite(estimate) or estimate < 0 or estimate > hard_cap:
+        raise HoldoutError("holdout estimate exceeds the frozen hard cap")
+    if (
+        isinstance(max_cost_usd, bool)
+        or not isinstance(max_cost_usd, (int, float))
+        or not math.isfinite(max_cost_usd)
+        or max_cost_usd > hard_cap
+    ):
+        raise HoldoutError(f"--max-cost-usd must not exceed the frozen ${hard_cap:.2f} cap")
+    try:
+        return validate_live_cost(float(max_cost_usd), estimate)
+    except BakeoffError as exc:
+        raise HoldoutError(str(exc)) from exc
+
+
+def _verdict_payload(verdict: JudgeVerdict | None) -> dict[str, Any] | None:
+    if verdict is None:
+        return None
+    return {
+        "claims": [
+            {
+                "text": claim.text,
+                "supported": claim.supported,
+                "citation_ids": list(claim.citation_ids),
+            }
+            for claim in verdict.claims
+        ],
+        "faithful": verdict.faithful,
+        "relevant": verdict.relevant,
+        "citations_correct": verdict.citations_correct,
+        "refusal_correct": verdict.refusal_correct,
+    }
+
+
+def _saved_verdict(value: Any) -> JudgeVerdict | None:
+    if not isinstance(value, dict) or set(value) != {
+        "claims",
+        "faithful",
+        "relevant",
+        "citations_correct",
+        "refusal_correct",
+    }:
+        return None
+    claims = value.get("claims")
+    if not isinstance(claims, list):
+        return None
+    if any(
+        not isinstance(item, dict)
+        or set(item) != {"text", "supported", "citation_ids"}
+        for item in claims
+    ):
+        return None
+    try:
+        return JudgeVerdict(
+            tuple(
+                AtomicClaim(
+                    text=item["text"],
+                    supported=item["supported"],
+                    citation_ids=tuple(item["citation_ids"]),
+                )
+                for item in claims
+            ),
+            value["faithful"],
+            value["relevant"],
+            value["citations_correct"],
+            value["refusal_correct"],
+        )
+    except (KeyError, TypeError):
+        return None
+
+
+def run_live(
+    cases: list[dict[str, Any]],
+    contexts: dict[str, tuple[RetrievedChunk, ...]],
+    winner: str,
+    judge_model: str,
+    selection_hash: str,
+    config_hash: str,
+    context_hash: str,
+    api_key: str,
+    generation: dict[str, Any],
+    judge_settings: dict[str, Any],
+) -> list[dict[str, Any]]:
+    generator = GroundedAnswerClient(
+        api_key=api_key,
+        model=winner,
+        max_tokens=int(generation["max_tokens"]),
+        temperature=float(generation["temperature"]),
+        system_prompt=str(generation["prompt"]),
+        citation_mode=str(generation["citation_mode"]),
+        require_supported_parameters=bool(generation["require_supported_parameters"]),
+        reasoning_effort=generation.get("reasoning_effort"),
+        exclude_reasoning=bool(generation.get("exclude_reasoning", False)),
+        reconsider_insufficient_evidence=bool(generation.get("reconsider_insufficient_evidence", False)),
+    )
+    judge = AnswerJudge(
+        api_key=api_key,
+        model=judge_model,
+        max_tokens=int(judge_settings["max_tokens"]),
+        require_supported_parameters=bool(judge_settings.get("require_supported_parameters", False)),
+        prompt_version=2,
+    )
+    result = []
+    for case in cases:
         started = time.perf_counter()
-        verdict = judge.judge(case["question"], answer, contexts[case["id"]], expected_answerable=case["answerability"] == "answerable")
-        judge_latency = (time.perf_counter() - started) * 1000
-        judge_payload = None if verdict is None else {"claims": [{"text": claim.text, "supported": claim.supported, "citation_ids": list(claim.citation_ids)} for claim in verdict.claims], **{key: getattr(verdict, key) for key in ("faithful", "relevant", "citations_correct", "refusal_correct")}}
-        usage = combined_usage(dict(generator.last_metadata), dict(judge.last_metadata), generator_latency, judge_latency)
-        answer_payload = {"status": answer.status, "text": answer.text, "citations": [item.__dict__ for item in answer.citations]}
-        result.append({"model": winner, "qa_id": case["id"], "answerability": case["answerability"], "config_sha256": config_hash, "contexts_sha256": context_hash, "answer": answer_payload, "judge": judge_payload, "structurally_valid": structurally_valid_answer(answer_payload, contexts[case["id"]]), "metadata": usage})
+        answer = generator.answer(case["question"], contexts[case["id"]])
+        generator_latency = (time.perf_counter() - started) * 1_000
+        generator_metadata = dict(generator.last_metadata)
+        started = time.perf_counter()
+        verdict = judge.judge(
+            case["question"],
+            answer,
+            contexts[case["id"]],
+            expected_answerable=case["answerability"] == "answerable",
+        )
+        judge_latency = (time.perf_counter() - started) * 1_000
+        judge_metadata = dict(judge.last_metadata)
+        answer_payload = {
+            "status": answer.status,
+            "text": answer.text,
+            "citations": [item.__dict__ for item in answer.citations],
+        }
+        result.append({
+            "model": winner,
+            "qa_id": case["id"],
+            "answerability": case["answerability"],
+            "selection_sha256": selection_hash,
+            "config_sha256": config_hash,
+            "contexts_sha256": context_hash,
+            "answer": answer_payload,
+            "judge": _verdict_payload(verdict),
+            "structurally_valid": structurally_valid_answer(answer_payload, contexts[case["id"]]),
+            "generator_metadata": {**generator_metadata, "latency_ms": generator_latency},
+            "judge_metadata": {**judge_metadata, "latency_ms": judge_latency},
+            "metadata": combined_usage(generator_metadata, judge_metadata, generator_latency, judge_latency),
+        })
     return result
+
+
+def saved_rows(
+    outputs: dict[str, Any],
+    cases: list[dict[str, Any]],
+    contexts: dict[str, tuple[RetrievedChunk, ...]],
+    winner: str,
+    selection_hash: str,
+    config_hash: str,
+    context_hash: str,
+) -> list[dict[str, Any]]:
+    rows = outputs.get("outputs")
+    if not isinstance(rows, list) or len(rows) != len(cases):
+        raise HoldoutError("holdout output must contain exactly seven records")
+    expected = {item["id"]: item for item in cases}
+    qa_ids = [row.get("qa_id") for row in rows if isinstance(row, dict)]
+    if (
+        len(qa_ids) != len(rows)
+        or not all(isinstance(qa_id, str) for qa_id in qa_ids)
+        or len(set(qa_ids)) != len(qa_ids)
+        or set(qa_ids) != set(expected)
+    ):
+        raise HoldoutError("holdout output must contain each frozen question exactly once")
+    result = []
+    for row in rows:
+        if not isinstance(row, dict) or set(row) != HOLDOUT_ROW_FIELDS:
+            raise HoldoutError("holdout output row has unexpected fields")
+        case = expected[row["qa_id"]]
+        if (
+            row.get("model") != winner
+            or row.get("answerability") != case["answerability"]
+            or row.get("selection_sha256") != selection_hash
+            or row.get("config_sha256") != config_hash
+            or row.get("contexts_sha256") != context_hash
+        ):
+            raise HoldoutError("holdout output provenance does not match the frozen selection")
+        structural = structurally_valid_answer(row.get("answer"), contexts[row["qa_id"]])
+        if row.get("structurally_valid") is not structural:
+            raise HoldoutError("saved holdout structural verdict does not replay")
+        verdict = _saved_verdict(row.get("judge"))
+        expected_refusal = (
+            row.get("answer", {}).get("status") == "insufficient_evidence"
+        ) == (case["answerability"] == "unanswerable")
+        if (
+            verdict is None
+            or not validate_verdict(verdict, contexts[row["qa_id"]])
+            or verdict.refusal_correct != expected_refusal
+            or (
+                row.get("answer", {}).get("status") == "insufficient_evidence"
+                and bool(verdict.claims)
+            )
+        ):
+            raise HoldoutError("saved holdout judge verdict does not replay")
+        generator_metadata, judge_metadata = row.get("generator_metadata"), row.get("judge_metadata")
+        if not isinstance(generator_metadata, dict) or not isinstance(judge_metadata, dict):
+            raise HoldoutError("holdout usage metadata is missing")
+        generator_usage, judge_usage = dict(generator_metadata), dict(judge_metadata)
+        generator_latency, judge_latency = generator_usage.pop("latency_ms", None), judge_usage.pop("latency_ms", None)
+        if not all(
+            isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value >= 0
+            for value in (generator_latency, judge_latency)
+        ):
+            raise HoldoutError("holdout latency metadata is invalid")
+        raw_hash = judge_usage.get("raw_output_sha256")
+        if (
+            not isinstance(raw_hash, str)
+            or len(raw_hash) != 64
+            or any(character not in "0123456789ABCDEF" for character in raw_hash)
+        ):
+            raise HoldoutError("holdout judge-v2 raw response hash is invalid")
+        recomputed = combined_usage(generator_usage, judge_usage, generator_latency, judge_latency)
+        if row.get("metadata") != recomputed:
+            raise HoldoutError("holdout combined usage metadata does not replay")
+        result.append(dict(row))
+    return sorted(result, key=lambda row: row["qa_id"])
+
+
+def summarize(rows: list[dict[str, Any]]) -> tuple[dict[str, Any], bool]:
+    metrics = candidate_summary(rows)
+    answered = [row for row in rows if row["answer"]["status"] == "answered"]
+    answered_faithfulness = (
+        sum(row["judge"]["faithful"] is True for row in answered) / len(answered)
+        if answered
+        else 0.0
+    )
+    metrics["answered_faithfulness"] = answered_faithfulness
+    passes = (
+        metrics.get("outputs") == 7
+        and metrics.get("judged_outputs") == 7
+        and metrics.get("structural_validity") == 1.0
+        and metrics.get("answerable_answer_rate") == 1.0
+        and metrics.get("correct_refusal") == 1.0
+        and metrics.get("relevancy") == 1.0
+        and answered_faithfulness >= 0.80
+        and metrics.get("citation_correctness", 0.0) >= 0.80
+    )
+    return metrics, passes
+
+
+def expected_summary(
+    *,
+    rows: list[dict[str, Any]],
+    qa_hash: str,
+    retriever_config_hash: str,
+    selection_hash: str,
+    owner_report_hash: str,
+    contexts_hash: str,
+    outputs_hash: str,
+    catalog_hash: str,
+    winner: str,
+    judge_model: str,
+    cost_estimate: dict[str, Any],
+    approved_max_cost_usd: float,
+) -> dict[str, Any]:
+    metrics, passes = summarize(rows)
+    return {
+        "schema_version": 2,
+        "qa_sha256": qa_hash,
+        "retriever_config_sha256": retriever_config_hash,
+        "accepted_selection_sha256": selection_hash,
+        "owner_validation_report_sha256": owner_report_hash,
+        "contexts_sha256": contexts_hash,
+        "outputs_sha256": outputs_hash,
+        "model_catalog_sha256": catalog_hash,
+        "winner": winner,
+        "judge_model": judge_model,
+        "holdout_scope": "five answerable and two unanswerable cases evaluated once",
+        "cost_estimate": cost_estimate,
+        "approved_max_cost_usd": approved_max_cost_usd,
+        "metrics": metrics,
+        "acceptance_thresholds": {
+            "structural_validity": 1.0,
+            "answerable_answer_rate": 1.0,
+            "correct_refusal": 1.0,
+            "relevancy": 1.0,
+            "answered_faithfulness_minimum": 0.80,
+            "citation_correctness_minimum": 0.80,
+        },
+        "passes": passes,
+    }
+
+
+def expected_final_config(summary: dict[str, Any], *, summary_hash: str) -> dict[str, Any]:
+    return {
+        "schema_version": 2,
+        "status": "frozen_after_passing_holdout",
+        "winner": summary["winner"],
+        "judge_model": summary["judge_model"],
+        "qa_sha256": summary["qa_sha256"],
+        "retriever_config_sha256": summary["retriever_config_sha256"],
+        "accepted_selection_sha256": summary["accepted_selection_sha256"],
+        "owner_validation_report_sha256": summary["owner_validation_report_sha256"],
+        "holdout_contexts_sha256": summary["contexts_sha256"],
+        "holdout_outputs_sha256": summary["outputs_sha256"],
+        "holdout_summary_sha256": summary_hash,
+        "holdout_metrics": summary["metrics"],
+    }
+
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); parser.add_argument("--config", type=Path, default=ROOT / "artifacts/section5/frozen_config.json"); parser.add_argument("--bakeoff", type=Path, default=ROOT / "data/rag_bakeoff_summary.json"); parser.add_argument("--judge-validation", type=Path, default=ROOT / "data/judge_validation_report.json"); parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_holdout_contexts.json"); parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_holdout_outputs.json"); parser.add_argument("--result", type=Path, default=ROOT / "data/rag_holdout_summary.json"); parser.add_argument("--frozen-generator-config", type=Path, default=ROOT / "artifacts/section5/generator_config.json")
-    parser.add_argument("--live", action="store_true"); parser.add_argument("--max-cost-usd", type=float); parser.add_argument("--confirm-cost", action="store_true"); parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json")
+    parser.add_argument("--retriever-config", type=Path, default=ROOT / "artifacts/section5/frozen_config.json")
+    parser.add_argument("--selection", type=Path, default=ROOT / "artifacts/section5/accepted_generator_v2_5.json")
+    parser.add_argument("--owner-validation", type=Path, default=ROOT / "data/judge_validation_v2_5_report.json")
+    parser.add_argument("--generator-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_5_config.json")
+    parser.add_argument("--judge-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_5_judge_config.json")
+    parser.add_argument("--model-catalog", type=Path, default=ROOT / "artifacts/section5/holdout_model_catalog.json")
+    parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_holdout_contexts.json")
+    parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_holdout_outputs.json")
+    parser.add_argument("--result", type=Path, default=ROOT / "data/rag_holdout_summary.json")
+    parser.add_argument("--frozen-generator-config", type=Path, default=ROOT / "artifacts/section5/generator_config.json")
+    parser.add_argument("--live", action="store_true")
+    parser.add_argument("--estimate-only", action="store_true")
+    parser.add_argument("--finalize-saved", action="store_true")
+    parser.add_argument("--max-cost-usd", type=float)
+    parser.add_argument("--confirm-cost", action="store_true")
     args = parser.parse_args(argv)
     try:
-        for target in (args.result, args.frozen_generator_config):
-            if target.exists() and not args.overwrite:
-                raise HoldoutError(f"refusing to overwrite existing file: {target}; pass --overwrite")
-        if args.live and args.outputs.exists() and not args.overwrite:
-            raise HoldoutError(f"refusing to overwrite existing file: {args.outputs}; pass --overwrite")
-        qa, config, bakeoff, judge_report, context_packet = load_json(args.qa), load_json(args.config), load_json(args.bakeoff), load_json(args.judge_validation), load_json(args.contexts)
-        cases = holdout_cases(qa); validate_config(config); winner = winner_from(bakeoff)
-        judge_model = bakeoff.get("judge_model")
-        if not isinstance(judge_model, str) or not judge_model.strip():
-            raise HoldoutError("holdout requires the bake-off's validated judge model ID")
-        if judge_report.get("passes") is not True: raise HoldoutError("holdout requires a passing judge-validation artifact")
-        qa_hash, config_hash, context_hash = hash_file(args.qa), hash_file(args.config), hash_file(args.contexts)
-        if bakeoff.get("qa_sha256") != qa_hash or bakeoff.get("config_sha256") != config_hash:
-            raise HoldoutError("bake-off winner is not bound to the approved QA and frozen RAG configuration")
-        if judge_report.get("source_outputs_sha256") != bakeoff.get("outputs_sha256"):
-            raise HoldoutError("judge validation is not bound to the winning bake-off outputs")
-        validate_context_provenance(context_packet, config_hash); contexts = contexts_from(context_packet, cases, qa_hash=qa_hash, config_hash=config_hash)
+        if sum((args.live, args.estimate_only, args.finalize_saved)) > 1:
+            raise HoldoutError("choose only one of --live, --estimate-only, or --finalize-saved")
+        qa = load_json(args.qa)
+        retriever_config = load_json(args.retriever_config)
+        selection = load_json(args.selection)
+        owner_report = load_json(args.owner_validation)
+        generator_config = load_json(args.generator_config)
+        judge_config = load_json(args.judge_config)
+        catalog = load_json(args.model_catalog)
+        context_packet = load_json(args.contexts)
+        qa_hash = hash_file(args.qa)
+        retriever_config_hash = hash_file(args.retriever_config)
+        selection_hash = hash_file(args.selection)
+        owner_report_hash = hash_file(args.owner_validation)
+        generator_config_hash = hash_file(args.generator_config)
+        judge_config_hash = hash_file(args.judge_config)
+        catalog_hash = hash_file(args.model_catalog)
+        context_hash = hash_file(args.contexts)
+        cases = holdout_cases(qa)
+        validate_config(retriever_config)
+        winner, generation, judge_settings, hard_cap = validate_selection_bindings(
+            selection,
+            owner_report,
+            generator_config,
+            judge_config,
+            qa_hash=qa_hash,
+            retriever_config_hash=retriever_config_hash,
+            selection_hash=selection_hash,
+            owner_report_hash=owner_report_hash,
+            generator_config_hash=generator_config_hash,
+            judge_config_hash=judge_config_hash,
+        )
+        validate_context_provenance(
+            context_packet,
+            retriever_config_hash,
+            qa_hash=qa_hash,
+            selection_hash=selection_hash,
+        )
+        contexts = contexts_from(
+            context_packet,
+            cases,
+            qa_hash=qa_hash,
+            config_hash=retriever_config_hash,
+        )
+        catalog_models = validate_model_catalog(
+            catalog,
+            max_age_hours=24 if args.live or args.estimate_only else None,
+        )
+        if winner not in catalog_models or validate_judge_catalog(catalog) != selection.get("judge_model"):
+            raise HoldoutError("accepted generator or judge is absent from the frozen catalog")
+        validate_selected_parameter_support(catalog, [winner], generation)
+        estimate = estimate_holdout_cost(
+            cases,
+            contexts,
+            catalog,
+            winner,
+            selection["judge_model"],
+            generation,
+            judge_settings,
+        )
+        if args.estimate_only:
+            print(json.dumps(estimate, sort_keys=True, indent=2))
+            return 0
+
         if args.live:
-            print(validate_live_cost(args.max_cost_usd))
-            if not args.confirm_cost: raise HoldoutError("--live requires --confirm-cost after reviewing the maximum-cost status")
-            key = os.environ.get("OPENROUTER_API_KEY")
-            if not key: raise HoldoutError("--live requires OPENROUTER_API_KEY; no provider call was made")
-            rows = run_live(cases, contexts, winner, judge_model, config_hash, context_hash, key); write_json_atomic(args.outputs, {"outputs": rows}, overwrite=args.overwrite)
-        else: rows = saved_rows(load_json(args.outputs), cases, contexts, winner, config_hash, context_hash)
-        metrics = candidate_summary(rows)
-        if metrics["outputs"] != 7 or metrics["structural_validity"] != 1.0 or metrics["judged_outputs"] != 7 or any(metrics[key] is None for key in ("faithfulness", "correct_refusal", "relevancy", "citation_correctness")): raise HoldoutError("holdout is incomplete, structurally invalid, or not fully judged; generator configuration remains unfrozen")
-        summary = {"qa_sha256": qa_hash, "config_sha256": config_hash, "bakeoff_sha256": hash_file(args.bakeoff), "judge_validation_sha256": hash_file(args.judge_validation), "contexts_sha256": context_hash, "outputs_sha256": hash_file(args.outputs), "winner": winner, "judge_model": judge_model, "live_calls": args.live, "metrics": metrics}
-        write_json_atomic(args.result, summary, overwrite=args.overwrite)
-        write_json_atomic(args.frozen_generator_config, {"status": "frozen_after_complete_holdout", "winner": winner, "qa_sha256": summary["qa_sha256"], "rag_config_sha256": config_hash, "bakeoff_sha256": summary["bakeoff_sha256"], "judge_validation_sha256": summary["judge_validation_sha256"], "holdout_contexts_sha256": context_hash, "holdout_outputs_sha256": summary["outputs_sha256"], "holdout_summary_sha256": hash_file(args.result)}, overwrite=args.overwrite)
-    except (BakeoffError, OSError, TypeError) as exc: print(f"Error: {exc}", file=sys.stderr); return 1
-    print(json.dumps(summary, sort_keys=True)); return 0
-if __name__ == "__main__": raise SystemExit(main())
+            if any(path.exists() for path in (args.outputs, args.result, args.frozen_generator_config)):
+                raise HoldoutError("one-shot holdout target already exists; overwrite is prohibited")
+            print(validate_holdout_cost_bound(args.max_cost_usd, estimate["estimated_max_cost_usd"], hard_cap))
+            if not args.confirm_cost:
+                raise HoldoutError("--live requires --confirm-cost after reviewing the frozen estimate")
+            api_key = os.environ.get("OPENROUTER_API_KEY")
+            if not api_key:
+                raise HoldoutError("--live requires OPENROUTER_API_KEY; no provider call was made")
+            live_rows = run_live(
+                cases,
+                contexts,
+                winner,
+                selection["judge_model"],
+                selection_hash,
+                retriever_config_hash,
+                context_hash,
+                api_key,
+                generation,
+                judge_settings,
+            )
+            output_packet = {
+                "schema_version": 2,
+                "selection_sha256": selection_hash,
+                "qa_sha256": qa_hash,
+                "retriever_config_sha256": retriever_config_hash,
+                "contexts_sha256": context_hash,
+                "model_catalog_sha256": catalog_hash,
+                "cost_estimate": estimate,
+                "approved_max_cost_usd": float(args.max_cost_usd),
+                "outputs": live_rows,
+            }
+            write_json_atomic(args.outputs, output_packet, overwrite=False)
+        else:
+            if not args.outputs.is_file():
+                raise HoldoutError("saved holdout outputs do not exist")
+            output_packet = load_json(args.outputs)
+            if set(output_packet) != HOLDOUT_OUTPUT_FIELDS:
+                raise HoldoutError("saved holdout output packet has unexpected fields")
+            expected_bindings = {
+                "selection_sha256": selection_hash,
+                "qa_sha256": qa_hash,
+                "retriever_config_sha256": retriever_config_hash,
+                "contexts_sha256": context_hash,
+                "model_catalog_sha256": catalog_hash,
+                "cost_estimate": estimate,
+            }
+            if any(output_packet.get(field) != value for field, value in expected_bindings.items()):
+                raise HoldoutError("saved holdout output packet does not match frozen inputs")
+
+        rows = saved_rows(
+            output_packet,
+            cases,
+            contexts,
+            winner,
+            selection_hash,
+            retriever_config_hash,
+            context_hash,
+        )
+        summary = expected_summary(
+            rows=rows,
+            qa_hash=qa_hash,
+            retriever_config_hash=retriever_config_hash,
+            selection_hash=selection_hash,
+            owner_report_hash=owner_report_hash,
+            contexts_hash=context_hash,
+            outputs_hash=hash_file(args.outputs),
+            catalog_hash=catalog_hash,
+            winner=winner,
+            judge_model=selection["judge_model"],
+            cost_estimate=estimate,
+            approved_max_cost_usd=float(output_packet["approved_max_cost_usd"]),
+        )
+        if args.live or args.finalize_saved:
+            if args.result.exists() or args.frozen_generator_config.exists():
+                raise HoldoutError("holdout summary/final configuration already exists; overwrite is prohibited")
+            write_json_atomic(args.result, summary, overwrite=False)
+            if summary["passes"]:
+                final_config = expected_final_config(summary, summary_hash=hash_file(args.result))
+                write_json_atomic(args.frozen_generator_config, final_config, overwrite=False)
+        else:
+            if load_json(args.result) != summary:
+                raise HoldoutError("saved holdout summary does not replay")
+            if summary["passes"]:
+                expected_final = expected_final_config(summary, summary_hash=hash_file(args.result))
+                if load_json(args.frozen_generator_config) != expected_final:
+                    raise HoldoutError("frozen generator configuration does not replay")
+            elif args.frozen_generator_config.exists():
+                raise HoldoutError("a failed holdout cannot have an accepted final generator config")
+    except (BakeoffError, OSError, KeyError, TypeError, ValueError) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
+    print(json.dumps(summary, sort_keys=True))
+    return 0 if summary["passes"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

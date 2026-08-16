@@ -14,6 +14,7 @@
 | Lexical/semantic/hybrid chunk metrics | `artifacts/section5/chunk_evaluation.json`; `scripts/evaluate_chunks.py` | Pass on development split; hybrid Recall@5 0.810 |
 | Grounded answers, citations, refusal | `src/generation.py`; versioned generator diagnostics | Contract passes; GPT v2.5 measured 10/10 answers, 3/3 refusals, and 13/13 structure |
 | Generator selection and judge validation | `data/rag_generator_v2_5_judge_summary.json`; `artifacts/section5/generator_v2_5_judge_config.json`; blind worksheet and Markdown renderer | Judge-v2 measured 0.900 answered-only faithfulness; owner labels pending; oracle targets hidden; holdout untouched |
+| One-shot RAG holdout gate | `scripts/freeze_generator_selection.py`; `scripts/export_rag_holdout_contexts.py`; `scripts/run_rag_holdout.py`; focused tests | Implemented and replay/tamper-tested; remains closed until owner labels pass |
 | Independent implementation review | `artifacts/section6/claude_opus_review.md` | Opus re-review passed after fixes |
 | Generator-v2.5 independent review | `artifacts/section5/claude_generator_v2_5_review.md`; `artifacts/section5/claude_generator_v2_5_judge_review.md` | Opus passed the prompt-only experiment and corrected judge-v2 evidence chain before paid calls |
 | Public deployment | `app.py`; `railway.json`; `DEPLOYMENT.md` | Local shell and Railway packaging implemented; project/domain/secrets/deploy pending |
@@ -32,6 +33,7 @@
 
 - `data/qa.json` is owner-approved and frozen. The remaining human gate is the ten-output judge-validation worksheet.
 - Development retrieval, generator, and judge-v2 results are reported with their denominators. GPT-OSS remains provisional pending owner validation; no holdout faithfulness claim is made.
+- The holdout bridge refuses to create an accepted selection before the blind owner report passes, binds every downstream artifact by SHA-256, prohibits overwrite of one-shot contexts/results, and freezes a final generator only after all seven saved rows replay and meet the preregistered thresholds.
 
 ## Pending credentials / deployment
 

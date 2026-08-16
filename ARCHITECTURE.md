@@ -342,6 +342,22 @@ response, and replays copied and combined metadata. Its measured v2.5 result is
 correctness, and `1.000` correct refusal. The remaining qa08 failure is retained
 as over-citation evidence pending owner validation.
 
+The holdout bridge is deliberately separate from generator tuning. A frozen
+selection can be created only from the exact v2.5 generator, judge-v2, blind
+worksheet, and passing owner-agreement hashes. Only then may seven holdout query
+embeddings be purchased under a `$0.01` ceiling and their top-five hybrid
+contexts written once. The final runner revalidates the accepted model, prompt,
+provider-parameter contract, different-family judge, fresh model catalog,
+contexts, and a conservative `$0.50` generation-plus-judging ceiling before any
+call. Saved rows contain exact QA/provenance identities, citation-bound answers,
+judge-v2 verdicts and raw-response hashes, and recomputable usage metadata.
+Duplicate cases, malformed claims, altered answerability, changed citations,
+and metadata drift fail offline replay. The preregistered holdout gate is 7/7
+structural and judged outputs, 5/5 answerable responses, 2/2 correct refusals,
+1.0 relevancy, at least 0.80 answered-only faithfulness, and at least 0.80
+citation correctness. A failed holdout is retained as evidence and cannot emit
+an accepted final generator configuration; no post-holdout tuning is permitted.
+
 ## Application and release boundary
 
 The single-process FastAPI service exposes `/healthz`, `/api/metrics`,

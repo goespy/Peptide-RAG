@@ -50,6 +50,25 @@ class RunProjectTests(unittest.TestCase):
             and "owner labels pending" in check.detail
             for check in checks
         ))
+        self.assertTrue(any(
+            check.name == "RAG accepted generator and QA holdout"
+            and check.state == "TBD"
+            for check in checks
+        ))
+
+    def test_holdout_artifact_without_accepted_selection_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            orphan = Path(temp) / "rag_holdout_contexts.json"
+            orphan.write_text("{}", encoding="utf-8")
+            with patch.object(run_project, "RAG_HOLDOUT_CONTEXTS", orphan):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(
+            check.name == "RAG accepted generator and QA holdout"
+            and check.state == "FAIL"
+            and "without an accepted generator" in check.detail
+            for check in checks
+        ))
 
     def test_owner_worksheet_oracle_leak_fails_release(self) -> None:
         for leaked_field, leaked_value in (
