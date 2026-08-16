@@ -81,6 +81,22 @@ def generator_cost_only(estimate: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def validate_reviewed_estimate(config: dict[str, Any], actual: float) -> None:
+    """Bind a reviewed pre-run estimate when the frozen experiment records one."""
+
+    diagnostic = config.get("generator_diagnostic")
+    reviewed = diagnostic.get("reviewed_estimate_usd") if isinstance(diagnostic, dict) else None
+    if reviewed is None:
+        return
+    if (
+        isinstance(reviewed, bool)
+        or not isinstance(reviewed, (int, float))
+        or not math.isfinite(reviewed)
+        or not math.isclose(float(reviewed), actual, rel_tol=0.0, abs_tol=1e-12)
+    ):
+        raise BakeoffError("reviewed generator estimate does not match frozen inputs")
+
+
 def select_diagnostic_models(
     config: dict[str, Any], catalog_models: Sequence[str]
 ) -> tuple[str, ...]:
@@ -299,11 +315,11 @@ def run_live_generators(
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json")
-    parser.add_argument("--config", type=Path, default=ROOT / "artifacts/section5/generator_v2_4_config.json")
+    parser.add_argument("--config", type=Path, default=ROOT / "artifacts/section5/generator_v2_5_config.json")
     parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json")
-    parser.add_argument("--model-catalog", type=Path, default=ROOT / "artifacts/section5/model_candidates_refresh.json")
-    parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_generator_v2_4_outputs.json")
-    parser.add_argument("--result", type=Path, default=ROOT / "data/rag_generator_v2_4_summary.json")
+    parser.add_argument("--model-catalog", type=Path, default=ROOT / "artifacts/section5/model_candidates_judge_refresh.json")
+    parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_generator_v2_5_outputs.json")
+    parser.add_argument("--result", type=Path, default=ROOT / "data/rag_generator_v2_5_summary.json")
     parser.add_argument("--live", action="store_true")
     parser.add_argument("--estimate-only", action="store_true")
     parser.add_argument("--max-cost-usd", type=float)
@@ -348,6 +364,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         estimate = generator_cost_only(
             estimate_bakeoff_cost(cases, contexts, catalog, models, judge_model, generation)
         )
+        validate_reviewed_estimate(config, estimate["estimated_max_cost_usd"])
         if args.estimate_only:
             print(json.dumps(estimate, indent=2, sort_keys=True))
             return 0

@@ -23,9 +23,10 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Project-owner approval of the 20-case QA oracle
 - [x] Paid semantic/chunk development evaluation and frozen hybrid retrieval configuration
 - [x] Three-model development bake-off preserved and reanalyzed as a negative result
-- [x] GPT-only v2.2, v2.3, and v2.4 diagnostics measured; v2.4 reached 10/10 answerable, 3/3 correct refusals, and 13/13 structural validity
-- [x] General v2.4 refusal-reconsideration experiment passed its generator gate; judge-only runner and blind-label workflow are frozen and tested
-- [ ] Claude judge validation, owner labeling, untouched QA holdout, and public Railway deployment
+- [x] GPT-only v2.2 through v2.5 diagnostics measured; v2.4 and v2.5 reached 10/10 answerable, 3/3 correct refusals, and 13/13 structural validity
+- [x] Claude judge-v2 development run completed for v2.5: 0.900 answered-only faithfulness, 1.000 relevancy, 0.900 citation correctness, and 1.000 correct refusal
+- [x] Blind, evidence-bound 10-output owner worksheet frozen with oracle answers and Claude verdicts hidden
+- [ ] Owner judge labeling, untouched QA holdout, and public Railway deployment
 - [x] Section 6 offline release-check, CI, self-evaluation, cost, and Railway config foundations
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
@@ -212,10 +213,10 @@ each paid stage:
 
 ```bash
 python scripts/run_generator_diagnostic.py --estimate-only
-# The owner-approved v2.4 run used this command and stayed below the bound:
+# The owner-approved v2.5 run used this command and stayed below the bound:
 python scripts/run_generator_diagnostic.py --live --max-cost-usd 0.02 --confirm-cost
 
-# v2.4 passed 10/10, 3/3, and 13/13, so the judge config is now frozen:
+# v2.5 passed 10/10, 3/3, and 13/13, so the judge config is now frozen:
 python scripts/freeze_generator_judge_config.py --hard-cost-cap-usd 0.25
 python scripts/run_generator_judge.py --estimate-only
 # After a separate approval of the displayed judge-only maximum:
@@ -237,8 +238,8 @@ not an accepted generator. The holdout remains untouched. Claude Opus's
 independent findings and the fixes are recorded in
 [`artifacts/section5/claude_bakeoff_review.md`](artifacts/section5/claude_bakeoff_review.md).
 
-Three later GPT-only generator diagnostics changed neither QA nor retrieval and
-made no judge or holdout calls. v2.2 measured 8/10 answerable and 2/3 correct
+Four later GPT-only generator diagnostics changed neither QA nor retrieval and
+made no holdout calls. v2.2 measured 8/10 answerable and 2/3 correct
 refusals for `$0.001690265`; v2.3 measured 9/10, 3/3, and 13/13 structural
 validity for `$0.001138185`. v2.3's remaining QA04 failure is documented as a
 model refusal despite direct supplied human evidence at context rank 5. v2.4
@@ -246,9 +247,16 @@ uses one general refusal-reconsideration stage, contains no QA ID or expected
 answer, and measured 10/10 answerable, 3/3 correct refusals, and 13/13
 structurally valid for `$0.001276115`. QA04 was answered only after the general
 reconsideration, showing that its prior miss was synthesis behavior rather than
-missing retrieved evidence. Claude Opus's initial v2.4 audit found and caused a
-diagnostic-gate fix; its resolution review was unavailable due to the
-subscription session limit and is not presented as a PASS.
+missing retrieved evidence. Its first Claude judge measured `0.800`
+answered-only faithfulness and exposed scope overclaims in qa02 and qa07. The
+general v2.5 prompt correction changed no QA, retrieval, contexts, model, or
+holdout data and cost `$0.001613150`; it preserved 10/10, 3/3, and 13/13.
+Judge-v2 then cost `$0.123666000` and measured `0.900` answered-only
+faithfulness, `1.000` relevancy, `0.900` citation correctness, and `1.000`
+correct refusal. The remaining qa08 failure is an over-citation: citation 4 does
+not independently support every clause in a sentence also supported by
+citations 1 and 2. Claude Opus returned `PASS` on the corrected judge-v2 evidence
+chain before that paid run. Owner validation and holdout remain pending.
 
 The holdout command freezes a generator only when all seven outputs are
 structurally valid and judged. Offline reruns use the saved outputs and make no
@@ -300,17 +308,18 @@ bake-off spend was `$0.445648435` across 122 calls, 234,700 input tokens, and
 outputs and corrected offline reanalysis are saved in
 `data/rag_bakeoff_outputs.json` and `data/rag_bakeoff_reanalysis.json`.
 
-Later GPT-only generator diagnostics are reported separately because they have
-not entered the Claude judge:
+Later GPT-only generator diagnostics and their separately gated judge results
+are reported without overwriting earlier negative evidence:
 
-| Experiment | Answered / 10 | Correct refusals / 3 | Structurally valid / 13 | Provider cost | Judge status |
-|---|---:|---:|---:|---:|---|
-| GPT v2.2 | 8 | 2 | 13 | $0.001690265 | Not opened |
-| GPT v2.3 | 9 | 3 | 13 | $0.001138185 | Not opened |
-| GPT v2.4 | 10 | 3 | 13 | $0.001276115 | Generator gate passed; paid judge separately gated |
+| Experiment | Answered / 10 | Refusals / 3 | Structural / 13 | Generator cost | Answered faithfulness | Citation correctness | Judge cost | Status |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| GPT v2.2 | 8 | 2 | 13 | $0.001690265 | TBD | TBD | — | Did not reach judge gate |
+| GPT v2.3 | 9 | 3 | 13 | $0.001138185 | TBD | TBD | — | Did not reach judge gate |
+| GPT v2.4 | 10 | 3 | 13 | $0.001276115 | 0.800 | 1.000 | $0.130374000 | Superseded development result |
+| GPT v2.5 | 10 | 3 | 13 | $0.001613150 | 0.900 | 0.900 | $0.123666000 | Owner validation pending |
 
-Generator acceptance and holdout metrics remain `TBD` until owner validation
-of the Claude judge and a versioned response-quality decision. See
+Final generator acceptance and holdout metrics remain `TBD` until owner
+validation of the Claude judge and a versioned response-quality decision. See
 [`SELF-EVALUATION.md`](SELF-EVALUATION.md) for the live gate status and
 [`COST-REPORT.md`](COST-REPORT.md) for measured embedding spend.
 

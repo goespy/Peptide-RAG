@@ -1,0 +1,736 @@
+{
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "purpose": "Blind project-owner labels for deterministic judge validation",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "rubric": {
+    "citations_correct": "For an answered response, cited evidence supports the associated claims; use null when the response is a refusal with no citations.",
+    "faithful": "Every factual claim in an answered response is supported by the displayed evidence; use null for a refusal, which is scored separately.",
+    "refusal_correct": "The answer/refusal status matches the displayed frozen answerability label.",
+    "relevant": "The response directly and usefully addresses the displayed question."
+  },
+  "sample": [
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "7901724:c0001",
+            "citation_id": 1,
+            "pmid": "7901724",
+            "title": "Hepatoprotective effect of BPC 157, a 15-amino acid peptide, on liver lesions induced by either restraint stress or bile duct and hepatic artery ligation or CCl4 administration. A comparative study with dopamine agonists and somatostatin."
+          },
+          {
+            "chunk_id": "40005408:c0001",
+            "citation_id": 2,
+            "pmid": "40005408",
+            "title": "Protective Effects of BPC 157 on Liver, Kidney, and Lung Distant Organ Damage in Rats with Experimental Lower-Extremity Ischemia-Reperfusion Injury."
+          }
+        ],
+        "status": "answered",
+        "text": "BPC\u2011157 significantly prevented liver necrosis, fatty changes, and histopathological damage in rat models of bile duct+hepatic artery ligation, restraint stress, CCl\u2084 administration, and lower\u2011extremity ischemia\u2011reperfusion injury, as evidenced by reduced sinusoidal dilation, necrotic cells, and mononuclear infiltration [1][2]"
+      },
+      "answerability": "answerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa01",
+      "question": "What effect did BPC-157 have on liver injury in the reported rat models?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "7901724:c0001",
+          "citation_id": 1,
+          "end_char": 960,
+          "pmid": "7901724",
+          "start_char": 0,
+          "text": "The hepatoprotective effects of a newly synthesized 15 amino acid fragment code named BPC 157 was evaluated in comparison with the reference standards (bromocriptine, amantadine and somatostatin) in various experimental models of liver injury in rats: 24 h-bile duct+hepatic artery ligation 48 h-restraint stress and CCl4 administration. BPC 157 administered either intragastrically or intraperitoneally, significantly prevented the development of liver necrosis or fatty changes in rats subjected to 24 h bile duct + hepatic artery ligation, 48 h-restraint stress, CCl4 treatment (1 ml/kg i.p., sacrifice 48 h thereafter). The other reference drugs had either little or no protective actions in these models. Noteworthy, the laboratory test results for bilirubin, SGOT, SGPT fully correlated with the macro/microscopical findings. Thus, on the basis of consistent protective effect of BPC 157, possible clinical application in liver diseases is now warranted.",
+          "title": "Hepatoprotective effect of BPC 157, a 15-amino acid peptide, on liver lesions induced by either restraint stress or bile duct and hepatic artery ligation or CCl4 administration. A comparative study with dopamine agonists and somatostatin."
+        },
+        {
+          "chunk_id": "40005408:c0001",
+          "citation_id": 2,
+          "end_char": 1797,
+          "pmid": "40005408",
+          "start_char": 0,
+          "text": "Background and Objectives: Ischemia-reperfusion (I/R) injury can affect multiple distant organs following I/R in the lower extremities. BPC-157's anti-inflammatory and free radical-neutralizing properties suggest its potential in mitigating ischemia-reperfusion damage. This study evaluates the protective effects of BPC-157 on remote organ damage, including the kidneys, liver, and lungs, in a rat model of skeletal muscle I/R injury. Materials and Methods: A total of 24 male Wistar albino rats were randomly divided into four groups: sham (S), BPC-157(B), lower extremity I/R(IR) and lower extremity I/R+BPC-157(I/RB). Some 45 min of ischemia of lower extremity was followed by 2 h of reperfusion of limbs. BPC-157 was applied to groups B and I/RB at the beginning of the procedure. After 2 h of reperfusion, liver, kidney and lung tissues were harvested for biochemical and histopathological analyses. Results: In the histopathological examination, vascular and glomerular vacuolization, tubular dilation, hyaline casts, and tubular cell shedding in renal tissue were significantly lower in the I/RB group compared to other groups. Lung tissue showed reduced interstitial edema, alveolar congestion, and total damage scores in the I/RB group. Similarly, in liver tissue, sinusoidal dilation, necrotic cells, and mononuclear cell infiltration were significantly lower in the I/RB group. Additionally, the evaluation of TAS, TOS, OSI, and PON-1 revealed a statistically significant increase in antioxidant activity in the liver, lung, and kidney tissues of the I/RB group. Conclusions: The findings of this study demonstrate that BPC-157 exerts a significant protective effect against distant organ damage in the liver, kidneys, and lungs following lower extremity ischemia-reperfusion injury in",
+          "title": "Protective Effects of BPC 157 on Liver, Kidney, and Lung Distant Organ Damage in Rats with Experimental Lower-Extremity Ischemia-Reperfusion Injury."
+        },
+        {
+          "chunk_id": "36228773:c0001",
+          "citation_id": 3,
+          "end_char": 1631,
+          "pmid": "36228773",
+          "start_char": 0,
+          "text": "AIMS: Radiation-induced liver disease (RILD) is the major complication for cancer patients after radiation therapy. We investigated the protective effects of BPC 157 peptide in reducing RILD. MATERIALS AND METHODS: Mice were irradiated with a single dose of 12 Gy to induce acute liver injury with or without oral BPC 157. Plasma levels of AST and ALT were determined. In vitro rat liver clone 9 cells and in vivo liver tissues were harvested for MTT assay, TUNEL assay, lipid staining, polypoid cell counts, Western blotting of caspase-3, PCNA, KLF-4 and HIF-2\u03b1, and immunocytochemistry for PCNA, KLF-4 and HIF-2\u03b1. SiRNAs were used to knockdown KLF-4. KEY FINDINGS: BPC 157 was firstly demonstrated to reduce RILD by decreasing plasma levels of AST and ALT, and inhibiting hydropic degeneration of liver. BPC 157 significantly decreased radiation-induced cell apoptosis, increased PCNA expression, promoted the expression of KLF4, decreased the radiation-induced hepatic lipid accumulation and HIF-2\u03b1 expression both in mice liver and in clone 9 liver cells. The knockdown of KLF4 abolished the protective effect of BPC 157 on radiation-induced apoptosis and lipid accumulation in clone 9 liver cells, indicating that the protective effect of BPC 157 was mediated by KLF4 in liver cells. SIGNIFICANCE: The present study provided a good model for molecular mechanism underlying the acute RILD. BPC 157, as a stable pentadecapeptide that can be chemically synthesized and purified easily for research, together with its in vivo markedly protective effect made it worth of being investigated for future clinical application for RILD.",
+          "title": "Pentadecapeptide BPC 157 efficiently reduces radiation-induced liver injury and lipid accumulation through Kruppel-like factor 4 upregulation both in vivo and in vitro."
+        },
+        {
+          "chunk_id": "40005408:c0002",
+          "citation_id": 4,
+          "end_char": 1803,
+          "pmid": "40005408",
+          "start_char": 1351,
+          "text": "significantly lower in the I/RB group. Additionally, the evaluation of TAS, TOS, OSI, and PON-1 revealed a statistically significant increase in antioxidant activity in the liver, lung, and kidney tissues of the I/RB group. Conclusions: The findings of this study demonstrate that BPC-157 exerts a significant protective effect against distant organ damage in the liver, kidneys, and lungs following lower extremity ischemia-reperfusion injury in rats.",
+          "title": "Protective Effects of BPC 157 on Liver, Kidney, and Lung Distant Organ Damage in Rats with Experimental Lower-Extremity Ischemia-Reperfusion Injury."
+        },
+        {
+          "chunk_id": "9403790:c0001",
+          "citation_id": 5,
+          "end_char": 1158,
+          "pmid": "9403790",
+          "start_char": 0,
+          "text": "The 15 amino acid agent BPC 157, showing a wide range of organoprotective action in different experimental models, was used in our experiments in order to establish its influence on different elements connected with the healing process. Elements thought to be of greatest importance in the process of healing are formation of granulation tissue, angiogenesis and production of collagen. In our work we tested the influence of BPC 157 on: granulation tissue and collagen formation, on angiogenesis as well as on tensile strength development, using three experimental rat models: 1) skin incisional wounds; 2) colon-colon anastomoses; and 3) angiogenesis model with synthetic sponge implantation. The specimens were histologically assessed for collagen, reticulin and blood vessels using scoring and morphometry. In all experiments significant differences between BPC 157-treated animals and controls were found, showing a strong, promoting involvement of BPC in the healing process. It is worth noting that these effects were achieved by different routes of application, including intragastric and local, making BPC 157 a potentially useful therapeutic agent.",
+          "title": "BPC 157's effect on healing."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa01"
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "18644225:c0001",
+            "citation_id": 1,
+            "pmid": "18644225",
+            "title": "The human tri-peptide GHK and tissue remodeling."
+          }
+        ],
+        "status": "answered",
+        "text": "In humans, GHK-Cu has been shown to increase hair follicle size and improve hair transplant success, indicating a potential for hair regrowth. [1]"
+      },
+      "answerability": "answerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa02",
+      "question": "Does GHK or GHK-Cu help regrow hair?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "18644225:c0001",
+          "citation_id": 1,
+          "end_char": 1709,
+          "pmid": "18644225",
+          "start_char": 0,
+          "text": "Tissue remodeling follows the initial phase of wound healing and stops inflammatory and scar-forming processes, then restores the normal tissue morphology. The human peptide Gly-(L-His)-(L-Lys) or GHK, has a copper 2+ (Cu(2+)) affinity similar to the copper transport site on albumin and forms GHK-Cu, a complex with Cu(2+). These two molecules activate a plethora of remodeling related processes: (1) chemoattraction of repair cells such as macrophages, mast cells, capillary cells; (2) anti-inflammatory actions (suppression of free radicals, thromboxane formation, release of oxidizing iron, transforming growth factor beta-1, tumor necrosis factor alpha and protein glycation while increasing superoxide dismutase, vessel vasodilation, blocking ultraviolet damage to skin keratinocytes and improving fibroblast recovery after X-ray treatments); (3) increases protein synthesis of collagen, elastin, metalloproteinases, anti-proteases, vascular endothelial growth factor, fibroblast growth factor 2, nerve growth factor, neutrotropins 3 and 4, and erythropoietin; (4) increases the proliferation of fibroblasts and keratinocytes; nerve outgrowth, angiogenesis, and hair follicle size. GHK-Cu stimulates wound healing in numerous models and in humans. Controlled studies on aged skin demonstrated that it tightens skin, improves elasticity and firmness, reduces fine lines, wrinkles, photodamage and hyperpigmentation. GHK-Cu also improves hair transplant success, protects hepatic tissue from tetrachloromethane poisoning, blocks stomach ulcer development, and heals intestinal ulcers and bone tissue. These results are beginning to define the complex biochemical processes that regulate tissue remodeling.",
+          "title": "The human tri-peptide GHK and tissue remodeling."
+        },
+        {
+          "chunk_id": "41997403:c0001",
+          "citation_id": 2,
+          "end_char": 1328,
+          "pmid": "41997403",
+          "start_char": 0,
+          "text": "Inflammation serves as a basic defense mechanism against both internal and external threats, while the unresolved or excessive inflammation can lead to irreversible tissue damage. Glycyl-L-histidyl-L-lysine-Cu2+ (GHK-Cu), a bioactive tripeptide complex known for its anti-aging and tissue repair properties, is extensively utilized in dermatological and hair care formulations. However, the role of GHK-Cu in regulating inflammation is less known. In this study, we explored the anti-inflammatory effects of GHK-Cu against the acute inflammation induced by copper sulfate (CuSO4) and lipopolysaccharide (LPS) in zebrafish larvae. GHK-Cu notably decreased the migration of neutrophils and macrophages, suppressed the expression of pro-inflammatory cytokines (tnf-a, il-1\u03b2, il6) and increased the expression of the anti-inflammatory cytokine il-10. Moreover, GHK-Cu mitigated oxidative stress by reducing levels of nitric oxide (NO) and reactive oxygen species (ROS), and improved superoxide dismutase (SOD) activity. Furthermore, pathway analysis revealed that GHK-Cu administration downregulated the JAK1 pathway. In summary, this study highlights the dual role of GHK-Cu in both anti-inflammatory and anti-oxidant properties, which provides the theoretical evidences supporting its addition as a functional cosmetic ingredient.",
+          "title": "Glycyl-L-histidyl-L-lysine-Cu2+ (GHK-Cu) Attenuates CuSO4 or LPS induced-inflammation in Zebrafish larvae model."
+        },
+        {
+          "chunk_id": "23019153:c0001",
+          "citation_id": 3,
+          "end_char": 1639,
+          "pmid": "23019153",
+          "start_char": 0,
+          "text": "The peptide Gly-His-Lys (GHK) is a naturally occurring copper(II)-chelating motifs in human serum and cerebrospinal fluid. In industry, GHK (with or without copper) is used to make hair and skin care products. Copper-GHK plays a physiological role in the process of wound healing and tissue repair by stimulating collagen synthesis in fibroblasts. We also reported that copper-GHK promotes the survival of basal stem cells in the skin. However, the effects of copper-free GHK (GHK) have not been investigated well. In this study, the effects of GHK were studied using cultured normal human keratinocytes and skin equivalent (SE) models. In monolayer cultured keratinocytes, GHK increased the proliferation of keratinocytes. When GHK was added during the culture of SE models, the basal cells became more cuboidal than control model. In addition, there was linear and intense staining of \u03b16 and \u03b21 integrin along the basement membrane. The number of p63 and proliferating cell nuclear antigen positive cells was also significantly increased in GHK-treated SEs than in control SEs. Western blot and slide culture experiment showed that GHK increased the expression of integrin by keratinocytes. All these results showed that GHK increased the stemness and proliferative potential of epidermal basal cells, which is associated with increased expression of integrin. In conclusion, copper-free GHK showed similar effects with copper-GHK. Thus, it can be said that copper-free GHK can be used in industry to obtain the effects of copper-GHK in vivo. Further study is necessary to explore the relationship between copper-free GHK and copper-GHK.",
+          "title": "Stem cell recovering effect of copper-free GHK in skin."
+        },
+        {
+          "chunk_id": "38026438:c0001",
+          "citation_id": 4,
+          "end_char": 1136,
+          "pmid": "38026438",
+          "start_char": 0,
+          "text": "Copper peptides (GHK-Cu) are a powerful hair growth promoter with minimal side effects when compared with minoxidil and finasteride; however, challenges in delivering GHK-Cu topically limits their non-invasive applications. Using theoretical calculations and pseudo-ternary phase diagrams, we designed and constructed a thermodynamically stable ionic liquid (IL)-based microemulsion (IL-M), which integrates the high drug solubility of ILs and high skin permeability of microemulsions, thus improving the local delivery of copper peptides by approximately three-fold while retaining their biological function. Experiments in mice validated the effectiveness of our proposed IL-M system. Furthermore, the exact effects of the IL-M system on the expression of growth factors, such as vascular endothelial growth factor, were revealed, and it was found that microemulsion increased the activation of the Wnt/\u03b2-catenin signaling pathway, which includes factors involved in hair growth regulation. Overall, the safe and non-invasive IL microemulsion system developed in this study has great potential for the clinical treatment of hair loss.",
+          "title": "Thermodynamically stable ionic liquid microemulsions pioneer pathways for topical delivery and peptide application."
+        },
+        {
+          "chunk_id": "25731775:c0001",
+          "citation_id": 5,
+          "end_char": 1434,
+          "pmid": "25731775",
+          "start_char": 0,
+          "text": "After anterior cruciate ligament reconstruction (ACLR), the biological healing of the graft is a rate-limiting step which can contribute to graft failure. The tripeptide-copper complex glycyl-L-histidyl-L-lysine-Cu(II) (GHK-Cu) is a well-known activator of tissue remodeling. We investigated whether GHK-Cu can improve graft healing following ACLR. Seventy-two rats underwent unilateral ACLR were randomized to saline, 0.3 or 3 mg/ml GHK-Cu groups (n = 24). Post-operational intra-articular injections were given from week 2, once a week, for 4 weeks. Gait analysis was performed pre-injury and at harvesting time. At 6 or 12 weeks post-operation, knee specimens were harvested for knee laxity test, graft pull-out test, and histology. At 6 weeks post-ACLR, GHK-Cu groups resulted in a smaller side-to-side difference in knee laxity as compared to the saline group (p = 0.009), but there was no significant difference at 12 weeks post-operation. The graft complex in the 0.3 mg/ml GHK-Cu group had higher stiffness than saline group at 6 weeks post-operation (p = 0.026), but there was no significant difference in ultimate load, gait parameters, and histological scores among treatment groups. All grafts failed mid-substance during pull-out test. Intra-articular supplementation with a bioactive small molecule GHK-Cu improved graft healing following ACLR in rat, but the beneficial effects could not last as treatment discontinued.",
+          "title": "Tripeptide-copper complex GHK-Cu (II) transiently improved healing outcome in a rat model of ACL reconstruction."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa02"
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "42542926:c0001",
+            "citation_id": 1,
+            "pmid": "42542926",
+            "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+          }
+        ],
+        "status": "answered",
+        "text": "TB\u2011500 improved tendon healing in a rat Achilles tendon repair model, showing higher biomechanical strength and better histopathology compared to controls. [1]"
+      },
+      "answerability": "answerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa03",
+      "question": "Does TB-500 help injuries or wounds heal?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "42542926:c0001",
+          "citation_id": 1,
+          "end_char": 1888,
+          "pmid": "42542926",
+          "start_char": 0,
+          "text": "OBJECTIVES: This study aims to evaluate the effects of BPC-157, synthetic thymosin beta-4 (TB-500), and their combination on Achilles tendon healing using biomechanical, histopathological, histochemical, and immunohistochemical analyses in a rat model. MATERIALS AND METHODS: Thirty-two male Sprague-Dawley rats, each aged 12 weeks and weighing approximately 330 g, underwent standardized Achilles tendon transection and repair and were randomly assigned to four groups, with eight rats in each group: control, BPC-157 (10 \u03bcg/kg/day), TB-500 (60 \u03bcg/kg/day), and combined BPC-157 + TB-500 (BPC + TB). Treatments were administered intraperitoneally for four weeks postoperatively. At four weeks, tendons were harvested for biomechanical testing or histological evaluation. Maximum load to failure was assessed biomechanically. Histological and histochemical analyses included hematoxylin-eosin, Masson trichrome, Alcian blue, and Sirius red staining and were evaluated using Bonar and Movin scoring systems. Expression of collagen types I and III was assessed immunohistochemically and semiquantified using H-score analysis. RESULTS: Biomechanical testing revealed higher maximum load to failure values in the BPC-157 and TB-500 groups compared to controls, reaching statistical significance in the TB-500 group (p < 0.05). Histopathological evaluation demonstrated significantly lower total Bonar scores in the TB-500 group (p = 0.016) and significantly lower total Movin scores in the TB-500 and BPC + TB groups (p = 0.017 and p = 0.040, respectively) relative to controls, indicating improved tendon architecture, collagen alignment, and reduced degenerative changes. The BPC-157 group showed numerically lower scores without reaching statistical significance for total scores. Sirius red birefringence analysis showed increased type I collagen organization and altered type III collagen",
+          "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+        },
+        {
+          "chunk_id": "42542926:c0002",
+          "citation_id": 2,
+          "end_char": 2976,
+          "pmid": "42542926",
+          "start_char": 1435,
+          "text": "and significantly lower total Movin scores in the TB-500 and BPC + TB groups (p = 0.017 and p = 0.040, respectively) relative to controls, indicating improved tendon architecture, collagen alignment, and reduced degenerative changes. The BPC-157 group showed numerically lower scores without reaching statistical significance for total scores. Sirius red birefringence analysis showed increased type I collagen organization and altered type III collagen distribution in treatment groups, particularly in the TB-500 group, suggesting progression toward matrix maturation. Immunohistochemical analysis revealed no significant differences in collagen type I expression among groups, whereas collagen type III expression differed significantly, consistent with histochemical findings. Combined BPC-157 and TB-500 treatment did not confer additional benefits compared to either agent alone. CONCLUSION: In this exploratory rat model study, both BPC-157 and TB-500 were associated with improved histopathological parameters and extracellular matrix organization during early Achilles tendon repair, with TB-500 additionally demonstrating a significant biomechanical advantage at four weeks. The absence of additive effects with combination therapy may reflect convergence on shared downstream pathways; however, this hypothesis requires further experimental confirmation. These preliminary findings indicate that both peptides warrant further investigation as candidate adjuncts to tendon repair, pending dose-optimization and longer-term studies.",
+          "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+        },
+        {
+          "chunk_id": "38382158:c0001",
+          "citation_id": 3,
+          "end_char": 1784,
+          "pmid": "38382158",
+          "start_char": 0,
+          "text": "BACKGROUND: TB-500 (Ac-LKKTETQ), derived from the active site of thymosin \u03b24 (T\u03b24), has various biological functions in its unacetylated form, LKKTETQ. These functions include actin binding, dermal wound healing, angiogenesis, and skin repair. The biological effects of TB-500, however, have not been documented. And the analysis of TB-500 and its metabolites have been neither simultaneously quantified nor structurally identified using synthesized authentic standards. METHODS: This study was aimed to investigating simultaneous analytical methods of TB-500 and its metabolites in in-vitro and urine samples by using UHPLC-Q-Exactive orbitrap MS, and to comparing the biological activity of its metabolites with the parent TB-500. The metabolism of TB-500 was investigated in human serum, various in-vitro enzyme systems, and urine samples from rats treated with TB-500, and their biological activities measured by cytotoxicity and wound healing experiments were also evaluated in fibroblasts. RESULTS: The simultaneous analytical method for TB-500 and its metabolites was developed and validated. The study found that Ac-LK was the primary metabolite with the highest concentration in rats at 0-6 h intervals. Also, the metabolite Ac-LKK was a long-term metabolite of TB-500 detected up to 72 hr. No cytotoxicity of the parent and its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. CONCLUSION: The study provides a valuable tool for quantifying TB-500 and its metabolites, contributing to the understanding of metabolism and potential therapeutic applications. Our results also suggest that the previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent",
+          "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+        },
+        {
+          "chunk_id": "38382158:c0002",
+          "citation_id": 4,
+          "end_char": 1790,
+          "pmid": "38382158",
+          "start_char": 1334,
+          "text": "its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. CONCLUSION: The study provides a valuable tool for quantifying TB-500 and its metabolites, contributing to the understanding of metabolism and potential therapeutic applications. Our results also suggest that the previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent form.",
+          "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+        },
+        {
+          "chunk_id": "20536458:c0001",
+          "citation_id": 5,
+          "end_char": 1340,
+          "pmid": "20536458",
+          "start_char": 0,
+          "text": "Incisional wounds in rats treated locally with thymosin beta4 (Tbeta4) healed with minimal scaring and without loss in wound breaking strength. Treated wounds were significantly narrower in width. Polarized light microscopy treated wounds had superior organized collagen fibers, displaying a red birefringence, which is consistent with mature connective tissue. Control incisions had randomly organized collagen fibers, displaying green birefringence that is consistent with immature connective tissue. Immunohistology treated wounds had few myofibroblasts and fibroblasts with alpha smooth muscle actin (SMA) stained stress fibers. Polyvinyl alcohol sponge implants placed in subcutaneous pockets received either carrier or 100 microg of Tbeta4 on days 2, 3, and 4. On day 14, treated implants revealed longer, thicker collagen fiber bundles with intense yellow-red birefringence by polarized light microscopy. In controls, fine, thin collagen fiber bundles were arranged in random arrays with predominantly green birefringence. Controls contained mostly myofibroblasts, while few myofibroblasts appeared in Tbeta4 treated implants. Electron microscopy confirmed both cell types and the degree of collagen fiber bundle organization. Our results demonstrate that Tbeta4 treated wounds appear to mature earlier and heal with minimal scaring.",
+          "title": "Thymosin beta4 enhances repair by organizing connective tissue and preventing the appearance of myofibroblasts."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa03"
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "10496658:c0001",
+            "citation_id": 5,
+            "pmid": "10496658",
+            "title": "Pharmacokinetic-pharmacodynamic modeling of ipamorelin, a growth hormone releasing peptide, in human volunteers."
+          }
+        ],
+        "status": "answered",
+        "text": "Ipamorelin increases growth hormone release in humans, as shown by a dose\u2011dependent rise in GH levels in healthy volunteers. [5]"
+      },
+      "answerability": "answerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa04",
+      "question": "Does ipamorelin increase growth hormone?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "9849822:c0001",
+          "citation_id": 1,
+          "end_char": 1737,
+          "pmid": "9849822",
+          "start_char": 0,
+          "text": "The development and pharmacology of a new potent growth hormone (GH) secretagogue, ipamorelin, is described. Ipamorelin is a pentapeptide (Aib-His-D-2-Nal-D-Phe-Lys-NH2), which displays high GH releasing potency and efficacy in vitro and in vivo. As an outcome of a major chemistry programme, ipamorelin was identified within a series of compounds lacking the central dipeptide Ala-Trp of growth hormone-releasing peptide (GHRP)-1. In vitro, ipamorelin released GH from primary rat pituitary cells with a potency and efficacy similar to GHRP-6 (ECs) = 1.3+/-0.4nmol/l and Emax = 85+/-5% vs 2.2+/-0.3nmol/l and 100%). A pharmacological profiling using GHRP and growth hormone-releasing hormone (GHRH) antagonists clearly demonstrated that ipamorelin, like GHRP-6, stimulates GH release via a GHRP-like receptor. In pentobarbital anaesthetised rats, ipamorelin released GH with a potency and efficacy comparable to GHRP-6 (ED50 = 80+/-42nmol/kg and Emax = 1545+/-250ng GH/ml vs 115+/-36nmol/kg and 1167+/-120ng GH/ml). In conscious swine, ipamorelin released GH with an ED50 = 2.3+/-0.03 nmol/kg and an Emax = 65+/-0.2 ng GH/ml plasma. Again, this was very similar to GHRP-6 (ED50 = 3.9+/-1.4 nmol/kg and Emax = 74+/-7ng GH/ml plasma). GHRP-2 displayed higher potency but lower efficacy (ED50 = 0.6 nmol/kg and Emax = 56+/-6 ng GH/ml plasma). The specificity for GH release was studied in swine. None of the GH secretagogues tested affected FSH, LH, PRL or TSH plasma levels. Administration of both GHRP-6 and GHRP-2 resulted in increased plasma levels of ACTH and cortisol. Very surprisingly, ipamorelin did not release ACTH or cortisol in levels significantly different from those observed following GHRH stimulation. This lack of effect",
+          "title": "Ipamorelin, the first selective growth hormone secretagogue."
+        },
+        {
+          "chunk_id": "10373343:c0001",
+          "citation_id": 2,
+          "end_char": 1463,
+          "pmid": "10373343",
+          "start_char": 0,
+          "text": "Ipamorelin is a new and potent synthetic pentapeptide which has distinct and specific growth hormone (GH)-releasing properties. With the objective of investigating the effects on longitudinal bone growth rate (LGR), body weight (BW), and GH release, ipamorelin in different doses (0, 18, 90 and 450 microg/day) was injected s.c. three times daily for 15 days to adult female rats. After intravital tetracycline labelling on days 0, 6, and 13, LGR was determined by measuring the distance between the respective fluorescent bands in the proximal tibia metaphysis. Ipamorelin dose-dependently increased LGR from 42 microm/day in the vehicle group to 44, 50, and 52 microm/day in the treatment groups (P<0.0001). There was also a pronounced and dose-dependent effect on BW gain. The treatment did not affect total IGF-I levels, IGFBPs, or serum markers of bone formation and resorption. The number of tartrate-resistant acid phosphatase-positive multinuclear cells in the metaphysis of the tibia did not change significantly with treatment. The responsiveness of the pituitary to a provocative i.v. dose of ipamorelin or GHRH showed that the plasma GH response was marginally reduced (P<0.03) after ipamorelin, but unchanged after GHRH. The pituitary GH content was unchanged by ipamorelin treatment. Whether ipamorelin or other GH secretagogues may have a place in the treatment of children with growth retardation requires demonstration in future clinical studies.",
+          "title": "Ipamorelin, a new growth-hormone-releasing peptide, induces longitudinal bone growth in rats."
+        },
+        {
+          "chunk_id": "12168778:c0001",
+          "citation_id": 3,
+          "end_char": 1656,
+          "pmid": "12168778",
+          "start_char": 0,
+          "text": "Growth hormone (GH) is secreted in the anterior pituitary gland by the somatotroph cells. Secretion is regulated by growth hormone releasing hormone (GHRH) and somatostatin. Morever, GH secretagogues (GHS) can exert a considerable effect on GH secretion. In order to determine the effects of chronic treatment with the GHS Ipamorelin on the composition of the somatotroph cell population and on somatotroph GH content, an in vitro analysis was performed of the percentage of somatotroph cells (% of total), the ratio of different GH cell types (strongly/weakly-staining) and individual GH content, in pituitary cell cultures obtained from young female rats receiving Ipamorelin over 21 days (Ipamorelin group) and the effects were compared with those of GHRH (GHRH group) or saline (saline group). The ultrastructure of somatotroph cells did not change, but the volume density of secretion granules was increased (P<0.05) by previous in vivo Ipamorelin or GHRH treatment. In 3-day basal pituitary cell monolayer cultures, the percentage of somatotroph cells showed no modifications between groups, nor was there any change in the ratio of strongly/weakly immunostaining GH cells. In the Ipamorelin group alone, in vitro treatment with Ipamorelin (10(-8) M), or GHRP 6 (10(-8) M), or GHRH (10(-8) M) for 4 hours, increased the percentage of somatotroph cells, without modifying the ratio of strongly/weakly immunostained GH cells. Basal intracellular GH content in somatotroph cells over 4 hours was lower in the Ipamorelin group and the GHRH group than in the saline group. Only in the Ipamorelin group did Ipamorelin (10(-8) M), GHRP 6 (10(-8) M) and GHRH",
+          "title": "Influence of chronic treatment with the growth hormone secretagogue Ipamorelin, in young female rats: somatotroph response in vitro."
+        },
+        {
+          "chunk_id": "11162489:c0001",
+          "citation_id": 4,
+          "end_char": 987,
+          "pmid": "11162489",
+          "start_char": 0,
+          "text": "Growth hormone secretagogues (GHSs) stimulate growth hormone (GH) secretion, which is lipolytic. Here we compared the effects of twice daily s.c. treatment of GH and the GHS, ipamorelin, on body fat in GH-deficient (lit/lit) and in GH-intact (+/lit and +/+) mice. In +/lit and lit/lit mice ipamorelin induced a small (15%) increase in body weight by 2 weeks, that was not further augmented by 9 weeks. GH treatment markedly enhanced body weight in both groups. Ipamorelin also increased fat pad weights relative to body weight in both lit/lit and +/lit mice. Two weeks GHS treatment (ipamorelin or GHRP-6) also increased relative body fat, quantified by in vivo dual energy X-ray absorpiometry (DEXA) in GH-intact mice. GH decreased relative fat mass in lit/lit mice and had no effect in GH-intact mice. Treatment with GHS, but not GH, increased serum leptin and food intake in GH-intact mice. Thus, GHSs increase body fat by GH-independent mechanisms that may include increased feeding.",
+          "title": "Growth hormone (GH)-independent stimulation of adiposity by GH secretagogues."
+        },
+        {
+          "chunk_id": "10496658:c0001",
+          "citation_id": 5,
+          "end_char": 1466,
+          "pmid": "10496658",
+          "start_char": 0,
+          "text": "PURPOSE: To examine the pharmacokinetics (PK) and pharmacodynamics (PD) of ipamorelin, a growth hormone (GH) releasing peptide, in healthy volunteers. METHODS: A trial was conducted with a dose escalation design comprising 5 different infusion rates (4.21, 14.02, 42.13, 84.27 and 140.45 nmol/kg over 15 minutes) with eight healthy male subjects at each dose level. Concentrations of ipamorelin and growth hormone were measured. RESULTS: The PK parameters showed dose-proportionality, with a short terminal half-life of 2 hours, a clearance of 0.078 L/h/kg and a volume of distribution at steady-state of 0.22 L/kg. The time course of GH stimulation by ipamorelin showed a single episode of GH release with a peak at 0.67 hours and an exponential decline to negligible GH concentration at all doses. The ipamorelin-GH concentration relationship was characterized using an indirect response model and population fitting. The model employed a zero-order GH release rate over a finite duration of time to describe the episodic release of GH. Ipamorelin induces the release of GH at all dose levels with the concentration (SC50) required for half-maximal GH stimulation of 214 nmol/L and a maximal GH production rate of 694 mIU/L/h. The inter-individual variability of the PD parameters was larger than that of the PK parameters. CONCLUSIONS: The proposed PK/PD model provides a useful characterization of ipamorelin disposition and GH responses across a range of doses.",
+          "title": "Pharmacokinetic-pharmacodynamic modeling of ipamorelin, a growth hormone releasing peptide, in human volunteers."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa04"
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "20101189:c0002",
+            "citation_id": 1,
+            "pmid": "20101189",
+            "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension."
+          },
+          {
+            "chunk_id": "20554713:c0002",
+            "citation_id": 2,
+            "pmid": "20554713",
+            "title": "Effects of tesamorelin (TH9507), a growth hormone-releasing factor analog, in human immunodeficiency virus-infected patients with excess abdominal fat: a pooled analysis of two multicenter, double-blind placebo-controlled phase 3 trials with safety extension data."
+          }
+        ],
+        "status": "answered",
+        "text": "Tesamorelin reduces visceral belly fat in HIV\u2011infected patients, with an average 18% decrease in VAT over 12\u202fmonths and sustained reductions up to 52\u202fweeks, while sparing subcutaneous fat. [1][2]"
+      },
+      "answerability": "answerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa05",
+      "question": "Does tesamorelin reduce belly fat?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "20101189:c0002",
+          "citation_id": 1,
+          "end_char": 2247,
+          "pmid": "20101189",
+          "start_char": 1352,
+          "text": "(P < 0.001), waist circumference (P = 0.02), and waist-hip-ratio (P = 0.001) improved, with no change in limb or abdominal SC fat. Insulin-like growth factor-1 increased (P < 0.001), but no change in glucose parameters was observed. Patient rating of belly appearance distress (P = 0.02) and physician rating of belly profile (P = 0.02) were significantly improved in the tesamorelin vs. placebo-treated groups. The drug was well tolerated. VAT was reduced by approximately 18% (P < 0.001) in patients continuing tesamorelin for 12 months. The initial improvements over 6 months in VAT were rapidly lost in those switching from tesamorelin to placebo. CONCLUSIONS: Tesamorelin reduces visceral fat by approximately 18% and improves body image distress in HIV-infected patients with central fat accumulation. These changes are achieved without significant side effects or perturbation of glucose.",
+          "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension."
+        },
+        {
+          "chunk_id": "20554713:c0002",
+          "citation_id": 2,
+          "end_char": 2605,
+          "pmid": "20554713",
+          "start_char": 1211,
+          "text": "effect, -15.4%). No significant changes were observed in abdominal sc adipose tissue (-2 +/- 32 vs. 2 +/- 29 cm(2), P = 0.08; treatment effect, -0.6%). Treatment with tesamorelin resulted in significant decreases in triglycerides (-37 +/- 139 vs. 6 +/- 112 mg/dl, P < 0.001; treatment effect, -12.3%) and cholesterol to high-density lipoprotein ratio (-0.18 +/- 1.00 vs. 0.18 +/- 0.94, P < 0.001; treatment effect, -7.2%) vs. placebo. Tesamorelin improved body image [belly appearance distress (P = 0.002)], patient rating of belly profile (P = 0.003), and physician rating of belly profile (P < 0.001). Mean IGF-I increased 108 +/- 112 vs.-7 +/- 64 ng/ml (P < 0.001 vs. placebo). At wk 52, decreases in VAT [-35 +/- 50 cm(2) (-17.5 +/- 23.3%)], waist circumference (-3.4 +/- 6.0 cm), triglycerides (-48 +/- 182 mg/dl), cholesterol (-8 +/- 38 mg/dl), and non-high-density lipoprotein (-7 +/- 38 mg/dl) were maintained (all P < 0.001 vs. original baseline) in the T-T group. Treatment with tesamorelin was generally well tolerated. No clinically meaningful differences were observed between groups in glucose parameters at wk 26 and 52. CONCLUSIONS: Treatment with tesamorelin reduces VAT and maintains the reduction for up to 52 wk, preserves abdominal sc adipose tissue, improves body image and lipids, and is overall well tolerated without clinically meaningful changes in glucose parameters.",
+          "title": "Effects of tesamorelin (TH9507), a growth hormone-releasing factor analog, in human immunodeficiency virus-infected patients with excess abdominal fat: a pooled analysis of two multicenter, double-blind placebo-controlled phase 3 trials with safety extension data."
+        },
+        {
+          "chunk_id": "30764032:c0001",
+          "citation_id": 3,
+          "end_char": 881,
+          "pmid": "30764032",
+          "start_char": 0,
+          "text": "Morphologic and metabolic abnormalities remain a common problem in patients with HIV-1 infection, which contributes to poor self image and may negatively impact on patient's adherence to medication and success of therapy. In addition, these physiological and metabolic changes can lead to increased cardiovascular risk. In such patients, excess central fat could be associated with loss of subcutaneous fat. Several strategies to decrease the excess of visceral fat have been assessed. Tesamorelin, an injectable growth hormone-releasing factor analogue, has been shown to improve visceral fat adiposity with relatively little effect on subcutaneous fat with improvement in triglycerides and belly appearance distress. It is well tolerated overall without clinically significant changes in mean glucose or insulin levels. However, these benefits cease if treatment is discontinued.",
+          "title": "Tesamorelin for the treatment of excess abdominal fat in HIV-1-infected patients with lipodystrophy."
+        },
+        {
+          "chunk_id": "22050344:c0001",
+          "citation_id": 4,
+          "end_char": 1854,
+          "pmid": "22050344",
+          "start_char": 0,
+          "text": "Tesamorelin (EgriftaTM) is a synthetic analog of human growth hormone-releasing hormone (also known as growth hormone-releasing factor) that stimulates the synthesis and release of endogenous growth hormone. It is the first and, so far, only treatment indicated for the reduction of excess abdominal fat in patients with HIV-associated lipodystrophy. This article reviews the pharmacological properties, clinical efficacy and tolerability of tesamorelin in patients with HIV-associated central fat accumulation. Subcutaneous tesamorelin was effective in reducing visceral adipose tissue (VAT), but did not affect subcutaneous adipose tissue to a clinically significant extent in two 26-week, well designed, clinical trials in patients with HIV-associated central fat accumulation. This reduction in VAT was maintained in the longer term in patients who continued to receive tesamorelin until week 52 in the extension phases of the two trials. However, discontinuation of therapy during this period resulted in the reaccumulation of VAT. Tesamorelin therapy was also associated with significant improvements in other body composition measures (e.g. trunk fat and waist circumference) and improvements were generally seen in some body image parameters (e.g. belly image distress). Tesamorelin was generally well tolerated, with treatment-emergent serious adverse events occurring in <4% of patients during 26 weeks of therapy. Most of these events were injection-site reactions or events known to be associated with growth hormone therapy (e.g. arthralgia, headache and peripheral edema). Although long-term clinical experience is needed to further assess the benefits and risks of therapy, current evidence suggests that tesamorelin may be useful for reducing visceral adiposity in patients with HIV-associated lipodystrophy, thereby potentially improving",
+          "title": "Spotlight on tesamorelin in HIV-associated lipodystrophy."
+        },
+        {
+          "chunk_id": "20101189:c0001",
+          "citation_id": 5,
+          "end_char": 1755,
+          "pmid": "20101189",
+          "start_char": 0,
+          "text": "BACKGROUND: HIV-infected patients receiving antiretroviral therapy often demonstrate excess visceral fat. A growth hormone-releasing factor, tesamorelin, may selectively reduce visceral fat in this population. We investigated the effects of tesamorelin (GHRH(1-44)) in HIV-infected patients with central fat accumulation. METHODS: A 12-month study of 404 HIV-infected patients with excess abdominal fat in the context of antiretroviral therapy was conducted between January 2007 and October 2008. The study consisted of 2 sequential phases. In the primary efficacy phase (months 0-6), patients were randomly assigned to receive tesamorelin [2 mg subcutaneous (SC) every day] or placebo in a 2:1 ratio. In the extension phase (months 6-12), patients receiving tesamorelin were rerandomized to continue on tesamorelin (2 mg SC every day) or switch to placebo. Patients initially randomized to placebo switched to tesamorelin. Patients and investigators were blinded to treatment assignment throughout the study. The primary endpoint was visceral adipose tissue (VAT). Secondary endpoints included body image, IGF-I, safety measures, including glucose, and other body composition measures. RESULTS: VAT decreased by -10.9% (-21 cm(2)) in the tesamorelin group vs. -0.6% (-1 cm(2)) in the placebo group in the 6-month efficacy phase, P < 0.0001. Trunk fat (P < 0.001), waist circumference (P = 0.02), and waist-hip-ratio (P = 0.001) improved, with no change in limb or abdominal SC fat. Insulin-like growth factor-1 increased (P < 0.001), but no change in glucose parameters was observed. Patient rating of belly appearance distress (P = 0.02) and physician rating of belly profile (P = 0.02) were significantly improved in the tesamorelin vs. placebo-treated",
+          "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa05"
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "11087911:c0001",
+            "citation_id": 1,
+            "pmid": "11087911",
+            "title": "Effect of epitalon on the lifespan increase in Drosophila melanogaster."
+          }
+        ],
+        "status": "answered",
+        "text": "Developmental exposure to Epitalon increased adult fruit\u2011fly lifespan by 11\u201316% in Drosophila melanogaster. [1]"
+      },
+      "answerability": "answerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa06",
+      "question": "What effect did developmental exposure to Epitalon have on adult fruit-fly lifespan?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "11087911:c0001",
+          "citation_id": 1,
+          "end_char": 755,
+          "pmid": "11087911",
+          "start_char": 0,
+          "text": "The geroprotector activity of epitalon, a synthetic tetrapeptide Ala-Glu-Asp-Gly, was studied on the Drosophila melanogaster wild strain Canton-S. The substance was added to the culture medium only at the developmental stage (from egg to larva). Epitalon significantly increased the lifespan (LS) of imagoes by 11-16% when applied at unprecedented low concentrations-from 0.001 x 10(-6) to 5 x 10(-6) wt.% of culture medium for males and from 0.01 x 10(-6) to 0.1 x 10(-6) wt.% of culture medium for females. The increase in LS did not depend on the substance dose. Effective concentrations of epitalon were 16,000-80,000,000 times lower than those of melatonin. The possible mechanisms of the antioxidant and regulatory effects of epitalon are discussed.",
+          "title": "Effect of epitalon on the lifespan increase in Drosophila melanogaster."
+        },
+        {
+          "chunk_id": "16634527:c0001",
+          "citation_id": 2,
+          "end_char": 1221,
+          "pmid": "16634527",
+          "start_char": 0,
+          "text": "The potential preventive effect of the synthetic pineal peptide Epitalon (Ala-Glu-Asp-Gly) on spontaneous tumorigenesis in mice was studied. One-year-old female C3H/He mice were kept for 6.5 months under standard conditions. Epitalon was injected at a dose of 0.1 microg, 5 times a week. Long-term exposure to Epitalon in small doses did not show any toxic effect. Treatment with Epitalon decreased the number of tumor-bearing mice with malignant tumors and prevented the development of metastases. Spontaneous tumors of the reproductive organs (mammary glands and ovaries) were predominant in both groups of mice (control and experimental). The mammary gland tumors were different variants of invasive ductal carcinomas. In the ovaries, granulosa-cell tumors were found. Tumors were in the minority in other organs and had benign characteristics. In control mice, metastases were found in 3 out of 9 tumor-bearing mice, all of them being from tumors of the reproductive organs. Treatment with Epitalon slowed down the development of metastases from spontaneous tumors, and no metastases were found in the experimental mice. These data highlight the antimetastatic effect of Epitalon as part of its oncostatic properties.",
+          "title": "Effect of the synthetic pineal peptide epitalon on spontaneous carcinogenesis in female C3H/He mice."
+        },
+        {
+          "chunk_id": "15909815:c0001",
+          "citation_id": 3,
+          "end_char": 1675,
+          "pmid": "15909815",
+          "start_char": 0,
+          "text": "Female senescence accelerated mice SAMP-1. (prone) and SAMR-1 (resistant) were exposed 5 times a week monthly to melatonin (with drinking water 20mg/ml during the night hours) or to s.c. injections of epitalon (Ala-Glu-Asp-Gly) at a single dose 1mkg/mouse. Control mice were intact or exposed to injection of 0.1 ml normal saline. The body weight and temperature, food consumption, estrous function were monitored regularly. The life span and tumor incidence were evaluated as well. As age advanced, the weight increased whereas food consumption and body temperature did not change. There was no significant substrain difference in these parameters. Exposure to melatonin or epitalon also failed to influence those indices. As age advanced, the incidence of irregular estrous cycles increased both in SAMP-1 and SAMR-1, whereas the treatment with both melatonin and epitalon prevented such disturbances. SAMP-1 revealed some features of accelerated aging as compared to SAMR-1. The mean life span of the 10% of the last survivors among treated SAMP-1 was shorter than that of SAMR-1, aging rate increased and mortality doubling time decreased. There was a direct correlation between body mass of the two substrains at the age of 3 and 12 months matched by body mass increase and longer life span. Melatonin or epitalon treatment was followed by longer mean and maximum survival in the 10% of the last survivors among SAMP-1. Melatonin involved decreased aging rate and increased mortality doubling time. Malignant lymphomas predominated in SAM without any significant difference in frequency between the substrains. While melatonin failed to influence tumor incidence or term",
+          "title": "[Effect of epitalon and melatonin on life span and spontaneous carcinogenesis in senescence accelerated mice (SAM)]."
+        },
+        {
+          "chunk_id": "35413689:c0001",
+          "citation_id": 4,
+          "end_char": 1129,
+          "pmid": "35413689",
+          "start_char": 0,
+          "text": "The developmental potential of oocytes decreases with time after ovulation in vivo or in vitro. Epitalon is a synthetic short peptide made of four amino acids (alanine, glutamic acid, aspartic acid, and glycine), based on a natural peptide called epithalamion extracted from the pineal gland. It is a potent antioxidant, comparable to melatonin, that may confer longevity benefits. The current study aims to test the protective effects of Epitalon on the quality of post-ovulatory aging oocytes. Epitalon at 0.1mM was added to the culture medium, and the quality of oocytes was evaluated at 6h, 12h, and 24h of culture. We found that 0.1mM Epitalon reduced intracellular reactive oxygen species. Epitalon treatment significantly decreased frequency of spindle defects and abnormal distribution of cortical granules during aging for 12h and 24h, while increased mitochondrial membrane potential and DNA copy number of mitochondria, thus decreasing apoptosis of oocytes by 24h of in vitro aging. Our results suggest that Epitalon can delay the aging process of oocytes in vitro via modulating mitochondrial activity and ROS levels.",
+          "title": "Epitalon protects against post-ovulatory aging-related damage of mouse oocytes in vitro."
+        },
+        {
+          "chunk_id": "14501183:c0001",
+          "citation_id": 5,
+          "end_char": 1119,
+          "pmid": "14501183",
+          "start_char": 0,
+          "text": "From the age of 3 months until their natural deaths, female outbred Swiss-derived SHR mice were subcutaneously injected on 5 consecutive days every month with 0.1 ml of normal saline (control) or with 1.0 microg/mouse (approximately 30-40 microg/kg) of tetrapeptide Epitalon (Ala-Glu-Asp-Gly) dissolved in 0.1 ml saline. There were 54 mice in each group. The results of this study show that treatment with Epitalon did not influence food consumption, body weight or mean life span of mice. However, it slowed down the age-related switching-off of estrous function and decreased the frequency of chromosome aberrations in bone marrow cells (by 17.1%, P<0.05). It also increased by 13.3% the life span of the last 10% of the survivors (P<0.01) and by 12.3% the maximum life span in comparison with the control group. We also found that treatment with Epitalon did not influence total spontaneous tumor incidence, but inhibited the development of leukemia (6.0-fold), as compared with the control group. The data obtained suggest a geroprotector activity of Epitalon and the safety of its long-term administration in mice.",
+          "title": "Effect of Epitalon on biomarkers of aging, life span and spontaneous tumor incidence in female Swiss-derived SHR mice."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa06"
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "31293078:c0001",
+            "citation_id": 3,
+            "pmid": "31293078",
+            "title": "The mitochondrial-derived peptide MOTS-c is a regulator of plasma metabolites and enhances insulin sensitivity."
+          }
+        ],
+        "status": "answered",
+        "text": "In diet\u2011induced obese mice, MOTS\u2011c injection reduced body weight and improved insulin sensitivity, lowering plasma sphingolipid, monoacylglycerol, and dicarboxylate metabolites, indicating a metabolic benefit. [3]"
+      },
+      "answerability": "answerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa07",
+      "question": "Does MOTS-c help with weight loss or metabolism?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "41551324:c0001",
+          "citation_id": 1,
+          "end_char": 1807,
+          "pmid": "41551324",
+          "start_char": 0,
+          "text": "INTRODUCTION: MOTS-c (mitochondrial open reading frame of the 12S rRNA type-c) is a mitochondrial-derived peptide and regulator of metabolic homeostasis. Although its role in glucose and lipid metabolism is emerging, changes in circulating MOTS-c with obesity remain unclear. We hypothesized that circulating MOTS-c concentrations would be altered in obese vs. lean adults in associations with altered metabolic and inflammatory markers. METHODS: Circulating MOTS-c levels, metabolic parameters, and inflammatory markers were compared between 22 lean controls and 32 obese participants scheduled for bariatric surgery. Longitudinal changes in weight, MOTS-c levels, and metabolic markers were also analyzed in 10 of the obese patients before and 6 months after bariatric surgery. Additionally, adipose tissue MOTS-c expression was assessed by immunofluorescence in lean kidney donors (n = 6) and obese (n = 14) subjects. RESULTS: Circulating MOTS-c levels were significantly higher in obese compared to lean individuals (273 \u00b1 56 vs. 223 \u00b1 50 pg/mL; P < 0.01). BMI and HOMA-IR independently predicted elevated MOTS-c levels (P = 0.035 and P = 0.032, respectively). MOTS-c showed a biphasic relationship with HOMA-IR, rising sharply above HOMA-IR of \u223c 6.6 mmol/L\u00d7\u03bcU/mL. Adipose tissue MOTS-c did not differ between the groups or correlate with circulating MOTS-c. Despite significant BMI improvements post-surgery (P < 0.001), circulating MOTS-c levels remained unchanged (P = 0.913). CONCLUSION: Circulating MOTS-c levels are elevated in obesity, exhibiting a nonlinear relationship with BMI and insulin resistance. MOTS-c may represent a compensatory metabolic response in obesity and insulin-resistant states, highlighting its potential as a clinical biomarker. This preliminary exploratory study warrants",
+          "title": "Systemic MOTS-c levels are increased in adults with obesity in association with metabolic dysregulation and remain unchanged after weight loss."
+        },
+        {
+          "chunk_id": "41551324:c0002",
+          "citation_id": 2,
+          "end_char": 1853,
+          "pmid": "41551324",
+          "start_char": 1314,
+          "text": "the groups or correlate with circulating MOTS-c. Despite significant BMI improvements post-surgery (P < 0.001), circulating MOTS-c levels remained unchanged (P = 0.913). CONCLUSION: Circulating MOTS-c levels are elevated in obesity, exhibiting a nonlinear relationship with BMI and insulin resistance. MOTS-c may represent a compensatory metabolic response in obesity and insulin-resistant states, highlighting its potential as a clinical biomarker. This preliminary exploratory study warrants validation in larger and independent cohorts.",
+          "title": "Systemic MOTS-c levels are increased in adults with obesity in association with metabolic dysregulation and remain unchanged after weight loss."
+        },
+        {
+          "chunk_id": "31293078:c0001",
+          "citation_id": 3,
+          "end_char": 928,
+          "pmid": "31293078",
+          "start_char": 0,
+          "text": "MOTS-c is an exercise mimetic and improves insulin sensitivity in aged and diet-induced obese mice. Although plasma markers are good markers for the metabolic condition, whether MOTS-c changes plasma markers in diet-induced obese mice has not been examined. Here, we used an unbiased metabolomics approach to examine the effect of MOTS-c on plasma markers of metabolic dysfunction. We found that three pathways - sphingolipid metabolism, monoacylglycerol metabolism, and dicarboxylate metabolism - were reduced in MOTS-c-injected mice. Interestingly, these pathways are upregulated in obese and T2D models. MOTS-c improves insulin sensitivity and increases beta-oxidation to prevent fat accumulation in DIO mice through these pathways. These results provide us a better understanding of the mechanism of how MOTS-c improves insulin sensitivity and reduces the body weight and fatty liver and opens a new venue for further study.",
+          "title": "The mitochondrial-derived peptide MOTS-c is a regulator of plasma metabolites and enhances insulin sensitivity."
+        },
+        {
+          "chunk_id": "34520826:c0002",
+          "citation_id": 4,
+          "end_char": 1939,
+          "pmid": "34520826",
+          "start_char": 1374,
+          "text": "and leads to adaptions that are similar to that of being physically active (weight loss, increased antioxidant capacity and improved insulin sensitivity), however, studies utilising a MOTS-c inactivating genetic variant or combination of exercise + MOTS-c treatment in mice suggest that there are distinct and overlapping pathways through which exercise and MOTS-c evoke metabolic benefits. Overall, MOTS-c, and potentially other MDPs, may be exercise-sensitive myokines and further work is required to define inter- and intra-tissue targets in an exercise context.",
+          "title": "Mitochondrial-derived peptides and exercise."
+        },
+        {
+          "chunk_id": "42266945:c0001",
+          "citation_id": 5,
+          "end_char": 1846,
+          "pmid": "42266945",
+          "start_char": 0,
+          "text": "BACKGROUND: Cancer cachexia is a multifactorial metabolic syndrome marked by progressive skeletal muscle loss, reduced function, and increased mortality. Mitochondrial dysfunction is a key driver of this phenotype. MOTS-c, a mitochondrial-derived peptide that regulates metabolic homeostasis and mimics exercise signaling, may counteract cachexia, but its role remains largely unexplored, and human studies using MOTS-c in subjects with cancer cachexia are needed. METHODS: Differentiated myotubes were treated with MOTS-c (50 \u03bcM) to assess intracellular signaling. In vivo, male mice were inoculated with Colon-26 (C26) carcinoma cells and treated daily with MOTS-c (15 mg/kg/2x Day, i.p.) or vehicle. Body weight was monitored daily. At euthanasia, organ and skeletal muscle masses were measured. Molecular analyses focused on FOXO signaling, atrogene expression (MuRF1, Atrogin-1), and mitochondrial biogenesis markers, including PGC-1\u03b1. RESULTS: In vitro, MOTS-c increased PGC-1\u03b1 mRNA (+84.6%) and AMPK phosphorylation (+103.1%). C26 tumor-bearing mice exhibited significant systemic wasting (~9% body weight loss). Although MOTS-c did not prevent total body weight or fat loss, it significantly preserved skeletal muscle mass, rescuing quadriceps weight (+12% vs. C26 vehicle; p < 0.05) and trending toward protection of gastrocnemius mass and EDL function. Cachexia-induced upregulation of Atrogin-1 (+8.6-fold) and MuRF1 (+16-fold) was attenuated by MOTS-c, accompanied by increased inhibitory pFOXO1 (+80%), reduced pFOXO3a (-39%), and partial restoration of PGC-1\u03b1 protein (+143%). CONCLUSION: Our findings demonstrate that MOTS-c partially protects against skeletal muscle loss in C26 cachexia by modulating FOXO-driven catabolic signaling and promoting mitochondrial biogenesis, supporting its therapeutic potential in cancer cachexia.",
+          "title": "MOTS-c partially protects against skeletal muscle deterioration in C26 cachexia."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa07"
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa16",
+      "question": "What is the safest effective BPC-157 dose for healing a human tendon injury?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "21030672:c0001",
+          "citation_id": 1,
+          "end_char": 1705,
+          "pmid": "21030672",
+          "start_char": 0,
+          "text": "Pentadecapeptide BPC 157, composed of 15 amino acids, is a partial sequence of body protection compound (BPC) that is discovered in and isolated from human gastric juice. Experimentally it has been demonstrated to accelerate the healing of many different wounds, including transected rat Achilles tendon. This study was designed to investigate the potential mechanism of BPC 157 to enhance healing of injured tendon. The outgrowth of tendon fibroblasts from tendon explants cultured with or without BPC 157 was examined. Results showed that BPC 157 significantly accelerated the outgrowth of tendon explants. Cell proliferation of cultured tendon fibroblasts derived from rat Achilles tendon was not directly affected by BPC 157 as evaluated by MTT assay. However, the survival of BPC 157-treated cells was significantly increased under the H(2)O(2) stress. BPC 157 markedly increased the in vitro migration of tendon fibroblasts in a dose-dependent manner as revealed by transwell filter migration assay. BPC 157 also dose dependently accelerated the spreading of tendon fibroblasts on culture dishes. The F-actin formation as detected by FITC-phalloidin staining was induced in BPC 157-treated fibroblasts. The protein expression and activation of FAK and paxillin were determined by Western blot analysis, and the phosphorylation levels of both FAK and paxillin were dose dependently increased by BPC 157 while the total amounts of protein was unaltered. In conclusion, BPC 157 promotes the ex vivo outgrowth of tendon fibroblasts from tendon explants, cell survival under stress, and the in vitro migration of tendon fibroblasts, which is likely mediated by the activation of the FAK-paxillin pathway.",
+          "title": "The promoting effect of pentadecapeptide BPC 157 on tendon healing involves tendon outgrowth, cell survival, and cell migration."
+        },
+        {
+          "chunk_id": "36551977:c0001",
+          "citation_id": 2,
+          "end_char": 1770,
+          "pmid": "36551977",
+          "start_char": 0,
+          "text": "First, we review the definitively severed myotendinous junction and recovery by the cytoprotective stable gastric pentadecapeptide BPC 157 therapy, its healing that might combine both transected and detached tendon and transected muscle, ligament and bone injuries, applied alone, as native peptide therapy, effective in rat injury, given intraperitoneally or in drinking water or topically, at the site of injury. As a follow up, we reviewed that with the BPC 157 therapy, its cytoprotective ability to organize simultaneous healing of different tissues of and full recovery of the myotendinous junction might represent the particular muscle therapy against distinctive etiopathology muscle disabilities and weakness. In this, BPC 157 therapy might recover many of muscle disabilities (i.e., succinylcholine, vascular occlusion, spinal cord compression, stroke, traumatic brain injury, severe electrolyte disturbances, neurotoxins, neuroleptics, alcohol, serotonin syndrome and NO-system blockade and tumor-cachexia). These might provide practical realization of the multimodal muscle-axis impact able to react depending on the condition and the given agent(s) and the symptoms distinctively related to the prime injurious cause symptoms in the wide healing concept, the concept of cytoprotection, in particular. Further, the BPC 157 therapy might be the recovery for the disabled heart functioning, and disabled smooth muscle functioning (various sphincters function recovery). Finally, BPC 157, native and stable in human gastric juice, might be a prototype of anti-ulcer cytoprotective peptide for the muscle therapy with high curing potential (very safe profile (lethal dose not achieved), with suited wide effective range (\u03bcg-ng regimens) and ways of application).",
+          "title": "Stable Gastric Pentadecapeptide BPC 157 and Striated, Smooth, and Heart Muscle."
+        },
+        {
+          "chunk_id": "14554208:c0001",
+          "citation_id": 3,
+          "end_char": 1789,
+          "pmid": "14554208",
+          "start_char": 0,
+          "text": "In studies intended to improve healing of transected Achilles tendon, effective was a stable gastric pentadecapeptide BPC 157 (GEPPPGKPADDAGLV, M.W. 1419). Currently in clinical trials for inflammatory bowel disease (PLD-116, PL 14736, Pliva), it ameliorates internal and external wound healing. In rats, the right Achilles tendon transected (5 mm proximal to its calcaneal insertion) presents with a large tendon defect between cut ends. Agents (/kg b.w., i.p., once time daily) (BPC 157 (dissolved in saline, with no carrier addition) (10 microg, 10 ng or 10 pg) or saline (5.0 ml)), were firstly applied at 30 min after surgery, the last application at 24 h before autopsy. Achilles functional index (AFI) was assessed once time daily. Biomechanical, microscopical and macroscopical assessment was on day 1, 4, 7, 10 and 14. Controls generally have severely compromised healing. In comparison, pentadecapeptide BPC 157 fully improves recovery: (i) biomechanically, increased load of failure, load of failure per area and Young's modulus of elasticity; (ii) functionally, significantly higher AFI-values; (iii) microscopically, more mononuclears and less granulocytes, superior formation of fibroblasts, reticulin and collagen; (iv) macroscopically, smaller size and depth of tendon defect, and subsequently the reestablishment of full tendon integrity. Likewise, unlike TGF-beta, pentadecapeptide BPC 157, presenting with no effect on the growth of cultured cell of its own, consistently opposed 4-hydroxynonenal (HNE), a negative modulator of the growth. HNE-effect is opposed in both combinations: BPC 157+HNE (HNE growth inhibiting effect reversed into growth stimulation of cultured tendocytes) and HNE+BPC 157(abolished inhibiting activity of the aldehyde), both in the presence of",
+          "title": "Gastric pentadecapeptide BPC 157 accelerates healing of transected rat Achilles tendon and in vitro stimulates tendocytes growth."
+        },
+        {
+          "chunk_id": "20190676:c0001",
+          "citation_id": 4,
+          "end_char": 1552,
+          "pmid": "20190676",
+          "start_char": 0,
+          "text": "BACKGROUND: The effect of systemic and local peptide treatment effective in muscle contusion and then on counteraction of corticosteroid-induced impairment was tested. The pentadecapeptide BPC 157, given without a carrier, improved the healing of transected quadriceps muscle. It also improved muscle healing in rats with muscle crush injury when applied systemically or locally. Importantly, it counteracted corticosteroid-impairment in tendon to bone healing. Thus BPC 157 is proposed as an effective treatment that can improve muscle healing in spite of corticosteroid treatment. MATERIAL/METHODS: After the gastrocnemius muscle complex had been injured, rats received BPC 157 (intraperitoneally or locally as a cream) and/or 6alpha-methylprednisolone (intraperitoneally) only once (immediately after injury, sacrifice at 2 h) or once daily (final dose 24 hours before sacrifice and/or assessment procedure at days 1, 2, 4, 7, and 14). Muscle healing was evaluated functionally, macroscopically, and histologically. RESULTS: Without therapy, crushed gastrocnemius muscle complex controls showed limited improvement. 6alpha-methylprednisolone markedly aggravated healing. In contrast, BPC 157 induced faster muscle healing and full function restoration and improved muscle healing despite systemic corticosteroid treatment when given intraperitoneally or locally and demonstrated functionally, macroscopically, and histologically at all investigated intervals. CONCLUSIONS: BPC 157 completely reversed systemic corticosteroid-impaired muscle healing.",
+          "title": "Impact of pentadecapeptide BPC 157 on muscle healing impaired by systemic corticosteroid application."
+        },
+        {
+          "chunk_id": "18668315:c0001",
+          "citation_id": 5,
+          "end_char": 1106,
+          "pmid": "18668315",
+          "start_char": 0,
+          "text": "PURPOSE: Stable gastric pentadecapeptide BPC 157 accelerates the healing of a transected Achilles tendon and a transected quadriceps muscle. It may also be of clinical relevance as a systemic and local peptide treatment for crush injury of a major muscle, such as gastrocnemius muscle complex. BPC 157 is effective without a carrier, and it is presently undergoing trials for inflammatory bowel disease, and no toxicity has so far been reported. METHODS: In crushed rats (force delivered 0.727 Ns/cm2), BPC 157 was applied either intraperitoneally or locally, as a thin cream layer, immediately after injury (sacrifice at 2 h), and once a day for 14 days. RESULTS: BPC 157 improved muscle healing, macroscopically (less hematoma and edema, no post-injury leg contracture), microscopically, functionally, and also based on enzyme activity (creatine kinase, lactate dehydrogenase, aspartate aminotransferase, alanine aminotransferase). CONCLUSION: BPC 157, at all investigated intervals, given locally or intraperitoneally, accelerated post-injury muscle healing and also helped to restore the full function.",
+          "title": "Gastric pentadecapeptide BPC 157 as an effective therapy for muscle crush injury in the rat."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa16"
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa17",
+      "question": "Does injectable GHK-Cu reverse human skin aging better than topical GHK-Cu?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "35083444:c0001",
+          "citation_id": 1,
+          "end_char": 844,
+          "pmid": "35083444",
+          "start_char": 0,
+          "text": "GHK (glycyl-L-histidyl-L-lysine) is a naturally occurring peptide found in human serum with levels averaging 200 ng/ml at age 20 but declining to an average of 80 ng/ml by age 60. The molecule has a very high affinity for copper and forms the chelate GHK-Cu. The peptide as well as its Cu (II) chelate have anti-inflammatory and tissue remodeling properties. GHK-Cu has been shown to promote skin remodeling, wound healing and regeneration, and has prominent antioxidant and anti-inflammatory effects in in vitro and in vivo studies. In addition, preliminary observations suggest GHK can partially reverse cognitive impairment in aging mice by targeting anti-inflammatory and epigenetic pathways. The evidence as presented provides the rationale to further investigate this naturally occurring peptide in preclinical and clinical aging studies.",
+          "title": "The potential of GHK as an anti-aging peptide."
+        },
+        {
+          "chunk_id": "28370978:c0001",
+          "citation_id": 2,
+          "end_char": 1135,
+          "pmid": "28370978",
+          "start_char": 0,
+          "text": "Glycyl-l-histidyl-l-lysine (GHK)-Cu is considered to be an activator of tissue remodeling, and has been used in cosmetic products. In this study, we prepared liposomes encapsulating GHK-Cu and analyzed their effect on human umbilical vein endothelial cells (HUVECs) proliferation and scald wound healing in mice. The nanoscaled GHK-Cu-liposomes promoted HUVECs proliferation, with a 33.1% increased rate. Flow cytometry analysis showed increased cell number at G1 stage and decreased cell number at G2 stage after GHK-Cu-liposomes treatment. Western blotting indicated that the expression of vascular endothelial growth factor and fibroblast grow factors-2 were both enhanced, as well as cell cycle-related proteins CDK4 and CyclinD1. In a mice scald model, angiogenesis in burned skin treated with GHK-Cu-liposomes was better compared with free GHK-Cu, and immunofluorescence analysis showed enhanced signal of CD31 and Ki67 in GHK-Cu-liposomes treated mice. Moreover, the wound healing time was shortened to 14 days post injury. Our results provide the evidence that GHK-Cu-liposomes could be utilized as a treatment for skin wounds.",
+          "title": "GHK-Cu-liposomes accelerate scald wound healing in mice by promoting cell proliferation and angiogenesis."
+        },
+        {
+          "chunk_id": "39963574:c0001",
+          "citation_id": 3,
+          "end_char": 1827,
+          "pmid": "39963574",
+          "start_char": 0,
+          "text": "INTRODUCTION: Peptides are promising and attractive anti-wrinkle active ingredients, amongst which glycyl-histidyl-lysine peptide (GHK) is one of the most broadly promoted peptide for topical application. This simple sequence of amino acid residues not only has the capability of tissue regeneration and the enhancement of collagen and glycosaminoglycans synthesis but also is able to increase nerve outgrowth and angiogenesis. Consequently, GHK has several properties, from wound healing to prevention/reduction wrinkles. GHK-Cu and Pal-GHK are metal complex and palmitoylated derivatives of GHK, respectively. Although GHK-Cu and Pal-GHK are widely used in anti-wrinkle products available on the cosmetic market, the published information on their skin permeability, effectiveness, physicochemical properties and so on is insufficient. METHODS: This review aims to highlight whether GHK is sufficiently effective on wrinkle prevention/reduction. Apart from the effectiveness, another question that is tried to be answered is whether skin permeability of GHK allows it to act as an anti-wrinkle peptide at its site of action? Skin permeation enhancement methods employed so far are also reviewed. RESULTS: Based on cellular studies, undoubtedly, GHK can be considered as an anti-wrinkle ingredient. Although GHK-Cu and Pal-GHK have been of interest as effective peptides to be incorporated in the anti-wrinkle products, there is a surprising absence of clinical studies using them. Metal complexation and chemical modification with a hydrophobic moiety increase permeability of this peptide. Besides, cell penetrating peptides seem promising to increase skin permeation of GHK and its derivatives. Skin pretreatment with microneedles also has the potential to be further studied for permeation enhancement of such peptides. As",
+          "title": "Topically applied GHK as an anti-wrinkle peptide: Advantages, problems and prospective."
+        },
+        {
+          "chunk_id": "42573538:c0001",
+          "citation_id": 4,
+          "end_char": 1628,
+          "pmid": "42573538",
+          "start_char": 0,
+          "text": "BACKGROUND: Skin aging is a complex process driven by multiplex factors, including chronic inflammation and UV exposure. It has become common practice for cosmetic formulations to counteract skin aging by targeting different pathways simultaneously with a pool of active ingredients. The present study aims to explore the skin protective effects of a novel extract of ferment in combination with copper tripeptide-1 GHK-Cu from an anti-inflammation perspective. MATERIALS AND METHODS: An extract of the Thermus thermophilus and Bacillus subtilis mixed-culture ferment (TBFE) was prepared and the skin protective effects of its combination with the human tripeptide derivative GHK-Cu were explored through in vitro, ex vivo, and clinical tests. RESULTS: The combination outperformed TBFE or GHK-Cu alone in inhibiting secretion of inflammatory cytokines by lipopolysaccharide-stimulated macrophages. In addition, one face cream formulated with the combination as the sole active ingredients protected human skin explants from ultraviolet irradiation induced damage by maintaining skin morphology and decreasing the degradation of extracellular matrix. Finally, results from the clinical study demonstrated that the combination was effective in decreasing wrinkles and improving skin barrier conditions. CONCLUSION: It is concluded that the combination of TBFE and GHK-Cu exerts anti-aging effects on human skin by targeting inflammation, extracellular matrix, and skin barrier function. Therefore, the combination offers a promising option for anti-aging skincare regimen by addressing multiple mechanisms involved in skin aging.",
+          "title": "Augmented Skin Beneficial Effects of Thermus Thermophilus and Bacillus Subtilis Mixed-Culture Ferment Extract by Tripeptide GHK-Cu."
+        },
+        {
+          "chunk_id": "37062921:c0001",
+          "citation_id": 5,
+          "end_char": 1140,
+          "pmid": "37062921",
+          "start_char": 0,
+          "text": "INTRODUCTION: GHK-Cu and HA are two commonly used skin care ingredients, both of which were reported to enhance collagen synthesis. This work aims to investigate their co-effect on collagen regulation. MATERIALS AND METHODS: In cell experiments, human dermal fibroblasts were treated by a series of GHK-Cu and HA combinations, and the expressions of collagen I, IV, and VII were measured by qRT-PCR. The best formula screened out from cell experiments were further studied by ex-vivo skin model, and the content of collagen IV was quantified by immunofluorescence method. RESULTS: The combination GHK-Cu and HA was found to promote the generation of collagen I, IV, and VII. Especially, they form a synergy on collagen IV. At the ratio of 1:9, GHK-Cu and LMW HA deliver the strongest effect to elevate collagen IV synthesis by 25.4 times in cell test and 2.03 times in ex-vivo skin test. CONCLUSION: The co-effect of GHK-Cu and HA was revealed. Their synergy brings an insight to anti-aging technology: choosing proper molecular weight of HA and managing its ratio with GHK-Cu could enhance DEJ health via stimulating collagen IV synthesis.",
+          "title": "Synergy of GHK-Cu and hyaluronic acid on collagen IV upregulation via fibroblast and ex-vivo skin tests."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa17"
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "model": "openai/gpt-oss-20b",
+      "owner_label": {
+        "citations_correct": null,
+        "faithful": null,
+        "refusal_correct": null,
+        "relevant": null,
+        "reviewer": ""
+      },
+      "qa_id": "qa18",
+      "question": "Does TB-500 speed recovery after surgery in humans?",
+      "retrieved_evidence": [
+        {
+          "chunk_id": "42542926:c0002",
+          "citation_id": 1,
+          "end_char": 2976,
+          "pmid": "42542926",
+          "start_char": 1435,
+          "text": "and significantly lower total Movin scores in the TB-500 and BPC + TB groups (p = 0.017 and p = 0.040, respectively) relative to controls, indicating improved tendon architecture, collagen alignment, and reduced degenerative changes. The BPC-157 group showed numerically lower scores without reaching statistical significance for total scores. Sirius red birefringence analysis showed increased type I collagen organization and altered type III collagen distribution in treatment groups, particularly in the TB-500 group, suggesting progression toward matrix maturation. Immunohistochemical analysis revealed no significant differences in collagen type I expression among groups, whereas collagen type III expression differed significantly, consistent with histochemical findings. Combined BPC-157 and TB-500 treatment did not confer additional benefits compared to either agent alone. CONCLUSION: In this exploratory rat model study, both BPC-157 and TB-500 were associated with improved histopathological parameters and extracellular matrix organization during early Achilles tendon repair, with TB-500 additionally demonstrating a significant biomechanical advantage at four weeks. The absence of additive effects with combination therapy may reflect convergence on shared downstream pathways; however, this hypothesis requires further experimental confirmation. These preliminary findings indicate that both peptides warrant further investigation as candidate adjuncts to tendon repair, pending dose-optimization and longer-term studies.",
+          "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+        },
+        {
+          "chunk_id": "42542926:c0001",
+          "citation_id": 2,
+          "end_char": 1888,
+          "pmid": "42542926",
+          "start_char": 0,
+          "text": "OBJECTIVES: This study aims to evaluate the effects of BPC-157, synthetic thymosin beta-4 (TB-500), and their combination on Achilles tendon healing using biomechanical, histopathological, histochemical, and immunohistochemical analyses in a rat model. MATERIALS AND METHODS: Thirty-two male Sprague-Dawley rats, each aged 12 weeks and weighing approximately 330 g, underwent standardized Achilles tendon transection and repair and were randomly assigned to four groups, with eight rats in each group: control, BPC-157 (10 \u03bcg/kg/day), TB-500 (60 \u03bcg/kg/day), and combined BPC-157 + TB-500 (BPC + TB). Treatments were administered intraperitoneally for four weeks postoperatively. At four weeks, tendons were harvested for biomechanical testing or histological evaluation. Maximum load to failure was assessed biomechanically. Histological and histochemical analyses included hematoxylin-eosin, Masson trichrome, Alcian blue, and Sirius red staining and were evaluated using Bonar and Movin scoring systems. Expression of collagen types I and III was assessed immunohistochemically and semiquantified using H-score analysis. RESULTS: Biomechanical testing revealed higher maximum load to failure values in the BPC-157 and TB-500 groups compared to controls, reaching statistical significance in the TB-500 group (p < 0.05). Histopathological evaluation demonstrated significantly lower total Bonar scores in the TB-500 group (p = 0.016) and significantly lower total Movin scores in the TB-500 and BPC + TB groups (p = 0.017 and p = 0.040, respectively) relative to controls, indicating improved tendon architecture, collagen alignment, and reduced degenerative changes. The BPC-157 group showed numerically lower scores without reaching statistical significance for total scores. Sirius red birefringence analysis showed increased type I collagen organization and altered type III collagen",
+          "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+        },
+        {
+          "chunk_id": "38382158:c0001",
+          "citation_id": 3,
+          "end_char": 1784,
+          "pmid": "38382158",
+          "start_char": 0,
+          "text": "BACKGROUND: TB-500 (Ac-LKKTETQ), derived from the active site of thymosin \u03b24 (T\u03b24), has various biological functions in its unacetylated form, LKKTETQ. These functions include actin binding, dermal wound healing, angiogenesis, and skin repair. The biological effects of TB-500, however, have not been documented. And the analysis of TB-500 and its metabolites have been neither simultaneously quantified nor structurally identified using synthesized authentic standards. METHODS: This study was aimed to investigating simultaneous analytical methods of TB-500 and its metabolites in in-vitro and urine samples by using UHPLC-Q-Exactive orbitrap MS, and to comparing the biological activity of its metabolites with the parent TB-500. The metabolism of TB-500 was investigated in human serum, various in-vitro enzyme systems, and urine samples from rats treated with TB-500, and their biological activities measured by cytotoxicity and wound healing experiments were also evaluated in fibroblasts. RESULTS: The simultaneous analytical method for TB-500 and its metabolites was developed and validated. The study found that Ac-LK was the primary metabolite with the highest concentration in rats at 0-6 h intervals. Also, the metabolite Ac-LKK was a long-term metabolite of TB-500 detected up to 72 hr. No cytotoxicity of the parent and its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. CONCLUSION: The study provides a valuable tool for quantifying TB-500 and its metabolites, contributing to the understanding of metabolism and potential therapeutic applications. Our results also suggest that the previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent",
+          "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+        },
+        {
+          "chunk_id": "38382158:c0002",
+          "citation_id": 4,
+          "end_char": 1790,
+          "pmid": "38382158",
+          "start_char": 1334,
+          "text": "its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. CONCLUSION: The study provides a valuable tool for quantifying TB-500 and its metabolites, contributing to the understanding of metabolism and potential therapeutic applications. Our results also suggest that the previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent form.",
+          "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+        },
+        {
+          "chunk_id": "23084823:c0001",
+          "citation_id": 5,
+          "end_char": 1720,
+          "pmid": "23084823",
+          "start_char": 0,
+          "text": "A veterinary preparation known as TB-500 and containing a synthetic version of the naturally occurring peptide LKKTETQ has emerged. The peptide segment (17)LKKTETQ(23) is the active site within the protein thymosin \u03b2(4) responsible for actin binding, cell migration and wound healing. The key ingredient of TB-500 is the peptide LKKTETQ with artificial acetylation of the N-terminus. TB-500 is claimed to promote endothelial cell differentiation, angiogenesis in dermal tissues, keratinocyte migration, collagen deposition and decrease inflammation. In order to control the misuse of TB-500 in equine sports, a method to definitely identify its prior use in horses is required. This study describes a method for the simultaneous detection of N-acetylated LKKTETQ and its metabolites in equine urine and plasma samples. The possible metabolites of N-acetylated LKKTETQ were first identified from in vitro studies. The parent peptide and its metabolites were isolated from equine urine or plasma by solid-phase extraction using ion-exchange cartridges, and analysed by liquid chromatography-mass spectrometry (LC/MS). These analytes were identified according to their LC retention times and relative abundances of the major product ions. The peptide N-acetylated LKKTETQ could be detected and confirmed at 0.02 ng/mL in equine plasma and 0.01 ng/mL in equine urine. This method was successful in confirming the presence of N-acetylated LKKTETQ and its metabolites in equine urine and plasma collected from horses administered with a single dose of TB-500 (containing 10mg of N-acetylated LKKTETQ). To our knowledge, this is the first identification of TB-500 and its metabolites in post-administration samples from horses.",
+          "title": "Doping control analysis of TB-500, a synthetic version of an active region of thymosin \u03b24, in equine urine and plasma by liquid chromatography-mass spectrometry."
+        }
+      ],
+      "sample_id": "openai/gpt-oss-20b:qa18"
+    }
+  ],
+  "source_outputs_sha256": "18AEB2B68E35425636CBC77D229F8360091A2D7064704058393E24483F3B12FC",
+  "version": 3
+}

@@ -35,6 +35,7 @@ class JudgeValidationTests(unittest.TestCase):
         source = {f"{row['model']}:{row['qa_id']}": row for row in rows()}
         self.assertEqual(sum(source[item["sample_id"]]["answerability"] == "answerable" for item in first["sample"]), 6)
         self.assertTrue(all("judge" not in item for item in first["sample"]))
+        self.assertTrue(all("acceptable_answer" not in item for item in first["sample"]))
         self.assertTrue(all(item["question"] and item["retrieved_evidence"] for item in first["sample"]))
         self.assertEqual(len({item["qa_id"] for item in first["sample"] if item["answerability"] == "answerable"}), 6)
 
@@ -61,12 +62,14 @@ class JudgeValidationTests(unittest.TestCase):
         source = {f"{row['model']}:{row['qa_id']}": row for row in saved}
         for item in packet["sample"]:
             verdict = source[item["sample_id"]]["judge"]
-            citations = None if item["answer"]["status"] == "insufficient_evidence" else True
-            item["owner_label"] = {"reviewer": "owner", "faithful": verdict["faithful"], "relevant": True, "citations_correct": citations, "refusal_correct": verdict["refusal_correct"]}
+            refusal = item["answer"]["status"] == "insufficient_evidence"
+            citations = None if refusal else True
+            faithful = None if refusal else verdict["faithful"]
+            item["owner_label"] = {"reviewer": "owner", "faithful": faithful, "relevant": True, "citations_correct": citations, "refusal_correct": verdict["refusal_correct"]}
         report = judge_validation.validate_labels(packet, saved, cases, contexts)
-        self.assertEqual(report["dimensions"]["relevant"]["status"], "inconclusive_undefined_kappa")
+        self.assertEqual(report["dimensions"]["relevant"]["status"], "pass_raw_agreement_undefined_kappa")
         self.assertLess(report["dimensions"]["citations_correct"]["n"], 10)
-        self.assertFalse(report["passes"])
+        self.assertTrue(report["passes"])
 
         packet["sample"][0]["retrieved_evidence"][0]["text"] = "edited"
         with self.assertRaises(judge_validation.JudgeValidationError):

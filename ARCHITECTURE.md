@@ -287,9 +287,10 @@ rate, correct-refusal rate, and overall answerability classification. A
 development winner is provisional and is not itself an acceptance gate. Claude is the
 different-family judge, but its verdict is unusable until a deterministic
 10-output sample reaches at least 80% owner agreement and Cohen's kappa 0.60.
-Undefined kappa remains inconclusive and is accompanied by the confusion
-matrix. The owner worksheet hides the judge verdict but displays the frozen
-question, answerability target, acceptable answer, returned answer, and exact
+When kappa is undefined because one side has no label variation, at least 80%
+raw agreement plus the confusion matrix is the disclosed fallback rather than
+an impossible gate. The owner worksheet hides both the judge verdict and oracle
+acceptable answer, but displays the frozen question, returned answer, and exact
 five retrieved chunks required to make independent labels. Citation
 correctness may be marked not applicable for a refusal with no citations, and
 the smaller denominator is reported. During validation the worksheet is
@@ -324,7 +325,16 @@ stage. It contains no QA ID, expected answer, PMID, or question-specific hint.
 The measured run reached 10/10 answerable cases, 3/3 correct refusals, and
 13/13 structurally valid outputs. QA04 was answered after reconsideration from
 the unchanged rank-five evidence, so the improvement is attributed to the
-answer-synthesis policy rather than retrieval or chunk changes.
+answer-synthesis policy rather than retrieval or chunk changes. Its first
+Claude judge measured `0.800` answered-only faithfulness and exposed unsupported
+scope generalizations in qa02 and qa07. A versioned general prompt correction
+in v2.5 kept the generation gate perfect without changing QA, retrieval,
+contexts, model, or holdout. The corrected judge-v2 contract extracts claims
+only from the answer, validates exact scope and polarity, requires a hashed raw
+response, and replays copied and combined metadata. Its measured v2.5 result is
+`0.900` answered-only faithfulness, `1.000` relevancy, `0.900` citation
+correctness, and `1.000` correct refusal. The remaining qa08 failure is retained
+as over-citation evidence pending owner validation.
 
 ## Application and release boundary
 
@@ -348,9 +358,10 @@ rate-limiting claim.
 frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics,
 compares the complete per-query and aggregate reports with saved evidence, and
 validates committed chunk manifests. The approved QA, retrieval caches, and
-first bake-off plus GPT v2.2/v2.3/v2.4 diagnostics are saved evidence. The
-runner replays their output counts and usage and validates their frozen hashes.
-Human judge labels, an independently accepted generator, QA holdout metrics, and a
+first bake-off plus GPT v2.2/v2.3/v2.4/v2.5 diagnostics and the v2.4/v2.5 judge
+runs are saved evidence. The runner replays their outputs, metrics, usage,
+cost-estimate bounds, worksheets, and frozen hashes. Human judge labels, an
+independently accepted generator, QA holdout metrics, and a
 public deployment remain `TBD`; they are not converted into zeros or passing
 claims. Railway config-as-code is checked in with Railpack, Python 3.11, a
 `$PORT`-aware Uvicorn start command, `/healthz`, and bounded restart behavior;

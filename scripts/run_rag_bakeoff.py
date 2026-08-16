@@ -81,10 +81,16 @@ def validate_config(config: dict[str, Any]) -> dict[str, Any]:
         "frozen_generator_v2_2_before_development_rerun",
         "frozen_generator_v2_3_before_development_rerun",
         "frozen_generator_v2_4_before_development_rerun",
+        "frozen_generator_v2_5_before_development_rerun",
     } or config.get("selected") is not True:
         raise BakeoffError("selected RAG configuration is not frozen")
     if not isinstance(config.get("prompt"), str) or not config["prompt"].strip() or not isinstance(config.get("generation"), dict):
         raise BakeoffError("frozen RAG config must record prompt and generation settings")
+    prompt_hash = config.get("prompt_sha256")
+    if prompt_hash is not None and prompt_hash != hashlib.sha256(
+        config["prompt"].encode("utf-8")
+    ).hexdigest().upper():
+        raise BakeoffError("frozen generator prompt_sha256 does not match its prompt")
     generation = config["generation"]
     max_tokens = generation.get("max_tokens")
     citation_mode = generation.get("citation_mode", "declared")

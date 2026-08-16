@@ -17,6 +17,12 @@ SPEC.loader.exec_module(diagnostic)
 
 
 class GeneratorDiagnosticTests(unittest.TestCase):
+    def test_reviewed_estimate_must_match_recomputed_inputs(self):
+        config = {"generator_diagnostic": {"reviewed_estimate_usd": 0.01}}
+        diagnostic.validate_reviewed_estimate(config, 0.01)
+        with self.assertRaises(diagnostic.BakeoffError):
+            diagnostic.validate_reviewed_estimate(config, 0.011)
+
     def test_config_selects_a_validated_nonempty_model_subset(self):
         catalog_models = ("qwen/model", "openai/gpt-oss-20b", "google/model")
         self.assertEqual(
@@ -179,13 +185,14 @@ class GeneratorDiagnosticTests(unittest.TestCase):
                     result_path=Path(directory) / "summary.json",
                 )
 
-    def test_default_estimate_wires_v2_4_without_touching_parent_evidence(self):
-        parent_outputs = ROOT / "data/rag_generator_v2_3_outputs.json"
-        parent_summary = ROOT / "data/rag_generator_v2_3_summary.json"
-        before = (
-            diagnostic.hash_file(parent_outputs),
-            diagnostic.hash_file(parent_summary),
+    def test_default_estimate_wires_v2_5_without_touching_v2_4_evidence(self):
+        protected = (
+            ROOT / "data/rag_generator_v2_4_outputs.json",
+            ROOT / "data/rag_generator_v2_4_summary.json",
+            ROOT / "data/rag_generator_v2_4_judged_outputs.json",
+            ROOT / "data/rag_generator_v2_4_judge_summary.json",
         )
+        before = tuple(diagnostic.hash_file(path) for path in protected)
         stdout = StringIO()
         catalog_models = (
             "qwen/qwen3-30b-a3b-instruct-2507",
@@ -203,12 +210,16 @@ class GeneratorDiagnosticTests(unittest.TestCase):
             ["openai/gpt-oss-20b"],
         )
         self.assertEqual(estimate["judge_calls"], 0)
+        config = json.loads(
+            (ROOT / "artifacts/section5/generator_v2_5_config.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            estimate["estimated_max_cost_usd"],
+            config["generator_diagnostic"]["reviewed_estimate_usd"],
+        )
         self.assertEqual(
             before,
-            (
-                diagnostic.hash_file(parent_outputs),
-                diagnostic.hash_file(parent_summary),
-            ),
+            tuple(diagnostic.hash_file(path) for path in protected),
         )
 
     def test_summary_requires_all_answerable_answers_before_judging(self):

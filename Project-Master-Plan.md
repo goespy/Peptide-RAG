@@ -19,7 +19,7 @@ flowchart LR
 | 2. Oracle and Boolean MVP | Complete |
 | 3. BM25 and full IR evaluation | Complete |
 | 4. Retrieval tuning and hardening | Complete |
-| 5. RAG and hybrid retrieval | In progress: retrieval frozen; GPT v2.4 passed its 10/10 generator gate; Claude judge validation, owner labels, and holdout pending |
+| 5. RAG and hybrid retrieval | In progress: retrieval frozen; GPT v2.5 passed 10/10 and judge-v2 measured 0.900 answered-only faithfulness; blind owner labels and holdout pending |
 | 6. Final evaluation and submission | In progress: offline runner, CI, and report foundations complete; final measured artifacts/deployment pending |
 
 The frozen corpus contains 2,000 PubMed records and has SHA-256 `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. The frozen qrels v2 contains 75 graded judgments across 15 queries. Neither artifact may be silently changed.

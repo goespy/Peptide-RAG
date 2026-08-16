@@ -10,22 +10,22 @@ python run_project.py
 
 It validates frozen core hashes, builds the index, runs Boolean and BM25
 evaluation, and validates the approved QA set, chunk manifests, embedding
-ledger, selected hybrid configuration, and development contexts. Corruption
-exits nonzero. Judge validation and holdout gates remain `TBD` until their
-evidence exists. The measured GPT-only v2.4 development run reached 10/10
-answerable cases, 3/3 correct refusals, and 13/13 structurally valid outputs;
-it opens only the separately approved judge stage, not the holdout.
+ledger, selected hybrid configuration, development contexts, versioned GPT
+outputs, Claude judge evidence, and blind owner worksheet. Corruption exits
+nonzero. The measured GPT-only v2.5 development run reached 10/10 answerable
+cases, 3/3 correct refusals, and 13/13 structurally valid outputs. Judge-v2
+measured `0.900` answered-only faithfulness, but holdout remains `TBD` until the
+owner-validation gate passes.
 
 ## Pending human validation
 
-The 20-case QA set and evidence spans are approved. The separately approved
-GPT-only v2.4 development diagnostic passed its 10/10 answerable, 3/3
-correct-refusal, and 13/13 structural gate. After a separate judge-cost
-approval, run the different-family Claude judge, manually label
-the blinded 10-output worksheet (seven answerable plus all three unanswerable
-outputs for the single-generator run), validate agreement, and run the
-untouched seven-case holdout exactly once. Commit every reproducible generator,
-judge, worksheet, citation, usage, and negative-result artifact.
+The 20-case QA set and evidence spans are approved. GPT-only v2.5 passed its
+10/10 answerable, 3/3 correct-refusal, and 13/13 structural gate, and the
+different-family Claude judge-v2 run is complete. The remaining human step is
+to label the blinded 10-output worksheet (seven answerable plus all three
+unanswerable outputs), validate agreement, and only then run the untouched
+seven-case holdout exactly once. Commit every reproducible generator, judge,
+worksheet, citation, usage, and negative-result artifact.
 
 ## Pending credentials and deployment
 

@@ -42,14 +42,16 @@ def _relative(path: Path) -> str:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json")
-    parser.add_argument("--generator-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_4_config.json")
+    parser.add_argument("--generator-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_5_config.json")
     parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json")
-    parser.add_argument("--model-catalog", type=Path, default=ROOT / "artifacts/section5/model_candidates_refresh.json")
-    parser.add_argument("--generator-outputs", type=Path, default=ROOT / "data/rag_generator_v2_4_outputs.json")
-    parser.add_argument("--generator-summary", type=Path, default=ROOT / "data/rag_generator_v2_4_summary.json")
-    parser.add_argument("--output", type=Path, default=ROOT / "artifacts/section5/generator_v2_4_judge_config.json")
-    parser.add_argument("--judged-outputs", type=Path, default=ROOT / "data/rag_generator_v2_4_judged_outputs.json")
-    parser.add_argument("--judge-summary", type=Path, default=ROOT / "data/rag_generator_v2_4_judge_summary.json")
+    parser.add_argument("--model-catalog", type=Path, default=ROOT / "artifacts/section5/model_candidates_judge_refresh.json")
+    parser.add_argument("--generator-outputs", type=Path, default=ROOT / "data/rag_generator_v2_5_outputs.json")
+    parser.add_argument("--generator-summary", type=Path, default=ROOT / "data/rag_generator_v2_5_summary.json")
+    parser.add_argument("--output", type=Path, default=ROOT / "artifacts/section5/generator_v2_5_judge_config.json")
+    parser.add_argument("--judged-outputs", type=Path, default=ROOT / "data/rag_generator_v2_5_judged_outputs.json")
+    parser.add_argument("--judge-summary", type=Path, default=ROOT / "data/rag_generator_v2_5_judge_summary.json")
+    parser.add_argument("--experiment-id", default="generator-v2.5-claude-judge-v2")
+    parser.add_argument("--prompt-version", type=int, choices=(1, 2), default=2)
     parser.add_argument("--hard-cost-cap-usd", type=float, required=True)
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
@@ -110,13 +112,14 @@ def main(argv: Sequence[str] | None = None) -> int:
             grouped,
             model=judge_model,
             max_tokens=600,
+            prompt_version=args.prompt_version,
             catalog=catalog,
         )
         if estimate["estimated_max_cost_usd"] > args.hard_cost_cap_usd:
             raise BakeoffError("judge estimate exceeds the proposed hard cost cap")
         packet = {
-            "schema_version": 1,
-            "experiment_id": "generator-v2.4-claude-judge",
+            "schema_version": 2 if args.prompt_version == 2 else 1,
+            "experiment_id": args.experiment_id,
             "status": "frozen_before_paid_judging",
             "selected": True,
             **hashes,
@@ -129,6 +132,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "temperature": 0,
                 "max_tokens": 600,
                 "require_supported_parameters": True,
+                "prompt_version": args.prompt_version,
                 "hard_cost_cap_usd": args.hard_cost_cap_usd,
             },
             "cost_estimate": estimate,

@@ -12,10 +12,10 @@
 | Property, deletion, robustness, performance | index/BM25 tests; `artifacts/section4/benchmark_lexical.json` | Pass |
 | QA oracle and evidence spans | `QA-REVIEW.md`; `data/qa.json`; `scripts/freeze_qa.py` | Pass: 20 owner-approved cases |
 | Lexical/semantic/hybrid chunk metrics | `artifacts/section5/chunk_evaluation.json`; `scripts/evaluate_chunks.py` | Pass on development split; hybrid Recall@5 0.810 |
-| Grounded answers, citations, refusal | `src/generation.py`; versioned generator diagnostics | Contract passes; GPT v2.4 measured 10/10 answers, 3/3 refusals, and 13/13 structure |
-| Generator selection and judge validation | `data/rag_generator_v2_4_summary.json`; `artifacts/section5/generator_v2_4_judge_config.json`; judge-only scripts | Generator gate passed; Claude judging and owner labels remain pending; holdout untouched |
+| Grounded answers, citations, refusal | `src/generation.py`; versioned generator diagnostics | Contract passes; GPT v2.5 measured 10/10 answers, 3/3 refusals, and 13/13 structure |
+| Generator selection and judge validation | `data/rag_generator_v2_5_judge_summary.json`; `artifacts/section5/generator_v2_5_judge_config.json`; blind worksheet | Judge-v2 measured 0.900 answered-only faithfulness; owner labels pending; holdout untouched |
 | Independent implementation review | `artifacts/section6/claude_opus_review.md` | Opus re-review passed after fixes |
-| Generator-v2.4 independent review | `artifacts/section5/claude_generator_v2_4_review.md` | Initial Opus review found a gate bug; fixed with tests; resolution review unavailable due session limit, not claimed as pass |
+| Generator-v2.5 independent review | `artifacts/section5/claude_generator_v2_5_review.md`; `artifacts/section5/claude_generator_v2_5_judge_review.md` | Opus passed the prompt-only experiment and corrected judge-v2 evidence chain before paid calls |
 | Public deployment | `app.py`; `railway.json`; `DEPLOYMENT.md` | Local shell and Railway packaging implemented; project/domain/secrets/deploy pending |
 | Cost report | `COST-REPORT.md` | Embedding, bake-off, and later GPT costs measured where exposed; Railway/projections pending |
 | Demo and social evidence | `DEMO-SCRIPT.md`; `SOCIAL-POST.md` | Draft only |
@@ -31,9 +31,9 @@
 ## Pending human validation
 
 - `data/qa.json` is owner-approved and frozen. The remaining human gate is the ten-output judge-validation worksheet.
-- Development retrieval and generator-gate results are reported with their denominators. GPT-OSS remains a candidate pending independent faithfulness judging and owner validation; no holdout faithfulness claim is made.
+- Development retrieval, generator, and judge-v2 results are reported with their denominators. GPT-OSS remains provisional pending owner validation; no holdout faithfulness claim is made.
 
 ## Pending credentials / deployment
 
-- Claude judging and the final holdout each require configured provider credentials and a separately approved paid-run budget. The approved v2.4 generator run is complete.
+- Claude development judging is complete. The final holdout still requires owner-validation passage, configured provider credentials, and a separately approved paid-run budget.
 - Deployment is not represented as complete. See [DEPLOYMENT.md](DEPLOYMENT.md) for the explicit release gates.

@@ -13,6 +13,12 @@ from src.retrieval import RetrievedChunk
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("run_rag_bakeoff", ROOT / "scripts/run_rag_bakeoff.py")
 bakeoff = importlib.util.module_from_spec(SPEC); SPEC.loader.exec_module(bakeoff)
+DIAGNOSTIC_SPEC = importlib.util.spec_from_file_location(
+    "run_generator_diagnostic_for_config_tests",
+    ROOT / "scripts/run_generator_diagnostic.py",
+)
+diagnostic = importlib.util.module_from_spec(DIAGNOSTIC_SPEC)
+DIAGNOSTIC_SPEC.loader.exec_module(diagnostic)
 
 
 def approved_qa():
@@ -46,6 +52,9 @@ class BakeoffTests(unittest.TestCase):
             packet["prompt_sha256"],
             hashlib.sha256(packet["prompt"].encode("utf-8")).hexdigest().upper(),
         )
+        packet["prompt_sha256"] = "0" * 64
+        with self.assertRaises(bakeoff.BakeoffError):
+            bakeoff.validate_config(packet)
 
     def test_v2_1_config_binds_parent_catalog_and_derived_citation_contract(self):
         path = ROOT / "artifacts/section5/generator_v2_1_config.json"
@@ -103,6 +112,55 @@ class BakeoffTests(unittest.TestCase):
             packet["parent_outputs_sha256"],
             bakeoff.hash_file(ROOT / "data/rag_generator_v2_3_outputs.json"),
         )
+
+    def test_v2_5_config_freezes_general_supported_scope_rules(self):
+        path = ROOT / "artifacts/section5/generator_v2_5_config.json"
+        packet = json.loads(path.read_text(encoding="utf-8"))
+        parent = json.loads(
+            (ROOT / "artifacts/section5/generator_v2_4_config.json").read_text(encoding="utf-8")
+        )
+        generation = bakeoff.validate_config(packet)
+        prompt = packet["prompt"].casefold()
+        self.assertEqual(packet["generator_candidates"], ["openai/gpt-oss-20b"])
+        self.assertTrue(generation["reconsider_insufficient_evidence"])
+        self.assertIn("never spread a qualifier", prompt)
+        self.assertIn("do not infer no evidence", prompt)
+        for leaked in ("qa02", "qa07", "ghk-cu", "mots-c", "18644225", "41551324"):
+            self.assertNotIn(leaked, prompt)
+        self.assertFalse(packet["qa_or_retrieval_changes"])
+        self.assertEqual(packet["holdout_status"], "untouched")
+        self.assertEqual(packet["generation"], parent["generation"])
+        for sentence in parent["prompt"].split(". "):
+            self.assertIn(sentence, packet["prompt"])
+        catalog_path = ROOT / "artifacts/section5/model_candidates_judge_refresh.json"
+        catalog_packet = json.loads(catalog_path.read_text(encoding="utf-8"))
+        selected_models = bakeoff.validate_model_catalog(catalog_packet)
+        self.assertEqual(
+            bakeoff.validate_judge_catalog(catalog_packet),
+            "anthropic/claude-sonnet-4.6",
+        )
+        self.assertTrue(set(packet["generator_candidates"]).issubset(selected_models))
+        diagnostic.validate_selected_parameter_support(
+            catalog_packet,
+            tuple(packet["generator_candidates"]),
+            generation,
+        )
+        self.assertEqual(
+            packet["model_catalog_sha256"],
+            bakeoff.hash_file(catalog_path),
+        )
+        parents = {
+            "parent_config_sha256": ROOT / "artifacts/section5/generator_v2_4_config.json",
+            "parent_outputs_sha256": ROOT / "data/rag_generator_v2_4_outputs.json",
+            "parent_summary_sha256": ROOT / "data/rag_generator_v2_4_summary.json",
+            "parent_review_sha256": ROOT / "artifacts/section5/claude_generator_v2_4_judge_review.md",
+            "parent_judge_config_sha256": ROOT / "artifacts/section5/generator_v2_4_judge_config.json",
+            "parent_judge_outputs_sha256": ROOT / "data/rag_generator_v2_4_judged_outputs.json",
+            "parent_judge_summary_sha256": ROOT / "data/rag_generator_v2_4_judge_summary.json",
+        }
+        for field, parent_path in parents.items():
+            with self.subTest(field=field):
+                self.assertEqual(packet[field], bakeoff.hash_file(parent_path))
 
     def test_selection_disqualifies_missing_or_invalid_rows(self):
         rows = {model: [] for model in bakeoff.MODELS}

@@ -77,7 +77,6 @@ def review_material(qa: dict[str, Any], context_packet: dict[str, Any]) -> tuple
         cases[item["id"]] = {
             "question": item["question"],
             "answerability": "answerable" if item["answerable"] else "unanswerable",
-            "acceptable_answer": item["acceptable_answer"],
         }
     if len(cases) != 13:
         raise JudgeValidationError("judge worksheet requires exactly 13 development QA cases")
@@ -123,10 +122,10 @@ def worksheet(rows: list[dict[str, Any]], cases: dict[str, dict[str, Any]], cont
             "owner_label": {"reviewer": "", **{dimension: None for dimension in DIMENSIONS}},
         })
     return {
-        "version": 2,
+        "version": 3,
         "purpose": "Blind project-owner labels for deterministic judge validation",
         "rubric": {
-            "faithful": "Every answer claim is supported by the displayed evidence; a refusal is faithful only when that evidence is insufficient.",
+            "faithful": "Every factual claim in an answered response is supported by the displayed evidence; use null for a refusal, which is scored separately.",
             "relevant": "The response directly and usefully addresses the displayed question.",
             "citations_correct": "For an answered response, cited evidence supports the associated claims; use null when the response is a refusal with no citations.",
             "refusal_correct": "The answer/refusal status matches the displayed frozen answerability label.",
@@ -162,19 +161,33 @@ def validate_labels(packet: dict[str, Any], rows: list[dict[str, Any]], cases: d
             if not isinstance(owner, dict) or not isinstance(owner.get("reviewer"), str) or not owner["reviewer"].strip():
                 raise JudgeValidationError(f"owner label and reviewer required for {dimension}")
             owner_value = owner.get(dimension)
-            if dimension == "citations_correct" and saved.get("answer", {}).get("status") == "insufficient_evidence" and owner_value is None:
+            if dimension in {"faithful", "citations_correct"} and saved.get("answer", {}).get("status") == "insufficient_evidence" and owner_value is None:
                 continue
             if not isinstance(owner_value, bool): raise JudgeValidationError(f"owner label and reviewer required for {dimension}")
             if not isinstance(judge, dict) or not isinstance(judge.get(dimension), bool): raise JudgeValidationError(f"saved judge verdict required for {dimension}")
             pairs.append((owner_value, judge[dimension]))
-        value = binary_agreement(pairs); value["passes"] = value["agreement"] >= .80 and value["kappa"] is not None and value["kappa"] >= .60
-        value["status"] = "pass" if value["passes"] else ("inconclusive_undefined_kappa" if value["kappa"] is None else "fail")
+        value = binary_agreement(pairs)
+        if value["agreement"] is None:
+            value["passes"] = False
+            value["status"] = "fail_no_labels"
+        elif value["kappa"] is None:
+            # The project plan explicitly requires raw agreement plus the
+            # confusion matrix when constant marginals make kappa undefined.
+            value["passes"] = value["agreement"] >= .80
+            value["status"] = (
+                "pass_raw_agreement_undefined_kappa"
+                if value["passes"]
+                else "fail_raw_agreement_undefined_kappa"
+            )
+        else:
+            value["passes"] = value["agreement"] >= .80 and value["kappa"] >= .60
+            value["status"] = "pass" if value["passes"] else "fail"
         report["dimensions"][dimension] = value
     report["passes"] = all(value["passes"] for value in report["dimensions"].values())
     return report
 
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_generator_v2_4_judged_outputs.json"); parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json"); parser.add_argument("--worksheet", type=Path, default=ROOT / "data/judge_validation_v2_4_worksheet.json"); parser.add_argument("--report", type=Path, default=ROOT / "data/judge_validation_v2_4_report.json"); parser.add_argument("--validate", action="store_true"); parser.add_argument("--overwrite", action="store_true")
+    parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_generator_v2_5_judged_outputs.json"); parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json"); parser.add_argument("--worksheet", type=Path, default=ROOT / "data/judge_validation_v2_5_worksheet.json"); parser.add_argument("--report", type=Path, default=ROOT / "data/judge_validation_v2_5_report.json"); parser.add_argument("--validate", action="store_true"); parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
     try:
         output_packet, qa, context_packet = load(args.outputs), load(args.qa), load(args.contexts); outputs = output_packet.get("outputs")

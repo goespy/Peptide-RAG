@@ -20,7 +20,19 @@ from typing import Any, Sequence
 
 from run_day1 import Day1Error, load_qrels, sha256, validate_corpus_binding
 from scripts.run_generator_diagnostic import summarize as summarize_generator
+from scripts.run_generator_judge import (
+    estimate_judge_cost,
+    judge_usage,
+    offline_judged_rows,
+    validate_generator_gate,
+    validate_judge_config,
+)
 from scripts.run_rag_bakeoff import BakeoffError, contexts_from, offline_rows, realized_usage, validate_config, validate_qa
+from scripts.validate_judge import (
+    review_material as judge_review_material,
+    validate_labels as validate_judge_labels,
+    worksheet as expected_judge_worksheet,
+)
 from src.analysis import ANALYSIS_CONFIGS
 from src.bm25 import BM25Config, rank_bm25
 from src.boolean import search_boolean
@@ -50,6 +62,7 @@ RAG_BAKEOFF_OUTPUTS = ROOT / "data/rag_bakeoff_outputs.json"
 RAG_BAKEOFF_REANALYSIS = ROOT / "data/rag_bakeoff_reanalysis.json"
 JUDGE_WORKSHEET = ROOT / "data/judge_validation_worksheet.json"
 MODEL_CATALOG_REFRESH = SECTION5 / "model_candidates_refresh.json"
+JUDGE_MODEL_CATALOG_REFRESH = SECTION5 / "model_candidates_judge_refresh.json"
 GENERATOR_V2_2_CONFIG = SECTION5 / "generator_v2_2_config.json"
 GENERATOR_V2_2_OUTPUTS = ROOT / "data/rag_generator_v2_2_outputs.json"
 GENERATOR_V2_2_SUMMARY = ROOT / "data/rag_generator_v2_2_summary.json"
@@ -59,6 +72,20 @@ GENERATOR_V2_3_SUMMARY = ROOT / "data/rag_generator_v2_3_summary.json"
 GENERATOR_V2_4_CONFIG = SECTION5 / "generator_v2_4_config.json"
 GENERATOR_V2_4_OUTPUTS = ROOT / "data/rag_generator_v2_4_outputs.json"
 GENERATOR_V2_4_SUMMARY = ROOT / "data/rag_generator_v2_4_summary.json"
+GENERATOR_V2_4_JUDGE_CONFIG = SECTION5 / "generator_v2_4_judge_config.json"
+GENERATOR_V2_4_JUDGED_OUTPUTS = ROOT / "data/rag_generator_v2_4_judged_outputs.json"
+GENERATOR_V2_4_JUDGE_SUMMARY = ROOT / "data/rag_generator_v2_4_judge_summary.json"
+GENERATOR_V2_4_JUDGE_WORKSHEET = ROOT / "data/judge_validation_v2_4_worksheet.json"
+GENERATOR_V2_4_JUDGE_REPORT = ROOT / "data/judge_validation_v2_4_report.json"
+GENERATOR_V2_4_JUDGE_REVIEW = SECTION5 / "claude_generator_v2_4_judge_review.md"
+GENERATOR_V2_5_CONFIG = SECTION5 / "generator_v2_5_config.json"
+GENERATOR_V2_5_OUTPUTS = ROOT / "data/rag_generator_v2_5_outputs.json"
+GENERATOR_V2_5_SUMMARY = ROOT / "data/rag_generator_v2_5_summary.json"
+GENERATOR_V2_5_JUDGE_CONFIG = SECTION5 / "generator_v2_5_judge_config.json"
+GENERATOR_V2_5_JUDGED_OUTPUTS = ROOT / "data/rag_generator_v2_5_judged_outputs.json"
+GENERATOR_V2_5_JUDGE_SUMMARY = ROOT / "data/rag_generator_v2_5_judge_summary.json"
+GENERATOR_V2_5_JUDGE_WORKSHEET = ROOT / "data/judge_validation_v2_5_worksheet.json"
+GENERATOR_V2_5_JUDGE_REPORT = ROOT / "data/judge_validation_v2_5_report.json"
 GENERATOR_V2_3_DIAGNOSIS = SECTION5 / "generator_v2_3_diagnosis.json"
 GENERATOR_V2_3_REVIEW = SECTION5 / "claude_generator_v2_3_review.md"
 
@@ -403,6 +430,7 @@ def _validate_generator_diagnostic(
     config_path: Path,
     outputs_path: Path,
     summary_path: Path,
+    catalog_path: Path = MODEL_CATALOG_REFRESH,
 ) -> Check:
     config = _json(config_path)
     validate_config(config)
@@ -415,12 +443,12 @@ def _validate_generator_diagnostic(
     if (
         config.get("qa_sha256") != qa_hash
         or config.get("contexts_sha256") != contexts_hash
-        or config.get("model_catalog_sha256") != sha256(MODEL_CATALOG_REFRESH)
+        or config.get("model_catalog_sha256") != sha256(catalog_path)
         or summary.get("qa_sha256") != qa_hash
         or summary.get("contexts_sha256") != contexts_hash
         or summary.get("config_sha256") != config_hash
         or summary.get("outputs_sha256") != outputs_hash
-        or summary.get("model_catalog_sha256") != sha256(MODEL_CATALOG_REFRESH)
+        or summary.get("model_catalog_sha256") != sha256(catalog_path)
         or summary.get("live_calls") is not True
     ):
         raise ValueError(f"{label} hashes do not bind the frozen development inputs")
@@ -512,6 +540,347 @@ def _validate_versioned_generator_evidence() -> list[Check]:
                 "10/10, 3/3, and 13/13 gate passed" if candidate.get("ready_for_paid_judging") is True else "measured development run did not open paid judging",
             )
         )
+        if candidate.get("ready_for_paid_judging") is True:
+            checks.extend(_validate_frozen_judge_config())
+
+    v2_5 = _json(GENERATOR_V2_5_CONFIG)
+    validate_config(v2_5)
+    expected_v2_5_parents = {
+        "parent_config_sha256": sha256(GENERATOR_V2_4_CONFIG),
+        "parent_outputs_sha256": sha256(GENERATOR_V2_4_OUTPUTS),
+        "parent_summary_sha256": sha256(GENERATOR_V2_4_SUMMARY),
+        "parent_review_sha256": sha256(GENERATOR_V2_4_JUDGE_REVIEW),
+        "parent_judge_config_sha256": sha256(GENERATOR_V2_4_JUDGE_CONFIG),
+        "parent_judge_outputs_sha256": sha256(GENERATOR_V2_4_JUDGED_OUTPUTS),
+        "parent_judge_summary_sha256": sha256(GENERATOR_V2_4_JUDGE_SUMMARY),
+    }
+    if (
+        v2_5.get("qa_sha256") != sha256(QA)
+        or v2_5.get("contexts_sha256") != sha256(RAG_DEVELOPMENT_CONTEXTS)
+        or v2_5.get("model_catalog_sha256") != sha256(JUDGE_MODEL_CATALOG_REFRESH)
+        or v2_5.get("retriever_config_sha256") != sha256(FROZEN_RAG_CONFIG)
+        or v2_5.get("holdout_status") != "untouched"
+        or v2_5.get("qa_or_retrieval_changes") is not False
+        or v2_5.get("generation") != v2_4.get("generation")
+        or any(v2_5.get(field) != value for field, value in expected_v2_5_parents.items())
+    ):
+        raise ValueError("GPT v2.5 config is not bound to the measured v2.4 evidence")
+    v2_5_present = (GENERATOR_V2_5_OUTPUTS.is_file(), GENERATOR_V2_5_SUMMARY.is_file())
+    if v2_5_present == (False, False):
+        checks.append(Check(
+            "RAG GPT v2.5 generator gate",
+            "TBD",
+            "supported-scope experiment is frozen; no development output exists",
+        ))
+    elif v2_5_present != (True, True):
+        raise ValueError("GPT v2.5 has only one of its required output/summary artifacts")
+    else:
+        checks.append(_validate_generator_diagnostic(
+            "GPT v2.5",
+            GENERATOR_V2_5_CONFIG,
+            GENERATOR_V2_5_OUTPUTS,
+            GENERATOR_V2_5_SUMMARY,
+            JUDGE_MODEL_CATALOG_REFRESH,
+        ))
+        v2_5_summary = _json(GENERATOR_V2_5_SUMMARY)
+        v2_5_candidate = (
+            v2_5_summary.get("diagnostic", {})
+            .get("candidates", {})
+            .get("openai/gpt-oss-20b", {})
+        )
+        checks.append(Check(
+            "RAG GPT v2.5 generator gate",
+            "PASS" if v2_5_candidate.get("ready_for_paid_judging") is True else "TBD",
+            "10/10, 3/3, and 13/13 gate passed"
+            if v2_5_candidate.get("ready_for_paid_judging") is True
+            else "measured development run did not open paid judging",
+        ))
+        if v2_5_candidate.get("ready_for_paid_judging") is True:
+            checks.extend(_validate_frozen_judge_config(
+                label="GPT v2.5",
+                generator_config_path=GENERATOR_V2_5_CONFIG,
+                generator_outputs_path=GENERATOR_V2_5_OUTPUTS,
+                generator_summary_path=GENERATOR_V2_5_SUMMARY,
+                judge_config_path=GENERATOR_V2_5_JUDGE_CONFIG,
+                judged_outputs_path=GENERATOR_V2_5_JUDGED_OUTPUTS,
+                judge_summary_path=GENERATOR_V2_5_JUDGE_SUMMARY,
+                catalog_path=JUDGE_MODEL_CATALOG_REFRESH,
+                worksheet_path=GENERATOR_V2_5_JUDGE_WORKSHEET,
+                report_path=GENERATOR_V2_5_JUDGE_REPORT,
+            ))
+    return checks
+
+
+def _validate_frozen_judge_config(
+    *,
+    label: str = "GPT v2.4",
+    generator_config_path: Path | None = None,
+    generator_outputs_path: Path | None = None,
+    generator_summary_path: Path | None = None,
+    judge_config_path: Path | None = None,
+    judged_outputs_path: Path | None = None,
+    judge_summary_path: Path | None = None,
+    catalog_path: Path | None = None,
+    worksheet_path: Path | None = None,
+    report_path: Path | None = None,
+) -> list[Check]:
+    """Recompute and verify the exact judge-only experiment without network calls."""
+
+    # Local aliases keep the historical implementation readable while making
+    # every artifact path explicit for later versioned experiments.
+    GENERATOR_V2_4_CONFIG = generator_config_path or globals()["GENERATOR_V2_4_CONFIG"]
+    GENERATOR_V2_4_OUTPUTS = generator_outputs_path or globals()["GENERATOR_V2_4_OUTPUTS"]
+    GENERATOR_V2_4_SUMMARY = generator_summary_path or globals()["GENERATOR_V2_4_SUMMARY"]
+    GENERATOR_V2_4_JUDGE_CONFIG = judge_config_path or globals()["GENERATOR_V2_4_JUDGE_CONFIG"]
+    GENERATOR_V2_4_JUDGED_OUTPUTS = judged_outputs_path or globals()["GENERATOR_V2_4_JUDGED_OUTPUTS"]
+    GENERATOR_V2_4_JUDGE_SUMMARY = judge_summary_path or globals()["GENERATOR_V2_4_JUDGE_SUMMARY"]
+    JUDGE_MODEL_CATALOG_REFRESH = catalog_path or globals()["JUDGE_MODEL_CATALOG_REFRESH"]
+    GENERATOR_V2_4_JUDGE_WORKSHEET = worksheet_path or globals()["GENERATOR_V2_4_JUDGE_WORKSHEET"]
+    GENERATOR_V2_4_JUDGE_REPORT = report_path or globals()["GENERATOR_V2_4_JUDGE_REPORT"]
+
+    if not GENERATOR_V2_4_JUDGE_CONFIG.is_file():
+        return [Check(
+            f"RAG {label} judge configuration",
+            "TBD",
+            "generator gate passed, but no frozen judge-only configuration exists",
+        )]
+    judge_config = _json(GENERATOR_V2_4_JUDGE_CONFIG)
+    catalog = _json(JUDGE_MODEL_CATALOG_REFRESH)
+    hashes = {
+        "qa_sha256": sha256(QA),
+        "contexts_sha256": sha256(RAG_DEVELOPMENT_CONTEXTS),
+        "model_catalog_sha256": sha256(JUDGE_MODEL_CATALOG_REFRESH),
+        "generator_config_sha256": sha256(GENERATOR_V2_4_CONFIG),
+        "generator_outputs_sha256": sha256(GENERATOR_V2_4_OUTPUTS),
+        "generator_summary_sha256": sha256(GENERATOR_V2_4_SUMMARY),
+    }
+    settings = validate_judge_config(
+        judge_config,
+        hashes=hashes,
+        outputs_path=GENERATOR_V2_4_JUDGED_OUTPUTS,
+        result_path=GENERATOR_V2_4_JUDGE_SUMMARY,
+        catalog=catalog,
+    )
+
+    qa_packet = _json(QA)
+    generator_config = _json(GENERATOR_V2_4_CONFIG)
+    generator_outputs = _json(GENERATOR_V2_4_OUTPUTS)
+    generator_summary = _json(GENERATOR_V2_4_SUMMARY)
+    cases = validate_qa(qa_packet)
+    models = generator_config.get("generator_candidates")
+    if not isinstance(models, list) or len(models) != 1 or not isinstance(models[0], str):
+        raise ValueError(f"{label} judge gate requires exactly one frozen generator")
+    contexts = contexts_from(
+        _json(RAG_DEVELOPMENT_CONTEXTS),
+        cases,
+        qa_hash=hashes["qa_sha256"],
+        config_hash=generator_config.get(
+            "retriever_config_sha256", hashes["generator_config_sha256"]
+        ),
+    )
+    grouped = offline_rows(
+        generator_outputs,
+        cases,
+        contexts,
+        hashes["generator_config_sha256"],
+        hashes["contexts_sha256"],
+        (models[0],),
+    )
+    validate_generator_gate(
+        generator_summary,
+        model=models[0],
+        generator_config_hash=hashes["generator_config_sha256"],
+        generator_outputs_hash=hashes["generator_outputs_sha256"],
+        qa_hash=hashes["qa_sha256"],
+        contexts_hash=hashes["contexts_sha256"],
+    )
+    expected_estimate = estimate_judge_cost(
+        cases,
+        contexts,
+        grouped,
+        model=settings["model"],
+        max_tokens=settings["max_tokens"],
+        prompt_version=settings["prompt_version"],
+        catalog=catalog,
+    )
+    if judge_config.get("cost_estimate") != expected_estimate:
+        raise ValueError(f"{label} judge cost estimate does not match frozen evidence")
+    if expected_estimate["estimated_max_cost_usd"] > settings["hard_cost_cap_usd"]:
+        raise ValueError(f"{label} judge estimate exceeds its frozen hard cost cap")
+    checks = [Check(
+        f"RAG {label} judge configuration",
+        "PASS",
+        f"{expected_estimate['judge_calls']} judge calls, zero generator calls; "
+        f"maximum ${expected_estimate['estimated_max_cost_usd']:.6f} under "
+        f"${settings['hard_cost_cap_usd']:.2f} cap; holdout untouched",
+        True,
+    )]
+
+    present = (
+        GENERATOR_V2_4_JUDGED_OUTPUTS.is_file(),
+        GENERATOR_V2_4_JUDGE_SUMMARY.is_file(),
+    )
+    if present == (False, False):
+        checks.append(Check(
+            f"RAG {label} judge evidence",
+            "TBD",
+            "judge-only configuration is valid; no paid judge output exists",
+        ))
+        return checks
+    if present != (True, True):
+        raise ValueError(f"{label} has only one of its required judge artifacts")
+
+    judge_config_hash = sha256(GENERATOR_V2_4_JUDGE_CONFIG)
+    judged_outputs_hash = sha256(GENERATOR_V2_4_JUDGED_OUTPUTS)
+    judged_grouped = offline_judged_rows(
+        _json(GENERATOR_V2_4_JUDGED_OUTPUTS),
+        grouped,
+        contexts,
+        judge_config_hash=judge_config_hash,
+        generator_outputs_hash=hashes["generator_outputs_sha256"],
+        judge_prompt_version=settings["prompt_version"],
+    )
+    expected_selection = select_winner(judged_grouped, len(cases))
+    judge_summary = _json(GENERATOR_V2_4_JUDGE_SUMMARY)
+    if (
+        any(judge_summary.get(field) != value for field, value in hashes.items())
+        or judge_summary.get("judge_config_sha256") != judge_config_hash
+        or judge_summary.get("judged_outputs_sha256") != judged_outputs_hash
+        or judge_summary.get("live_calls") is not True
+        or not isinstance(judge_summary.get("approved_max_cost_usd"), (int, float))
+        or isinstance(judge_summary.get("approved_max_cost_usd"), bool)
+        or judge_summary["approved_max_cost_usd"] < expected_estimate["estimated_max_cost_usd"]
+        or judge_summary["approved_max_cost_usd"] > settings["hard_cost_cap_usd"]
+        or judge_summary.get("cost_estimate") != expected_estimate
+        or judge_summary.get("actual_judge_usage") != judge_usage(judged_grouped)
+        or judge_summary.get("selection") != expected_selection
+        or judge_summary.get("ready_for_owner_validation") is not True
+        or judge_summary.get("holdout_status") != "untouched"
+    ):
+        raise ValueError(f"{label} judge summary does not replay from frozen evidence")
+    candidate = expected_selection.get("candidates", {}).get(models[0], {})
+    judged_rows = judged_grouped[models[0]]
+    answered_rows = [
+        row for row in judged_rows
+        if row.get("answer", {}).get("status") == "answered"
+    ]
+    answered_faithfulness = (
+        sum(row.get("judge", {}).get("faithful") is True for row in answered_rows)
+        / len(answered_rows)
+    )
+    checks.append(Check(
+        f"RAG {label} judge evidence",
+        "PASS",
+        f"13 verdicts replay; all-row faithfulness={candidate.get('faithfulness'):.3f}, "
+        f"answered-only faithfulness={answered_faithfulness:.3f}, "
+        f"relevancy={candidate.get('relevancy'):.3f}, "
+        f"citation correctness={candidate.get('citation_correctness'):.3f}, "
+        f"correct refusal={candidate.get('correct_refusal'):.3f}; owner validation pending",
+        True,
+    ))
+
+    if not GENERATOR_V2_4_JUDGE_WORKSHEET.is_file():
+        checks.append(Check(
+            f"RAG {label} owner worksheet",
+            "TBD",
+            "judge evidence exists, but no blind owner worksheet is frozen",
+        ))
+        return checks
+    worksheet_packet = _json(GENERATOR_V2_4_JUDGE_WORKSHEET)
+    cases_by_id, contexts_by_id = judge_review_material(
+        qa_packet, _json(RAG_DEVELOPMENT_CONTEXTS)
+    )
+    expected_packet = expected_judge_worksheet(
+        _json(GENERATOR_V2_4_JUDGED_OUTPUTS)["outputs"],
+        cases_by_id,
+        contexts_by_id,
+    )
+    if (
+        worksheet_packet.get("source_outputs_sha256") != judged_outputs_hash
+        or worksheet_packet.get("qa_sha256") != hashes["qa_sha256"]
+        or worksheet_packet.get("contexts_sha256") != hashes["contexts_sha256"]
+        or any(
+            worksheet_packet.get(field) != expected_packet.get(field)
+            for field in ("version", "purpose", "rubric")
+        )
+    ):
+        raise ValueError(f"{label} owner worksheet is not bound to frozen evidence")
+    sample = worksheet_packet.get("sample")
+    expected_sample = {
+        item["sample_id"]: item for item in expected_packet["sample"]
+    }
+    if not isinstance(sample, list) or len(sample) != 10:
+        raise ValueError(f"{label} owner worksheet must contain ten outputs")
+    label_states: list[str] = []
+    for item in sample:
+        if not isinstance(item, dict) or item.get("sample_id") not in expected_sample:
+            raise ValueError(f"{label} owner worksheet contains an unknown output")
+        if "judge" in item or "acceptable_answer" in item:
+            raise ValueError(f"{label} owner worksheet leaks a judge or oracle label")
+        expected_item = expected_sample[item["sample_id"]]
+        if any(
+            item.get(field) != value
+            for field, value in expected_item.items()
+            if field != "owner_label"
+        ):
+            raise ValueError(f"{label} owner worksheet evidence was modified")
+        owner_label = item.get("owner_label")
+        if not isinstance(owner_label, dict) or not isinstance(owner_label.get("reviewer"), str):
+            raise ValueError(f"{label} owner worksheet has a malformed owner label")
+        values = [owner_label.get(name) for name in ("faithful", "relevant", "citations_correct", "refusal_correct")]
+        is_refusal = item.get("answer", {}).get("status") == "insufficient_evidence"
+        complete_values = (
+            isinstance(owner_label.get("relevant"), bool)
+            and isinstance(owner_label.get("refusal_correct"), bool)
+            and (
+                owner_label.get("faithful") is None and owner_label.get("citations_correct") is None
+                if is_refusal
+                else isinstance(owner_label.get("faithful"), bool)
+                and isinstance(owner_label.get("citations_correct"), bool)
+            )
+        )
+        label_states.append(
+            "empty"
+            if not owner_label["reviewer"].strip() and all(value is None for value in values)
+            else "complete"
+            if owner_label["reviewer"].strip() and complete_values
+            else "partial"
+        )
+    if "partial" in label_states or len(set(label_states)) != 1:
+        raise ValueError(f"{label} owner worksheet is partially labeled")
+    state = label_states[0]
+    checks.append(Check(
+        f"RAG {label} owner worksheet",
+        "PASS",
+        "10 blind, evidence-bound outputs; oracle answers and Claude verdicts absent; "
+        + ("owner labels pending" if state == "empty" else "owner labels complete"),
+        True,
+    ))
+
+    if state == "complete":
+        if not GENERATOR_V2_4_JUDGE_REPORT.is_file():
+            checks.append(Check(
+                f"RAG {label} owner-judge agreement",
+                "TBD",
+                "owner labels are complete; validation report has not been generated",
+            ))
+            return checks
+        expected_report = validate_judge_labels(
+            worksheet_packet,
+            _json(GENERATOR_V2_4_JUDGED_OUTPUTS)["outputs"],
+            cases_by_id,
+            contexts_by_id,
+        )
+        expected_report["worksheet_sha256"] = sha256(GENERATOR_V2_4_JUDGE_WORKSHEET)
+        expected_report["source_outputs_sha256"] = judged_outputs_hash
+        if _json(GENERATOR_V2_4_JUDGE_REPORT) != expected_report:
+            raise ValueError(f"{label} owner-judge report does not replay from labels")
+        checks.append(Check(
+            f"RAG {label} owner-judge agreement",
+            "PASS" if expected_report.get("passes") is True else "TBD",
+            "validated blind labels pass" if expected_report.get("passes") is True else "blind labels do not pass the frozen agreement gate",
+            expected_report.get("passes") is True,
+        ))
     return checks
 
 

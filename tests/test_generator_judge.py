@@ -157,6 +157,7 @@ class FakeJudge:
             "output_tokens": 8,
             "cost_usd": 0.002,
             "provider": "test",
+            "raw_output_sha256": "A" * 64,
         }
         return JudgeVerdict(
             (AtomicClaim("Supported answer", True, (1,)),) if expected_answerable else (),
@@ -197,7 +198,8 @@ class GeneratorJudgeTests(unittest.TestCase):
 
     def test_estimate_contains_exactly_thirteen_judge_calls_and_zero_generator_calls(self):
         estimate = generator_judge.estimate_judge_cost(
-            cases(), contexts(), source_grouped(), model=JUDGE, max_tokens=600, catalog=catalog()
+            cases(), contexts(), source_grouped(), model=JUDGE, max_tokens=600,
+            prompt_version=1, catalog=catalog()
         )
         self.assertEqual(estimate["judge_calls"], 13)
         self.assertEqual(estimate["generator_calls"], 0)
@@ -246,6 +248,15 @@ class GeneratorJudgeTests(unittest.TestCase):
             generator_outputs_hash="C" * 64,
         )
         self.assertEqual(len(replayed[MODEL]), 13)
+        replayed_v2 = generator_judge.offline_judged_rows(
+            packet,
+            source_grouped(),
+            contexts(),
+            judge_config_hash="J" * 64,
+            generator_outputs_hash="C" * 64,
+            judge_prompt_version=2,
+        )
+        self.assertEqual(len(replayed_v2[MODEL]), 13)
 
         altered = json.loads(json.dumps(packet))
         altered["outputs"][0]["answer"]["text"] = "changed"
@@ -257,6 +268,66 @@ class GeneratorJudgeTests(unittest.TestCase):
                 judge_config_hash="J" * 64,
                 generator_outputs_hash="C" * 64,
             )
+
+        altered = json.loads(json.dumps(packet))
+        altered["outputs"][0]["judge"]["claims"][0]["supported"] = False
+        with self.assertRaises(generator_judge.BakeoffError):
+            generator_judge.offline_judged_rows(
+                altered,
+                source_grouped(),
+                contexts(),
+                judge_config_hash="J" * 64,
+                generator_outputs_hash="C" * 64,
+            )
+
+        altered = json.loads(json.dumps(packet))
+        altered["outputs"][0]["generator_metadata"]["input_tokens"] += 1
+        with self.assertRaises(generator_judge.BakeoffError):
+            generator_judge.offline_judged_rows(
+                altered,
+                source_grouped(),
+                contexts(),
+                judge_config_hash="J" * 64,
+                generator_outputs_hash="C" * 64,
+            )
+
+        altered = json.loads(json.dumps(packet))
+        altered["outputs"][0]["judge_metadata"]["cost_usd"] += 1
+        with self.assertRaises(generator_judge.BakeoffError):
+            generator_judge.offline_judged_rows(
+                altered,
+                source_grouped(),
+                contexts(),
+                judge_config_hash="J" * 64,
+                generator_outputs_hash="C" * 64,
+            )
+
+        altered = json.loads(json.dumps(packet))
+        altered["outputs"][0]["judge_metadata"].pop("raw_output_sha256", None)
+        with self.assertRaises(generator_judge.BakeoffError):
+            generator_judge.offline_judged_rows(
+                altered,
+                source_grouped(),
+                contexts(),
+                judge_config_hash="J" * 64,
+                generator_outputs_hash="C" * 64,
+                judge_prompt_version=2,
+            )
+
+        for invalid_hash in ("a" * 64, "A" * 63):
+            altered = json.loads(json.dumps(packet))
+            altered["outputs"][0]["judge_metadata"]["raw_output_sha256"] = invalid_hash
+            with self.subTest(raw_output_sha256=invalid_hash), self.assertRaises(
+                generator_judge.BakeoffError
+            ):
+                generator_judge.offline_judged_rows(
+                    altered,
+                    source_grouped(),
+                    contexts(),
+                    judge_config_hash="J" * 64,
+                    generator_outputs_hash="C" * 64,
+                    judge_prompt_version=2,
+                )
 
         altered = json.loads(json.dumps(packet))
         altered["outputs"][0]["judge"]["refusal_correct"] = False

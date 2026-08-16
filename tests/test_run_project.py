@@ -20,6 +20,66 @@ class RunProjectTests(unittest.TestCase):
         self.assertTrue(any(check.name == "RAG retrieval evaluation" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG GPT v2.3 generator evidence" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG GPT v2.4 generator gate" and check.state == "PASS" for check in checks))
+        self.assertTrue(any(
+            check.name == "RAG GPT v2.4 judge configuration" and check.state == "PASS"
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG GPT v2.4 judge evidence" and check.state == "PASS"
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG GPT v2.4 owner worksheet" and check.state == "PASS"
+            and "owner labels pending" in check.detail
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG GPT v2.5 generator gate" and check.state == "PASS"
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG GPT v2.5 judge configuration" and check.state == "PASS"
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG GPT v2.5 judge evidence" and check.state == "PASS"
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG GPT v2.5 owner worksheet" and check.state == "PASS"
+            and "owner labels pending" in check.detail
+            for check in checks
+        ))
+
+    def test_owner_worksheet_oracle_leak_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "worksheet.json"
+            payload = json.loads(run_project.GENERATOR_V2_4_JUDGE_WORKSHEET.read_text(encoding="utf-8"))
+            payload["sample"][0]["acceptable_answer"] = "leaked oracle"
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "GENERATOR_V2_4_JUDGE_WORKSHEET", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(
+            check.name == "RAG GPT generator diagnostics" and check.state == "FAIL"
+            and "leaks" in check.detail
+            for check in checks
+        ))
+
+    def test_judge_cost_estimate_drift_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "judge_config.json"
+            payload = json.loads(run_project.GENERATOR_V2_4_JUDGE_CONFIG.read_text(encoding="utf-8"))
+            payload["cost_estimate"]["estimated_max_cost_usd"] += 0.01
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "GENERATOR_V2_4_JUDGE_CONFIG", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(
+            check.name == "RAG GPT generator diagnostics" and check.state == "FAIL"
+            and "judge cost estimate" in check.detail
+            for check in checks
+        ))
 
     def test_missing_required_core_artifact_fails_only_core(self) -> None:
         with patch.object(run_project, "BASELINE", run_project.ROOT / "missing.json"):

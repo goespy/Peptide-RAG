@@ -26,7 +26,10 @@ ceiling. The immutable provider responses report:
 | GPT-only v2.2 diagnostic | 26,969 | 3,916 | 14 | $0.001690265 |
 | GPT-only v2.3 diagnostic | 24,273 | 851 | 12 | $0.001138185 |
 | GPT-only v2.4 diagnostic | 30,697 | 1,132 | 15 | $0.001276115 |
-| **Known OpenRouter development total** | **2,638,268** | **41,233** | **256** | **$0.496185580** |
+| GPT v2.4 Claude judge | 31,388 | 2,414 | 13 | $0.130374000 |
+| GPT-only v2.5 diagnostic | 35,889 | 1,088 | 17 | $0.001613150 |
+| GPT v2.5 Claude judge-v2 | 32,232 | 1,798 | 13 | $0.123666000 |
+| **Known OpenRouter development total** | **2,737,777** | **46,533** | **299** | **$0.751838730** |
 
 The generator/judge total is recomputed from all 39 saved rows in
 `data/rag_bakeoff_outputs.json` and bound in
@@ -37,11 +40,14 @@ Generator-v2 made 123 provider calls under an approved `$0.04` ceiling and a
 `$0.03457764` conservative estimate, but the saved provider responses did not
 expose complete token or cost fields. Its actual spend is therefore recorded as
 `unknown/not exposed` and is not silently included as zero in the known total.
-The owner-approved v2.4 run stayed below its `$0.02` cap and cost
-`$0.001276115`. Its generator gate passed at 10/10 answerable, 3/3 correct
-refusals, and 13/13 structurally valid. The separately gated 13-call Claude
-Sonnet 4.6 judge has a conservative maximum of `$0.230508` under a frozen
-`$0.25` cap. Claude judging and holdout have not yet been opened for v2.4.
+The owner-approved v2.4 generator run cost `$0.001276115`, and its separately
+gated judge cost `$0.130374000`. The prompt-only v2.5 correction cost
+`$0.001613150` for generation. Its 13-call Claude Sonnet 4.6 judge-v2 run had a
+conservative `$0.235458` estimate under a frozen `$0.25` cap and actually cost
+`$0.123666000`. Both v2.4 and v2.5 passed the 10/10 answerable, 3/3 refusal, and
+13/13 structural generator gates. The v2.5 judge measured `0.900`
+answered-only faithfulness and `0.900` citation correctness; owner validation is
+pending, and the seven-case QA holdout remains untouched.
 
 ## Production projection
 

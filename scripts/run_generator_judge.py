@@ -84,6 +84,7 @@ def validate_judge_config(
         raise BakeoffError("judge config must contain judge settings")
     model = validate_judge_catalog(catalog)
     max_tokens = judge.get("max_tokens")
+    prompt_version = judge.get("prompt_version", 1)
     hard_cap = judge.get("hard_cost_cap_usd")
     if (
         judge.get("model") != model
@@ -92,6 +93,8 @@ def validate_judge_config(
         or not isinstance(max_tokens, int)
         or not 1 <= max_tokens <= 2_000
         or judge.get("require_supported_parameters") is not True
+        or isinstance(prompt_version, bool)
+        or prompt_version not in {1, 2}
         or isinstance(hard_cap, bool)
         or not isinstance(hard_cap, (int, float))
         or not math.isfinite(hard_cap)
@@ -114,6 +117,7 @@ def validate_judge_config(
         "temperature": 0,
         "require_supported_parameters": True,
         "hard_cost_cap_usd": float(hard_cap),
+        "prompt_version": prompt_version,
     }
 
 
@@ -180,6 +184,7 @@ def estimate_judge_cost(
     *,
     model: str,
     max_tokens: int,
+    prompt_version: int,
     catalog: dict[str, Any],
 ) -> dict[str, Any]:
     """Estimate exactly 13 judge calls from frozen answer/evidence payloads."""
@@ -192,6 +197,7 @@ def estimate_judge_cost(
         model=model,
         max_tokens=max_tokens,
         require_supported_parameters=True,
+        prompt_version=prompt_version,
     )
     rows = {row["qa_id"]: row for row in next(iter(grouped.values()))}
     input_tokens = 0
@@ -303,6 +309,7 @@ def offline_judged_rows(
     *,
     judge_config_hash: str,
     generator_outputs_hash: str,
+    judge_prompt_version: int = 1,
 ) -> dict[str, list[dict[str, Any]]]:
     rows = packet.get("outputs")
     if (
@@ -331,6 +338,48 @@ def offline_judged_rows(
             or row.get("judge_config_sha256") != judge_config_hash
         ):
             raise BakeoffError("judged output row has invalid source bindings")
+        generator_metadata = row.get("generator_metadata")
+        judge_metadata = row.get("judge_metadata")
+        if generator_metadata != source[qa_id].get("metadata"):
+            raise BakeoffError("judged output row alters frozen generator metadata")
+        if not isinstance(judge_metadata, dict):
+            raise BakeoffError("judged output row has malformed judge metadata")
+        judge_latency = judge_metadata.get("latency_ms")
+        generator_latency = generator_metadata.get("latency_ms")
+        if (
+            not isinstance(judge_latency, (int, float))
+            or isinstance(judge_latency, bool)
+            or not math.isfinite(judge_latency)
+            or judge_latency < 0
+            or not isinstance(generator_latency, (int, float))
+            or isinstance(generator_latency, bool)
+            or not math.isfinite(generator_latency)
+            or generator_latency < 0
+        ):
+            raise BakeoffError("judged output row has invalid latency metadata")
+        raw_output_hash = judge_metadata.get("raw_output_sha256")
+        if (
+            judge_prompt_version >= 2
+            and row.get("judge") is not None
+            and raw_output_hash is None
+        ):
+            raise BakeoffError("judge-v2 verdict is missing its raw response hash")
+        if raw_output_hash is not None and (
+            not isinstance(raw_output_hash, str)
+            or len(raw_output_hash) != 64
+            or any(character not in "0123456789ABCDEF" for character in raw_output_hash)
+        ):
+            raise BakeoffError("judged output row has invalid raw judge-output hash")
+        judge_usage_metadata = dict(judge_metadata)
+        judge_usage_metadata.pop("latency_ms", None)
+        expected_metadata = combined_usage(
+            generator_metadata,
+            judge_usage_metadata,
+            float(generator_latency),
+            float(judge_latency),
+        )
+        if row.get("metadata") != expected_metadata:
+            raise BakeoffError("judged output row has inconsistent combined usage metadata")
         verdict = row.get("judge")
         if verdict is not None:
             if not isinstance(verdict, dict) or not isinstance(verdict.get("claims"), list):
@@ -353,6 +402,12 @@ def offline_judged_rows(
             ) == (source[qa_id]["answerability"] == "unanswerable")
             if not validate_verdict(parsed, contexts[qa_id]) or parsed.refusal_correct != expected_refusal:
                 raise BakeoffError("saved judge verdict is invalid or has a tampered refusal label")
+            if (
+                judge_prompt_version >= 2
+                and source[qa_id]["answer"]["status"] == "insufficient_evidence"
+                and parsed.claims
+            ):
+                raise BakeoffError("judge-v2 refusal verdict contains claims not present in the answer")
         seen.add(qa_id)
         validated.append(dict(row))
     return {model: sorted(validated, key=lambda item: item["qa_id"])}
@@ -383,14 +438,14 @@ def judge_usage(grouped: dict[str, list[dict[str, Any]]]) -> dict[str, Any]:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--qa", type=Path, default=ROOT / "data/qa.json")
-    parser.add_argument("--generator-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_4_config.json")
-    parser.add_argument("--judge-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_4_judge_config.json")
+    parser.add_argument("--generator-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_5_config.json")
+    parser.add_argument("--judge-config", type=Path, default=ROOT / "artifacts/section5/generator_v2_5_judge_config.json")
     parser.add_argument("--contexts", type=Path, default=ROOT / "data/rag_development_contexts.json")
-    parser.add_argument("--model-catalog", type=Path, default=ROOT / "artifacts/section5/model_candidates_refresh.json")
-    parser.add_argument("--generator-outputs", type=Path, default=ROOT / "data/rag_generator_v2_4_outputs.json")
-    parser.add_argument("--generator-summary", type=Path, default=ROOT / "data/rag_generator_v2_4_summary.json")
-    parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_generator_v2_4_judged_outputs.json")
-    parser.add_argument("--result", type=Path, default=ROOT / "data/rag_generator_v2_4_judge_summary.json")
+    parser.add_argument("--model-catalog", type=Path, default=ROOT / "artifacts/section5/model_candidates_judge_refresh.json")
+    parser.add_argument("--generator-outputs", type=Path, default=ROOT / "data/rag_generator_v2_5_outputs.json")
+    parser.add_argument("--generator-summary", type=Path, default=ROOT / "data/rag_generator_v2_5_summary.json")
+    parser.add_argument("--outputs", type=Path, default=ROOT / "data/rag_generator_v2_5_judged_outputs.json")
+    parser.add_argument("--result", type=Path, default=ROOT / "data/rag_generator_v2_5_judge_summary.json")
     parser.add_argument("--live", action="store_true")
     parser.add_argument("--estimate-only", action="store_true")
     parser.add_argument("--max-cost-usd", type=float)
@@ -459,8 +514,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             source_grouped,
             model=settings["model"],
             max_tokens=settings["max_tokens"],
+            prompt_version=settings["prompt_version"],
             catalog=catalog,
         )
+        if (
+            judge_config.get("cost_estimate") != estimate
+            or judge_config.get("judge_calls") != estimate["judge_calls"]
+            or judge_config.get("generator_calls") != estimate["generator_calls"]
+        ):
+            raise BakeoffError("frozen judge estimate or call counts do not match selected inputs")
         if args.estimate_only:
             print(json.dumps(estimate, indent=2, sort_keys=True))
             return 0
@@ -487,6 +549,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     model=settings["model"],
                     max_tokens=settings["max_tokens"],
                     require_supported_parameters=settings["require_supported_parameters"],
+                    prompt_version=settings["prompt_version"],
                 ),
                 judge_config_hash=judge_config_hash,
                 generator_outputs_hash=hashes["generator_outputs_sha256"],
@@ -494,7 +557,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             write_json_atomic(
                 args.outputs,
                 {
-                    "schema_version": 1,
+                    "schema_version": judge_config.get("schema_version", 1),
                     "experiment": judge_config["experiment_id"],
                     "judge_config_sha256": judge_config_hash,
                     "generator_outputs_sha256": hashes["generator_outputs_sha256"],
@@ -509,10 +572,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                 contexts,
                 judge_config_hash=judge_config_hash,
                 generator_outputs_hash=hashes["generator_outputs_sha256"],
+                judge_prompt_version=settings["prompt_version"],
             )
         selection = select_winner(grouped, len(cases))
         result = {
-            "schema_version": 1,
+            "schema_version": judge_config.get("schema_version", 1),
             "experiment": judge_config["experiment_id"],
             **hashes,
             "judge_config_sha256": judge_config_hash,
