@@ -53,6 +53,9 @@ class DeploymentConfigTests(unittest.TestCase):
         self.assertGreater(len(payload), 10_000)
         social = (ROOT / "SOCIAL-POST.md").read_text(encoding="utf-8")
         self.assertIn("artifacts/section6/search-results.jpg", social)
+        attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8")
+        self.assertIn("*.jpg binary", attributes)
+        self.assertIn("*.jpeg binary", attributes)
 
 
 if __name__ == "__main__":
