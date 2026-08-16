@@ -4,6 +4,7 @@
 
 | Assignment requirement | Reproducible evidence | Current state |
 | --- | --- | --- |
+| Completed Pre-Search Phases 1–3 | `Presearch.md`; `Post-Stack Refinement.md`; `tests/test_presearch_docs.py` | Pass: all 16 checklist topics documented; initial decisions distinguished from later measurements |
 | Frozen real corpus and judgments | `python run_project.py`; `data/corpus.jsonl`; `data/qrels_v2.json` | Pass |
 | Positional inverted index and Boolean retrieval | `tests/test_index.py`; `tests/test_boolean.py`; offline runner | Pass |
 | BM25 and full IR metrics | `tests/test_bm25.py`; `tests/test_metrics.py`; `artifacts/section3/baseline.json` | Pass |

@@ -4,6 +4,8 @@
 
 A from-scratch relevance engine over a custom corpus of therapeutic-peptide research from PubMed. The project follows the Gauntlet AI rule **measured, not vibed**: freeze human relevance judgments before tuning retrieval, calculate metrics ourselves, and do not add an LLM until lexical retrieval is objectively evaluated.
 
+Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 3](Post-Stack%20Refinement.md) · [Architecture](ARCHITECTURE.md) · [Project master plan](Project-Master-Plan.md)
+
 ## Project status
 
 - [x] Assignment constraints and analysis/index architecture documented
