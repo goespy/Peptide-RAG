@@ -19,6 +19,11 @@
   }
   function evidenceCard(item) {
     const card = document.createElement("article"); card.className = "result";
+    const metadata = document.createElement("p"); metadata.className = "result-meta";
+    const details = [];
+    if (Number.isInteger(item.rank) && item.rank > 0) details.push(`Rank ${item.rank}`);
+    if (typeof item.score === "number" && Number.isFinite(item.score)) details.push(`Score ${item.score.toFixed(6)}`);
+    if (details.length) { text(metadata, details.join(" · ")); card.append(metadata); }
     const title = document.createElement("h3"); text(title, item.title); card.append(title);
     const snippet = document.createElement("p"); highlighted(snippet, item.snippet); card.append(snippet);
     if (item.pubmed_url) { const link = document.createElement("a"); link.href = item.pubmed_url; link.target = "_blank"; link.rel = "noopener noreferrer"; text(link, `PubMed ${item.pmid}`); card.append(link); }

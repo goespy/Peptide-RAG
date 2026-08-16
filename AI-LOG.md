@@ -38,6 +38,7 @@ Approximately **100% of source/test code was AI-generated or AI-edited** and **0
 - The optional BM25 differential initially appeared green only because `bm25s` was absent. Installing it exposed an incorrectly batched reference call; the corrected scorer now matches all 15 frozen queries within `1e-6`.
 - Claude found a self-confirming judge worksheet and an offline release check that reported pass without comparing saved metrics. Blind/hash-bound labels and full replay comparisons replaced both.
 - The production service expected the wrong final-generator status/hash fields and would have ignored the measured v2.5 prompt settings. A release-loader regression test now requires the accepted selection, retriever hash, prompt hash, and exact generation settings to agree before generation can activate.
+- A release audit found that ranked scores existed in the API but were invisible in the web UI. The API now emits explicit ranks, the client renders stable rank/score metadata, and an in-app browser run verified the result users actually see.
 
 ## Key Learnings
 

@@ -37,9 +37,14 @@ class WebAppTests(unittest.TestCase):
         response = client.post("/api/search", json={"query": "peptide", "mode": "bm25", "k": 2})
         body = response.json()
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(body["results"][0]["rank"], 1)
+        self.assertEqual(body["results"][0]["score"], 1.0)
         self.assertEqual(body["results"][0]["pubmed_url"], "https://pubmed.ncbi.nlm.nih.gov/12345/")
         self.assertIn("medical advice", body["disclaimer"])
         self.assertNotIn("access-control-allow-origin", response.headers)
+        script = client.get("/static/app.js").text
+        self.assertIn('details.push(`Rank ${item.rank}`)', script)
+        self.assertIn('details.push(`Score ${item.score.toFixed(6)}`)', script)
 
     def test_validation_and_answer_fallback_preserve_evidence(self):
         class Failing(FakeService):

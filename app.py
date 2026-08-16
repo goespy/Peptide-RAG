@@ -111,7 +111,7 @@ def _evidence(items: Any) -> list[dict[str, Any]]:
     if not isinstance(items, (list, tuple)):
         return []
     output: list[dict[str, Any]] = []
-    for item in items:
+    for rank, item in enumerate(items, start=1):
         if isinstance(item, dict):
             value = item
         else:
@@ -119,6 +119,7 @@ def _evidence(items: Any) -> list[dict[str, Any]]:
         pmid = str(value.get("pmid", ""))
         text = value.get("snippet", value.get("text", ""))
         output.append({
+            "rank": rank,
             "pmid": pmid,
             "title": str(value.get("title", "Untitled record")),
             "snippet": str(text),
