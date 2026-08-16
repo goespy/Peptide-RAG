@@ -31,6 +31,13 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
+def source_sha256(path: Path) -> str:
+    """Hash UTF-8 source with canonical LF newlines across Git platforms."""
+
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(text.encode("utf-8")).hexdigest().upper()
+
+
 def process_memory_bytes() -> tuple[int, int]:
     """Return current and peak resident bytes for this process."""
 
@@ -123,7 +130,7 @@ def build_report(
         if cache_path.is_relative_to(ROOT)
         else str(cache_path),
         "cache_sha256": sha256(cache_path),
-        "service_sha256": sha256(ROOT / "src" / "service.py"),
+        "service_sha256": source_sha256(ROOT / "src" / "service.py"),
         "corpus_sha256": sha256(ROOT / "data" / "corpus.jsonl"),
         "startup_ms": elapsed_ms,
         "rss_before_bytes": before_rss,

@@ -15,6 +15,6 @@
   "schema_version": 1,
   "scope": "single cold service initialization on the recorded development machine",
   "semantic_available": true,
-  "service_sha256": "84AD4FF072FA9C02C8B5DB915BDB0B51A427CCE6E80FDC4F2C1F6DC7ED434C0D",
+  "service_sha256": "AD95974EA33E85B598805E6D2459F9BA1F05594B5C0E4623CC899B1F523F38BA",
   "startup_ms": 3519.2616999993334
 }

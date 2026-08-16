@@ -9,6 +9,7 @@ from scripts.benchmark_service import (
     build_report,
     main,
     render_markdown,
+    source_sha256,
 )
 
 
@@ -25,6 +26,15 @@ class FakeService:
 
 
 class ServiceBenchmarkTests(unittest.TestCase):
+    def test_source_hash_is_stable_across_lf_and_crlf_checkouts(self):
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            lf = directory / "lf.py"
+            crlf = directory / "crlf.py"
+            lf.write_bytes(b"first\nsecond\n")
+            crlf.write_bytes(b"first\r\nsecond\r\n")
+            self.assertEqual(source_sha256(lf), source_sha256(crlf))
+
     def test_report_records_offline_service_footprint(self):
         with TemporaryDirectory() as temp:
             cache = Path(temp) / "cache.npz"

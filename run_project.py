@@ -143,6 +143,13 @@ def _json(path: Path) -> dict[str, Any]:
     return value
 
 
+def _source_sha256(path: Path) -> str:
+    """Hash UTF-8 source with canonical LF newlines across Git platforms."""
+
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(text.encode("utf-8")).hexdigest().upper()
+
+
 def _require_hash(payload: dict[str, Any], key: str, path: Path) -> None:
     expected = payload.get(key)
     if not isinstance(expected, str) or len(expected) != 64:
@@ -1262,7 +1269,7 @@ def _validate_service_memory() -> Check:
         raise ValueError("service-memory cache path escapes or is missing")
     expected_hashes = {
         "cache_sha256": sha256(cache),
-        "service_sha256": sha256(ROOT / "src/service.py"),
+        "service_sha256": _source_sha256(ROOT / "src/service.py"),
         "corpus_sha256": sha256(CORPUS),
     }
     if any(report.get(field) != value for field, value in expected_hashes.items()):
