@@ -44,6 +44,12 @@ path. If provider calls finish but summary finalization is interrupted, use
 rows and makes no provider request. Railway deployment remains closed until the
 holdout artifact is frozen and the offline release check passes.
 
+At runtime, generation also fails closed unless the final holdout config,
+accepted generator selection, frozen retriever, source v2.5 prompt hash, and
+all generation settings agree. Deployment therefore cannot silently replace
+the measured prompt, token cap, citation mode, reasoning settings, or refusal
+reconsideration behavior with application defaults.
+
 ## Pending credentials and deployment
 
 Set `OPENROUTER_API_KEY` only in the deployment environment after the RAG

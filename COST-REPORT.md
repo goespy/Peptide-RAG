@@ -33,8 +33,9 @@ ceiling. The immutable provider responses report:
 
 The generator/judge total is recomputed from all 39 saved rows in
 `data/rag_bakeoff_outputs.json` and bound in
-`data/rag_bakeoff_reanalysis.json`. Railway usage and coding-agent subscription
-tokens remain `TBD` or `unknown/not exposed`; they are not represented as zero.
+`data/rag_bakeoff_reanalysis.json`. Railway has not been deployed yet, so actual
+hosting usage is `unknown/not exposed`. Coding-agent subscription tokens are
+also `unknown/not exposed`; neither quantity is represented as zero.
 
 Generator-v2 made 123 provider calls under an approved `$0.04` ceiling and a
 `$0.03457764` conservative estimate, but the saved provider responses did not
@@ -51,7 +52,7 @@ pending, and the seven-case QA holdout remains untouched.
 
 ## Production projection
 
-The workload assumptions are frozen even though current provider prices are not:
+The workload assumptions are frozen:
 
 - 2 sessions per user per month.
 - 10 generated questions per session.
@@ -59,23 +60,39 @@ The workload assumptions are frozen even though current provider prices are not:
 - 4,000 generation-input tokens and 300 output tokens per call.
 - One query embedding per question; corpus embeddings are generated once and cached.
 
-If `Pi`, `Po`, and `Pe` are the current dollars per million input,
-output, and query-embedding tokens, and `Eq` is the measured average query-token
-count, the variable AI cost per user is:
+The price snapshot was checked on **2026-08-16**. OpenRouter listed
+`openai/gpt-oss-20b` at `$0.03/M` input tokens and `$0.13/M` output tokens, and
+`openai/text-embedding-3-small` at `$0.02/M` input tokens:
+
+- [Frozen 2026-08-16 model-catalog artifact](artifacts/section5/model_candidates_judge_refresh.json)
+- [GPT-OSS 20B pricing](https://openrouter.ai/openai/gpt-oss-20b/pricing)
+- [text-embedding-3-small pricing](https://openrouter.ai/openai/text-embedding-3-small/pricing)
+
+The measured development-query average is `180 / 13 = 13.846` embedding tokens
+per question. With `Pi=0.03`, `Po=0.13`, `Pe=0.02`, and `Eq=13.846`, the
+variable AI cost per user is:
 
 ```text
 20 * ((4,000 * Pi + 300 * Po + Eq * Pe) / 1,000,000)
+    = $0.00318554 per user per month
 ```
 
-Prices must be revalidated on the report date and recorded with direct source
-links before replacing these cells:
+| Users | Q&A calls/month | Generation input tokens | Generation output tokens | Variable AI cost | Railway baseline | Combined lower bound |
+|---:|---:|---:|---:|---:|---:|---:|
+| 100 | 2,000 | 8,000,000 | 600,000 | $0.32 | $5.00 | $5.32 |
+| 1,000 | 20,000 | 80,000,000 | 6,000,000 | $3.19 | $5.00 | $8.19 |
+| 10,000 | 200,000 | 800,000,000 | 60,000,000 | $31.86 | $5.00 minimum | $36.86 minimum |
+| 100,000 | 2,000,000 | 8,000,000,000 | 600,000,000 | $318.55 | $5.00 minimum | $323.55 minimum |
 
-| Users | Q&A calls/month | Generation input tokens | Generation output tokens | Variable AI cost | Railway |
-|---:|---:|---:|---:|---:|---:|
-| 100 | 2,000 | 8,000,000 | 600,000 | TBD | TBD |
-| 1,000 | 20,000 | 80,000,000 | 6,000,000 | TBD | TBD |
-| 10,000 | 200,000 | 800,000,000 | 60,000,000 | TBD | TBD |
-| 100,000 | 2,000,000 | 8,000,000,000 | 600,000,000 | TBD | TBD |
+Railway's Hobby plan is `$5/month` and includes the first `$5` of measured
+resource usage. Current listed resource rates are `$10/GB-month` RAM,
+`$20/vCPU-month`, `$0.05/GB` egress, and `$0.15/GB-month` volume storage. The
+combined figures above therefore use the subscription minimum, not an invented
+resource estimate. Actual deployment CPU, memory, egress, and sleeping behavior
+must be measured before replacing the lower bounds:
+
+- [Railway plans and usage pricing](https://docs.railway.com/pricing/plans)
+- [Railway cost controls](https://docs.railway.com/pricing/cost-control)
 
 The present in-memory rate limiter and daily counter are single-process. Even
 if model spend is acceptable, 10,000 and 100,000-user scenarios require load

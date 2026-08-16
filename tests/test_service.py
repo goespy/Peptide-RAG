@@ -12,7 +12,12 @@ from src.chunks import Chunk, embedding_text
 from src.embeddings import EmbeddingCacheManifest, save_embedding_cache
 from src.generation import insufficient_evidence
 from src.retrieval import RetrievedChunk
-from src.service import LocalResearchService, _load_lexical_metrics, load_semantic_retriever
+from src.service import (
+    LocalResearchService,
+    _load_lexical_metrics,
+    load_release_answer_client,
+    load_semantic_retriever,
+)
 
 
 class ServiceTests(unittest.TestCase):
@@ -97,6 +102,60 @@ class ServiceTests(unittest.TestCase):
             self.assertEqual(measured["all_queries"]["query_count"], 15)
             self.assertEqual(measured["untouched_holdout"]["ndcg_at_10"], 0.65)
             self.assertIsNone(_load_lexical_metrics(path, corpus_sha256="WRONG", lexical_config_sha256="CONFIG"))
+
+    def test_release_generator_uses_exact_accepted_prompt_and_settings(self):
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            frozen = directory / "frozen.json"
+            source = directory / "generator_v2_5.json"
+            accepted = directory / "accepted.json"
+            final = directory / "generator.json"
+            frozen.write_text("{}", encoding="utf-8")
+            prompt = "Use only measured evidence."
+            generation = {
+                "citation_mode": "derived_from_text_markers",
+                "exclude_reasoning": True,
+                "max_tokens": 800,
+                "reasoning_effort": "low",
+                "reconsider_insufficient_evidence": True,
+                "repair_attempts": 1,
+                "require_supported_parameters": True,
+                "temperature": 0,
+            }
+            source.write_text(json.dumps({
+                "generator_candidates": ["openai/gpt-oss-20b"],
+                "generation": generation,
+                "holdout_status": "untouched",
+                "prompt": prompt,
+                "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest().upper(),
+            }), encoding="utf-8")
+            accepted.write_text(json.dumps({
+                "status": "accepted_for_holdout",
+                "holdout_status": "untouched",
+                "winner": "openai/gpt-oss-20b",
+                "retriever_config_sha256": hashlib.sha256(frozen.read_bytes()).hexdigest().upper(),
+                "generator_config_sha256": hashlib.sha256(source.read_bytes()).hexdigest().upper(),
+                "generation": {**generation, "prompt": prompt},
+            }), encoding="utf-8")
+            final.write_text(json.dumps({
+                "schema_version": 2,
+                "status": "frozen_after_passing_holdout",
+                "winner": "openai/gpt-oss-20b",
+                "retriever_config_sha256": hashlib.sha256(frozen.read_bytes()).hexdigest().upper(),
+                "accepted_selection_sha256": hashlib.sha256(accepted.read_bytes()).hexdigest().upper(),
+            }), encoding="utf-8")
+            client = load_release_answer_client(final, accepted, source, frozen)
+            self.assertIsNotNone(client)
+            self.assertEqual(client.system_prompt, prompt)
+            self.assertEqual(client.max_tokens, 800)
+            self.assertEqual(client.reasoning_effort, "low")
+            self.assertTrue(client.exclude_reasoning)
+            self.assertTrue(client.reconsider_insufficient_evidence)
+
+            source_payload = json.loads(source.read_text(encoding="utf-8"))
+            source_payload["prompt"] = "tampered"
+            source.write_text(json.dumps(source_payload), encoding="utf-8")
+            self.assertIsNone(load_release_answer_client(final, accepted, source, frozen))
 
     def test_lexical_answer_fails_closed_but_keeps_local_evidence(self):
         class RefusingClient:

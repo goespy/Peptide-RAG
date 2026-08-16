@@ -367,6 +367,14 @@ configured cache matches the selected chunk, corpus, and model identities.
 Without it, explicit semantic/hybrid requests return no fabricated downgrade;
 Q&A returns retrieved evidence and an insufficient-evidence status.
 
+Grounded generation has a second, independent activation gate. The service
+requires the final passing-holdout status, the exact accepted-selection hash,
+the frozen retriever hash, the source v2.5 generator-config hash, the prompt
+hash, and every recorded generation setting to agree. It then constructs the
+client with those measured settings; it never falls back to the library's
+default prompt or token cap. Missing or altered evidence leaves generation
+disabled while local retrieval remains available.
+
 The browser renders corpus and model strings with text nodes, converts only
 the service's `[[query match]]` markers to safe `<mark>` elements, and creates
 PubMed citation links itself. Queries are capped at 500 characters, `k` at

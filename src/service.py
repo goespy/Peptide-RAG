@@ -32,6 +32,8 @@ DEFAULT_LEXICAL_CONFIG = ROOT / "data" / "lexical_config.json"
 DEFAULT_LEXICAL_EVALUATION = ROOT / "artifacts" / "section4" / "holdout.json"
 DEFAULT_FROZEN_CONFIG = ROOT / "artifacts" / "section5" / "frozen_config.json"
 DEFAULT_GENERATOR_CONFIG = ROOT / "artifacts" / "section5" / "generator_config.json"
+DEFAULT_ACCEPTED_SELECTION = ROOT / "artifacts" / "section5" / "accepted_generator_v2_5.json"
+DEFAULT_SOURCE_GENERATOR_CONFIG = ROOT / "artifacts" / "section5" / "generator_v2_5_config.json"
 
 
 def _sha256(path: Path) -> str:
@@ -151,6 +153,69 @@ def load_semantic_retriever(
         return None
 
 
+def load_release_answer_client(
+    final_config_path: Path,
+    accepted_selection_path: Path,
+    source_generator_config_path: Path,
+    frozen_config_path: Path,
+) -> GroundedAnswerClient | None:
+    """Load only the exact generator contract accepted by the replayed holdout."""
+
+    try:
+        final = json.loads(Path(final_config_path).read_text(encoding="utf-8"))
+        accepted = json.loads(Path(accepted_selection_path).read_text(encoding="utf-8"))
+        source = json.loads(Path(source_generator_config_path).read_text(encoding="utf-8"))
+        if not all(isinstance(value, dict) for value in (final, accepted, source)):
+            return None
+        winner = final.get("winner")
+        if (
+            final.get("schema_version") != 2
+            or final.get("status") != "frozen_after_passing_holdout"
+            or final.get("retriever_config_sha256") != _sha256(Path(frozen_config_path))
+            or final.get("accepted_selection_sha256") != _sha256(Path(accepted_selection_path))
+            or not isinstance(winner, str)
+            or not winner
+            or accepted.get("status") != "accepted_for_holdout"
+            or accepted.get("holdout_status") != "untouched"
+            or accepted.get("winner") != winner
+            or accepted.get("retriever_config_sha256") != final.get("retriever_config_sha256")
+            or accepted.get("generator_config_sha256") != _sha256(Path(source_generator_config_path))
+            or source.get("generator_candidates") != [winner]
+            or source.get("holdout_status") != "untouched"
+        ):
+            return None
+        prompt = source.get("prompt")
+        source_generation = source.get("generation")
+        accepted_generation = accepted.get("generation")
+        if (
+            not isinstance(prompt, str)
+            or not prompt.strip()
+            or source.get("prompt_sha256")
+            != hashlib.sha256(prompt.encode("utf-8")).hexdigest().upper()
+            or not isinstance(source_generation, dict)
+            or not isinstance(accepted_generation, dict)
+        ):
+            return None
+        expected_generation = {**source_generation, "prompt": prompt}
+        if accepted_generation != expected_generation or accepted_generation.get("repair_attempts") != 1:
+            return None
+        return GroundedAnswerClient(
+            model=winner,
+            max_tokens=int(accepted_generation["max_tokens"]),
+            temperature=float(accepted_generation["temperature"]),
+            system_prompt=prompt,
+            citation_mode=str(accepted_generation["citation_mode"]),
+            require_supported_parameters=bool(accepted_generation["require_supported_parameters"]),
+            reasoning_effort=accepted_generation.get("reasoning_effort"),
+            exclude_reasoning=bool(accepted_generation.get("exclude_reasoning", False)),
+            reconsider_insufficient_evidence=bool(
+                accepted_generation.get("reconsider_insufficient_evidence", False)
+            ),
+        )
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return None
+
+
 class LocalResearchService:
     """Serves local Boolean/BM25 results and optional validated RAG assets."""
 
@@ -162,6 +227,8 @@ class LocalResearchService:
         lexical_evaluation_path: Path = DEFAULT_LEXICAL_EVALUATION,
         frozen_config_path: Path = DEFAULT_FROZEN_CONFIG,
         generator_config_path: Path = DEFAULT_GENERATOR_CONFIG,
+        accepted_selection_path: Path = DEFAULT_ACCEPTED_SELECTION,
+        source_generator_config_path: Path = DEFAULT_SOURCE_GENERATOR_CONFIG,
         embedding_cache_path: Path | None = None,
         answer_client: GroundedAnswerClient | None = None,
     ) -> None:
@@ -192,19 +259,12 @@ class LocalResearchService:
         )
         self.answer_client = answer_client
         if self.answer_client is None and self.semantic_retriever is not None:
-            try:
-                generator = json.loads(Path(generator_config_path).read_text(encoding="utf-8"))
-                if (
-                    not isinstance(generator, dict)
-                    or generator.get("status") != "frozen_after_complete_holdout"
-                    or generator.get("rag_config_sha256") != _sha256(Path(frozen_config_path))
-                    or not isinstance(generator.get("winner"), str)
-                    or not generator["winner"]
-                ):
-                    raise ValueError("generator configuration is not release-frozen")
-                self.answer_client = GroundedAnswerClient(model=generator["winner"])
-            except (OSError, TypeError, ValueError, json.JSONDecodeError):
-                self.answer_client = None
+            self.answer_client = load_release_answer_client(
+                Path(generator_config_path),
+                Path(accepted_selection_path),
+                Path(source_generator_config_path),
+                Path(frozen_config_path),
+            )
 
     def _record(self, document_id: str, query: str, score: float | None = None) -> dict[str, Any]:
         document = self.index.documents[document_id]
