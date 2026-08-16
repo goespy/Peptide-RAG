@@ -24,6 +24,8 @@ Show the analyzer/index/BM25 → chunking/embeddings/RRF → structured answer/j
 
 ## Evidence to insert before recording
 
+- Architecture visual: `docs/architecture-overview.svg`
+- Ranked-search screenshot: `artifacts/section6/search-results.jpg`
 - Public URL: `TBD`
 - Tested release commit: `TBD`
 - Final test count: `TBD`

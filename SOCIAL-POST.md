@@ -20,7 +20,7 @@ Do not publish this draft until every bracketed value is backed by the final fro
 
 Required attachments before posting:
 
-- Architecture image: `TBD`
-- Search-results screenshot: `TBD`
+- Architecture image: `docs/architecture-overview.svg`
+- Search-results screenshot: `artifacts/section6/search-results.jpg`
 - Cited-answer or refusal screenshot: `TBD`
 - Public-post URL after publication: `TBD`

@@ -1,5 +1,6 @@
 import json
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -30,6 +31,28 @@ class DeploymentConfigTests(unittest.TestCase):
         self.assertIn("EMBEDDING_CACHE_PATH", example)
         self.assertNotIn("OPENROUTER_GENERATION_MODEL", example)
         self.assertNotIn("OPENROUTER_JUDGE_MODEL", example)
+
+    def test_submission_architecture_asset_is_valid_and_gate_accurate(self):
+        asset = ROOT / "docs/architecture-overview.svg"
+        ET.parse(asset)
+        svg = asset.read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        social = (ROOT / "SOCIAL-POST.md").read_text(encoding="utf-8")
+        self.assertIn("docs/architecture-overview.svg", readme)
+        self.assertIn("docs/architecture-overview.svg", social)
+        self.assertIn("answered faithfulness .900", svg)
+        self.assertIn("QA holdout remains untouched", svg)
+        self.assertIn("deploy after gates", svg)
+        self.assertNotIn("Sections 1–2 complete", svg)
+
+    def test_ranked_search_screenshot_is_a_real_jpeg_submission_asset(self):
+        screenshot = ROOT / "artifacts/section6/search-results.jpg"
+        payload = screenshot.read_bytes()
+        self.assertTrue(payload.startswith(b"\xff\xd8\xff"))
+        self.assertTrue(payload.endswith(b"\xff\xd9"))
+        self.assertGreater(len(payload), 10_000)
+        social = (ROOT / "SOCIAL-POST.md").read_text(encoding="utf-8")
+        self.assertIn("artifacts/section6/search-results.jpg", social)
 
 
 if __name__ == "__main__":

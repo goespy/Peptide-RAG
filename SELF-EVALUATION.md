@@ -20,7 +20,7 @@
 | Final release audit | New code-only Opus review artifact | Pending: Claude subscription reports a 7:10 PM ET session reset; no verdict claimed |
 | Public deployment | `app.py`; `railway.json`; `DEPLOYMENT.md`; service-memory artifact | Local shell, packaging, and a 278,310,912-byte peak development measurement complete; project/domain/secrets/deploy pending |
 | Cost report | `COST-REPORT.md`; `artifacts/section6/cost_projection.json`; frozen provider catalog and usage ledgers | Development spend and replayed 100/1K/10K/100K projections complete; actual Railway resource usage pending deployment |
-| Demo and social evidence | `DEMO-SCRIPT.md`; `SOCIAL-POST.md` | Draft only |
+| Demo and social evidence | `DEMO-SCRIPT.md`; `SOCIAL-POST.md`; `docs/architecture-overview.svg`; `artifacts/section6/search-results.jpg` | Architecture and ranked-search assets complete; cited-answer/refusal, video, and public post pending |
 
 ## Complete, reproducible evidence
 

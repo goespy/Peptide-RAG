@@ -1,5 +1,7 @@
 # Peptide-RAG
 
+![Peptide-RAG measured architecture](docs/architecture-overview.svg)
+
 A from-scratch relevance engine over a custom corpus of therapeutic-peptide research from PubMed. The project follows the Gauntlet AI rule **measured, not vibed**: freeze human relevance judgments before tuning retrieval, calculate metrics ourselves, and do not add an LLM until lexical retrieval is objectively evaluated.
 
 ## Project status
