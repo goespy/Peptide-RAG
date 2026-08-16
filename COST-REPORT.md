@@ -68,6 +68,12 @@ The price snapshot was checked on **2026-08-16**. OpenRouter listed
 - [GPT-OSS 20B pricing](https://openrouter.ai/openai/gpt-oss-20b/pricing)
 - [text-embedding-3-small pricing](https://openrouter.ai/openai/text-embedding-3-small/pricing)
 
+The complete assumptions, input hashes, exact Decimal calculations, and four
+scenarios are saved in
+[`artifacts/section6/cost_projection.json`](artifacts/section6/cost_projection.json).
+Regenerate it with `python scripts/project_costs.py --overwrite`; the offline
+release check independently recomputes it and rejects drift.
+
 The measured development-query average is `180 / 13 = 13.846` embedding tokens
 per question. With `Pi=0.03`, `Po=0.13`, `Pe=0.02`, and `Eq=13.846`, the
 variable AI cost per user is:

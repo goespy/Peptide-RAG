@@ -1,0 +1,79 @@
+{
+  "input_hashes": {
+    "embedding_ledger_sha256": "C6D5C5D8CA659CFC4E04903D29B441892BE1A333EE0BE6D52D05573283159527",
+    "model_catalog_sha256": "5915A387E0DD751FA309C0508E9063C093874340F9137F84908C24B20AD1A817",
+    "query_usage_sha256": "A975F341C8E2FB381BB794B41807091381A0D44CE6181CD99C2569D831DE2BC1"
+  },
+  "limitations": [
+    "Railway CPU, memory, egress, and sleeping behavior are not projected.",
+    "Provider prices must be refreshed for a future report date.",
+    "10,000 and 100,000-user scenarios require load testing and distributed limits."
+  ],
+  "prices_usd_per_million_tokens": {
+    "embedding_input": "0.02",
+    "embedding_model": "openai/text-embedding-3-small",
+    "generator_input": "0.03",
+    "generator_model": "openai/gpt-oss-20b",
+    "generator_output": "0.13"
+  },
+  "railway": {
+    "actual_resource_usage": "unknown/not exposed until deployment",
+    "monthly_minimum_usd": "5.00",
+    "plan": "Hobby",
+    "source": "https://docs.railway.com/pricing/plans"
+  },
+  "report_date": "2026-08-16",
+  "scenarios": [
+    {
+      "combined_lower_bound_usd": "5.32",
+      "generation_input_tokens": 8000000,
+      "generation_output_tokens": 600000,
+      "qa_calls_per_month": 2000,
+      "railway_baseline_usd": "5.00",
+      "users": 100,
+      "variable_ai_cost_usd_exact": "0.3185538461538461538461538462",
+      "variable_ai_cost_usd_rounded": "0.32"
+    },
+    {
+      "combined_lower_bound_usd": "8.19",
+      "generation_input_tokens": 80000000,
+      "generation_output_tokens": 6000000,
+      "qa_calls_per_month": 20000,
+      "railway_baseline_usd": "5.00",
+      "users": 1000,
+      "variable_ai_cost_usd_exact": "3.185538461538461538461538462",
+      "variable_ai_cost_usd_rounded": "3.19"
+    },
+    {
+      "combined_lower_bound_usd": "36.86",
+      "generation_input_tokens": 800000000,
+      "generation_output_tokens": 60000000,
+      "qa_calls_per_month": 200000,
+      "railway_baseline_usd": "5.00",
+      "users": 10000,
+      "variable_ai_cost_usd_exact": "31.85538461538461538461538462",
+      "variable_ai_cost_usd_rounded": "31.86"
+    },
+    {
+      "combined_lower_bound_usd": "323.55",
+      "generation_input_tokens": 8000000000,
+      "generation_output_tokens": 600000000,
+      "qa_calls_per_month": 2000000,
+      "railway_baseline_usd": "5.00",
+      "users": 100000,
+      "variable_ai_cost_usd_exact": "318.5538461538461538461538462",
+      "variable_ai_cost_usd_rounded": "318.55"
+    }
+  ],
+  "schema_version": 1,
+  "variable_ai_cost_per_user_usd_exact": "0.003185538461538461538461538462",
+  "workload": {
+    "generated_questions_per_session": 10,
+    "generation_input_tokens_per_call": 4000,
+    "generation_output_tokens_per_call": 300,
+    "qa_calls_per_user_per_month": 20,
+    "query_embedding_tokens_denominator": 13,
+    "query_embedding_tokens_numerator": 180,
+    "sessions_per_user_per_month": 2
+  }
+}

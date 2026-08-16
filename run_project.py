@@ -24,6 +24,7 @@ from scripts.export_rag_holdout_contexts import (
     embedding_cost_estimate,
 )
 from scripts.freeze_generator_selection import build_selection
+from scripts.project_costs import projection_from_paths
 from scripts.run_generator_diagnostic import (
     summarize as summarize_generator,
     validate_selected_parameter_support,
@@ -121,6 +122,7 @@ RAG_HOLDOUT_OUTPUTS = ROOT / "data/rag_holdout_outputs.json"
 RAG_HOLDOUT_SUMMARY = ROOT / "data/rag_holdout_summary.json"
 FINAL_GENERATOR_CONFIG = SECTION5 / "generator_config.json"
 SERVICE_MEMORY = SECTION6 / "service_memory.json"
+COST_PROJECTION = SECTION6 / "cost_projection.json"
 GENERATOR_V2_3_DIAGNOSIS = SECTION5 / "generator_v2_3_diagnosis.json"
 GENERATOR_V2_3_REVIEW = SECTION5 / "claude_generator_v2_3_review.md"
 
@@ -1223,6 +1225,10 @@ def _rag_checks() -> list[Check]:
     except (OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("service memory benchmark", "FAIL", str(exc), True))
     try:
+        checks.append(_validate_cost_projection())
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        checks.append(Check("monthly cost projection", "FAIL", str(exc), True))
+    try:
         checks.append(_validate_rag_bakeoff())
     except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("RAG development bake-off evidence", "FAIL", str(exc), True))
@@ -1309,6 +1315,26 @@ def _validate_service_memory() -> Check:
         "PASS",
         f"cold startup={startup:.3f} ms; RSS after={report['rss_after_bytes']} bytes; "
         f"peak RSS={report['peak_rss_bytes']} bytes; zero provider calls",
+        True,
+    )
+
+
+def _validate_cost_projection() -> Check:
+    saved = _json(COST_PROJECTION)
+    expected = projection_from_paths(
+        JUDGE_MODEL_CATALOG_REFRESH,
+        EMBEDDING_USAGE,
+        QUERY_EMBEDDING_USAGE,
+    )
+    if saved != expected:
+        raise ValueError("cost projection does not replay from frozen prices and usage")
+    scenarios = saved.get("scenarios")
+    if not isinstance(scenarios, list) or len(scenarios) != 4:
+        raise ValueError("cost projection must contain four user-scale scenarios")
+    return Check(
+        "monthly cost projection",
+        "PASS",
+        "100/1K/10K/100K variable AI costs replay from the frozen catalog and query-token ledger; Railway remains a lower bound",
         True,
     )
 
