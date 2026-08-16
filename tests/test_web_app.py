@@ -1,16 +1,19 @@
 """Contract tests for the optional FastAPI web shell."""
 
+import asyncio
+import time
 import unittest
 from datetime import UTC, datetime, timedelta
 
 try:
     from fastapi.testclient import TestClient
-    from app import BudgetExceeded, SlidingRateLimiter, create_app
+    from app import BudgetExceeded, SlidingRateLimiter, _call, create_app
 except ImportError:  # Standard-library test discovery works without web extras.
     TestClient = None
     BudgetExceeded = RuntimeError
     create_app = None
     SlidingRateLimiter = None
+    _call = None
 
 
 class FakeService:
@@ -51,6 +54,11 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(response.json()["retrieval_only"])
         self.assertEqual(response.json()["evidence"][0]["pmid"], "12345")
 
+        capped_client = TestClient(create_app(Failing(), daily_answer_cap=1))
+        self.assertTrue(capped_client.post("/api/answer", json={"query": "first"}).json()["retrieval_only"])
+        capped = capped_client.post("/api/answer", json={"query": "second"}).json()
+        self.assertEqual(capped["reason"], "Daily answer budget is exhausted.")
+
     def test_answer_endpoint_retrieves_evidence_once(self):
         class Counting(FakeService):
             def __init__(self): self.search_calls = 0
@@ -85,3 +93,12 @@ class WebAppTests(unittest.TestCase):
         self.assertTrue(limiter.allow("search:first", 1, start))
         self.assertTrue(limiter.allow("search:second", 1, start + timedelta(seconds=61)))
         self.assertNotIn("search:first", limiter._events)
+
+
+@unittest.skipIf(_call is None, "FastAPI/Starlette are not installed")
+class AsyncBoundaryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_sync_provider_work_does_not_block_the_event_loop(self):
+        task = asyncio.create_task(_call(lambda: time.sleep(0.05)))
+        await asyncio.sleep(0.01)
+        self.assertFalse(task.done())
+        await task

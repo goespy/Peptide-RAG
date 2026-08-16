@@ -65,6 +65,13 @@ review the deployment details before activation.
 - `DAILY_ANSWER_CAP=200` -- default single-process budget guard.
 - `TRUST_PROXY_HEADERS=true` -- required on Railway so rate limits use the forwarded client IP; leave false for direct local serving.
 
+Synchronous retrieval/provider work is dispatched off the async event loop,
+and an answer-attempt budget slot is reserved before the provider await. This
+prevents a slow request from freezing unrelated endpoints and prevents
+concurrent requests from overshooting the single-process daily cap. Multiple
+Railway replicas would still require a shared external counter before the same
+claim could be made across instances.
+
 Planned start command:
 
 ```text

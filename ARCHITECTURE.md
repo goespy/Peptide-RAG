@@ -6,6 +6,39 @@ The MVP is a measured lexical search baseline over PubMed title and abstract tex
 
 The production index and metrics code may use the Python standard library, but no pre-built information-retrieval or metrics implementation (including PyTerrier, Elasticsearch, `rank_bm25`, or scikit-learn metrics).
 
+## System overview
+
+```mermaid
+flowchart LR
+    C["Frozen PubMed corpus"] --> A["Shared analyzer"]
+    A --> I["Positional inverted index"]
+    I --> B["Boolean retrieval"]
+    I --> M["Custom BM25"]
+    Q["Frozen qrels"] --> E["Custom IR metrics"]
+    B --> E
+    M --> E
+
+    C --> K["Measured 256/64 chunks"]
+    K --> L["Lexical chunk ranker"]
+    K --> S["Cached embeddings + cosine"]
+    L --> H["Weighted RRF hybrid"]
+    S --> H
+    O["Approved QA oracle"] --> R["Chunk/evidence evaluation"]
+    H --> R
+    H --> T["Top-five evidence"]
+    T --> G["Frozen GPT-OSS contract"]
+    G --> V["Citation + safety validator"]
+    V --> X["Answered or insufficient evidence"]
+    X --> J["Different-family Claude judge"]
+    J --> P["Blind owner validation"]
+    P --> U["One-shot seven-case holdout"]
+    U --> F["Hash-bound release config"]
+    F --> W["FastAPI / Railway"]
+```
+
+The lower path cannot activate in the public application until development
+selection, blind human judge validation, and the untouched holdout all pass.
+
 ## Frozen corpus input
 
 The Day 1 corpus contains 2,000 unique PubMed records in `data/corpus.jsonl`. All records have a PMID and title; 81 have no abstract and remain valid title-only documents. Its SHA-256 is `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. Qrels version 1 must name this exact hash so later corpus refreshes cannot silently change the evaluation population.
@@ -382,7 +415,10 @@ PubMed citation links itself. Queries are capped at 500 characters, `k` at
 30 search requests and five answer requests per IP per minute plus 200 answer
 attempts per UTC day. Keys stay server-side and raw query text is not logged.
 These counters are explicitly single-instance controls, not a distributed
-rate-limiting claim.
+rate-limiting claim. Synchronous index, embedding, and generation work runs in
+Starlette's thread pool so a provider request does not block the FastAPI event
+loop. The daily answer-attempt slot is reserved before that await, preventing
+concurrent requests from stepping past the configured single-process cap.
 
 `python run_project.py` is the network-free release check. It validates the
 frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics,

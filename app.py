@@ -13,6 +13,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+from starlette.concurrency import run_in_threadpool
 
 
 RESEARCH_DISCLAIMER = "Research use only. This tool does not provide medical advice."
@@ -97,7 +98,9 @@ def _environment_trust_proxy() -> bool:
 
 
 async def _call(method: Any, *args: Any) -> Any:
-    result = method(*args)
+    if inspect.iscoroutinefunction(method):
+        return await method(*args)
+    result = await run_in_threadpool(method, *args)
     return await result if inspect.isawaitable(result) else result
 
 
@@ -199,9 +202,11 @@ def create_app(service: ResearchService | None = None, *, daily_answer_cap: int 
         evidence = _evidence(await _call(app.state.service.search, query, payload.mode, payload.k))
         if app.state.answer_count >= app.state.daily_answer_cap:
             return {"answer": None, "retrieval_only": True, "reason": "Daily answer budget is exhausted.", "evidence": evidence, "disclaimer": RESEARCH_DISCLAIMER, "attribution": NCBI_ATTRIBUTION}
+        # Reserve the single-process daily slot before yielding to the provider
+        # thread, preventing concurrent requests from overshooting the cap.
+        app.state.answer_count += 1
         try:
             value = await _call(app.state.service.answer, query, payload.mode, payload.k, evidence)
-            app.state.answer_count += 1
         except (BudgetExceeded, ProviderUnavailable):
             return {"answer": None, "retrieval_only": True, "reason": "Answer generation is unavailable; showing retrieved evidence only.", "evidence": evidence, "disclaimer": RESEARCH_DISCLAIMER, "attribution": NCBI_ATTRIBUTION}
         if isinstance(value, str):
