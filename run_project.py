@@ -76,6 +76,7 @@ LEXICAL_CONFIG = ROOT / "data/lexical_config.json"
 EVAL_SPLIT = ROOT / "data/eval_split.json"
 BASELINE = ROOT / "artifacts/section3/baseline.json"
 SECTION5 = ROOT / "artifacts/section5"
+SECTION6 = ROOT / "artifacts/section6"
 DEVELOPMENT_EXPERIMENTS = ROOT / "artifacts/section4/development_experiments.json"
 HOLDOUT = ROOT / "artifacts/section4/holdout.json"
 BENCHMARK = ROOT / "artifacts/section4/benchmark_lexical.json"
@@ -119,6 +120,7 @@ RAG_HOLDOUT_MODEL_CATALOG = SECTION5 / "holdout_model_catalog.json"
 RAG_HOLDOUT_OUTPUTS = ROOT / "data/rag_holdout_outputs.json"
 RAG_HOLDOUT_SUMMARY = ROOT / "data/rag_holdout_summary.json"
 FINAL_GENERATOR_CONFIG = SECTION5 / "generator_config.json"
+SERVICE_MEMORY = SECTION6 / "service_memory.json"
 GENERATOR_V2_3_DIAGNOSIS = SECTION5 / "generator_v2_3_diagnosis.json"
 GENERATOR_V2_3_REVIEW = SECTION5 / "claude_generator_v2_3_review.md"
 
@@ -1210,6 +1212,10 @@ def _rag_checks() -> list[Check]:
     except (Day1Error, OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("RAG retrieval evaluation", "FAIL", str(exc), True))
     try:
+        checks.append(_validate_service_memory())
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        checks.append(Check("service memory benchmark", "FAIL", str(exc), True))
+    try:
         checks.append(_validate_rag_bakeoff())
     except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("RAG development bake-off evidence", "FAIL", str(exc), True))
@@ -1222,6 +1228,82 @@ def _rag_checks() -> list[Check]:
     except (BakeoffError, OSError, ValueError, KeyError, TypeError) as exc:
         checks.append(Check("RAG accepted generator and QA holdout", "FAIL", str(exc), True))
     return checks
+
+
+def _validate_service_memory() -> Check:
+    report = _json(SERVICE_MEMORY)
+    required = {
+        "schema_version",
+        "measured_at_utc",
+        "platform",
+        "python_version",
+        "cache_path",
+        "cache_sha256",
+        "service_sha256",
+        "corpus_sha256",
+        "startup_ms",
+        "rss_before_bytes",
+        "rss_after_bytes",
+        "rss_delta_bytes",
+        "peak_rss_bytes",
+        "documents",
+        "semantic_available",
+        "generation_available",
+        "network_calls",
+        "scope",
+    }
+    if set(report) != required or report.get("schema_version") != 1:
+        raise ValueError("service-memory artifact has an unexpected schema")
+    cache_value = report.get("cache_path")
+    if not isinstance(cache_value, str) or not cache_value:
+        raise ValueError("service-memory cache path is invalid")
+    cache = (ROOT / cache_value).resolve()
+    if not cache.is_relative_to(ROOT.resolve()) or not cache.is_file():
+        raise ValueError("service-memory cache path escapes or is missing")
+    expected_hashes = {
+        "cache_sha256": sha256(cache),
+        "service_sha256": sha256(ROOT / "src/service.py"),
+        "corpus_sha256": sha256(CORPUS),
+    }
+    if any(report.get(field) != value for field, value in expected_hashes.items()):
+        raise ValueError("service-memory artifact hashes do not match the release inputs")
+    integers = (
+        "rss_before_bytes",
+        "rss_after_bytes",
+        "rss_delta_bytes",
+        "peak_rss_bytes",
+        "documents",
+        "network_calls",
+    )
+    if any(
+        isinstance(report.get(field), bool) or not isinstance(report.get(field), int)
+        for field in integers
+    ):
+        raise ValueError("service-memory measurements must be integers")
+    startup = report.get("startup_ms")
+    if (
+        isinstance(startup, bool)
+        or not isinstance(startup, (int, float))
+        or not math.isfinite(float(startup))
+        or startup <= 0
+        or report["rss_before_bytes"] <= 0
+        or report["rss_after_bytes"] <= 0
+        or report["peak_rss_bytes"] < report["rss_after_bytes"]
+        or report["rss_delta_bytes"]
+        != report["rss_after_bytes"] - report["rss_before_bytes"]
+        or report["documents"] != 2_000
+        or report.get("semantic_available") is not True
+        or not isinstance(report.get("generation_available"), bool)
+        or report["network_calls"] != 0
+    ):
+        raise ValueError("service-memory measurements are inconsistent")
+    return Check(
+        "service memory benchmark",
+        "PASS",
+        f"cold startup={startup:.3f} ms; RSS after={report['rss_after_bytes']} bytes; "
+        f"peak RSS={report['peak_rss_bytes']} bytes; zero provider calls",
+        True,
+    )
 
 
 def _live_eval() -> list[Check]:

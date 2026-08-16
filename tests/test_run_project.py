@@ -18,6 +18,7 @@ class RunProjectTests(unittest.TestCase):
         self.assertTrue(any(check.name == "Section 4 experiment provenance" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "approved QA oracle" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG retrieval evaluation" and check.state == "PASS" for check in checks))
+        self.assertTrue(any(check.name == "service memory benchmark" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG GPT v2.3 generator evidence" and check.state == "PASS" for check in checks))
         self.assertTrue(any(check.name == "RAG GPT v2.4 generator gate" and check.state == "PASS" for check in checks))
         self.assertTrue(any(
@@ -160,6 +161,20 @@ class RunProjectTests(unittest.TestCase):
                 checks, failed = run_project.run()
         self.assertTrue(failed)
         self.assertTrue(any(check.state == "FAIL" and check.name.startswith("RAG ") for check in checks))
+
+    def test_service_memory_hash_drift_fails_release(self) -> None:
+        with TemporaryDirectory() as temp:
+            altered = Path(temp) / "service_memory.json"
+            payload = json.loads(run_project.SERVICE_MEMORY.read_text(encoding="utf-8"))
+            payload["service_sha256"] = "0" * 64
+            altered.write_text(json.dumps(payload), encoding="utf-8")
+            with patch.object(run_project, "SERVICE_MEMORY", altered):
+                checks, failed = run_project.run()
+        self.assertTrue(failed)
+        self.assertTrue(any(
+            check.name == "service memory benchmark" and check.state == "FAIL"
+            for check in checks
+        ))
 
     def test_recomputed_metric_drift_from_saved_evidence_fails_release(self) -> None:
         with TemporaryDirectory() as temp:

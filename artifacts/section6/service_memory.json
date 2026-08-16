@@ -1,0 +1,20 @@
+{
+  "cache_path": "artifacts/section5/embeddings_256_64.npz",
+  "cache_sha256": "8811AA37E3ACA4897DB73D8D3AC0B097C3BCC06972B457123D241A10724E9FE5",
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "documents": 2000,
+  "generation_available": false,
+  "measured_at_utc": "2026-08-16T20:21:23.883744Z",
+  "network_calls": 0,
+  "peak_rss_bytes": 278310912,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python_version": "3.12.13",
+  "rss_after_bytes": 216748032,
+  "rss_before_bytes": 41312256,
+  "rss_delta_bytes": 175435776,
+  "schema_version": 1,
+  "scope": "single cold service initialization on the recorded development machine",
+  "semantic_available": true,
+  "service_sha256": "84AD4FF072FA9C02C8B5DB915BDB0B51A427CCE6E80FDC4F2C1F6DC7ED434C0D",
+  "startup_ms": 3519.2616999993334
+}

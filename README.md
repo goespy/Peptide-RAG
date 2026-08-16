@@ -413,6 +413,20 @@ Claude's specification-only audit challenged the practical significance of the
 small holdout gains; the concern and decision not to retune on holdout are
 preserved in [`artifacts/section4/claude_review.md`](artifacts/section4/claude_review.md).
 
+The selected hybrid service was also initialized once with the committed
+256/64 embedding cache and no provider key:
+
+| Cold service startup | RSS before | RSS after | RSS delta | Peak process RSS | Provider calls |
+|---:|---:|---:|---:|---:|---:|
+| 3,519.262 ms | 41,312,256 bytes | 216,748,032 bytes | 175,435,776 bytes | 278,310,912 bytes | 0 |
+
+This is an observed Windows/Python 3.12 development-machine measurement, not a
+Railway guarantee. It is regenerated explicitly by
+`python scripts/benchmark_service.py --overwrite`
+and hash-bound in
+[`artifacts/section6/service_memory.json`](artifacts/section6/service_memory.json).
+The deployed Python 3.11 process must still be checked in Railway's own metrics.
+
 ### Historical Day 1 Boolean report
 
 - Command: `python run_day1.py`

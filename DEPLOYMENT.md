@@ -86,6 +86,18 @@ commit; if model/provider health or budget fails, unset the cache/key or lower
 the daily cap so the application remains available in local BM25
 retrieval-only mode.
 
+The offline development measurement is reproducible with:
+
+```text
+python scripts/benchmark_service.py --overwrite
+```
+
+It observed `216,748,032` bytes RSS after initialization and a
+`278,310,912`-byte peak with the selected cache, 2,000-document index, and zero
+provider calls. The machine ran Windows and Python 3.12, so the artifact is a
+pre-deployment sizing signal only; Railway/Python 3.11 memory remains the
+authoritative production measurement.
+
 ### Smoke-test checklist
 
 1. `/healthz` returns `{"status":"ok"}`.

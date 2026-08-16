@@ -24,6 +24,13 @@ class DeploymentConfigTests(unittest.TestCase):
     def test_deployment_runtime_is_python_3_11(self):
         self.assertEqual((ROOT / ".python-version").read_text(encoding="utf-8").strip(), "3.11")
 
+    def test_environment_cannot_override_the_measured_generator_contract(self):
+        example = (ROOT / ".env.example").read_text(encoding="utf-8")
+        self.assertIn("OPENROUTER_API_KEY", example)
+        self.assertIn("EMBEDDING_CACHE_PATH", example)
+        self.assertNotIn("OPENROUTER_GENERATION_MODEL", example)
+        self.assertNotIn("OPENROUTER_JUDGE_MODEL", example)
+
 
 if __name__ == "__main__":
     unittest.main()
