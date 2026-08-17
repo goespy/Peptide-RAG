@@ -1,0 +1,19 @@
+* text=auto
+
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.example text eol=lf
+*.excalidraw text eol=lf
+
+# Frozen provenance artifact: preserve the exact reviewed bytes, including Markdown hard breaks.
+artifacts/section5/claude_generator_v2_3_review.md whitespace=-blank-at-eol
+
+*.npz binary
+*.png binary
+*.jpg binary
+*.jpeg binary

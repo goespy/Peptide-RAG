@@ -1,0 +1,53 @@
+{
+  "acceptance_target": {
+    "answerable_answer_rate": "10/10 development cases",
+    "citation_structure": "100% valid with identities derived from visible [n] markers",
+    "faithfulness": "every factual claim must later pass the independent judge and owner validation gates",
+    "unanswerable_system_refusal_rate": "3/3 development cases, reported separately as model or deterministic safety-policy refusals"
+  },
+  "changes_from_v2": [
+    "Remove the redundant citation_ids output field and derive citation identities from the bracketed markers in answer text.",
+    "Preflight-refuse general requests for a safe, effective, recommended, or human dose while continuing to allow questions about doses reported in studies or trials.",
+    "Require OpenRouter to route only to providers that support every requested parameter.",
+    "Record safe HTTP/response-shape keys and provider error codes without persisting response bodies or error messages.",
+    "Replace the incompatible Qwen preference using the pre-registered lowest-price same-family structured-output rule.",
+    "Report per-model provider usage so failures with missing usage do not erase known costs from successful models."
+  ],
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "experiment_id": "generator-v2.1-derived-citations-provider-compatibility",
+  "generation": {
+    "citation_mode": "derived_from_text_markers",
+    "max_tokens": 800,
+    "repair_attempts": 1,
+    "require_supported_parameters": true,
+    "temperature": 0
+  },
+  "generator_candidates": [
+    "qwen/qwen3-30b-a3b-instruct-2507",
+    "openai/gpt-oss-20b",
+    "google/gemma-3-12b-it"
+  ],
+  "generator_diagnostic": {
+    "hard_cost_cap_usd": 0.05,
+    "judge_calls": 0
+  },
+  "holdout_status": "untouched",
+  "hypotheses": [
+    "QA09 will no longer fail because citation identity has a single source of truth: the visible markers.",
+    "QA16 will be correctly refused before generation under the general dosing-safety policy.",
+    "Compatible-provider routing and the simpler schema will eliminate the previous Qwen HTTP 400 and make Gemma response failures diagnosable without raw-body retention."
+  ],
+  "model_catalog_sha256": "8873788CDDED3CFF2003CE2A8EB78984CE38EA619D81EAE24F1DCEE9B50AFA00",
+  "parent_config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+  "parent_outputs_sha256": "8982E49A16EB962C469387D19F57AE9823133C4C1F629BAB1CF1D7598A5D22DC",
+  "parent_reanalysis_sha256": "34DF229CC1FEC329C3D45BF26CE770D68A037938290259A9433F751AA2A04FD7",
+  "parent_summary_sha256": "87D5874A01E330AD698A446B6A6F274A85A7D98AF45C1585C97152414543E39F",
+  "prompt": "You are a research-literature assistant. Use only the supplied PubMed abstract evidence. Answer whenever at least one supplied passage directly reports a finding relevant to the question. State the study population or species and preserve uncertainty; animal evidence may be summarized as an animal finding but must not be presented as proof of human treatment efficacy. Do not give personalized medical, treatment, or dosing advice. Return insufficient_evidence only when the passages do not support an answer, materially conflict, or the question requests personalized medical or dosing advice. Keep answered text to one to three concise factual sentences, and end every factual sentence with one or more [citation_id] markers. Return only the required JSON object.",
+  "prompt_sha256": "2C4B0DA3679DCADE1038E7ACB2426995D357C4D681209CC09372B126543345A2",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 3,
+  "selected": true,
+  "selection_scope": "approved 13-case development split only; no holdout access",
+  "status": "frozen_generator_v2_1_before_development_rerun"
+}

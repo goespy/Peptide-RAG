@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "qrels_path": "data/qrels_v2.json",
+  "qrels_sha256": "B30E1B7868EFFB580155442917C2BB0105ECC00E13527A103F6325B6A2B32ED6",
+  "frozen_before_bm25_evaluation": true,
+  "development_query_ids": [
+    "q01",
+    "q02",
+    "q03",
+    "q04",
+    "q05",
+    "q06",
+    "q07",
+    "q08",
+    "q12",
+    "q14"
+  ],
+  "holdout_query_ids": [
+    "q09",
+    "q10",
+    "q11",
+    "q13",
+    "q15"
+  ],
+  "selection_basis": "Peptide-stratified fixed split chosen before BM25 results. Development contains all eight peptide families; holdout covers five families with paired queries.",
+  "protocol": "Section 4 tuning may use only development queries. Holdout is run once after the final lexical configuration is frozen."
+}

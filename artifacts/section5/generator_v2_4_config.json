@@ -1,0 +1,61 @@
+{
+  "acceptance_target": {
+    "answerable_answer_rate": "10/10 development cases",
+    "citation_structure": "100% valid with identities derived from visible [n] markers",
+    "faithfulness": "every factual claim must later pass the independent Claude judge and owner validation gates",
+    "unanswerable_system_refusal_rate": "3/3 development cases, reported separately as model or deterministic safety-policy refusals"
+  },
+  "artifact_paths": {
+    "outputs": "data/rag_generator_v2_4_outputs.json",
+    "summary": "data/rag_generator_v2_4_summary.json"
+  },
+  "changes_from_v2_3": [
+    "When an initially valid model response says insufficient_evidence, spend the existing single secondary-attempt budget on a general evidence-scope reconsideration instead of accepting the refusal immediately.",
+    "The reconsideration directs the model to inspect all five passages, including later passages, and to answer only when supplied evidence directly supports the requested scope.",
+    "A retained refusal is still accepted, an invalid reconsideration fails closed, and personalized or dosing requests remain deterministic preflight refusals with no provider call."
+  ],
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "experiment_id": "generator-v2.4-general-refusal-reconsideration",
+  "generation": {
+    "citation_mode": "derived_from_text_markers",
+    "exclude_reasoning": true,
+    "max_tokens": 800,
+    "reasoning_effort": "low",
+    "reconsider_insufficient_evidence": true,
+    "repair_attempts": 1,
+    "require_supported_parameters": true,
+    "temperature": 0
+  },
+  "generator_candidates": [
+    "openai/gpt-oss-20b"
+  ],
+  "generator_diagnostic": {
+    "hard_cost_cap_usd": 0.02,
+    "judge_calls": 0
+  },
+  "holdout_status": "untouched",
+  "hypotheses": [
+    "The general reconsideration will recover answerable cases where direct evidence appears later in the supplied context, including QA04, without encoding a QA ID, PMID, question, or expected answer.",
+    "The same evidence-scope rules will preserve insufficient_evidence for genuinely unsupported development cases.",
+    "The maximum call count remains bounded by the existing initial-plus-one-secondary-attempt contract."
+  ],
+  "model_catalog_sha256": "8873788CDDED3CFF2003CE2A8EB78984CE38EA619D81EAE24F1DCEE9B50AFA00",
+  "parent_config_sha256": "77AF42B4F8EB5E09BCB07D1F7C62FB9019C5F08F37A7ADEE3A8D14B998A8E6BD",
+  "parent_diagnosis_sha256": "D4F7DB8CCE4273F195F618287A618E958BD57A12C5D5E7D298D9FE2FC146473D",
+  "parent_outputs_sha256": "4D00BB41F1E062E08B561E5FDDB4B2641D6D42B4CBEDA04A3CB951CD643EF808",
+  "parent_review_sha256": "7B06BBABDC228CDB5DE93741BD00851D961F595DEC64D4E40E41B24E1F8141F0",
+  "parent_summary_sha256": "F4F75420A2CC071D9B2995AF8F37B6A7E8CF96E619365910CFDA424E26FDF8E3",
+  "prompt": "You are a research-literature assistant. Use only the supplied PubMed abstract evidence. Classify the question's evidence scope before answering. If the question explicitly asks about humans, human recovery, human effectiveness, safety in humans, or clinical use, answer only when at least one supplied passage directly reports evidence in humans; animal, in-vitro, or equine evidence alone requires insufficient_evidence. If the question is general and a supplied animal or in-vitro passage directly reports a relevant finding, answer with the species or model and explicitly state that it is not proof of human efficacy; do not refuse solely because the evidence is nonhuman. Answer whenever at least one supplied passage directly reports a finding relevant to the question. State the study population or species and preserve uncertainty. Do not give personalized medical, treatment, or dosing advice. Return insufficient_evidence only when the passages do not support an answer, materially conflict, the explicitly requested human evidence is absent, or the question requests personalized medical or dosing advice. Prefer one concise factual sentence and use no more than three. Every sentence containing a study fact, outcome, number, mechanism, or limitation must include one or more [citation_id] markers. Return only the required JSON object.",
+  "prompt_sha256": "699282210B3910D2BAA054678AC7A4DC4DC72E070977B4250E3E2A65FDC569D6",
+  "provider_parameter_sources": [
+    "https://openrouter.ai/docs/guides/best-practices/reasoning-tokens",
+    "https://openrouter.ai/openai/gpt-oss-20b/pricing"
+  ],
+  "qa_or_retrieval_changes": false,
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 6,
+  "selected": true,
+  "selection_scope": "approved 13-case development split only; no holdout access",
+  "status": "frozen_generator_v2_4_before_development_rerun"
+}

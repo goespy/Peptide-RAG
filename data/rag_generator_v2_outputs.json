@@ -1,0 +1,2311 @@
+{
+  "experiment": "generator-v2-800-diagnostics",
+  "outputs": [
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1891.8871000641957,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa01",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 2001.319200033322,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa02",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1713.6536000762135,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa03",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1676.162700052373,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa04",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1673.7521999748424,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa05",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1736.923599964939,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa06",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1714.8488000966609,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa07",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1680.974500020966,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa08",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1717.2388000180945,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa09",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1732.4025999987498,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa10",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1677.2452000295743,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa16",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1675.276399939321,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa17",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "HTTPError",
+            "finish_reason": null,
+            "http_status": 400,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": 0.0,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 1931.2680999282748,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa18",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "7901724:c0001",
+            "citation_id": 1,
+            "pmid": "7901724",
+            "title": "Hepatoprotective effect of BPC 157, a 15-amino acid peptide, on liver lesions induced by either restraint stress or bile duct and hepatic artery ligation or CCl4 administration. A comparative study with dopamine agonists and somatostatin."
+          },
+          {
+            "chunk_id": "40005408:c0001",
+            "citation_id": 2,
+            "pmid": "40005408",
+            "title": "Protective Effects of BPC 157 on Liver, Kidney, and Lung Distant Organ Damage in Rats with Experimental Lower-Extremity Ischemia-Reperfusion Injury."
+          }
+        ],
+        "status": "answered",
+        "text": "BPC\u2011157 reduced liver injury in rats, showing protective effects against necrosis, fatty changes, and histopathological damage in models of bile duct ligation, restraint\u2011stress, and ischemia\u2011reperfusion injury. [1][2]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 271,
+            "raw_output_sha256": "978561FFF354ED29CD85C964634AC5096C1A6134E54814EFAA1B0A1BFE6EA244",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "citation_markers_do_not_match_declared_ids"
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 269,
+            "raw_output_sha256": "E9F82FBC153F0243225F9FD86BBFA338D2BA799665742A81653BECA8D92C5FDB",
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00019486999999999998,
+        "final_outcome": "answered_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 3707,
+        "latency_ms": 7130.615499918349,
+        "output_tokens": 297,
+        "provider": "multiple",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa01",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "18644225:c0001",
+            "citation_id": 1,
+            "pmid": "18644225",
+            "title": "The human tri-peptide GHK and tissue remodeling."
+          },
+          {
+            "chunk_id": "38026438:c0001",
+            "citation_id": 4,
+            "pmid": "38026438",
+            "title": "Thermodynamically stable ionic liquid microemulsions pioneer pathways for topical delivery and peptide application."
+          }
+        ],
+        "status": "answered",
+        "text": "GHK-Cu has been shown to promote hair growth and improve hair transplant success in humans and mice. [1][4]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 127,
+            "raw_output_sha256": "51CE757AA3B2D043BECBEC21F383BA8F45B7FB5539646886B688DF0B7F6653E1",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "refusal_has_citations"
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 159,
+            "raw_output_sha256": "AC41E278DD7066838690FF701C3749C13788BB17381DE8D9E60E3349D985DDD7",
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00018739,
+        "final_outcome": "answered_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 4043,
+        "latency_ms": 6375.78979996033,
+        "output_tokens": 321,
+        "provider": "multiple",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa02",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "42542926:c0001",
+            "citation_id": 1,
+            "pmid": "42542926",
+            "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+          },
+          {
+            "chunk_id": "38382158:c0001",
+            "citation_id": 3,
+            "pmid": "38382158",
+            "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+          }
+        ],
+        "status": "answered",
+        "text": "In a rat model of Achilles tendon injury, TB\u2011500 improved biomechanical strength and histopathological healing compared with controls, indicating a beneficial effect on tendon repair. [1] In vitro wound\u2011healing assays showed that the wound\u2011healing activity was observed only for a TB\u2011500 metabolite (Ac\u2011LKKTE), not for the parent peptide. [3]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 394,
+            "raw_output_sha256": "E6DB79EE0CAECDC94746EB7EBD30DABDB85003FFAF56633AAE9BA7BDC8E45D26",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "uncited_factual_sentence"
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 394,
+            "raw_output_sha256": "29AE90AFCBD2CE83D989F9F4CED16713DBEAAA49F1310E5BE36B3090F75A06B7",
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00024905,
+        "final_outcome": "answered_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 3887,
+        "latency_ms": 12810.217499965802,
+        "output_tokens": 771,
+        "provider": "multiple",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa03",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "9849822:c0001",
+            "citation_id": 1,
+            "pmid": "9849822",
+            "title": "Ipamorelin, the first selective growth hormone secretagogue."
+          },
+          {
+            "chunk_id": "10496658:c0001",
+            "citation_id": 5,
+            "pmid": "10496658",
+            "title": "Pharmacokinetic-pharmacodynamic modeling of ipamorelin, a growth hormone releasing peptide, in human volunteers."
+          }
+        ],
+        "status": "answered",
+        "text": "Ipamorelin increases growth hormone release in both animal models and healthy human volunteers. [1] [5]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 345,
+            "raw_output_sha256": "82249408C9E9FD5AA68B41D18E764C52BB505EEADF9FBF442DC8FFD9BB28AA7E",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "uncited_factual_sentence"
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 155,
+            "raw_output_sha256": "2090B49883E8F4D01BFAB20B981FFFC5F5EABDBDCF3AB6AA8E4D55F217B01B21",
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00026535,
+        "final_outcome": "answered_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 4734,
+        "latency_ms": 6749.7058000881225,
+        "output_tokens": 673,
+        "provider": "multiple",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa04",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "20101189:c0002",
+            "citation_id": 1,
+            "pmid": "20101189",
+            "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension."
+          }
+        ],
+        "status": "answered",
+        "text": "Tesamorelin reduces visceral abdominal fat in HIV\u2011infected patients, improving belly appearance and body image. [1]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 165,
+            "raw_output_sha256": "D66913F73E3950BAED931BA2526F4496B38DC803E92E36FA78EA5C9102914673",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 8.12e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2026,
+        "latency_ms": 1270.7866999553517,
+        "output_tokens": 150,
+        "provider": "Parasail",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa05",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "11087911:c0001",
+            "citation_id": 1,
+            "pmid": "11087911",
+            "title": "Effect of epitalon on the lifespan increase in Drosophila melanogaster."
+          }
+        ],
+        "status": "answered",
+        "text": "Developmental exposure to epitalon increased adult fruit\u2011fly lifespan by 11\u201316\u202f%. [1]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 135,
+            "raw_output_sha256": "8D4343595BD1864E3EEE8A882B41D122FDD1A1001C3F422FCBD3E0A43E9B17CF",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00011461,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 1774,
+        "latency_ms": 3131.1334000201896,
+        "output_tokens": 291,
+        "provider": "Novita",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa06",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "41551324:c0001",
+            "citation_id": 1,
+            "pmid": "41551324",
+            "title": "Systemic MOTS-c levels are increased in adults with obesity in association with metabolic dysregulation and remain unchanged after weight loss."
+          },
+          {
+            "chunk_id": "31293078:c0001",
+            "citation_id": 3,
+            "pmid": "31293078",
+            "title": "The mitochondrial-derived peptide MOTS-c is a regulator of plasma metabolites and enhances insulin sensitivity."
+          }
+        ],
+        "status": "answered",
+        "text": "In a small human study, circulating MOTS-c was higher in obese adults but did not change after bariatric surgery weight loss, indicating no direct weight\u2011loss effect [1]. In contrast, in diet\u2011induced obese mice, MOTS-c injection improved insulin sensitivity, increased beta\u2011oxidation, and reduced body weight and fatty liver [3]."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 381,
+            "raw_output_sha256": "BDA5C1BDE7F0EBEAF8422A35445D0E197C1E4795C0660D181F7186CC5F5BB4A3",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00012806,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 1634,
+        "latency_ms": 5411.8945999071,
+        "output_tokens": 418,
+        "provider": "Novita",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa07",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "15833522:c0001",
+            "citation_id": 1,
+            "pmid": "15833522",
+            "title": "Co-administration of low doses of intranasal PT-141, a melanocortin receptor agonist, and sildenafil to men with erectile dysfunction results in an enhanced erectile response."
+          },
+          {
+            "chunk_id": "14963471:c0001",
+            "citation_id": 2,
+            "pmid": "14963471",
+            "title": "Double-blind, placebo-controlled evaluation of the safety, pharmacokinetic properties and pharmacodynamic effects of intranasal PT-141, a melanocortin receptor agonist, in healthy males and patients with mild-to-moderate erectile dysfunction."
+          },
+          {
+            "chunk_id": "14999221:c0001",
+            "citation_id": 4,
+            "pmid": "14999221",
+            "title": "Evaluation of the safety, pharmacokinetics and pharmacodynamic effects of subcutaneously administered PT-141, a melanocortin receptor agonist, in healthy male subjects and in patients with an inadequate response to Viagra."
+          }
+        ],
+        "status": "answered",
+        "text": "PT\u2011141 has been shown to produce erectile responses in men with erectile dysfunction in clinical trials. [1][2][4]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 168,
+            "raw_output_sha256": "DB622909601685038BFE3423AE468E774371B3C4FA75C8365BCF97A20C98BCF9",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 9.679e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 1481,
+        "latency_ms": 3480.442799977027,
+        "output_tokens": 374,
+        "provider": "DeepInfra",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa08",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 92,
+            "raw_output_sha256": "6F961E77E79A4C27EA40325CD3489CE7E47882C72E5F5E3435B57899634E1FE3",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "citation_markers_do_not_match_declared_ids"
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 284,
+            "raw_output_sha256": "BBC724B9D865081B62C93AF07DF867C953A99A502717CDF03FE133F13F8A61E6",
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": "citation_markers_do_not_match_declared_ids"
+          }
+        ],
+        "cost_usd": 0.00017158,
+        "failure_reason": "citation_markers_do_not_match_declared_ids",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 3781,
+        "latency_ms": 6750.220300047658,
+        "output_tokens": 113,
+        "provider": "SiliconFlow",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa09",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "25731775:c0001",
+            "citation_id": 1,
+            "pmid": "25731775",
+            "title": "Tripeptide-copper complex GHK-Cu (II) transiently improved healing outcome in a rat model of ACL reconstruction."
+          }
+        ],
+        "status": "answered",
+        "text": "Intra\u2011articular GHK\u2011Cu transiently improved graft healing after ACL reconstruction in rats, producing a smaller side\u2011to\u2011side difference in knee laxity and higher graft stiffness at 6\u202fweeks post\u2011operation, but these benefits were not sustained at 12\u202fweeks after treatment stopped. [1]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 333,
+            "raw_output_sha256": "072C839ACCA271FE4162988817B8344612F858939F9AEB81D856F6A2133B3A0C",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00011988,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2127,
+        "latency_ms": 8508.617800078355,
+        "output_tokens": 232,
+        "provider": "Phala",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa10",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 237,
+            "raw_output_sha256": "432E31E86E66215826D36E192825847072EB846C6111FF46F7F3D1BC3EEBD52A",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "citation_markers_do_not_match_declared_ids"
+          },
+          {
+            "finish_reason": "length",
+            "http_status": 200,
+            "native_finish_reason": "length",
+            "outcome": "non_object_json",
+            "raw_output_characters": 4,
+            "raw_output_sha256": "74234E98AFE7498FB5DAF1F36AC2D78ACC339464F950703B8C019892F982B90B",
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": "non_object_json"
+          }
+        ],
+        "cost_usd": 0.00028492000000000003,
+        "failure_reason": "non_object_json",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 4492,
+        "latency_ms": 10500.496300053783,
+        "output_tokens": 1160,
+        "provider": "Parasail",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa16",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 120,
+            "raw_output_sha256": "BCD02041E55E6D69DA5D9DE723E2CFFB4571F89628FB731BEDF7BC76735C5A4E",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 7.771e-05,
+        "final_outcome": "model_insufficient_evidence",
+        "generation_max_tokens": 800,
+        "input_tokens": 1783,
+        "latency_ms": 3556.6874999785796,
+        "output_tokens": 173,
+        "provider": "DeepInfra",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa17",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 120,
+            "raw_output_sha256": "BCD02041E55E6D69DA5D9DE723E2CFFB4571F89628FB731BEDF7BC76735C5A4E",
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 7.073e-05,
+        "final_outcome": "model_insufficient_evidence",
+        "generation_max_tokens": 800,
+        "input_tokens": 2004,
+        "latency_ms": 1787.3678000178188,
+        "output_tokens": 75,
+        "provider": "Parasail",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa18",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1482.1318000322208,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa01",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1036.267500021495,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa02",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1049.988399958238,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa03",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1070.08620002307,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa04",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1192.7839999552816,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa05",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1018.5024000238627,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa06",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1182.2914999211207,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa07",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1035.4930999455974,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa08",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1075.4144999664277,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa09",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1267.400600016117,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa10",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1054.2092999676242,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa16",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1067.7391000790522,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa17",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "initial"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "initial",
+            "validation_error": "request_or_response_error"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 0,
+            "stage": "repair"
+          },
+          {
+            "error_type": "KeyError",
+            "finish_reason": null,
+            "http_status": 200,
+            "native_finish_reason": null,
+            "outcome": "request_or_response_error",
+            "retry_index": 1,
+            "stage": "repair",
+            "validation_error": "request_or_response_error"
+          }
+        ],
+        "cost_usd": null,
+        "failure_reason": "request_or_response_error",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": null,
+        "latency_ms": 1104.7727999975905,
+        "output_tokens": null,
+        "provider": null,
+        "provider_calls": 4
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa18",
+      "structurally_valid": true
+    }
+  ],
+  "schema_version": 2
+}

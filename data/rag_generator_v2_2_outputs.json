@@ -1,0 +1,959 @@
+{
+  "experiment": "generator-v2.2-gpt-only-derived-citations",
+  "outputs": [
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 388,
+            "raw_output_sha256": "61D3C5C5191A5008C1E2869CF8E65EE12AC2F115BF5D5A9AC93465EAE1E2CCBD",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "uncited_factual_sentence"
+          },
+          {
+            "finish_reason": "length",
+            "http_status": 200,
+            "native_finish_reason": "length",
+            "outcome": "missing_message_content",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": "missing_message_content"
+          }
+        ],
+        "cost_usd": 0.00028558,
+        "failure_reason": "missing_message_content",
+        "final_outcome": "failed_closed_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 3752,
+        "latency_ms": 10155.386899947189,
+        "output_tokens": 1162,
+        "provider": "Parasail",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa01",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "18644225:c0001",
+            "citation_id": 1,
+            "pmid": "18644225",
+            "title": "The human tri-peptide GHK and tissue remodeling."
+          },
+          {
+            "chunk_id": "38026438:c0001",
+            "citation_id": 4,
+            "pmid": "38026438",
+            "title": "Thermodynamically stable ionic liquid microemulsions pioneer pathways for topical delivery and peptide application."
+          }
+        ],
+        "status": "answered",
+        "text": "GHK-Cu has been shown to promote hair growth in human studies, improving hair transplant success and stimulating hair follicle size [1]. In mice, a topical IL-based microemulsion delivering GHK-Cu activated Wnt/\u03b2\u2011catenin signaling and promoted hair growth [4]."
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 291,
+            "raw_output_sha256": "CFA46874F665056F3EC4472A1EA6D8864FBC4643FCD8F485D6733F01B0F517E2",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00023385,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2142,
+        "latency_ms": 771.6423000674695,
+        "output_tokens": 244,
+        "provider": "Groq",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa02",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "42542926:c0001",
+            "citation_id": 1,
+            "pmid": "42542926",
+            "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+          },
+          {
+            "chunk_id": "38382158:c0001",
+            "citation_id": 3,
+            "pmid": "38382158",
+            "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro."
+          }
+        ],
+        "status": "answered",
+        "text": "In a rat model of Achilles tendon transection, TB\u2011500 treatment improved biomechanical strength and histopathology, indicating enhanced tendon repair. [1] In vitro fibroblast assays also showed that a TB\u2011500 metabolite (Ac\u2011LKKTE) promoted wound closure. [3]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "local_validation_failed",
+            "raw_output_characters": 287,
+            "raw_output_sha256": "EFF3A4FBD07A41A20A09FAD314C8DFB79FE7E6A2A69D65087D8E679DFD1ABB0E",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": "uncited_factual_sentence"
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 288,
+            "raw_output_sha256": "C14F0E6E8EE0F7C0B095CB4AE42732B3245C68C34F85C5FB5BB9956C5B1244A8",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "repair",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00021835000000000002,
+        "final_outcome": "answered_after_repair",
+        "generation_max_tokens": 800,
+        "input_tokens": 3879,
+        "latency_ms": 8001.970799989067,
+        "output_tokens": 711,
+        "provider": "multiple",
+        "provider_calls": 2
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa03",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "9849822:c0001",
+            "citation_id": 1,
+            "pmid": "9849822",
+            "title": "Ipamorelin, the first selective growth hormone secretagogue."
+          },
+          {
+            "chunk_id": "10496658:c0001",
+            "citation_id": 5,
+            "pmid": "10496658",
+            "title": "Pharmacokinetic-pharmacodynamic modeling of ipamorelin, a growth hormone releasing peptide, in human volunteers."
+          }
+        ],
+        "status": "answered",
+        "text": "Ipamorelin stimulates the release of growth hormone in animal models and in healthy human volunteers, with dose\u2011dependent increases in GH levels. [1][5]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 183,
+            "raw_output_sha256": "B96B82C197920DA81130136517A9A441453DB3D6E2C33E6B208B6105684E12F2",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 9.982e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2311,
+        "latency_ms": 4169.068300048821,
+        "output_tokens": 41,
+        "provider": "SiliconFlow",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa04",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "20101189:c0002",
+            "citation_id": 1,
+            "pmid": "20101189",
+            "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension."
+          },
+          {
+            "chunk_id": "20554713:c0002",
+            "citation_id": 2,
+            "pmid": "20554713",
+            "title": "Effects of tesamorelin (TH9507), a growth hormone-releasing factor analog, in human immunodeficiency virus-infected patients with excess abdominal fat: a pooled analysis of two multicenter, double-blind placebo-controlled phase 3 trials with safety extension data."
+          }
+        ],
+        "status": "answered",
+        "text": "Tesamorelin reduces visceral abdominal fat in HIV\u2011infected patients, with an approximate 18% decrease in VAT and improved belly\u2011appearance distress. [1][2]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 186,
+            "raw_output_sha256": "BF8F442D5B32D788638A4C07923F7F5DC2DF2211481B4522BD58BDB30EBE103A",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 8.267e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2035,
+        "latency_ms": 5400.083200074732,
+        "output_tokens": 158,
+        "provider": "Parasail",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa05",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "11087911:c0001",
+            "citation_id": 1,
+            "pmid": "11087911",
+            "title": "Effect of epitalon on the lifespan increase in Drosophila melanogaster."
+          }
+        ],
+        "status": "answered",
+        "text": "Developmental exposure to Epitalon increased adult Drosophila melanogaster lifespan by 11\u201316% compared with controls. [1]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 152,
+            "raw_output_sha256": "ABA3430891BEDCE519FD47BC501CDD82EB70B3D932F64FC76DE37D3D4D7BF12E",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 9.633e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 1783,
+        "latency_ms": 2796.2799000088125,
+        "output_tokens": 306,
+        "provider": "DeepInfra",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa06",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 110,
+            "raw_output_sha256": "2613F3561864AC4AB28F2FB4480220A7D47381091491355A8215A87D80677A81",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 7.056e-05,
+        "final_outcome": "model_insufficient_evidence",
+        "generation_max_tokens": 800,
+        "input_tokens": 1656,
+        "latency_ms": 1500.5208000075072,
+        "output_tokens": 24,
+        "provider": "SiliconFlow",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa07",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "15833522:c0001",
+            "citation_id": 1,
+            "pmid": "15833522",
+            "title": "Co-administration of low doses of intranasal PT-141, a melanocortin receptor agonist, and sildenafil to men with erectile dysfunction results in an enhanced erectile response."
+          },
+          {
+            "chunk_id": "14963471:c0001",
+            "citation_id": 2,
+            "pmid": "14963471",
+            "title": "Double-blind, placebo-controlled evaluation of the safety, pharmacokinetic properties and pharmacodynamic effects of intranasal PT-141, a melanocortin receptor agonist, in healthy males and patients with mild-to-moderate erectile dysfunction."
+          },
+          {
+            "chunk_id": "14999221:c0001",
+            "citation_id": 4,
+            "pmid": "14999221",
+            "title": "Evaluation of the safety, pharmacokinetics and pharmacodynamic effects of subcutaneously administered PT-141, a melanocortin receptor agonist, in healthy male subjects and in patients with an inadequate response to Viagra."
+          }
+        ],
+        "status": "answered",
+        "text": "Clinical studies in men with erectile dysfunction have shown that intranasal or subcutaneous PT\u2011141 produces statistically significant erections, alone or in combination with sildenafil, and is well tolerated. [1][2][4]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 250,
+            "raw_output_sha256": "0936C46C08D920A6977003B1B81463AFC2416846D32E99E2B54388C5ED45FBC1",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 8.09e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 1503,
+        "latency_ms": 2324.2682999698445,
+        "output_tokens": 243,
+        "provider": "Parasail",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa08",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "7904712:c0001",
+            "citation_id": 1,
+            "pmid": "7904712",
+            "title": "The beneficial effect of BPC 157, a 15 amino acid peptide BPC fragment, on gastric and duodenal lesions induced by restraint stress, cysteamine and 96% ethanol in rats. A comparative study with H2 receptor antagonists, dopamine promotors and gut peptides."
+          }
+        ],
+        "status": "answered",
+        "text": "In rats, BPC\u2011157 consistently protected the stomach and duodenum in all three experimental ulcer models (48\u2011h restraint stress, subcutaneous cysteamine, intragastric 96\u202f% ethanol), showing dose\u2011dependent protection in the cysteamine model and a partial positive effect in the ethanol model, whereas several reference drugs were ineffective. [1]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 375,
+            "raw_output_sha256": "FC521D2F71E65445802EC15F7FB52CC00FBE1E8381C2952DE8D8034885711E66",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 9.843e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 1839,
+        "latency_ms": 15177.099299966358,
+        "output_tokens": 309,
+        "provider": "DeepInfra",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa09",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "25731775:c0001",
+            "citation_id": 1,
+            "pmid": "25731775",
+            "title": "Tripeptide-copper complex GHK-Cu (II) transiently improved healing outcome in a rat model of ACL reconstruction."
+          }
+        ],
+        "status": "answered",
+        "text": "In rats, intra\u2011articular GHK\u2011Cu improved early graft healing after ACL reconstruction, producing a smaller side\u2011to\u2011side difference in knee laxity and higher graft stiffness at 6\u202fweeks, but these benefits did not persist at 12\u202fweeks. [1]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 267,
+            "raw_output_sha256": "24F2C7760C01515DAEB9EAB249C6FE589BEDAAF305850BE4E895B6C7D1F8C800",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.000243375,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2277,
+        "latency_ms": 667.4920000368729,
+        "output_tokens": 242,
+        "provider": "Groq",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa10",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [],
+        "cost_usd": 0.0,
+        "failure_reason": "personalized_or_dosing_request",
+        "final_outcome": "preflight_insufficient_evidence",
+        "generation_max_tokens": 800,
+        "input_tokens": 0,
+        "latency_ms": 0.16189995221793652,
+        "output_tokens": 0,
+        "provider": null,
+        "provider_calls": 0
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa16",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 102,
+            "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 7.924e-05,
+        "final_outcome": "model_insufficient_evidence",
+        "generation_max_tokens": 800,
+        "input_tokens": 1792,
+        "latency_ms": 3854.576600017026,
+        "output_tokens": 182,
+        "provider": "DeepInfra",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa17",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "42542926:c0002",
+            "citation_id": 1,
+            "pmid": "42542926",
+            "title": "Effects of BPC-157 and TB-500 on Achilles tendon healing in rats: A histopathological and biomechanical study."
+          }
+        ],
+        "status": "answered",
+        "text": "In a rat model of Achilles tendon repair, TB\u2011500 treatment increased maximum load to failure and improved histopathological scores compared with controls, indicating accelerated tendon healing in that species. [1]"
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 244,
+            "raw_output_sha256": "47AAD6334F6BAB1AF1651EE61F6D5A6B6CF4BF6365619EE670D878612BC44825",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "reasoning",
+              "reasoning_details",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00010116,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2000,
+        "latency_ms": 2747.325500007719,
+        "output_tokens": 294,
+        "provider": "DeepInfra",
+        "provider_calls": 1
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa18",
+      "structurally_valid": true
+    }
+  ],
+  "schema_version": 2
+}

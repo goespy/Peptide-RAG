@@ -1,0 +1,80 @@
+{
+  "actual_usage": {
+    "aggregate": {
+      "cost_usd": 0.001690265,
+      "input_tokens": 26969,
+      "output_tokens": 3916,
+      "provider_calls": 14,
+      "rows": 13,
+      "status": "provider_reported_complete"
+    },
+    "by_model": {
+      "openai/gpt-oss-20b": {
+        "cost_usd": 0.001690265,
+        "input_tokens": 26969,
+        "output_tokens": 3916,
+        "provider_calls": 14,
+        "rows": 13,
+        "status": "provider_reported_complete"
+      }
+    }
+  },
+  "approved_max_cost_usd": 0.02,
+  "config_sha256": "08749403259BCD52133715E628F03DDA0CC5C5384220CD70676241401124DF5E",
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "cost_estimate": {
+    "estimated_max_cost_usd": 0.01111358,
+    "generation": [
+      {
+        "conservative_input_tokens": 190186,
+        "estimated_cost_usd": 0.01111358,
+        "maximum_output_tokens": 41600,
+        "model": "openai/gpt-oss-20b",
+        "provider_calls": 52
+      }
+    ],
+    "judge_calls": 0,
+    "judge_cost_usd": 0.0,
+    "maximum_provider_calls": 52,
+    "method": "UTF-8 JSON characters/3 for conservative input tokens; all generation repair and retry attempts; maximum outputs"
+  },
+  "diagnostic": {
+    "candidates": {
+      "openai/gpt-oss-20b": {
+        "answerable_answer_count": 8,
+        "answerable_case_count": 10,
+        "final_outcomes": {
+          "answered": 8,
+          "answered_after_repair": 1,
+          "failed_closed_after_repair": 1,
+          "model_insufficient_evidence": 2,
+          "preflight_insufficient_evidence": 1
+        },
+        "finish_reasons": {
+          "length": 1,
+          "stop": 13
+        },
+        "ready_for_paid_judging": false,
+        "structurally_valid_count": 13,
+        "total_case_count": 13,
+        "unanswerable_case_count": 3,
+        "unanswerable_correct_system_refusal_count": 2,
+        "unanswerable_insufficient_evidence_shape_count": 2,
+        "unanswerable_model_refusal_count": 1,
+        "unanswerable_policy_refusal_count": 1,
+        "validation_errors": {
+          "missing_message_content": 1,
+          "uncited_factual_sentence": 2
+        }
+      }
+    },
+    "selection_status": "diagnostic_only_not_judged",
+    "winner": null
+  },
+  "experiment": "generator-v2.2-gpt-only-derived-citations",
+  "live_calls": true,
+  "model_catalog_sha256": "8873788CDDED3CFF2003CE2A8EB78984CE38EA619D81EAE24F1DCEE9B50AFA00",
+  "outputs_sha256": "08983F55489ABB8C9975E43CC7AB8DF917E77DB6B96D5463008E4178A020068C",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "schema_version": 2
+}

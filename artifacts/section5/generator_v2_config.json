@@ -1,0 +1,46 @@
+{
+  "acceptance_target": {
+    "answerable_answer_rate": "10/10 development cases",
+    "citation_structure": "100% valid",
+    "faithfulness": "every factual claim supported by supplied evidence",
+    "unanswerable_refusal_rate": "3/3 development cases"
+  },
+  "changes_from_v1": [
+    "Increase the output-token ceiling from 400 to 800.",
+    "Tell the generator to summarize direct animal findings while preserving species limitations instead of treating non-human evidence as automatically insufficient.",
+    "Show the repair request the previous invalid output and its stable local validation-error code.",
+    "Record finish reasons, raw candidate hashes and lengths, parse outcomes, validation errors, retries, usage, and final fail-closed outcome without persisting raw model text."
+  ],
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "experiment_id": "generator-v2-800-diagnostics",
+  "generator_diagnostic": {
+    "hard_cost_cap_usd": 0.04,
+    "judge_calls": 0
+  },
+  "generation": {
+    "max_tokens": 800,
+    "repair_attempts": 1,
+    "temperature": 0
+  },
+  "generator_candidates": [
+    "qwen/qwen3.7-flash",
+    "openai/gpt-oss-20b",
+    "google/gemma-3-12b-it"
+  ],
+  "holdout_status": "untouched",
+  "hypotheses": [
+    "The 400-token ceiling truncated at least some Qwen attempts.",
+    "The v1 prompt caused excessive refusal when abstracts reported animal rather than human outcomes.",
+    "The v1 repair prompt could not reliably repair an output it was never shown."
+  ],
+  "parent_outputs_sha256": "83341CDA4FBF5DD4DFBD97E61933140CD9B9DA0CD1495BE411566C1FE8D12423",
+  "parent_summary_sha256": "630FA8CF3928F57EC748FB6360CF902DBE28329EDADC17699B1F642DBEEAAD6B",
+  "prompt": "You are a research-literature assistant. Use only the supplied PubMed abstract evidence. Answer whenever at least one supplied passage directly reports a finding relevant to the question. State the study population or species and preserve uncertainty; animal evidence may be summarized as an animal finding but must not be presented as proof of human treatment efficacy. Do not give personalized medical, treatment, or dosing advice. Return insufficient_evidence only when the passages do not support an answer, materially conflict, or the question requests personalized medical or dosing advice. Keep answered text to one to three concise factual sentences, and end every factual sentence with one or more [citation_id] markers. Return only the required JSON object.",
+  "prompt_sha256": "2C4B0DA3679DCADE1038E7ACB2426995D357C4D681209CC09372B126543345A2",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 2,
+  "selected": true,
+  "selection_scope": "approved 13-case development split only; no holdout access",
+  "status": "frozen_generator_v2_before_development_rerun"
+}

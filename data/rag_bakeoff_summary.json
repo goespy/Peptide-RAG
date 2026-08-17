@@ -1,0 +1,106 @@
+{
+  "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "cost_estimate": {
+    "estimated_max_cost_usd": 0.85315206,
+    "generation": [
+      {
+        "conservative_input_tokens": 144886,
+        "estimated_cost_usd": 0.00705058,
+        "maximum_output_tokens": 20800,
+        "model": "qwen/qwen3.7-flash",
+        "provider_calls": 52
+      },
+      {
+        "conservative_input_tokens": 144886,
+        "estimated_cost_usd": 0.00705058,
+        "maximum_output_tokens": 20800,
+        "model": "openai/gpt-oss-20b",
+        "provider_calls": 52
+      },
+      {
+        "conservative_input_tokens": 144938,
+        "estimated_cost_usd": 0.010366900000000002,
+        "maximum_output_tokens": 20800,
+        "model": "google/gemma-3-12b-it",
+        "provider_calls": 52
+      }
+    ],
+    "judge": {
+      "conservative_input_tokens": 159228,
+      "estimated_cost_usd": 0.828684,
+      "maximum_output_tokens": 23400,
+      "model": "anthropic/claude-sonnet-4.6",
+      "provider_calls": 39
+    },
+    "maximum_provider_calls": 195,
+    "method": "UTF-8 JSON characters/3 for conservative input tokens; all generation repair and retry attempts; maximum outputs"
+  },
+  "judge_model": "anthropic/claude-sonnet-4.6",
+  "live_calls": true,
+  "model_catalog_sha256": "B15A12E5422D4DBA4A1FD2A60CD01CA98788F562FE89CF482C989D52E6DF78FD",
+  "models": [
+    "qwen/qwen3.7-flash",
+    "openai/gpt-oss-20b",
+    "google/gemma-3-12b-it"
+  ],
+  "outputs_sha256": "83341CDA4FBF5DD4DFBD97E61933140CD9B9DA0CD1495BE411566C1FE8D12423",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "selection": {
+    "candidates": {
+      "google/gemma-3-12b-it": {
+        "citation_correctness": 1.0,
+        "correct_refusal": 1.0,
+        "cost_usd": 0.1486864,
+        "denominators": {
+          "all_valid": 13,
+          "answered": 2,
+          "unanswerable": 3
+        },
+        "faithfulness": 0.38461538461538464,
+        "judged_outputs": 13,
+        "outputs": 13,
+        "p95_latency_ms": 31102.96369995922,
+        "relevancy": 0.7692307692307693,
+        "structural_validity": 1.0,
+        "valid_outputs": 13
+      },
+      "openai/gpt-oss-20b": {
+        "citation_correctness": null,
+        "correct_refusal": 1.0,
+        "cost_usd": 0.142342395,
+        "denominators": {
+          "all_valid": 13,
+          "answered": 0,
+          "unanswerable": 3
+        },
+        "faithfulness": 0.3076923076923077,
+        "judged_outputs": 13,
+        "outputs": 13,
+        "p95_latency_ms": 19736.14170018118,
+        "relevancy": 0.8461538461538461,
+        "structural_validity": 1.0,
+        "valid_outputs": 13
+      },
+      "qwen/qwen3.7-flash": {
+        "citation_correctness": null,
+        "correct_refusal": 1.0,
+        "cost_usd": 0.15461964,
+        "denominators": {
+          "all_valid": 13,
+          "answered": 0,
+          "unanswerable": 3
+        },
+        "faithfulness": 0.3076923076923077,
+        "judged_outputs": 13,
+        "outputs": 13,
+        "p95_latency_ms": 16395.627500023693,
+        "relevancy": 0.8461538461538461,
+        "structural_validity": 1.0,
+        "valid_outputs": 13
+      }
+    },
+    "reason": "schema/citation validity, faithfulness, refusal, relevancy, citation correctness, cost, p95 latency",
+    "winner": "google/gemma-3-12b-it"
+  }
+}

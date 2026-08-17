@@ -1,0 +1,4668 @@
+{
+  "metadata": {
+    "schema_version": 1,
+    "generated_at": "2026-08-13T18:15:49.285287+00:00",
+    "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+    "qrels_sha256": "B30E1B7868EFFB580155442917C2BB0105ECC00E13527A103F6325B6A2B32ED6",
+    "qrels_version": 2,
+    "split": {
+      "path": "data/eval_split.json",
+      "version": 1,
+      "development_query_ids": [
+        "q01",
+        "q02",
+        "q03",
+        "q04",
+        "q05",
+        "q06",
+        "q07",
+        "q08",
+        "q12",
+        "q14"
+      ],
+      "holdout_query_ids": [
+        "q09",
+        "q10",
+        "q11",
+        "q13",
+        "q15"
+      ],
+      "holdout_evaluated": false
+    },
+    "selection_order": [
+      "NDCG@10",
+      "Recall@10",
+      "MRR",
+      "simplicity",
+      "distance to (k1=1.2,b=0.75,proximity=0)",
+      "numeric order"
+    ]
+  },
+  "experiments": {
+    "parameter_grid": [
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.41
+            },
+            "recall_at": {
+              "10": 0.975
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9512690632208454
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9128781396400242
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9933694684805374
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9896718335446913
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9747429528567879
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9514426589871553
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.919261353975986
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9344415337372993
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8368826909859715
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.5,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.5,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.95
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9645672073964942
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.975788054854922
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.41
+            },
+            "recall_at": {
+              "10": 0.975
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9680858360415476
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9668342083190152
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8154455098186661
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 1.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 1.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.9550000000000001
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9545019380796811
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9444537180991301
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8687949224876583
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9458315980655165
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8154455098186661
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.2,
+        "b": 0.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.2,
+          "b": 0.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.41
+            },
+            "recall_at": {
+              "10": 0.975
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9491506911914728
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9128781396400242
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9933694684805374
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9896718335446913
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9747429528567879
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9514426589871553
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9143656167316339
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9181535506879261
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8368826909859715
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.2,
+        "b": 0.5,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.2,
+          "b": 0.5,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.39
+            },
+            "recall_at": {
+              "10": 0.93
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9603481708633659
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9708923176105698
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9100193356803011
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.2,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.2,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.95
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9620065017203597
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9708923176105698
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9458315980655165
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.2,
+        "b": 1.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.2,
+          "b": 1.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.9550000000000001
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9557295984103138
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8687949224876583
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9458315980655165
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8154455098186661
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9631044354383577
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.6,
+        "b": 0.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.6,
+          "b": 0.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.41
+            },
+            "recall_at": {
+              "10": 0.975
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9461640294509243
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9128781396400242
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9933694684805374
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.995749755077963
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.956591277102318
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9514426589871553
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9083053473410256
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9181535506879261
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8251500971922932
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.6,
+        "b": 0.5,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.6,
+          "b": 0.5,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.39
+            },
+            "recall_at": {
+              "10": 0.93
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9554977828907122
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9514426589871553
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9933694684805374
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9609247825245574
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9100193356803011
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.6,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.6,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.95
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9602014390703284
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9708923176105698
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9458315980655165
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9690945337173088
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 1.6,
+        "b": 1.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 1.6,
+          "b": 1.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.38
+            },
+            "recall_at": {
+              "10": 0.8966666666666667
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9393701050601939
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9669850519151656
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8687949224876583
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9344415337372993
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.6666666666666666
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9072836011519267
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 2.0,
+        "b": 0.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 2.0,
+          "b": 0.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.9550000000000001
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9289813373359243
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8714509482376813
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9933694684805374
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9828920819566878
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9708702451034545
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9505310077117097
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9128781396400242
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.904247238049471
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8823412883027109
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8212329558769652
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 2.0,
+        "b": 0.5,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 2.0,
+          "b": 0.5,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.39
+            },
+            "recall_at": {
+              "10": 0.93
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.950260424575921
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9128781396400242
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9933694684805374
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9609247825245574
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9100193356803011
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9733360964168419
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 2.0,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 2.0,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.39
+            },
+            "recall_at": {
+              "10": 0.93
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9560212030039118
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9708923176105698
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9100193356803011
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9631044354383577
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 2.0,
+        "b": 1.0,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 2.0,
+          "b": 1.0,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.38
+            },
+            "recall_at": {
+              "10": 0.8966666666666667
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9272225969105407
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9799153288412212
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8990671370233446
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9790187994940358
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8687949224876583
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9181535506879261
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.6666666666666666
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9072836011519267
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "analyzers": [
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.41
+            },
+            "recall_at": {
+              "10": 0.975
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9680858360415476
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9668342083190152
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8154455098186661
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "greek",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.41
+            },
+            "recall_at": {
+              "10": 0.975
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9680858360415476
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1203,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9668342083190152
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8154455098186661
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "stopwords",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.95
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9617489273613758
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9668342083190152
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "greek_stopwords",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.4
+            },
+            "recall_at": {
+              "10": 0.95
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9617489273613758
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1203,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9668342083190152
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "proximity": [
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.0,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.0
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.41
+            },
+            "recall_at": {
+              "10": 0.975
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9680858360415476
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9668342083190152
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 0.75
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8154455098186661
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.1,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.1
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.39
+            },
+            "recall_at": {
+              "10": 0.93
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9519449987782401
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8687949224876583
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9473139637672315
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.25,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.25
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.39
+            },
+            "recall_at": {
+              "10": 0.93
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.9506051490906197
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.8539316501572936
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9359238994390143
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      },
+      {
+        "analyzer": "baseline",
+        "k1": 0.8,
+        "b": 0.75,
+        "proximity_boost": 0.5,
+        "status": "evaluated",
+        "bm25_config": {
+          "k1": 0.8,
+          "b": 0.75,
+          "proximity_boost": 0.5
+        },
+        "evaluation": {
+          "cutoffs": [
+            10
+          ],
+          "aggregate": {
+            "query_count": 10,
+            "precision_at": {
+              "10": 0.39
+            },
+            "recall_at": {
+              "10": 0.93
+            },
+            "mrr": 1.0,
+            "ndcg_at": {
+              "10": 0.948105737241038
+            }
+          },
+          "queries": [
+            {
+              "query_id": "q01",
+              "query": "BPC 157 liver necrosis rats",
+              "relevant_count": 3,
+              "retrieved_count": 556,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q02",
+              "query": "GHK Cu cognitive decline neurodegeneration",
+              "relevant_count": 5,
+              "retrieved_count": 176,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9962033118905944
+              }
+            },
+            {
+              "query_id": "q03",
+              "query": "thymosin beta 4 backbone conformations",
+              "relevant_count": 4,
+              "retrieved_count": 1179,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q04",
+              "query": "ipamorelin oral bioavailability growth hormone",
+              "relevant_count": 5,
+              "retrieved_count": 518,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9807710461847231
+              }
+            },
+            {
+              "query_id": "q05",
+              "query": "tesamorelin HIV lipodystrophy clinical trials",
+              "relevant_count": 5,
+              "retrieved_count": 399,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0000000000000002
+              }
+            },
+            {
+              "query_id": "q06",
+              "query": "epitalon drosophila lifespan increase",
+              "relevant_count": 3,
+              "retrieved_count": 303,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 1.0
+              }
+            },
+            {
+              "query_id": "q07",
+              "query": "MOTS c metabolic obesity insulin resistance",
+              "relevant_count": 5,
+              "retrieved_count": 549,
+              "precision_at": {
+                "10": 0.4
+              },
+              "recall_at": {
+                "10": 0.8
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.830419897363192
+              }
+            },
+            {
+              "query_id": "q08",
+              "query": "PT 141 melanocortin sexual dysfunction",
+              "relevant_count": 5,
+              "retrieved_count": 143,
+              "precision_at": {
+                "10": 0.5
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9344415337372993
+              }
+            },
+            {
+              "query_id": "q12",
+              "query": "ipamorelin growth hormone release receptor",
+              "relevant_count": 4,
+              "retrieved_count": 631,
+              "precision_at": {
+                "10": 0.2
+              },
+              "recall_at": {
+                "10": 0.5
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.7520764230169481
+              }
+            },
+            {
+              "query_id": "q14",
+              "query": "epitalon evening melatonin cortisol secretion",
+              "relevant_count": 3,
+              "retrieved_count": 186,
+              "precision_at": {
+                "10": 0.3
+              },
+              "recall_at": {
+                "10": 1.0
+              },
+              "reciprocal_rank": 1.0,
+              "ndcg_at": {
+                "10": 0.9871451602176229
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "selected": {
+    "analyzer": "baseline",
+    "k1": 0.8,
+    "b": 0.75,
+    "proximity_boost": 0.0,
+    "bm25_config": {
+      "k1": 0.8,
+      "b": 0.75,
+      "proximity_boost": 0.0
+    }
+  }
+}

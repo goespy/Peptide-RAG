@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from src.analysis import GREEK_ANALYSIS
 from src.index import InvertedIndex
 from src.models import Document, Posting
 
@@ -22,6 +23,7 @@ class InvertedIndexTests(unittest.TestCase):
         self.assertEqual(index.postings["healing"], (Posting("9", (1,)), Posting("10", (2,))))
         self.assertEqual(index.document_frequency["tissue"], 2)
         self.assertEqual(index.document_lengths, {"10": 6, "9": 2})
+        self.assertEqual(index.title_lengths, {"10": 3, "9": 1})
 
     def test_postings_and_doc_ids_are_numeric_pmid_ordered(self) -> None:
         index = InvertedIndex.from_documents(
@@ -52,6 +54,14 @@ class InvertedIndexTests(unittest.TestCase):
         self.assertEqual(index.doc_ids("ghk"), ("1",))
         self.assertEqual(index.doc_ids("cu"), ("1",))
 
+    def test_configured_analysis_is_used_for_titles_and_text(self) -> None:
+        index = InvertedIndex.from_documents(
+            [Document("1", "Thymosin β4", "β activity")], analysis_config=GREEK_ANALYSIS
+        )
+        self.assertEqual(index.doc_ids("beta4"), ("1",))
+        self.assertEqual(index.doc_ids("beta"), ("1",))
+        self.assertEqual(index.title_lengths, {"1": 2})
+
     def test_from_jsonl_requires_exact_records(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             corpus = Path(directory) / "corpus.jsonl"
@@ -80,6 +90,32 @@ class InvertedIndexTests(unittest.TestCase):
                 {"1": Document("1", "word word", "")},
                 {"1": 2},
             )
+
+    def test_without_document_rebuilds_without_mutating_source(self) -> None:
+        index = InvertedIndex.from_documents(
+            [Document("1", "alpha beta", ""), Document("2", "beta gamma", "")]
+        )
+        reduced = index.without_document("1")
+
+        self.assertEqual(index.doc_ids("alpha"), ("1",))
+        self.assertEqual(index.documents["1"], Document("1", "alpha beta", ""))
+        self.assertEqual(reduced.documents, {"2": Document("2", "beta gamma", "")})
+        self.assertNotIn("alpha", reduced.postings)
+        self.assertEqual(reduced.doc_ids("beta"), ("2",))
+        self.assertEqual(reduced.document_frequency, {"beta": 1, "gamma": 1})
+        self.assertEqual(reduced.document_lengths, {"2": 2})
+        self.assertEqual(reduced.title_lengths, {"2": 2})
+        self.assertIsNot(reduced, index)
+
+    def test_index_metadata_fields_are_frozen(self) -> None:
+        index = InvertedIndex.from_documents([Document("1", "alpha", "")])
+        with self.assertRaises(AttributeError):
+            index.title_lengths = {"1": 0}  # type: ignore[misc]
+
+    def test_without_document_rejects_unknown_id(self) -> None:
+        index = InvertedIndex.from_documents([Document("1", "alpha", "")])
+        with self.assertRaises(ValueError):
+            index.without_document("2")
 
 
 if __name__ == "__main__":

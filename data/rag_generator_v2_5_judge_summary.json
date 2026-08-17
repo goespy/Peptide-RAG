@@ -1,0 +1,62 @@
+{
+  "actual_judge_usage": {
+    "cost_usd": 0.123666,
+    "input_tokens": 32232,
+    "output_tokens": 1798,
+    "provider_calls": 13,
+    "rows": 13,
+    "status": "provider_reported_complete"
+  },
+  "approved_max_cost_usd": 0.25,
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "cost_estimate": {
+    "conservative_input_tokens": 39486,
+    "estimated_max_cost_usd": 0.235458,
+    "generator_calls": 0,
+    "judge_calls": 13,
+    "maximum_output_tokens": 7800,
+    "method": "UTF-8 JSON characters/3 for conservative input tokens; maximum structured output tokens; one call per frozen development case",
+    "model": "anthropic/claude-sonnet-4.6"
+  },
+  "experiment": "generator-v2.5-claude-judge-v2",
+  "generator_config_sha256": "F5E782C2968FA53BB3DC6AC07A26D41726A929439E2E2D13BE6A0F385E54940F",
+  "generator_outputs_sha256": "29095C16BA51AED3AAFDE5148E92C6168BB25D7280FE5809A221BCCFB96B4B60",
+  "generator_summary_sha256": "780706898711467E8E8E8245CB5FC24A6AF58BC373795255DEBC14F3BB95A6C6",
+  "holdout_status": "untouched",
+  "judge_config_sha256": "7766F48DB4E8A5FE936287C3458141E98F29AE74CD3E6B0056D46D70B59020A0",
+  "judged_outputs_sha256": "18AEB2B68E35425636CBC77D229F8360091A2D7064704058393E24483F3B12FC",
+  "live_calls": true,
+  "model_catalog_sha256": "5915A387E0DD751FA309C0508E9063C093874340F9137F84908C24B20AD1A817",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "ready_for_owner_validation": true,
+  "schema_version": 2,
+  "selection": {
+    "candidates": {
+      "openai/gpt-oss-20b": {
+        "answerability_classification": 1.0,
+        "answerable_answer_rate": 1.0,
+        "citation_correctness": 0.9,
+        "correct_answer": 1.0,
+        "correct_refusal": 1.0,
+        "cost_usd": 0.12527915,
+        "denominators": {
+          "all_valid": 13,
+          "answerable": 10,
+          "answered": 10,
+          "unanswerable": 3
+        },
+        "faithfulness": 0.9230769230769231,
+        "judged_outputs": 13,
+        "outputs": 13,
+        "p95_latency_ms": 9769.641999999294,
+        "relevancy": 1.0,
+        "structural_validity": 1.0,
+        "valid_outputs": 13
+      }
+    },
+    "reason": "schema/citation validity, faithfulness, refusal, relevancy, citation correctness, cost, p95 latency",
+    "warning": "Inspect answerable_answer_rate and correct_answer before any holdout run; selection alone is not an acceptance gate.",
+    "winner": "openai/gpt-oss-20b",
+    "winner_status": "provisional_development_selection_pending_owner_judge_validation"
+  }
+}

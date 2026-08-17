@@ -1,0 +1,10 @@
+{
+  "chunk_count": 4565,
+  "chunk_sha256": "81B45B34429419CCC44C42AA27FFB7715012491F731A64576A14DBC7BAB7D41D",
+  "config": {
+    "overlap": 32,
+    "words": 128
+  },
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "schema_version": 1
+}

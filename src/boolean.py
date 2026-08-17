@@ -12,7 +12,7 @@ _OPERATORS = {"and", "or"}
 def _operand(index: InvertedIndex, raw_term: str) -> set[str]:
     """Resolve an analyzed whitespace token; its terms are implicitly ANDed."""
 
-    terms = analyze(raw_term)
+    terms = analyze(raw_term, index.analysis_config)
     if not terms:
         return set()
 
@@ -45,7 +45,7 @@ def search_boolean(index: InvertedIndex, query: str) -> list[str]:
             continue
 
         # Punctuation-only tokens do not make an operand.
-        if not analyze(raw_token):
+        if not analyze(raw_token, index.analysis_config):
             continue
         operands.append(_operand(index, raw_token))
         if not expecting_operand:

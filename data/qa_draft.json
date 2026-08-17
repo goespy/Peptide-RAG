@@ -1,0 +1,762 @@
+{
+  "version": 1,
+  "status": "candidate_pool_requires_human_review",
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "qrels_v2_sha256": "B30E1B7868EFFB580155442917C2BB0105ECC00E13527A103F6325B6A2B32ED6",
+  "source_qrels": "data/qrels_v2.json",
+  "development_case_ids": [
+    "qa01",
+    "qa02",
+    "qa03",
+    "qa04",
+    "qa05",
+    "qa06",
+    "qa07",
+    "qa08",
+    "qa09",
+    "qa10",
+    "qa16",
+    "qa17",
+    "qa18"
+  ],
+  "holdout_case_ids": [
+    "qa11",
+    "qa12",
+    "qa13",
+    "qa14",
+    "qa15",
+    "qa19",
+    "qa20"
+  ],
+  "cases": [
+    {
+      "id": "qa01",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q01",
+      "question": "What effect did BPC-157 have on liver injury in the reported rat models?",
+      "acceptable_answer": "In rat models of bile duct and hepatic artery ligation, restraint stress, and CCl4 injury, intragastric or intraperitoneal BPC-157 significantly prevented liver necrosis or fatty changes.",
+      "pmids": [
+        "7901724"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "7901724",
+          "start": 0,
+          "end": 624,
+          "text": "The hepatoprotective effects of a newly synthesized 15 amino acid fragment code named BPC 157 was evaluated in comparison with the reference standards (bromocriptine, amantadine and somatostatin) in various experimental models of liver injury in rats: 24 h-bile duct+hepatic artery ligation 48 h-restraint stress and CCl4 administration. BPC 157 administered either intragastrically or intraperitoneally, significantly prevented the development of liver necrosis or fatty changes in rats subjected to 24 h bile duct + hepatic artery ligation, 48 h-restraint stress, CCl4 treatment (1 ml/kg i.p., sacrifice 48 h thereafter). ",
+          "sha256": "A891A841311236641859062D005B13442FE0C33F2C14E097423FFF004BA4C2C6"
+        }
+      ],
+      "rationale": "The question and concise acceptable answer were drafted from the exact cited abstract support; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved by the project owner during sequential QA review."
+      }
+    },
+    {
+      "id": "qa02",
+      "answerability": "answerable",
+      "split": "development",
+      "question": "Does GHK or GHK-Cu help regrow hair?",
+      "acceptable_answer": "The corpus suggests potential, but it does not prove that GHK or GHK-Cu alone regrows human hair. In a 45-person trial of a combined 5-ALA/GHK product, hair counts increased and the 50 mg/ml group had a significantly larger hair-count change ratio than placebo, while hair length and thickness did not differ significantly. Because the product contained both 5-ALA and GHK, the trial cannot isolate GHK's contribution. A separate mouse study of a topical GHK-Cu delivery system reported effectiveness and greater activation of the hair-growth-related Wnt/beta-catenin pathway.",
+      "pmids": [
+        "27489425",
+        "38026438"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "27489425",
+          "start": 402,
+          "end": 576,
+          "text": "METHODS: Forty-five patients with male pattern hair loss were treated with ALAVAX 100 mg/ml (group A), ALAVAX 50 mg/ml (group B) or placebo (group C) once a day for 6 months.",
+          "sha256": "BC9E79317C3768C831EDD0F9B0CB27CCC1CDD12CFADAEE1D4D4985C6DED3E691"
+        },
+        {
+          "pmid": "27489425",
+          "start": 701,
+          "end": 969,
+          "text": "RESULTS: An increase in hair count for 6 months was 52.6 (p<0.05) in group A, 71.5 (p<0.05) in group B, and 9.6 in group C. The ratio of changes in hair count between group B (2.38) and group C (1.21) at 6 months showed a statistically significant difference (p<0.05).",
+          "sha256": "C289FFE199AF4ECBC854017B2E72301E8EF5044312DD4267B6FD928EA0AED515"
+        },
+        {
+          "pmid": "27489425",
+          "start": 1097,
+          "end": 1248,
+          "text": "There was no statistically significant difference in hair length and hair thickness among 3 groups at 6 months. There was no adverse event in 3 groups.",
+          "sha256": "2B47F43C56B37F4C4140452E2EB33A224A63373AA4F762E4A72E28151B3FF608"
+        },
+        {
+          "pmid": "38026438",
+          "start": 0,
+          "end": 223,
+          "text": "Copper peptides (GHK-Cu) are a powerful hair growth promoter with minimal side effects when compared with minoxidil and finasteride; however, challenges in delivering GHK-Cu topically limits their non-invasive applications.",
+          "sha256": "2563F266139E315F9C114DAC2DD94EB1922621BB349D5A2FA5431AFF34F0741A"
+        },
+        {
+          "pmid": "38026438",
+          "start": 610,
+          "end": 993,
+          "text": "Experiments in mice validated the effectiveness of our proposed IL-M system. Furthermore, the exact effects of the IL-M system on the expression of growth factors, such as vascular endothelial growth factor, were revealed, and it was found that microemulsion increased the activation of the Wnt/β-catenin signaling pathway, which includes factors involved in hair growth regulation. ",
+          "sha256": "B9E26AF52964F9EDE6A1637433495B01E28461C912BA6637742AF0478495384D"
+        }
+      ],
+      "rationale": "The project owner selected a realistic consumer-style hair-growth question. The acceptable answer combines direct human and mouse abstract evidence while preserving the central limitation that the human product combined 5-ALA with GHK and therefore does not establish the effect of GHK or GHK-Cu alone.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after replacing the abstract-specific neurodegeneration question with a broader real-user hair-regrowth question."
+      }
+    },
+    {
+      "id": "qa03",
+      "answerability": "answerable",
+      "split": "development",
+      "question": "Does TB-500 help injuries or wounds heal?",
+      "acceptable_answer": "Preclinical evidence suggests possible healing effects, but benefit in people has not been established. In a rat Achilles-tendon repair study, TB-500 significantly improved maximum load to failure and several histopathology scores compared with controls. In a separate laboratory study, only the Ac-LKKTE metabolite showed significant wound-healing activity, leading the authors to suggest that previously reported activity might come from that metabolite rather than parent TB-500. A narrative review reported that human orthopaedic data are lacking.",
+      "pmids": [
+        "42542926",
+        "38382158",
+        "41476424"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "42542926",
+          "start": 1132,
+          "end": 1668,
+          "text": "Biomechanical testing revealed higher maximum load to failure values in the BPC-157 and TB-500 groups compared to controls, reaching statistical significance in the TB-500 group (p < 0.05). Histopathological evaluation demonstrated significantly lower total Bonar scores in the TB-500 group (p = 0.016) and significantly lower total Movin scores in the TB-500 and BPC + TB groups (p = 0.017 and p = 0.040, respectively) relative to controls, indicating improved tendon architecture, collagen alignment, and reduced degenerative changes.",
+          "sha256": "5A90BF8A4D2F526E3EF292585D4775C823FC1E2B1F3F66BBCFBFC82D73C5DD4A"
+        },
+        {
+          "pmid": "38382158",
+          "start": 1300,
+          "end": 1444,
+          "text": "No cytotoxicity of the parent and its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. ",
+          "sha256": "FB384110CA0B52F17030302ECCE64E3D6DB5557035F6EA30E58D2A632C35A178"
+        },
+        {
+          "pmid": "38382158",
+          "start": 1444,
+          "end": 1790,
+          "text": "CONCLUSION: The study provides a valuable tool for quantifying TB-500 and its metabolites, contributing to the understanding of metabolism and potential therapeutic applications. Our results also suggest that the previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent form.",
+          "sha256": "FCF9F0D6BA7ADA8F8E9239A23F535E219D7C04B672076DDFEF58B39D4C18A616"
+        },
+        {
+          "pmid": "41476424",
+          "start": 1425,
+          "end": 1603,
+          "text": "TB-4 and its derivative TB-500 promoted angiogenesis and tissue repair in preclinical models, but human orthopaedic data are lacking, and both remain banned substances in sports.",
+          "sha256": "75254BEE18C1BB7F755029D89BA735969510A3F51A6DE1D62EFDF1483B414B77"
+        }
+      ],
+      "rationale": "The project owner selected a broad, public-facing healing question identified by the recorded web-query research. The answer triangulates direct rat and laboratory findings with a review's explicit human-evidence limitation and does not transfer preclinical effects into a human efficacy claim.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after replacing the abstract-specific protein-conformation question with a realistic TB-500 healing question."
+      }
+    },
+    {
+      "id": "qa04",
+      "answerability": "answerable",
+      "split": "development",
+      "question": "Does ipamorelin increase growth hormone?",
+      "acceptable_answer": "Under the studied conditions, yes. In healthy male volunteers receiving intravenous ipamorelin at five tested infusion rates, every dose induced a single growth-hormone release episode. The response peaked at about 0.67 hours and then declined exponentially to negligible concentrations. Other laboratory and animal profiling also described ipamorelin as a potent growth-hormone secretagogue. These findings establish an acute hormonal effect under research conditions; they do not establish muscle-building, weight-loss, or anti-aging benefits.",
+      "pmids": [
+        "10496658",
+        "9849822"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "10496658",
+          "start": 0,
+          "end": 428,
+          "text": "PURPOSE: To examine the pharmacokinetics (PK) and pharmacodynamics (PD) of ipamorelin, a growth hormone (GH) releasing peptide, in healthy volunteers. METHODS: A trial was conducted with a dose escalation design comprising 5 different infusion rates (4.21, 14.02, 42.13, 84.27 and 140.45 nmol/kg over 15 minutes) with eight healthy male subjects at each dose level. Concentrations of ipamorelin and growth hormone were measured.",
+          "sha256": "2684DC8AC715B3EF569C971CE7C08F67D161DD9E12963D7E3D5CEB6F94EEDBEF"
+        },
+        {
+          "pmid": "10496658",
+          "start": 616,
+          "end": 799,
+          "text": "The time course of GH stimulation by ipamorelin showed a single episode of GH release with a peak at 0.67 hours and an exponential decline to negligible GH concentration at all doses.",
+          "sha256": "66F4F81BF5BF542BE4BE3BD056F6DF108BEADEA9D098EB91FA6940C8F41A59D4"
+        },
+        {
+          "pmid": "10496658",
+          "start": 1039,
+          "end": 1228,
+          "text": "Ipamorelin induces the release of GH at all dose levels with the concentration (SC50) required for half-maximal GH stimulation of 214 nmol/L and a maximal GH production rate of 694 mIU/L/h.",
+          "sha256": "A7F73520D39F3A797E6247EBA2129280035E94834562FE3D01240CD236BDB76E"
+        },
+        {
+          "pmid": "9849822",
+          "start": 0,
+          "end": 246,
+          "text": "The development and pharmacology of a new potent growth hormone (GH) secretagogue, ipamorelin, is described. Ipamorelin is a pentapeptide (Aib-His-D-2-Nal-D-Phe-Lys-NH2), which displays high GH releasing potency and efficacy in vitro and in vivo.",
+          "sha256": "5942A867D903C27DFCF44E902116B35126192825FA22CE3CC52F9AC71A58AB83"
+        }
+      ],
+      "rationale": "The project owner approved a broad public-facing question about ipamorelin's central marketed mechanism. Direct human PK/PD evidence supports an acute growth-hormone response, while the answer explicitly limits that observation to the studied route and outcomes rather than inferring body-composition or anti-aging benefits.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after replacing the medicinal-chemistry question with a realistic question about growth-hormone release."
+      }
+    },
+    {
+      "id": "qa05",
+      "answerability": "answerable",
+      "split": "development",
+      "question": "Does tesamorelin reduce belly fat?",
+      "acceptable_answer": "Yes, in the population that was studied: people with HIV-associated abdominal-fat accumulation. In a 404-patient trial, visceral adipose tissue decreased 10.9% with tesamorelin versus 0.6% with placebo after six months. Patients who continued tesamorelin reached an approximately 18% reduction after 12 months, while the earlier improvement was rapidly lost after switching to placebo. These results do not establish tesamorelin as a general weight-loss treatment.",
+      "pmids": [
+        "20101189"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "20101189",
+          "start": 322,
+          "end": 496,
+          "text": "METHODS: A 12-month study of 404 HIV-infected patients with excess abdominal fat in the context of antiretroviral therapy was conducted between January 2007 and October 2008.",
+          "sha256": "A008ACD27288FD5598D3A62A35C2A79F6021292C92556E63C70598A78642105B"
+        },
+        {
+          "pmid": "20101189",
+          "start": 1187,
+          "end": 1341,
+          "text": "RESULTS: VAT decreased by -10.9% (-21 cm(2)) in the tesamorelin group vs. -0.6% (-1 cm(2)) in the placebo group in the 6-month efficacy phase, P < 0.0001.",
+          "sha256": "1BFEA09A131BD2EAA71668981D07DF1A9D59FF18A8777D66470FC98D70F27BEA"
+        },
+        {
+          "pmid": "20101189",
+          "start": 1793,
+          "end": 2003,
+          "text": "VAT was reduced by approximately 18% (P < 0.001) in patients continuing tesamorelin for 12 months. The initial improvements over 6 months in VAT were rapidly lost in those switching from tesamorelin to placebo.",
+          "sha256": "812500409E5E2C9D7C2DB0E473A98E748034AD6D67A85A64673B560F4D470CC7"
+        }
+      ],
+      "rationale": "The project owner approved a broad public-facing belly-fat question. The answer preserves the studied HIV-associated population, reports the controlled numerical results, notes loss of benefit after discontinuation, and avoids turning an indication-specific trial into a general weight-loss claim.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as part of the complete 20-question slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa06",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q06",
+      "question": "What effect did developmental exposure to Epitalon have on adult fruit-fly lifespan?",
+      "acceptable_answer": "Epitalon exposure during development increased adult Drosophila lifespan by 11% to 16% at the tested low concentrations, and the increase was not dose-dependent.",
+      "pmids": [
+        "11087911"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "11087911",
+          "start": 147,
+          "end": 566,
+          "text": "The substance was added to the culture medium only at the developmental stage (from egg to larva). Epitalon significantly increased the lifespan (LS) of imagoes by 11-16% when applied at unprecedented low concentrations-from 0.001 x 10(-6) to 5 x 10(-6) wt.% of culture medium for males and from 0.01 x 10(-6) to 0.1 x 10(-6) wt.% of culture medium for females. The increase in LS did not depend on the substance dose. ",
+          "sha256": "F795E3299EAAA970DC25A31DA748F74B1DB4F13DB3F206958D822105C693BAC6"
+        }
+      ],
+      "rationale": "The question and concise acceptable answer were drafted from the exact cited abstract support; a human must confirm wording and sufficiency.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as a specific research question in the complete slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa07",
+      "answerability": "answerable",
+      "split": "development",
+      "question": "Does MOTS-c help with weight loss or metabolism?",
+      "acceptable_answer": "The corpus shows promising metabolic effects in mice, not proof of a human weight-loss treatment. In the reported mouse experiments, MOTS-c prevented age-dependent and high-fat-diet-induced insulin resistance and prevented diet-induced obesity. Human treatment efficacy cannot be inferred from those animal findings.",
+      "pmids": [
+        "25738459"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "25738459",
+          "start": 721,
+          "end": 1011,
+          "text": "MOTS-c treatment in mice prevented age-dependent and high-fat-diet-induced insulin resistance, as well as diet-induced obesity. These results suggest that mitochondria may actively regulate metabolic homeostasis at the cellular and organismal level via peptides encoded within their genome.",
+          "sha256": "E13B71C9AC777990D6668813026CFF8816CC2B8A9DADF63112B580ABB994E422"
+        }
+      ],
+      "rationale": "The project owner approved a broad metabolism and weight-loss question. The answer reports the direct mouse findings while explicitly preserving the species limitation and avoiding a human efficacy claim.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as part of the complete 20-question slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa08",
+      "answerability": "answerable",
+      "split": "development",
+      "question": "Does PT-141 help with erectile dysfunction?",
+      "acceptable_answer": "Short-term controlled studies found that PT-141 produced statistically significant erectile responses. Intranasal doses above 7 mg produced significant responses versus placebo with onset at about 30 minutes, and subcutaneous 4 mg and 6 mg doses produced significant responses in erectile-dysfunction patients who reported an inadequate Viagra response. Flushing and nausea were common in the intranasal studies. These findings concern acute erectile response and do not establish long-term outcomes.",
+      "pmids": [
+        "14963471",
+        "14999221"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "14963471",
+          "start": 0,
+          "end": 347,
+          "text": "PT-141, a cyclic heptapeptide melanocortin analog, was evaluated following intranasal administration in healthy male subjects and in Viagra-responsive erectile dysfunction (ED) patients. Erectile response was assessed by RigiScan trade mark in healthy subjects without visual sexual stimulation (VSS) and in Viagra-responsive ED patients with VSS.",
+          "sha256": "01C1F700A5EF2F61C41FD4425682933DF2058E707E9CA4CEE0E8E8928047DE49"
+        },
+        {
+          "pmid": "14963471",
+          "start": 503,
+          "end": 725,
+          "text": "In both studies, an erectile response induced by PT-141 administration was statistically significant, compared to placebo, at doses greater than 7 mg, with the onset of the first erection occurring in approximately 30 min.",
+          "sha256": "339E457FC9856938D775FE3845836BAF6827707507120468106353F10A66BE7E"
+        },
+        {
+          "pmid": "14963471",
+          "start": 726,
+          "end": 1029,
+          "text": "PT-141 was safely administered and well tolerated in both studies. A maximum-tolerated dose was not identified. Flushing and nausea were the most common adverse events reported in both studies and no clinically significant changes in vital signs, laboratory tests, ECGs, or physical exams were observed.",
+          "sha256": "850353A0F4FC983A518A2C8244DEBDAC66C6003BC867B1A9842387BBB0476D9B"
+        },
+        {
+          "pmid": "14999221",
+          "start": 746,
+          "end": 932,
+          "text": "ED patients were treated with placebo, 4 or 6 mg PT-141 in a crossover design in the presence of VSS. The erectile response induced by PT-141 was statistically significant at both doses.",
+          "sha256": "231486E242E1EAB84E855126B4DDA06A366ECB804AD8AF54C22E1CC27F2C39E6"
+        }
+      ],
+      "rationale": "The project owner approved a broad erectile-dysfunction question. The answer uses direct controlled human studies, reports route and dose context, includes common adverse events, and limits the conclusion to acute erectile response rather than libido or long-term efficacy.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as part of the complete 20-question slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa09",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q09",
+      "question": "What did the rat study report about BPC-157 in experimental stomach and duodenal ulcer models?",
+      "acceptable_answer": "The study reported protection of the stomach and duodenum together with an anti-inflammatory effect when BPC-157 was investigated in three rat ulcer models.",
+      "pmids": [
+        "7904712"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "7904712",
+          "start": 0,
+          "end": 458,
+          "text": "The protection of stomach and duodenum in conjecture with anti-inflammatory effect was demonstrated for a novel 15 amino acid peptide, coded BPC 157, a fragment of the recently discovered gastric juice peptide BPC. BPC 157 (i.p./i.g.) was investigated in rats in comparison with several reference standards in three experimental ulcer models (48 h-restraint stress, subcutaneous cysteamine, intragastrical 96% ethanol ulcer tests) (pre-/co-/post-treatment). ",
+          "sha256": "F1AC7F6E26D8F6ADCAFAA6C4588C97848A79AE22CDB12CD3665FCEC131A8468F"
+        }
+      ],
+      "rationale": "The project owner approved this specific study question. The answer is limited to three experimental rat ulcer models and does not imply demonstrated human gastrointestinal efficacy.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as a specific research question in the complete slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa10",
+      "answerability": "answerable",
+      "split": "development",
+      "source_query_id": "q10",
+      "question": "How did intra-articular GHK-Cu affect graft healing after ACL reconstruction in rats?",
+      "acceptable_answer": "Intra-articular GHK-Cu improved graft healing after ACL reconstruction in rats, but the beneficial effects did not persist after treatment stopped.",
+      "pmids": [
+        "25731775"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "25731775",
+          "start": 1249,
+          "end": 1434,
+          "text": "Intra-articular supplementation with a bioactive small molecule GHK-Cu improved graft healing following ACLR in rat, but the beneficial effects could not last as treatment discontinued.",
+          "sha256": "66C52E5B426787F35E0FAEB31F5A54921B20ABA24CED17D80682ABC8F73635F7"
+        }
+      ],
+      "rationale": "The project owner approved this specific study question. The answer preserves the rat ACL-reconstruction setting and the reported loss of benefit after treatment stopped.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as a specific research question in the complete slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa11",
+      "answerability": "answerable",
+      "split": "holdout",
+      "question": "What peptide did researchers identify as the key ingredient of TB-500, and how is it related to thymosin beta-4?",
+      "acceptable_answer": "Researchers identified TB-500's key ingredient as LKKTETQ with artificial acetylation at the N-terminus, also described as N-acetylated LKKTETQ. LKKTETQ corresponds to residues 17-23, the active region of thymosin beta-4 associated in the abstract with actin binding, cell migration, and wound healing.",
+      "pmids": [
+        "23084823"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "23084823",
+          "start": 0,
+          "end": 383,
+          "text": "A veterinary preparation known as TB-500 and containing a synthetic version of the naturally occurring peptide LKKTETQ has emerged. The peptide segment (17)LKKTETQ(23) is the active site within the protein thymosin β(4) responsible for actin binding, cell migration and wound healing. The key ingredient of TB-500 is the peptide LKKTETQ with artificial acetylation of the N-terminus.",
+          "sha256": "3C043B11D077F50C868C9D5DCDE5F32EDC9DA18D6C666F0730DAC781BF8BED90"
+        }
+      ],
+      "rationale": "The project owner approved this specific composition question. It uses a holdout PMID distinct from the development TB-500 evidence and tests whether the system can relate TB-500 precisely to the acetylated thymosin beta-4 active-region fragment.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as a specific research question in the complete slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa12",
+      "answerability": "answerable",
+      "split": "holdout",
+      "question": "Does ipamorelin reduce body fat?",
+      "acceptable_answer": "The reported mouse study did not support that claim; it found the opposite under its experimental conditions. Ipamorelin produced about a 15% body-weight increase by two weeks, increased fat-pad weight relative to body weight, and—when grouped with another growth-hormone secretagogue—increased relative body fat in growth-hormone-intact mice. The authors concluded that growth-hormone secretagogues increased body fat through growth-hormone-independent mechanisms. These animal results do not establish the effect in people.",
+      "pmids": [
+        "11162489"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "11162489",
+          "start": 0,
+          "end": 263,
+          "text": "Growth hormone secretagogues (GHSs) stimulate growth hormone (GH) secretion, which is lipolytic. Here we compared the effects of twice daily s.c. treatment of GH and the GHS, ipamorelin, on body fat in GH-deficient (lit/lit) and in GH-intact (+/lit and +/+) mice.",
+          "sha256": "E170B7D62D7B90A7A3CB3E7A7CA15BA606BAED09E8D17A33B5E0327394E85F24"
+        },
+        {
+          "pmid": "11162489",
+          "start": 264,
+          "end": 558,
+          "text": "In +/lit and lit/lit mice ipamorelin induced a small (15%) increase in body weight by 2 weeks, that was not further augmented by 9 weeks. GH treatment markedly enhanced body weight in both groups. Ipamorelin also increased fat pad weights relative to body weight in both lit/lit and +/lit mice.",
+          "sha256": "FAA7D257AE0816300D74D78FB8FE1DA97F05CECC8DFB37A81347EB592665E899"
+        },
+        {
+          "pmid": "11162489",
+          "start": 559,
+          "end": 719,
+          "text": "Two weeks GHS treatment (ipamorelin or GHRP-6) also increased relative body fat, quantified by in vivo dual energy X-ray absorpiometry (DEXA) in GH-intact mice.",
+          "sha256": "6D27D3C2B3C8E935886800F2ED1EE38BCF47AB739B84580B049CF76CE05A3789"
+        },
+        {
+          "pmid": "11162489",
+          "start": 894,
+          "end": 987,
+          "text": "Thus, GHSs increase body fat by GH-independent mechanisms that may include increased feeding.",
+          "sha256": "3CB2A3BB8A737DAB054B8D1F07FCD3ADFCF3C87B5656A0C7CD831A0D02A2A6E4"
+        }
+      ],
+      "rationale": "The project owner approved a broad body-fat question that functions as an oracle catch. The answer reports the counterintuitive mouse result without generalizing it to people and uses a holdout PMID distinct from the development ipamorelin evidence.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as part of the complete 20-question slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa13",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q13",
+      "question": "What effects did tesamorelin have on visceral fat and triglycerides in the HIV trial, and what did the trial report about adverse events?",
+      "acceptable_answer": "Visceral adipose tissue decreased by 15.2% with tesamorelin versus a 5.0% increase with placebo, and triglycerides decreased by 50 mg/dL versus a 9 mg/dL increase. Overall adverse-event rates did not differ significantly, although more tesamorelin participants withdrew because of an adverse event.",
+      "pmids": [
+        "18057338"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "18057338",
+          "start": 932,
+          "end": 1318,
+          "text": "RESULTS: The measure of visceral adipose tissue decreased by 15.2% in the tesamorelin group and increased by 5.0% in the placebo group; the levels of triglycerides decreased by 50 mg per deciliter and increased by 9 mg per deciliter, respectively, and the ratio of total cholesterol to HDL cholesterol decreased by 0.31 and increased by 0.21, respectively (P<0.001 for all comparisons).",
+          "sha256": "7C7220A3D31E5D56F5BD95D686C6BFFCCA6A54CF6C1EDBD1B688D3267D3BF0B2"
+        },
+        {
+          "pmid": "18057338",
+          "start": 1535,
+          "end": 1704,
+          "text": "Adverse events did not differ significantly between the two study groups, but more patients in the tesamorelin group withdrew from the study because of an adverse event.",
+          "sha256": "8834E57C95545ACBDC71B05C2C486300E95400E7ED21464DE69F50ED16B0DE03"
+        }
+      ],
+      "rationale": "The project owner approved this specific trial-results question. The answer preserves the HIV population, numerical visceral-fat and triglyceride outcomes, and the distinction between overall adverse-event rates and withdrawals.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as a specific research question in the complete slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa14",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q14",
+      "question": "How did Epitalon affect evening melatonin and cortisol rhythm in older monkeys?",
+      "acceptable_answer": "Epitalon significantly stimulated evening melatonin synthesis in senescent monkeys and normalized the circadian rhythm of cortisol secretion.",
+      "pmids": [
+        "11524632"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "11524632",
+          "start": 346,
+          "end": 522,
+          "text": "RESULTS: Epitalon was proven to significantly stimulate melatonin synthesis in senescent monkeys in the evening, thereby normalising the circadian rhythm of cortisol secretion.",
+          "sha256": "99E4D630A16DAF7CDCF50B8B8688BCCC16836DC47AF6D47A46EC4CF00CC0CA7E"
+        }
+      ],
+      "rationale": "The project owner approved this specific animal-study question. The wording uses plain language while the answer retains the monkey population and the reported circadian outcomes.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as a specific research question in the complete slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa15",
+      "answerability": "answerable",
+      "split": "holdout",
+      "source_query_id": "q15",
+      "question": "What hypothesis did the authors make about the MOTS-c m.1382A>C variant and Japanese longevity?",
+      "acceptable_answer": "The authors suggested, while noting that more research was needed, that the Northeast-Asian-specific m.1382A>C polymorphism in MOTS-c-encoding mitochondrial DNA might contribute to Japanese longevity.",
+      "pmids": [
+        "26289118"
+      ],
+      "evidence_spans": [
+        {
+          "pmid": "26289118",
+          "start": 123,
+          "end": 501,
+          "text": "These include humanin, and the recently discovered mitochondrial open reading frame of the 12S rRNA-c (MOTS-c). Although more research is needed, we suggest that the m.1382A>C polymorphism located in the MOTS-c encoding mtDNA, which is specific for the Northeast Asian population, may be among the putative biological mechanisms explaining the high longevity of Japanese people.",
+          "sha256": "F41E7F1603C630C5476DC681FBF1115735ECD7BEE8B56456D0DF837E83C0D6EF"
+        }
+      ],
+      "rationale": "The project owner approved this specific hypothesis question. The answer retains the authors' uncertainty and does not present an exploratory population-genetics proposal as a proven cause of longevity.",
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved as a specific research question in the complete slate on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa16",
+      "answerability": "unanswerable",
+      "split": "development",
+      "question": "What is the safest effective BPC-157 dose for healing a human tendon injury?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The frozen corpus contains preclinical tendon studies, reviews, and a two-participant intravenous tolerance pilot, but it contains no validated safe and effective human tendon-healing dose. The pilot did not test tendon efficacy or dose optimization. The project owner approved this as an insufficient-evidence case after reviewing the recorded corpus audit.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "bpc",
+          "157"
+        ],
+        "claim_tokens": [
+          "human",
+          "tendon",
+          "dose"
+        ],
+        "matching_pmids": [
+          "21030672",
+          "25415472",
+          "36551977",
+          "38980576"
+        ],
+        "audited_pmids": [
+          "21030672",
+          "25415472",
+          "40131143",
+          "40756949",
+          "41476424",
+          "42198317"
+        ],
+        "limitation": "Strict matches contain related preclinical or review language, not a validated safe and effective human tendon regimen; the corpus-only conclusion is not a universal claim of absence."
+      },
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after the documented multi-query corpus insufficiency audit on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa17",
+      "answerability": "unanswerable",
+      "split": "development",
+      "question": "Does injectable GHK-Cu reverse human skin aging better than topical GHK-Cu?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The frozen corpus contains topical human work, combination-product studies, reviews, and experimental injectable filler research, but no controlled human head-to-head comparison of injectable and topical GHK-Cu. It also does not establish that either route reverses skin aging. The project owner approved this as an insufficient-evidence case after reviewing the recorded corpus audit.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "ghk",
+          "cu"
+        ],
+        "claim_tokens": [
+          "injectable",
+          "topical",
+          "skin"
+        ],
+        "matching_pmids": [],
+        "audited_pmids": [
+          "16847171",
+          "18644225",
+          "40716276",
+          "42573538"
+        ],
+        "limitation": "No strict head-to-head route match was found; separate route-specific findings cannot answer an unperformed human comparison, and the corpus-only conclusion is not universal."
+      },
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after the documented multi-query corpus insufficiency audit on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa18",
+      "answerability": "unanswerable",
+      "split": "development",
+      "question": "Does TB-500 speed recovery after surgery in humans?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The direct TB-500 evidence in the frozen corpus is laboratory, animal, or review evidence. Reviews describe human orthopaedic data as lacking, and thymosin beta-4 evidence cannot automatically be transferred to TB-500. The project owner approved this as an insufficient-evidence case after reviewing the recorded corpus audit.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "tb",
+          "500"
+        ],
+        "claim_tokens": [
+          "human",
+          "surgery"
+        ],
+        "matching_pmids": [],
+        "audited_pmids": [
+          "38382158",
+          "41476424",
+          "42160466",
+          "42542926",
+          "42578445"
+        ],
+        "limitation": "No strict human-surgery TB-500 match was found; related preclinical or thymosin beta-4 evidence does not establish human postoperative recovery, and the corpus-only conclusion is not universal."
+      },
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after the documented multi-query corpus insufficiency audit on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa19",
+      "answerability": "unanswerable",
+      "split": "holdout",
+      "question": "Does ipamorelin cause lasting muscle gain in healthy adults?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "Human ipamorelin evidence in the frozen corpus establishes an acute growth-hormone response, not lasting muscle gain. Muscle-related material is animal, combination-treatment, or narrative-review evidence, and reviews identify missing long-term clinical validation. The project owner approved this as an insufficient-evidence case after reviewing the recorded corpus audit.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "ipamorelin"
+        ],
+        "claim_tokens": [
+          "muscle",
+          "human"
+        ],
+        "matching_pmids": [
+          "41476424",
+          "42578445"
+        ],
+        "audited_pmids": [
+          "10496658",
+          "32257855",
+          "41476424",
+          "42021992",
+          "42395176",
+          "42578445"
+        ],
+        "limitation": "Strict matches are reviews discussing related evidence and gaps, not trials establishing durable muscle gain in healthy adults; the corpus-only conclusion is not universal."
+      },
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after the documented multi-query corpus insufficiency audit on 2026-08-14."
+      }
+    },
+    {
+      "id": "qa20",
+      "answerability": "unanswerable",
+      "split": "holdout",
+      "question": "Is PT-141 safe and effective for long-term treatment of low libido in men?",
+      "acceptable_answer": "",
+      "pmids": [],
+      "evidence_spans": [],
+      "rationale": "The male PT-141 studies in the frozen corpus evaluate acute erectile responses and short-term tolerability, principally in erectile-dysfunction populations. They do not establish long-term safety and efficacy for treating low libido in men. The project owner approved this as an insufficient-evidence case after reviewing the recorded corpus audit.",
+      "lexical_absence_check": {
+        "method": "same-document required-token conjunction over title and abstract",
+        "peptide_tokens": [
+          "pt",
+          "141"
+        ],
+        "claim_tokens": [
+          "libido",
+          "men",
+          "long",
+          "term"
+        ],
+        "matching_pmids": [],
+        "audited_pmids": [
+          "12851303",
+          "14963471",
+          "14999221",
+          "15833522",
+          "17584134",
+          "42021992"
+        ],
+        "limitation": "No strict long-term male-libido match was found; acute erectile response, low libido, and long-term treatment are distinct outcomes, and the corpus-only conclusion is not universal."
+      },
+      "human_review": {
+        "approved": true,
+        "decision": "approve",
+        "reviewer": "project_owner",
+        "notes": "Approved after the documented multi-query corpus insufficiency audit on 2026-08-14."
+      }
+    }
+  ],
+  "review_notice": "All 20 cases received explicit project-owner approval on 2026-08-14 and are ready to be frozen by scripts/freeze_qa.py."
+}

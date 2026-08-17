@@ -1,0 +1,68 @@
+{
+  "acceptance_target": {
+    "answerable_answer_rate": "10/10 development cases",
+    "citation_structure": "100% valid with identities derived from visible [n] markers",
+    "faithfulness": "every factual claim must later pass the independent Claude judge and owner validation gates",
+    "unanswerable_system_refusal_rate": "3/3 development cases, reported separately as model or deterministic safety-policy refusals"
+  },
+  "artifact_paths": {
+    "outputs": "data/rag_generator_v2_2_outputs.json",
+    "summary": "data/rag_generator_v2_2_summary.json"
+  },
+  "changes_from_v2_1": [
+    "Freeze openai/gpt-oss-20b as the sole generator candidate by project-owner decision.",
+    "Preserve Qwen and Gemma results as negative development evidence instead of rerunning incompatible or unusable candidates.",
+    "Reduce the generator-only hard cost cap from $0.05 to $0.02."
+  ],
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "excluded_generator_candidates": [
+    {
+      "evidence": "generator-v2 returned HTTP 400 for every attempt; current catalog replacement was not selected by the owner",
+      "family": "qwen"
+    },
+    {
+      "evidence": "generator-v2 returned HTTP 200 envelopes but no usable structured response or complete usage metadata",
+      "family": "google"
+    }
+  ],
+  "experiment_id": "generator-v2.2-gpt-only-derived-citations",
+  "generation": {
+    "citation_mode": "derived_from_text_markers",
+    "max_tokens": 800,
+    "repair_attempts": 1,
+    "require_supported_parameters": true,
+    "temperature": 0
+  },
+  "generator_candidates": [
+    "openai/gpt-oss-20b"
+  ],
+  "generator_diagnostic": {
+    "hard_cost_cap_usd": 0.02,
+    "judge_calls": 0
+  },
+  "holdout_status": "untouched",
+  "hypotheses": [
+    "QA09 will no longer fail because citation identity has a single source of truth: the visible markers.",
+    "QA16 will be correctly refused before generation under the general dosing-safety policy.",
+    "GPT-OSS will reach the 10/10 answerable and 3/3 correct-refusal structural development gate before paid judging."
+  ],
+  "model_catalog_sha256": "8873788CDDED3CFF2003CE2A8EB78984CE38EA619D81EAE24F1DCEE9B50AFA00",
+  "owner_decision": {
+    "decision": "select_gpt_oss_only",
+    "recorded_at": "2026-08-14",
+    "rationale": "Drop Qwen and Gemma after their measured provider and structured-output failures; continue with GPT-OSS, which reached 9/10 answerable cases in generator-v2."
+  },
+  "parent_config_sha256": "637074A7D415B4222E84EBBFE5EA69E5D54009A9C533917BD0815FE61F6A726E",
+  "parent_outputs_sha256": "8982E49A16EB962C469387D19F57AE9823133C4C1F629BAB1CF1D7598A5D22DC",
+  "parent_reanalysis_sha256": "34DF229CC1FEC329C3D45BF26CE770D68A037938290259A9433F751AA2A04FD7",
+  "parent_review_sha256": "F3B3225D5434AD9AED501D6A246C3200529B901EF414C6A81ED18B640488E5E2",
+  "parent_summary_sha256": "87D5874A01E330AD698A446B6A6F274A85A7D98AF45C1585C97152414543E39F",
+  "prompt": "You are a research-literature assistant. Use only the supplied PubMed abstract evidence. Answer whenever at least one supplied passage directly reports a finding relevant to the question. State the study population or species and preserve uncertainty; animal evidence may be summarized as an animal finding but must not be presented as proof of human treatment efficacy. Do not give personalized medical, treatment, or dosing advice. Return insufficient_evidence only when the passages do not support an answer, materially conflict, or the question requests personalized medical or dosing advice. Keep answered text to one to three concise factual sentences, and end every factual sentence with one or more [citation_id] markers. Return only the required JSON object.",
+  "prompt_sha256": "2C4B0DA3679DCADE1038E7ACB2426995D357C4D681209CC09372B126543345A2",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 4,
+  "selected": true,
+  "selection_scope": "approved 13-case development split only; no holdout access",
+  "status": "frozen_generator_v2_2_before_development_rerun"
+}

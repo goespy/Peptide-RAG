@@ -1,0 +1,3463 @@
+{
+  "outputs": [
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "BPC 157 significantly prevented the development of liver necrosis or fatty changes in rats subjected to 24 h bile duct + hepatic artery ligation, 48 h-restraint stress, and CCl4 treatment."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Laboratory test results for bilirubin, SGOT, and SGPT correlated with macro/microscopical findings in the liver injury models."
+          },
+          {
+            "citation_ids": [
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "BPC-157 reduced sinusoidal dilation, necrotic cells, and mononuclear cell infiltration in liver tissue in a rat model of lower-extremity ischemia-reperfusion injury."
+          },
+          {
+            "citation_ids": [
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "BPC-157 increased antioxidant activity (TAS, TOS, OSI, PON-1) in liver tissue following lower extremity ischemia-reperfusion injury in rats."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "BPC 157 reduced radiation-induced liver injury by decreasing plasma levels of AST and ALT and inhibiting hydropic degeneration of liver in mice."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "BPC 157 decreased radiation-induced cell apoptosis, increased PCNA expression, promoted KLF4 expression, and decreased hepatic lipid accumulation and HIF-2\u03b1 expression in liver."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "The protective effect of BPC 157 on radiation-induced apoptosis and lipid accumulation in liver cells was mediated by KLF4."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts regarding BPC-157's effect on liver injury in rat models."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01393728,
+        "generator_latency_ms": 7334.69889999833,
+        "generator_usage": {
+          "cost_usd": 0.00020928,
+          "input_tokens": 3492,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 5733,
+        "judge_latency_ms": 8699.63450008072,
+        "judge_usage": {
+          "cost_usd": 0.013728,
+          "input_tokens": 2241,
+          "output_tokens": 467,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 16034.33340007905,
+        "output_tokens": 1271,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa01",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "GHK-Cu increases hair follicle size according to a review of tissue remodeling processes."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "GHK-Cu improves hair transplant success."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "GHK-Cu is described as a powerful hair growth promoter with minimal side effects compared to minoxidil and finasteride."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "An ionic liquid microemulsion system improved topical delivery of GHK-Cu approximately three-fold and validated effectiveness in mice for hair growth."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "GHK-Cu is extensively utilized in hair care formulations."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "Copper-free GHK increases proliferation of keratinocytes and stemness of epidermal basal cells, which may relate to hair follicle function."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved abstracts to conclude that GHK or GHK-Cu definitively regrowing hair in humans."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01219374,
+        "generator_latency_ms": 7115.134299965575,
+        "generator_usage": {
+          "cost_usd": 0.00021774,
+          "input_tokens": 3774,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 6236,
+        "judge_latency_ms": 6099.9079999746755,
+        "judge_usage": {
+          "cost_usd": 0.011976,
+          "input_tokens": 2462,
+          "output_tokens": 306,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 13215.04229994025,
+        "output_tokens": 1110,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa02",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 (synthetic thymosin beta-4) demonstrated significantly higher maximum load to failure values in biomechanical testing compared to controls in a rat Achilles tendon healing model."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 showed significantly lower total Bonar and Movin scores compared to controls, indicating improved tendon architecture, collagen alignment, and reduced degenerative changes."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 treatment was associated with increased type I collagen organization and altered type III collagen distribution, suggesting progression toward matrix maturation."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "TB-500 is derived from the active site of thymosin \u03b24 and has biological functions including actin binding, dermal wound healing, angiogenesis, and skin repair."
+          },
+          {
+            "citation_ids": [
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "A metabolite of TB-500, Ac-LKKTE, showed significant wound healing activity in fibroblasts compared to control, while the parent TB-500 form did not show significant wound healing activity on its own."
+          },
+          {
+            "citation_ids": [
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "The previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent form."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Thymosin beta4 (the parent molecule of TB-500) treated incisional wounds in rats healed with minimal scarring, superior organized collagen fibers, and without loss in wound breaking strength."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Thymosin beta4 treated wounds appeared to mature earlier and had fewer myofibroblasts compared to controls."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts regarding TB-500 helping injuries or wounds heal."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01465686,
+        "generator_latency_ms": 7325.142899993807,
+        "generator_usage": {
+          "cost_usd": 0.00021786,
+          "input_tokens": 3778,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 6106,
+        "judge_latency_ms": 8102.615100098774,
+        "judge_usage": {
+          "cost_usd": 0.014439,
+          "input_tokens": 2328,
+          "output_tokens": 497,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 15427.758000092581,
+        "output_tokens": 1301,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa03",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin is a pentapeptide that displays high growth hormone releasing potency and efficacy in vitro and in vivo."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin released GH from primary rat pituitary cells with a potency and efficacy similar to GHRP-6."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin stimulates GH release via a GHRP-like receptor."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "In conscious swine, ipamorelin released GH with an ED50 of 2.3 nmol/kg."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "Ipamorelin dose-dependently increased longitudinal bone growth rate in adult female rats."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "Ipamorelin increased growth hormone release in rats as demonstrated by plasma GH response to a provocative dose."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "Chronic treatment with ipamorelin in young female rats increased the volume density of secretion granules in somatotroph cells."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "In vitro treatment with ipamorelin increased the percentage of somatotroph cells in the ipamorelin-pretreated group."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Ipamorelin induces the release of GH at all dose levels tested in human volunteers."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "The concentration of ipamorelin required for half-maximal GH stimulation (SC50) was 214 nmol/L in human volunteers."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts regarding whether ipamorelin increases growth hormone."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01579974,
+        "generator_latency_ms": 7595.809199963696,
+        "generator_usage": {
+          "cost_usd": 0.00023574000000000002,
+          "input_tokens": 4374,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 7152,
+        "judge_latency_ms": 8799.818300059997,
+        "judge_usage": {
+          "cost_usd": 0.015564,
+          "input_tokens": 2778,
+          "output_tokens": 482,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 16395.627500023693,
+        "output_tokens": 1286,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa04",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "Tesamorelin reduces visceral adipose tissue (belly fat) in HIV-infected patients with central fat accumulation."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Tesamorelin reduced VAT by approximately 18% over 12 months in HIV-infected patients."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "Tesamorelin does not significantly affect subcutaneous abdominal fat."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3
+            ],
+            "supported": true,
+            "text": "The belly fat reduction from tesamorelin is lost when treatment is discontinued."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "Tesamorelin is the first and only treatment indicated for reduction of excess abdominal fat in HIV-associated lipodystrophy."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": false
+      },
+      "metadata": {
+        "cost_usd": 0.01104906,
+        "generator_latency_ms": 6806.441600085236,
+        "generator_usage": {
+          "cost_usd": 0.00022206,
+          "input_tokens": 3918,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 6372,
+        "judge_latency_ms": 4675.862199976109,
+        "judge_usage": {
+          "cost_usd": 0.010827,
+          "input_tokens": 2454,
+          "output_tokens": 231,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11482.303800061345,
+        "output_tokens": 1035,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa05",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Developmental exposure to Epitalon significantly increased the lifespan of adult fruit flies (imagoes) by 11-16%."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Epitalon was added only at the developmental stage (from egg to larva) in the Drosophila melanogaster study."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The lifespan increase did not depend on the substance dose."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Effective concentrations of epitalon were 16,000-80,000,000 times lower than those of melatonin."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.00965592,
+        "generator_latency_ms": 6257.018300006166,
+        "generator_usage": {
+          "cost_usd": 0.00020592,
+          "input_tokens": 3380,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 5595,
+        "judge_latency_ms": 3347.368200076744,
+        "judge_usage": {
+          "cost_usd": 0.00945,
+          "input_tokens": 2215,
+          "output_tokens": 187,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 9604.38650008291,
+        "output_tokens": 991,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa06",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c is a mitochondrial-derived peptide and regulator of metabolic homeostasis."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Circulating MOTS-c levels are significantly higher in obese individuals compared to lean individuals."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "BMI and HOMA-IR independently predicted elevated MOTS-c levels."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Despite significant BMI improvements after bariatric surgery, circulating MOTS-c levels remained unchanged."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "MOTS-c may represent a compensatory metabolic response in obesity and insulin-resistant states."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c improves insulin sensitivity and reduces body weight and fatty liver in diet-induced obese mice."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c reduces sphingolipid metabolism, monoacylglycerol metabolism, and dicarboxylate metabolism pathways in mice, which are upregulated in obese and T2D models."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "MOTS-c acts as an exercise mimetic, leading to adaptations similar to physical activity including weight loss, increased antioxidant capacity, and improved insulin sensitivity."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "MOTS-c did not prevent total body weight or fat loss in C26 tumor-bearing mice with cachexia."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "MOTS-c partially preserved skeletal muscle mass in a cancer cachexia mouse model."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01322124,
+        "generator_latency_ms": 4645.956900087185,
+        "generator_usage": {
+          "cost_usd": 9.924e-05,
+          "input_tokens": 1566,
+          "output_tokens": 402,
+          "provider": "Alibaba",
+          "provider_calls": 4
+        },
+        "input_tokens": 3685,
+        "judge_latency_ms": 6564.093199907802,
+        "judge_usage": {
+          "cost_usd": 0.013122,
+          "input_tokens": 2119,
+          "output_tokens": 451,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11210.050099994987,
+        "output_tokens": 853,
+        "provider": "OpenRouter",
+        "provider_calls": 5,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa07",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3
+            ],
+            "supported": true,
+            "text": "PT-141 is a cyclic heptapeptide melanocortin analogue that acts as a melanocortin receptor agonist."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "PT-141 administration resulted in a statistically significant erectile response compared to placebo at doses greater than 7 mg in both healthy subjects and Viagra-responsive ED patients."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Co-administration of intranasal PT-141 and sildenafil produced a significantly greater erectile response than sildenafil alone in men with erectile dysfunction."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "Subcutaneous PT-141 produced a statistically significant erectile response in ED patients who had an inadequate response to Viagra."
+          },
+          {
+            "citation_ids": [
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "PT-141 was safe and well tolerated across multiple studies, with flushing and nausea being the most common adverse events."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "PT-141 activates neurons in the hypothalamus and works through central nervous system melanocortin receptors (MC3R and MC4R)."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Palatin was developing PT-141 as a nasal spray for erectile dysfunction and had completed a phase IIb trial by September 2003."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts regarding PT-141 helping with erectile dysfunction."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01170138,
+        "generator_latency_ms": 7174.5488999877125,
+        "generator_usage": {
+          "cost_usd": 0.00019038,
+          "input_tokens": 2862,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 4699,
+        "judge_latency_ms": 6255.996900028549,
+        "judge_usage": {
+          "cost_usd": 0.011511,
+          "input_tokens": 1837,
+          "output_tokens": 400,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 13430.545800016262,
+        "output_tokens": 1204,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa08",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              4,
+              5
+            ],
+            "supported": false,
+            "text": "The answer states there is insufficient evidence in the retrieved research abstracts regarding BPC-157 in experimental stomach and duodenal ulcer models."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.00801474,
+        "generator_latency_ms": 6929.248099913821,
+        "generator_usage": {
+          "cost_usd": 0.00021474,
+          "input_tokens": 3674,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 5914,
+        "judge_latency_ms": 2738.6355000780895,
+        "judge_usage": {
+          "cost_usd": 0.0078,
+          "input_tokens": 2240,
+          "output_tokens": 72,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 9667.88359999191,
+        "output_tokens": 876,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa09",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Intra-articular GHK-Cu resulted in a smaller side-to-side difference in knee laxity compared to the saline group at 6 weeks post-ACL reconstruction (p=0.009)."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "There was no significant difference in knee laxity between GHK-Cu and saline groups at 12 weeks post-operation."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The 0.3 mg/ml GHK-Cu group had higher graft stiffness than the saline group at 6 weeks post-operation (p=0.026)."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "There was no significant difference in ultimate load, gait parameters, or histological scores among treatment groups."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "All grafts failed mid-substance during the pull-out test."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The beneficial effects of GHK-Cu on graft healing could not last after treatment was discontinued."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Post-operational intra-articular injections were given from week 2, once a week, for 4 weeks."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": false
+      },
+      "metadata": {
+        "cost_usd": 0.013210020000000001,
+        "generator_latency_ms": 7056.44499999471,
+        "generator_usage": {
+          "cost_usd": 0.00022602,
+          "input_tokens": 4050,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 6693,
+        "judge_latency_ms": 5281.238700030372,
+        "judge_usage": {
+          "cost_usd": 0.012984,
+          "input_tokens": 2643,
+          "output_tokens": 337,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 12337.683700025082,
+        "output_tokens": 1141,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa10",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "The answer states there is insufficient evidence in the retrieved research abstracts to determine the safest effective BPC-157 dose for healing a human tendon injury."
+          },
+          {
+            "citation_ids": [
+              1,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "BPC-157 has been studied in rat models for tendon healing, not in human clinical trials for tendon injury."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "No specific safe and effective dose for human tendon injury has been established in the provided evidence."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01077846,
+        "generator_latency_ms": 6802.740599960089,
+        "generator_usage": {
+          "cost_usd": 0.00023646,
+          "input_tokens": 4398,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 7062,
+        "judge_latency_ms": 4761.247199960053,
+        "judge_usage": {
+          "cost_usd": 0.010542,
+          "input_tokens": 2664,
+          "output_tokens": 170,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11563.987799920142,
+        "output_tokens": 974,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa16",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "The retrieved evidence does not contain any studies comparing injectable GHK-Cu to topical GHK-Cu for reversing human skin aging."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "There is insufficient evidence in the retrieved abstracts to determine whether injectable GHK-Cu reverses human skin aging better than topical GHK-Cu."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.0089394,
+        "generator_latency_ms": 7409.637799952179,
+        "generator_usage": {
+          "cost_usd": 0.0002064,
+          "input_tokens": 3396,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 5642,
+        "judge_latency_ms": 3692.5280999857932,
+        "judge_usage": {
+          "cost_usd": 0.008733,
+          "input_tokens": 2246,
+          "output_tokens": 133,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11102.165899937972,
+        "output_tokens": 937,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa17",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "The retrieved research abstracts do not contain evidence from human clinical trials on TB-500 speeding recovery after surgery in humans."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 has been studied in a rat model of Achilles tendon repair, showing improved biomechanical and histopathological outcomes compared to controls."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 demonstrated a statistically significant biomechanical advantage (higher maximum load to failure) at four weeks in a rat tendon repair model."
+          },
+          {
+            "citation_ids": [
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "TB-500 metabolites and wound healing activity have been studied in vitro and in rats, but not in humans post-surgery."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "TB-500 has been studied in the context of equine doping control, not human surgical recovery."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.0114618,
+        "generator_latency_ms": 7898.4119000379,
+        "generator_usage": {
+          "cost_usd": 0.00022679999999999998,
+          "input_tokens": 4076,
+          "output_tokens": 804,
+          "provider": "Alibaba",
+          "provider_calls": 2
+        },
+        "input_tokens": 6536,
+        "judge_latency_ms": 5938.831600011326,
+        "judge_usage": {
+          "cost_usd": 0.011235,
+          "input_tokens": 2460,
+          "output_tokens": 257,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 13837.243500049226,
+        "output_tokens": 1061,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "qwen/qwen3.7-flash",
+      "qa_id": "qa18",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "The evidence provided does not include a rat model of liver injury that directly reports the effect of BPC\u2011157 on liver injury. Therefore, I cannot answer the question based on the supplied evidence."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "supported": false,
+            "text": "The answer states that the evidence does not include a rat model of liver injury that directly reports the effect of BPC-157 on liver injury."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.00801286,
+        "generator_latency_ms": 3377.0057999063283,
+        "generator_usage": {
+          "cost_usd": 8.686e-05,
+          "input_tokens": 1669,
+          "output_tokens": 283,
+          "provider": "CoreWeave",
+          "provider_calls": 1
+        },
+        "input_tokens": 3941,
+        "judge_latency_ms": 3082.7066000783816,
+        "judge_usage": {
+          "cost_usd": 0.007926,
+          "input_tokens": 2272,
+          "output_tokens": 74,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 6459.71239998471,
+        "output_tokens": 357,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa01",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "insufficient_evidence"
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "GHK-Cu increases hair follicle size according to a review of tissue remodeling processes."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "GHK-Cu improves hair transplant success."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "GHK-Cu is described as a powerful hair growth promoter with minimal side effects compared to minoxidil and finasteride."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "A topical IL-microemulsion system delivering GHK-Cu showed effectiveness in promoting hair growth in mice experiments."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "GHK-Cu is extensively utilized in hair care formulations."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "supported": false,
+            "text": "There is sufficient clinical evidence from controlled human trials that GHK or GHK-Cu can regrow hair."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01119551,
+        "generator_latency_ms": 2683.3939000498503,
+        "generator_usage": {
+          "cost_usd": 8.051e-05,
+          "input_tokens": 1865,
+          "output_tokens": 168,
+          "provider": "Parasail",
+          "provider_calls": 1
+        },
+        "input_tokens": 4320,
+        "judge_latency_ms": 5083.487399970181,
+        "judge_usage": {
+          "cost_usd": 0.011115,
+          "input_tokens": 2455,
+          "output_tokens": 250,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 7766.881300020032,
+        "output_tokens": 418,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa02",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence to answer the question."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 demonstrated a significant biomechanical advantage (higher maximum load to failure) in Achilles tendon healing in rats compared to controls."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 showed significantly improved histopathological parameters including tendon architecture, collagen alignment, and reduced degenerative changes in a rat Achilles tendon model."
+          },
+          {
+            "citation_ids": [
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "TB-500 has wound healing activity in vitro, though this activity may be attributable to its metabolite Ac-LKKTE rather than the parent form."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Thymosin beta4 (the parent molecule of TB-500) enhanced wound healing in rats, producing better organized collagen fibers and minimal scarring."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": false,
+            "text": "There is insufficient evidence to answer whether TB-500 helps injuries or wounds heal."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01126199,
+        "generator_latency_ms": 8097.542600007728,
+        "generator_usage": {
+          "cost_usd": 0.00020398999999999998,
+          "input_tokens": 3502,
+          "output_tokens": 596,
+          "provider": "multiple",
+          "provider_calls": 2
+        },
+        "input_tokens": 5828,
+        "judge_latency_ms": 5229.652300011367,
+        "judge_usage": {
+          "cost_usd": 0.011058,
+          "input_tokens": 2326,
+          "output_tokens": 272,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 13327.194900019094,
+        "output_tokens": 868,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa03",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "The evidence provided does not conclusively demonstrate that ipamorelin increases growth hormone levels in humans."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin is a pentapeptide with high GH releasing potency and efficacy in vitro and in vivo."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin released GH from primary rat pituitary cells with potency and efficacy similar to GHRP-6 in vitro."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin released GH in pentobarbital anaesthetised rats with potency and efficacy comparable to GHRP-6."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin released GH in conscious swine similarly to GHRP-6."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "Ipamorelin dose-dependently increased longitudinal bone growth rate in adult female rats."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Ipamorelin induced GH release in human volunteers at all dose levels tested."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "The evidence provided does not conclusively demonstrate that ipamorelin increases growth hormone levels in humans."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01307816,
+        "generator_latency_ms": 1868.5641000047326,
+        "generator_usage": {
+          "cost_usd": 0.00010916,
+          "input_tokens": 2174,
+          "output_tokens": 148,
+          "provider": "Novita",
+          "provider_calls": 1
+        },
+        "input_tokens": 4962,
+        "judge_latency_ms": 6051.633200026117,
+        "judge_usage": {
+          "cost_usd": 0.012969,
+          "input_tokens": 2788,
+          "output_tokens": 307,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 7920.19730003085,
+        "output_tokens": 455,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa04",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "Tesamorelin reduces visceral adipose tissue (belly fat) in HIV-infected patients with central fat accumulation."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Tesamorelin reduced VAT by approximately 18% over 12 months in HIV-infected patients."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "Tesamorelin does not significantly affect subcutaneous abdominal fat."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3
+            ],
+            "supported": true,
+            "text": "The belly fat reduction from tesamorelin is lost when treatment is discontinued."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "Tesamorelin is the first and only treatment indicated for reduction of excess abdominal fat in HIV-associated lipodystrophy."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": false
+      },
+      "metadata": {
+        "cost_usd": 0.01102744,
+        "generator_latency_ms": 7175.792799913324,
+        "generator_usage": {
+          "cost_usd": 0.00020044,
+          "input_tokens": 3811,
+          "output_tokens": 312,
+          "provider": "multiple",
+          "provider_calls": 2
+        },
+        "input_tokens": 6265,
+        "judge_latency_ms": 4642.758500063792,
+        "judge_usage": {
+          "cost_usd": 0.010827,
+          "input_tokens": 2454,
+          "output_tokens": 231,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11818.551299977116,
+        "output_tokens": 543,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa05",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "insufficient_evidence"
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [],
+            "supported": true,
+            "text": "The answer provided is 'insufficient_evidence', meaning no conclusion was drawn about the effect of developmental exposure to Epitalon on adult fruit-fly lifespan."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Evidence document [1] reports that Epitalon added to culture medium only at the developmental stage (from egg to larva) significantly increased the lifespan of adult Drosophila melanogaster imagoes by 11-16%."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.00877057,
+        "generator_latency_ms": 4488.510400056839,
+        "generator_usage": {
+          "cost_usd": 7.657e-05,
+          "input_tokens": 1660,
+          "output_tokens": 187,
+          "provider": "Parasail",
+          "provider_calls": 1
+        },
+        "input_tokens": 3868,
+        "judge_latency_ms": 3210.4220000328496,
+        "judge_usage": {
+          "cost_usd": 0.008694,
+          "input_tokens": 2208,
+          "output_tokens": 138,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 7698.932400089689,
+        "output_tokens": 325,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa06",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c is a mitochondrial-derived peptide and regulator of metabolic homeostasis."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Circulating MOTS-c levels are significantly higher in obese individuals compared to lean individuals."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "BMI and HOMA-IR independently predicted elevated MOTS-c levels."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Despite significant BMI improvements after bariatric surgery, circulating MOTS-c levels remained unchanged."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "MOTS-c may represent a compensatory metabolic response in obesity and insulin-resistant states."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c improves insulin sensitivity and reduces body weight and fatty liver in diet-induced obese mice."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c reduces sphingolipid metabolism, monoacylglycerol metabolism, and dicarboxylate metabolism pathways in mice, which are upregulated in obese and T2D models."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "MOTS-c is described as an exercise mimetic that leads to adaptations similar to physical activity, including weight loss, increased antioxidant capacity, and improved insulin sensitivity."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "MOTS-c did not prevent total body weight or fat loss in C26 tumor-bearing mice with cachexia."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts to answer whether MOTS-c helps with weight loss or metabolism in humans."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.013750465,
+        "generator_latency_ms": 13269.505600095727,
+        "generator_usage": {
+          "cost_usd": 0.000508465,
+          "input_tokens": 6132,
+          "output_tokens": 1508,
+          "provider": "multiple",
+          "provider_calls": 4
+        },
+        "input_tokens": 8251,
+        "judge_latency_ms": 6466.636100085452,
+        "judge_usage": {
+          "cost_usd": 0.013242,
+          "input_tokens": 2119,
+          "output_tokens": 459,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 19736.14170018118,
+        "output_tokens": 1967,
+        "provider": "OpenRouter",
+        "provider_calls": 5,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa07",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3
+            ],
+            "supported": true,
+            "text": "PT-141 is a cyclic heptapeptide melanocortin analogue that acts as a melanocortin receptor agonist."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "PT-141 administration resulted in a statistically significant erectile response compared to placebo at doses greater than 7 mg in erectile dysfunction patients."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Co-administration of intranasal PT-141 and sildenafil produced a significantly greater erectile response than sildenafil alone in erectile dysfunction patients."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "Subcutaneous PT-141 produced a statistically significant erectile response in ED patients who had an inadequate response to Viagra."
+          },
+          {
+            "citation_ids": [
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "PT-141 was safe and well tolerated in clinical studies, with flushing and nausea being the most common adverse events."
+          },
+          {
+            "citation_ids": [
+              2,
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "PT-141 holds promise as a new treatment for sexual dysfunction based on its erectogenic potential and tolerability profile."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts regarding PT-141 helping with erectile dysfunction."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.010802039999999999,
+        "generator_latency_ms": 6290.198300033808,
+        "generator_usage": {
+          "cost_usd": 0.00020604,
+          "input_tokens": 2736,
+          "output_tokens": 762,
+          "provider": "multiple",
+          "provider_calls": 2
+        },
+        "input_tokens": 4573,
+        "judge_latency_ms": 5548.510399996303,
+        "judge_usage": {
+          "cost_usd": 0.010596,
+          "input_tokens": 1837,
+          "output_tokens": 339,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11838.70870003011,
+        "output_tokens": 1101,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa08",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "insufficient_evidence."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              4,
+              5
+            ],
+            "supported": false,
+            "text": "The answer claims there is insufficient evidence regarding what rat studies report about BPC-157 in experimental stomach and duodenal ulcer models."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": false
+      },
+      "metadata": {
+        "cost_usd": 0.00785015,
+        "generator_latency_ms": 5812.836299999617,
+        "generator_usage": {
+          "cost_usd": 8.315e-05,
+          "input_tokens": 1703,
+          "output_tokens": 229,
+          "provider": "DeepInfra",
+          "provider_calls": 1
+        },
+        "input_tokens": 3937,
+        "judge_latency_ms": 2400.319399894215,
+        "judge_usage": {
+          "cost_usd": 0.007767,
+          "input_tokens": 2234,
+          "output_tokens": 71,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 8213.155699893832,
+        "output_tokens": 300,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa09",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "insufficient_evidence."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Intra-articular GHK-Cu resulted in a smaller side-to-side difference in knee laxity compared to saline at 6 weeks post-ACLR (p=0.009), but not at 12 weeks."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The 0.3 mg/ml GHK-Cu group had higher graft stiffness than the saline group at 6 weeks post-operation (p=0.026)."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "There was no significant difference in ultimate load, gait parameters, or histological scores among treatment groups."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "All grafts failed mid-substance during pull-out testing."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The beneficial effects of GHK-Cu on graft healing could not be sustained after treatment was discontinued."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.011834969999999998,
+        "generator_latency_ms": 1621.1528000421822,
+        "generator_usage": {
+          "cost_usd": 8.397e-05,
+          "input_tokens": 1987,
+          "output_tokens": 174,
+          "provider": "DeepInfra",
+          "provider_calls": 1
+        },
+        "input_tokens": 4624,
+        "judge_latency_ms": 5782.446000026539,
+        "judge_usage": {
+          "cost_usd": 0.011751,
+          "input_tokens": 2637,
+          "output_tokens": 256,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 7403.598800068721,
+        "output_tokens": 430,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa10",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence to determine a safe and effective BPC\u2011157 dose for healing a human tendon injury."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              3,
+              1
+            ],
+            "supported": true,
+            "text": "BPC-157 has been studied in rat models for tendon healing, including transected Achilles tendon."
+          },
+          {
+            "citation_ids": [
+              3,
+              2
+            ],
+            "supported": true,
+            "text": "No human clinical trial data on BPC-157 dosing for tendon injury healing exists in the provided evidence."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "Animal studies used doses of 10 microg, 10 ng, or 10 pg per kg body weight intraperitoneally in rats."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "BPC-157 has a very safe profile with lethal dose not achieved and a wide effective range (\u03bcg-ng regimens) in animal studies."
+          },
+          {
+            "citation_ids": [
+              3,
+              5
+            ],
+            "supported": true,
+            "text": "BPC-157 is currently in or has undergone clinical trials for inflammatory bowel disease, not tendon injury."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "There is insufficient evidence to determine a safe and effective BPC-157 dose for healing a human tendon injury."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.012582050000000001,
+        "generator_latency_ms": 3201.3996000168845,
+        "generator_usage": {
+          "cost_usd": 0.00010805,
+          "input_tokens": 2063,
+          "output_tokens": 312,
+          "provider": "Parasail",
+          "provider_calls": 1
+        },
+        "input_tokens": 4741,
+        "judge_latency_ms": 7062.140399939381,
+        "judge_usage": {
+          "cost_usd": 0.012474,
+          "input_tokens": 2678,
+          "output_tokens": 296,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 10263.539999956265,
+        "output_tokens": 608,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa16",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "There is no evidence comparing the efficacy of injectable versus topical GHK\u2011Cu for reversing human skin aging. The available studies describe topical application, liposomal delivery, and combination formulations, but none report on injectable administration or a direct comparison of the two routes of delivery. Therefore, insufficient evidence exists to answer the question."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "There is no evidence comparing the efficacy of injectable versus topical GHK-Cu for reversing human skin aging."
+          },
+          {
+            "citation_ids": [
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "Available studies describe topical application of GHK-Cu."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "Available studies describe liposomal delivery of GHK-Cu."
+          },
+          {
+            "citation_ids": [
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "Available studies describe combination formulations of GHK-Cu."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "None of the available studies report on injectable administration of GHK-Cu."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "None of the available studies report a direct comparison of injectable versus topical routes of delivery for GHK-Cu."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01080563,
+        "generator_latency_ms": 1978.454799973406,
+        "generator_usage": {
+          "cost_usd": 7.163e-05,
+          "input_tokens": 1664,
+          "output_tokens": 167,
+          "provider": "CoreWeave",
+          "provider_calls": 1
+        },
+        "input_tokens": 3972,
+        "judge_latency_ms": 4735.119400080293,
+        "judge_usage": {
+          "cost_usd": 0.010734,
+          "input_tokens": 2308,
+          "output_tokens": 254,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 6713.574200053699,
+        "output_tokens": 421,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa17",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "insufficient_evidence"
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 has been studied in a rat model of Achilles tendon repair, not in humans after surgery."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "In rats, TB-500 was associated with improved histopathological parameters and a statistically significant biomechanical advantage (higher maximum load to failure) at four weeks post-surgery."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "No human clinical trials or human surgical recovery studies on TB-500 are present in the evidence."
+          },
+          {
+            "citation_ids": [
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "TB-500's wound healing activity in vitro may be due to its metabolite Ac-LKKTE rather than the parent compound."
+          },
+          {
+            "citation_ids": [
+              5,
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 has been studied primarily in equine doping control and animal models, with no documented human post-surgical recovery evidence."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01137056,
+        "generator_latency_ms": 1129.7644000733271,
+        "generator_usage": {
+          "cost_usd": 6.656e-05,
+          "input_tokens": 1872,
+          "output_tokens": 80,
+          "provider": "CoreWeave",
+          "provider_calls": 1
+        },
+        "input_tokens": 4325,
+        "judge_latency_ms": 5996.411699918099,
+        "judge_usage": {
+          "cost_usd": 0.011304,
+          "input_tokens": 2453,
+          "output_tokens": 263,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 7126.176099991426,
+        "output_tokens": 343,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa18",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "BPC 157 significantly prevented the development of liver necrosis or fatty changes in rats subjected to 24 h bile duct + hepatic artery ligation, 48 h-restraint stress, and CCl4 treatment."
+          },
+          {
+            "citation_ids": [
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "BPC 157 reduced sinusoidal dilation, necrotic cells, and mononuclear cell infiltration in liver tissue in a rat model of lower-extremity ischemia-reperfusion injury."
+          },
+          {
+            "citation_ids": [
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "BPC 157 increased antioxidant activity (TAS, TOS, OSI, PON-1) in liver tissue following lower extremity ischemia-reperfusion injury in rats."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Laboratory test results for bilirubin, SGOT, and SGPT correlated with macro/microscopical findings in the rat liver injury models treated with BPC 157."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "BPC 157 reduced radiation-induced liver injury by decreasing plasma levels of AST and ALT and inhibiting hydropic degeneration of liver in mice."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "The protective effect of BPC 157 on radiation-induced liver injury was mediated by upregulation of KLF4."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": false
+      },
+      "metadata": {
+        "cost_usd": 0.0127361,
+        "generator_latency_ms": 21509.518299950287,
+        "generator_usage": {
+          "cost_usd": 0.0004931,
+          "input_tokens": 6682,
+          "output_tokens": 1060,
+          "provider": "DeepInfra",
+          "provider_calls": 4
+        },
+        "input_tokens": 8923,
+        "judge_latency_ms": 5774.038700037636,
+        "judge_usage": {
+          "cost_usd": 0.012243,
+          "input_tokens": 2241,
+          "output_tokens": 368,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 27283.556999987923,
+        "output_tokens": 1428,
+        "provider": "OpenRouter",
+        "provider_calls": 5,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa01",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "GHK-Cu increases hair follicle size."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "GHK-Cu improves hair transplant success."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "GHK-Cu is described as a powerful hair growth promoter with minimal side effects compared to minoxidil and finasteride."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "An ionic liquid microemulsion system improved topical delivery of GHK-Cu approximately three-fold and validated effectiveness in mice for hair growth."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "GHK-Cu increased activation of the Wnt/\u03b2-catenin signaling pathway, which includes factors involved in hair growth regulation."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts regarding GHK or GHK-Cu regrowing hair."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.0114678,
+        "generator_latency_ms": 6820.187199977227,
+        "generator_usage": {
+          "cost_usd": 0.0002418,
+          "input_tokens": 3639,
+          "output_tokens": 399,
+          "provider": "DeepInfra",
+          "provider_calls": 2
+        },
+        "input_tokens": 6101,
+        "judge_latency_ms": 7758.507900056429,
+        "judge_usage": {
+          "cost_usd": 0.011226,
+          "input_tokens": 2462,
+          "output_tokens": 256,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 14578.695100033656,
+        "output_tokens": 655,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa02",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 (synthetic thymosin beta-4) demonstrated significantly higher maximum load to failure values in biomechanical testing compared to controls in a rat Achilles tendon healing model."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 showed significantly lower total Bonar scores and Movin scores compared to controls, indicating improved tendon architecture, collagen alignment, and reduced degenerative changes."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 showed increased type I collagen organization and altered type III collagen distribution, suggesting progression toward matrix maturation."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "TB-500 has biological functions including dermal wound healing, angiogenesis, and skin repair."
+          },
+          {
+            "citation_ids": [
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "The wound-healing activity of TB-500 may be due to its metabolite Ac-LKKTE rather than the parent form of TB-500."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Thymosin beta4 (the parent molecule of TB-500) treated incisional wounds in rats healed with minimal scarring, superior organized collagen fibers, and without loss in wound breaking strength."
+          },
+          {
+            "citation_ids": [],
+            "supported": false,
+            "text": "There is insufficient evidence in the retrieved research abstracts regarding TB-500 helping injuries or wounds heal."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01287955,
+        "generator_latency_ms": 12568.735599983484,
+        "generator_usage": {
+          "cost_usd": 0.00037555,
+          "input_tokens": 5291,
+          "output_tokens": 740,
+          "provider": "DeepInfra",
+          "provider_calls": 3
+        },
+        "input_tokens": 7619,
+        "judge_latency_ms": 6391.446199966595,
+        "judge_usage": {
+          "cost_usd": 0.012504,
+          "input_tokens": 2328,
+          "output_tokens": 368,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 18960.181799950078,
+        "output_tokens": 1108,
+        "provider": "OpenRouter",
+        "provider_calls": 4,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa03",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "9849822:c0001",
+            "citation_id": 1,
+            "pmid": "9849822",
+            "title": "Ipamorelin, the first selective growth hormone secretagogue."
+          },
+          {
+            "chunk_id": "10496658:c0001",
+            "citation_id": 5,
+            "pmid": "10496658",
+            "title": "Pharmacokinetic-pharmacodynamic modeling of ipamorelin, a growth hormone releasing peptide, in human volunteers."
+          }
+        ],
+        "status": "answered",
+        "text": "Yes, ipamorelin increases growth hormone [1]. Ipamorelin is a potent growth hormone (GH) secretagogue [1]. It releases GH from primary rat pituitary cells with a potency and efficacy similar to GHRP-6 [1]. In rats, ipamorelin released GH with a potency and efficacy comparable to GHRP-6 [1]. In conscious swine, ipamorelin released GH [1]. Ipamorelin induces the release of GH at all dose levels [5]."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              5
+            ],
+            "supported": true,
+            "text": "Ipamorelin increases growth hormone."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin is a potent growth hormone (GH) secretagogue."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Ipamorelin releases GH from primary rat pituitary cells with a potency and efficacy similar to GHRP-6."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "In rats, ipamorelin released GH with a potency and efficacy comparable to GHRP-6."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "In conscious swine, ipamorelin released GH."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Ipamorelin induces the release of GH at all dose levels."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.0124285,
+        "generator_latency_ms": 2488.877799944021,
+        "generator_usage": {
+          "cost_usd": 0.0001285,
+          "input_tokens": 2153,
+          "output_tokens": 139,
+          "provider": "DeepInfra",
+          "provider_calls": 1
+        },
+        "input_tokens": 5078,
+        "judge_latency_ms": 4975.19749996718,
+        "judge_usage": {
+          "cost_usd": 0.0123,
+          "input_tokens": 2925,
+          "output_tokens": 235,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 7464.075299911201,
+        "output_tokens": 374,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa04",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "Tesamorelin reduces visceral adipose tissue (belly fat) in HIV-infected patients with central fat accumulation."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Tesamorelin reduced VAT by approximately 18% over 12 months in HIV-infected patients."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "Tesamorelin does not significantly affect subcutaneous abdominal fat."
+          },
+          {
+            "citation_ids": [
+              1,
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "The benefits of tesamorelin on visceral fat are lost upon discontinuation of treatment."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "Tesamorelin is the first and only treatment indicated for reduction of excess abdominal fat in HIV-associated lipodystrophy."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "Tesamorelin is generally well tolerated without clinically significant changes in glucose parameters."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01173555,
+        "generator_latency_ms": 6213.240299955942,
+        "generator_usage": {
+          "cost_usd": 0.00024855,
+          "input_tokens": 3879,
+          "output_tokens": 364,
+          "provider": "DeepInfra",
+          "provider_calls": 2
+        },
+        "input_tokens": 6333,
+        "judge_latency_ms": 5046.843499992974,
+        "judge_usage": {
+          "cost_usd": 0.011487,
+          "input_tokens": 2454,
+          "output_tokens": 275,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11260.083799948916,
+        "output_tokens": 639,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa05",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Developmental exposure to Epitalon significantly increased the lifespan of adult fruit flies (imagoes) by 11-16%."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The lifespan increase was observed when Epitalon was applied only at the developmental stage (from egg to larva)."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The effective concentrations ranged from 0.001\u00d710\u207b\u2076 to 5\u00d710\u207b\u2076 wt.% for males and 0.01\u00d710\u207b\u2076 to 0.1\u00d710\u207b\u2076 wt.% for females."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The increase in lifespan did not depend on the substance dose."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Effective concentrations of Epitalon were 16,000\u201380,000,000 times lower than those of melatonin."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.0113223,
+        "generator_latency_ms": 26631.65370002389,
+        "generator_usage": {
+          "cost_usd": 0.0005673,
+          "input_tokens": 6546,
+          "output_tokens": 1600,
+          "provider": "DeepInfra",
+          "provider_calls": 4
+        },
+        "input_tokens": 8761,
+        "judge_latency_ms": 4471.309999935329,
+        "judge_usage": {
+          "cost_usd": 0.010755,
+          "input_tokens": 2215,
+          "output_tokens": 274,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 31102.96369995922,
+        "output_tokens": 1874,
+        "provider": "OpenRouter",
+        "provider_calls": 5,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa06",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c is a mitochondrial-derived peptide and regulator of metabolic homeostasis."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Circulating MOTS-c levels are significantly higher in obese individuals compared to lean individuals."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "BMI and HOMA-IR independently predicted elevated MOTS-c levels."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Despite significant BMI improvements after bariatric surgery, circulating MOTS-c levels remained unchanged."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c improves insulin sensitivity and reduces body weight and fatty liver in diet-induced obese mice."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "MOTS-c reduces sphingolipid metabolism, monoacylglycerol metabolism, and dicarboxylate metabolism pathways in mice, which are upregulated in obese and T2D models."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "MOTS-c leads to adaptations similar to physical activity including weight loss, increased antioxidant capacity, and improved insulin sensitivity."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "MOTS-c did not prevent total body weight or fat loss in C26 tumor-bearing mice."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": false
+      },
+      "metadata": {
+        "cost_usd": 0.01220245,
+        "generator_latency_ms": 12935.112399980426,
+        "generator_usage": {
+          "cost_usd": 0.00037045,
+          "input_tokens": 4625,
+          "output_tokens": 928,
+          "provider": "DeepInfra",
+          "provider_calls": 3
+        },
+        "input_tokens": 6744,
+        "judge_latency_ms": 5236.86629999429,
+        "judge_usage": {
+          "cost_usd": 0.011832,
+          "input_tokens": 2119,
+          "output_tokens": 365,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 18171.978699974716,
+        "output_tokens": 1293,
+        "provider": "OpenRouter",
+        "provider_calls": 4,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa07",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3
+            ],
+            "supported": true,
+            "text": "PT-141 is a cyclic heptapeptide melanocortin analogue that acts as a melanocortin receptor agonist."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "PT-141 administration resulted in a statistically significant erectile response compared to placebo at doses greater than 7 mg in both healthy subjects and Viagra-responsive ED patients."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Co-administration of intranasal PT-141 and sildenafil produced a significantly greater erectile response than sildenafil alone in men with erectile dysfunction."
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "Subcutaneous PT-141 produced a statistically significant erectile response in ED patients who had an inadequate response to Viagra."
+          },
+          {
+            "citation_ids": [
+              2,
+              4
+            ],
+            "supported": true,
+            "text": "PT-141 was safe and well tolerated in clinical studies, with flushing and nausea being the most common adverse events."
+          },
+          {
+            "citation_ids": [
+              2,
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "PT-141 holds promise as a new treatment for sexual dysfunction based on its erectogenic potential and tolerability profile."
+          },
+          {
+            "citation_ids": [
+              5
+            ],
+            "supported": true,
+            "text": "Palatin was developing PT-141 as a nasal spray for the potential treatment of erectile dysfunction and female sexual dysfunction."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01122965,
+        "generator_latency_ms": 13096.340399933979,
+        "generator_usage": {
+          "cost_usd": 0.00040865,
+          "input_tokens": 5638,
+          "output_tokens": 845,
+          "provider": "DeepInfra",
+          "provider_calls": 4
+        },
+        "input_tokens": 7475,
+        "judge_latency_ms": 5695.310900104232,
+        "judge_usage": {
+          "cost_usd": 0.010821,
+          "input_tokens": 1837,
+          "output_tokens": 354,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 18791.65130003821,
+        "output_tokens": 1199,
+        "provider": "OpenRouter",
+        "provider_calls": 5,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa08",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": false,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              4,
+              5
+            ],
+            "supported": false,
+            "text": "The answer states there is insufficient evidence in the retrieved research abstracts regarding BPC-157 in experimental stomach and duodenal ulcer models."
+          }
+        ],
+        "faithful": false,
+        "refusal_correct": false,
+        "relevant": false
+      },
+      "metadata": {
+        "cost_usd": 0.00836425,
+        "generator_latency_ms": 21453.628199989907,
+        "generator_usage": {
+          "cost_usd": 0.00056425,
+          "input_tokens": 7070,
+          "output_tokens": 1405,
+          "provider": "DeepInfra",
+          "provider_calls": 4
+        },
+        "input_tokens": 9310,
+        "judge_latency_ms": 2656.024600029923,
+        "judge_usage": {
+          "cost_usd": 0.0078,
+          "input_tokens": 2240,
+          "output_tokens": 72,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 24109.65280001983,
+        "output_tokens": 1477,
+        "provider": "OpenRouter",
+        "provider_calls": 5,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa09",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "25731775:c0001",
+            "citation_id": 1,
+            "pmid": "25731775",
+            "title": "Tripeptide-copper complex GHK-Cu (II) transiently improved healing outcome in a rat model of ACL reconstruction."
+          }
+        ],
+        "status": "answered",
+        "text": "Intra-articular GHK-Cu transiently improved healing outcome in a rat model of ACL reconstruction [1]. Specifically, at 6 weeks post-ACLR, GHK-Cu groups resulted in a smaller side-to-side difference in knee laxity as compared to the saline group [1]. The graft complex in the 0.3 mg/ml GHK-Cu group had higher stiffness than the saline group at 6 weeks post-operation [1]. However, the beneficial effects of GHK-Cu could not last as treatment discontinued [1]. All grafts failed mid-substance during the pull-out test [1]."
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "Intra-articular GHK-Cu transiently improved healing outcome in a rat model of ACL reconstruction."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "At 6 weeks post-ACLR, GHK-Cu groups resulted in a smaller side-to-side difference in knee laxity as compared to the saline group."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The graft complex in the 0.3 mg/ml GHK-Cu group had higher stiffness than the saline group at 6 weeks post-operation."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The beneficial effects of GHK-Cu could not last as treatment discontinued."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "All grafts failed mid-substance during the pull-out test."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01223615,
+        "generator_latency_ms": 7350.342999910936,
+        "generator_usage": {
+          "cost_usd": 0.00026915,
+          "input_tokens": 3847,
+          "output_tokens": 512,
+          "provider": "DeepInfra",
+          "provider_calls": 2
+        },
+        "input_tokens": 6646,
+        "judge_latency_ms": 4319.285200093873,
+        "judge_usage": {
+          "cost_usd": 0.011967,
+          "input_tokens": 2799,
+          "output_tokens": 238,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 11669.628200004809,
+        "output_tokens": 750,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa10",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "The answer states there is insufficient evidence in the retrieved research abstracts to determine the safest effective BPC-157 dose for healing a human tendon injury."
+          },
+          {
+            "citation_ids": [
+              1,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "BPC-157 has been studied in rat models for tendon healing, not in human clinical trials for tendon injury."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "No specific safe and effective dose for human tendon injury has been established in the provided evidence."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.010961599999999998,
+        "generator_latency_ms": 12754.625499946997,
+        "generator_usage": {
+          "cost_usd": 0.0004196,
+          "input_tokens": 6262,
+          "output_tokens": 710,
+          "provider": "DeepInfra",
+          "provider_calls": 3
+        },
+        "input_tokens": 8926,
+        "judge_latency_ms": 4576.342400046997,
+        "judge_usage": {
+          "cost_usd": 0.010542,
+          "input_tokens": 2664,
+          "output_tokens": 170,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 17330.967899993993,
+        "output_tokens": 880,
+        "provider": "OpenRouter",
+        "provider_calls": 4,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa16",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "The retrieved research abstracts do not contain evidence comparing injectable GHK-Cu to topical GHK-Cu for reversing human skin aging."
+          },
+          {
+            "citation_ids": [
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "GHK-Cu has been studied primarily in topical, in vitro, and ex vivo contexts for skin anti-aging effects."
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "There is a surprising absence of clinical studies using GHK-Cu and Pal-GHK as topical anti-wrinkle peptides."
+          },
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "No injectable GHK-Cu human skin aging studies are described in the retrieved abstracts."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01024185,
+        "generator_latency_ms": 7384.198400075547,
+        "generator_usage": {
+          "cost_usd": 0.00023385000000000002,
+          "input_tokens": 3219,
+          "output_tokens": 486,
+          "provider": "DeepInfra",
+          "provider_calls": 2
+        },
+        "input_tokens": 5465,
+        "judge_latency_ms": 5146.297800005414,
+        "judge_usage": {
+          "cost_usd": 0.010008,
+          "input_tokens": 2246,
+          "output_tokens": 218,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 12530.496200080961,
+        "output_tokens": 704,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa17",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "supported": true,
+            "text": "The retrieved research abstracts do not contain evidence from human clinical trials on TB-500 speeding recovery after surgery in humans."
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "TB-500 improved histopathological parameters and biomechanical outcomes in a rat Achilles tendon repair model."
+          },
+          {
+            "citation_ids": [
+              2,
+              3,
+              5
+            ],
+            "supported": true,
+            "text": "TB-500 has been studied in rats and horses, and in vitro, but not in human surgical recovery contexts in the available evidence."
+          },
+          {
+            "citation_ids": [
+              3,
+              4
+            ],
+            "supported": true,
+            "text": "TB-500's wound healing activity in vitro may be attributable to its metabolite Ac-LKKTE rather than the parent compound."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "metadata": {
+        "cost_usd": 0.01088065,
+        "generator_latency_ms": 8432.977700023912,
+        "generator_usage": {
+          "cost_usd": 0.00027565,
+          "input_tokens": 3827,
+          "output_tokens": 562,
+          "provider": "DeepInfra",
+          "provider_calls": 2
+        },
+        "input_tokens": 6287,
+        "judge_latency_ms": 5228.872500010766,
+        "judge_usage": {
+          "cost_usd": 0.010605,
+          "input_tokens": 2460,
+          "output_tokens": 215,
+          "provider": "Anthropic",
+          "provider_calls": 1
+        },
+        "latency_ms": 13661.850200034678,
+        "output_tokens": 777,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "google/gemma-3-12b-it",
+      "qa_id": "qa18",
+      "structurally_valid": true
+    }
+  ]
+}
