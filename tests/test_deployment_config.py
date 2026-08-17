@@ -41,8 +41,11 @@ class DeploymentConfigTests(unittest.TestCase):
         self.assertIn("docs/architecture-overview.svg", readme)
         self.assertIn("docs/architecture-overview.svg", social)
         self.assertIn("answered faithfulness .900", svg)
-        self.assertIn("QA holdout remains untouched", svg)
-        self.assertIn("deploy after gates", svg)
+        self.assertIn("holdout faithfulness 1.000", svg)
+        self.assertIn("5 answers · 2 refusals", svg)
+        self.assertIn("live · smoke passed", svg)
+        self.assertNotIn("labels pending", svg)
+        self.assertNotIn("QA holdout remains untouched", svg)
         self.assertNotIn("Sections 1–2 complete", svg)
 
     def test_ranked_search_screenshot_is_a_real_jpeg_submission_asset(self):
@@ -56,6 +59,29 @@ class DeploymentConfigTests(unittest.TestCase):
         attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8")
         self.assertIn("*.jpg binary", attributes)
         self.assertIn("*.jpeg binary", attributes)
+
+    def test_live_release_evidence_is_machine_readable_and_secret_free(self):
+        measurement = json.loads(
+            (ROOT / "artifacts/section6/railway_release_measurement.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        smoke = json.loads(
+            (ROOT / "artifacts/section6/deployment_smoke.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(measurement["schema_version"], 1)
+        self.assertEqual(measurement["service"]["deployment_status"], "SUCCESS")
+        self.assertEqual(measurement["http"]["status_5xx"], 0)
+        self.assertGreater(measurement["memory"]["max_mb"], 0)
+        self.assertEqual(smoke["git_commit"], measurement["release"]["git_commit"])
+        self.assertEqual(smoke["deployment_id"], measurement["service"]["deployment_id"])
+        self.assertEqual(smoke["checks"]["search_rate_limit_http_429_probe"], 30)
+        self.assertEqual(smoke["checks"]["model_originated_refusal"], "pass")
+        serialized = json.dumps({"measurement": measurement, "smoke": smoke}).casefold()
+        self.assertNotIn("openrouter_api_key", serialized)
+        self.assertNotIn("sk-or-", serialized)
 
 
 if __name__ == "__main__":

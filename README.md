@@ -29,9 +29,11 @@ Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 
 - [x] Three-model development bake-off preserved and reanalyzed as a negative result
 - [x] GPT-only v2.2 through v2.5 diagnostics measured; v2.4 and v2.5 reached 10/10 answerable, 3/3 correct refusals, and 13/13 structural validity
 - [x] Claude judge-v2 development run completed for v2.5: 0.900 answered-only faithfulness, 1.000 relevancy, 0.900 citation correctness, and 1.000 correct refusal
-- [x] Blind, evidence-bound 10-output owner worksheet frozen with oracle answers, answerability targets, and Claude verdicts hidden
-- [ ] Owner judge labeling, untouched QA holdout, and public Railway deployment
-- [x] Section 6 offline release-check, CI, self-evaluation, cost, and Railway config foundations
+- [x] Blind, evidence-bound 10-output owner validation: 10/10 agreement with Claude; kappa undefined because labels had no variation
+- [x] Untouched QA holdout: 5/5 answerable, 2/2 correct refusals, 7/7 structural; faithfulness, relevancy, citation correctness, correct answer, and correct refusal all 1.0
+- [x] Accepted generator `openai/gpt-oss-20b` with judge `anthropic/claude-sonnet-4.6`
+- [x] Section 6 release evidence: `run_project.py` passes all gates; deployed-runtime CI run `32071964692` passed 307 tests, and the final documentation/evidence suite passes 308 tests locally
+- [x] Public Railway deployment: [peptide-rag-production.up.railway.app](https://peptide-rag-production.up.railway.app)
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
 
@@ -169,10 +171,9 @@ python run_project.py
 
 It makes no network or paid calls. It verifies the frozen core hashes, rebuilds
 the index, recomputes Boolean/BM25 metrics, validates every committed chunk
-manifest, replays the development bake-off from saved outputs, and labels the
-owner-validation/holdout gate as `TBD` instead of inventing a pass. `python
-run_project.py --live-eval` is a readiness check only; it never calls a
-provider.
+manifest, and replays the saved generator, judge-validation, and holdout
+evidence. The final offline run passes every gate. `python run_project.py
+--live-eval` remains a readiness check only; it never calls a provider.
 
 ## Section 5 RAG workflow
 
@@ -274,25 +275,29 @@ faithfulness, `1.000` relevancy, `0.900` citation correctness, and `1.000`
 correct refusal. The remaining qa08 failure is an over-citation: citation 4 does
 not independently support every clause in a sentence also supported by
 citations 1 and 2. Claude Opus returned `PASS` on the corrected judge-v2 evidence
-chain before that paid run. Owner validation and holdout remain pending.
+chain before that paid run. The blind owner validation then achieved 10/10
+agreement with the Claude judge; Cohen's kappa is undefined because the labels
+had no variation, so the disclosed raw-agreement fallback applies.
 
-The bridge to holdout is hash-bound end to end: the accepted-selection artifact
-requires the exact v2.5 10/3/13 generator result, complete judge-v2 evidence,
-and a passing blind owner report. Context export is one-shot and refuses an
-existing target. The holdout runner then requires that selection, its exact
-prompt/model/catalog hashes, and those frozen contexts; it has no overwrite
-mode. It atomically checkpoints each completed generator+judge pair to a
-hash-bound partial journal; after an interruption, repeat the exact live command
-with `--resume-partial` so completed cases are validated and skipped. It saves
-an owner-cap-checked worst-case reservation before every attempted case, saves
-all seven raw rows even when the preregistered quality thresholds fail, and only
-writes the final generator configuration after offline replay passes. A crashed
-post-call finalization can use `--finalize-saved` without making another paid
-call. Ordinary offline reruns make no provider calls. The
+The completed bridge to holdout is hash-bound end to end. The accepted selection
+is `openai/gpt-oss-20b`, judged by `anthropic/claude-sonnet-4.6`; the untouched
+holdout passed 5/5 answerable cases, 2/2 correct refusals, and all 7/7
+structural checks. Faithfulness, relevancy, citation correctness, correct
+answer, and correct refusal each measured 1.0. Its p95 latency was 8445.535 ms
+and actual holdout cost was `$0.06478416`. The runner retains its one-shot,
+hash-bound contexts and partial-journal recovery behavior, while ordinary
+offline reruns make no provider calls. The
 independent Section 5/6 code audit and resolution trail is saved in
 [`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md),
 with the final release-hardening audit in
 [`artifacts/section6/claude_opus_release_review.md`](artifacts/section6/claude_opus_release_review.md).
+The final documentation/evidence audit and its correction trail are saved in
+[`artifacts/section6/claude_opus_final_docs_review.md`](artifacts/section6/claude_opus_final_docs_review.md).
+
+Initial public smoke exposed a valid-refusal edge case: an optional
+reconsideration failure could discard a safe validated refusal. PR #8 fixes it
+by retaining the safe refusal and recording the failed reconsideration. Prompts,
+retrieval, and the untouched holdout were not changed.
 
 The local application is available without provider credentials:
 
@@ -306,9 +311,20 @@ to a cache matching the selected chunk artifact. Grounded Q&A fails closed as
 retrieval-only until that measured configuration exists; `OPENROUTER_API_KEY`
 is server-side only.
 
-`railway.json` now pins Railpack, the `$PORT` start command, `/healthz`, and a
-bounded restart policy. This is deployment packaging, not a deployment claim:
-no Railway project, public domain, or Railway secret has been created yet.
+The public Railway deployment is
+[https://peptide-rag-production.up.railway.app](https://peptide-rag-production.up.railway.app)
+from main commit `4c709558dd0796a416022eeebf7436259927e0de` (deployment
+`37dcb82b-a1cd-4524-ae52-ecc5481c34c3`, status `SUCCESS`). `railway.json` pins
+Railpack, the `$PORT` start command, `/healthz`, and a bounded restart policy.
+Public smoke passed health, metrics, same-origin behavior, BM25, a grounded
+answer with two citations, a model-originated `qa17` refusal, and controlled
+rate limiting (HTTP 429 exactly at probe 30). The committed public-UI evidence
+is `artifacts/section6/cited-answer.png` and
+`artifacts/section6/evidence-refusal.png`. Machine-readable smoke and early
+Railway billing/resource evidence live in
+`artifacts/section6/deployment_smoke.json` and
+`artifacts/section6/railway_release_measurement.json`; the Railway snapshot is
+not a monthly forecast or capacity test.
 
 ## Metrics Report
 
@@ -325,7 +341,7 @@ in [`artifacts/section5/chunk_evaluation.json`](artifacts/section5/chunk_evaluat
 | Semantic chunks | 0.350 | 0.690 | 0.710 | 0.730 | 0.800 |
 | Hybrid chunks | 0.520 | 0.590 | 0.810 | 0.900 | 0.900 |
 
-| Generator | Answered / 10 | Correct answer | Faithfulness | Correct refusal | Relevancy | Citation correctness | Cost | Status |
+| Generator | Answered / 10 | Correct answer | Faithfulness | Correct refusal | Relevancy | Citation correctness | Generator + judge cost | Status |
 |---|---:|---:|---:|---:|---:|---:|---:|---|
 | `qwen/qwen3.7-flash` | 0 | 0.000 | 0.308 | 1.000 | 0.846 | 0.000 | $0.154619640 | Development failure |
 | `openai/gpt-oss-20b` | 0 | 0.000 | 0.308 | 1.000 | 0.846 | 0.000 | $0.142342395 | Development failure |
@@ -347,12 +363,15 @@ are reported without overwriting earlier negative evidence:
 | GPT v2.2 | 8 | 2 | 13 | $0.001690265 | TBD | TBD | — | Did not reach judge gate |
 | GPT v2.3 | 9 | 3 | 13 | $0.001138185 | TBD | TBD | — | Did not reach judge gate |
 | GPT v2.4 | 10 | 3 | 13 | $0.001276115 | 0.800 | 1.000 | $0.130374000 | Superseded development result |
-| GPT v2.5 | 10 | 3 | 13 | $0.001613150 | 0.900 | 0.900 | $0.123666000 | Owner validation pending |
+| GPT v2.5 | 10 | 3 | 13 | $0.001613150 | 0.900 | 0.900 | $0.123666000 | Accepted after owner validation and holdout |
 
-Final generator acceptance and holdout metrics remain `TBD` until owner
-validation of the Claude judge and a versioned response-quality decision. See
-[`SELF-EVALUATION.md`](SELF-EVALUATION.md) for the live gate status and
-[`COST-REPORT.md`](COST-REPORT.md) for measured embedding spend.
+Final acceptance is based on the unchanged v2.5 prompt/retrieval/holdout
+contract: `openai/gpt-oss-20b` with `anthropic/claude-sonnet-4.6`. The untouched
+holdout measured 5/5 answerable, 2/2 correct refusals, 7/7 structural validity,
+and 1.0 for faithfulness, relevancy, citation correctness, correct answer, and
+correct refusal; p95 latency was 8445.535 ms and actual cost was `$0.06478416`.
+See [`SELF-EVALUATION.md`](SELF-EVALUATION.md) and
+[`COST-REPORT.md`](COST-REPORT.md) for saved evidence and cost context.
 
 ### Section 3 ranked-retrieval baseline
 
@@ -429,14 +448,15 @@ The selected hybrid service was also initialized once with the committed
 
 | Cold service startup | RSS before | RSS after | RSS delta | Peak process RSS | Provider calls |
 |---:|---:|---:|---:|---:|---:|
-| 3,482.187 ms | 41,349,120 bytes | 218,300,416 bytes | 176,951,296 bytes | 278,355,968 bytes | 0 |
+| 3,616.166 ms | 41,222,144 bytes | 217,669,632 bytes | 176,447,488 bytes | 278,188,032 bytes | 0 |
 
 This is an observed Windows/Python 3.12 development-machine measurement, not a
 Railway guarantee. It is regenerated explicitly by
 `python scripts/benchmark_service.py --overwrite`
 and hash-bound in
 [`artifacts/section6/service_memory.json`](artifacts/section6/service_memory.json).
-The deployed Python 3.11 process must still be checked in Railway's own metrics.
+The separate early Railway/Python 3.11 resource snapshot is recorded in
+[`artifacts/section6/railway_release_measurement.json`](artifacts/section6/railway_release_measurement.json).
 
 ### Historical Day 1 Boolean report
 

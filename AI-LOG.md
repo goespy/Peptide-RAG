@@ -7,7 +7,7 @@
 - **Codex** was the primary pair programmer and integrator. It read the assignment first, implemented the custom index/BM25/metrics/RAG code, delegated bounded modules after interfaces were frozen, ran tests, and maintained hash-bound artifacts.
 - **Claude Code (Opus)** was the independent reviewer. Its read-only reviews found evaluation-design, concurrency, recovery, and artifact-integrity defects that green tests had missed. After evidence-backed fixes, the final release-hardening review returned `PASS`; the blind owner labels and untouched holdout data were excluded from its scope.
 - **OpenRouter** supplied hosted embeddings, GPT-OSS generation, and a different-family Claude Sonnet judge for explicitly approved, cost-capped evaluations. Production code uses no prebuilt IR or metrics library; `bm25s` is differential-test-only.
-- **Human owner** wrote/approved relevance and QA judgments, chose the generator family, and approved every paid evaluation ceiling. The remaining blind judge-validation labels are explicitly pending; AI review never substitutes for human oracle approval.
+- **Human owner** wrote/approved relevance and QA judgments, chose the generator family, approved every paid evaluation ceiling, and completed the blind judge-validation labels. AI review never substitutes for human oracle approval.
 
 ## MCP Usage
 
@@ -40,6 +40,15 @@ Approximately **100% of source/test code was AI-generated or AI-edited** and **0
 - The production service expected the wrong final-generator status/hash fields and would have ignored the measured v2.5 prompt settings. A release-loader regression test now requires the accepted selection, retriever hash, prompt hash, and exact generation settings to agree before generation can activate.
 - A release audit found that ranked scores existed in the API but were invisible in the web UI. The API now emits explicit ranks, the client renders stable rank/score metadata, and an in-app browser run verified the result users actually see.
 - Opus's release audit also caught shared provider-call state, non-resumable paid holdout work, and a daily-cap concurrency race. Request-local state, atomic cost-reserved checkpoints, and a true concurrent regression test now guard those boundaries.
+- Production smoke initially used `qa16`, a correct deterministic safety refusal that was inappropriate for testing a **model-originated** refusal. `qa17` then intermittently returned a valid initial model refusal followed by an unusable optional reconsideration. The final release preserves that failure metadata and tests the validated initial refusal/fail-closed behavior rather than changing prompt, retrieval, or the untouched holdout.
+
+## Final release evidence
+
+- Public service: https://peptide-rag-production.up.railway.app (Railway project `cb2e8529-ebca-4a99-9f36-9811e5bdede1`, service `bcd52c1e-5128-40db-8823-77ff9180b42b`, deployment `37dcb82b-a1cd-4524-ae52-ecc5481c34c3`: `SUCCESS`).
+- Deployed `main` commit: `4c709558dd0796a416022eeebf7436259927e0de`; its 307-test CI run `32071964692` passed. The final documentation/evidence suite passes 308 tests locally, and the offline runner passes every gate.
+- Blind owner validation achieved 10/10 raw agreement; kappa is undefined because the labels had no variation. GPT-OSS was accepted as generator and Claude Sonnet 4.6 as judge.
+- The untouched seven-case QA holdout answered all 5 answerable cases, correctly refused both unanswerable cases, and met 7/7 structural checks. Measured faithfulness, relevancy, citation, correct-answer, and correct-refusal rates were all 1.0; p95 latency was 8,445.535 ms and model/judge cost was $0.06478416.
+- Public smoke passed health, metrics, same-origin behavior, BM25, a grounded answer with two citations, and the model-originated `qa17` refusal. Controlled rate-limit smoke returned HTTP 429 exactly at probe 30. Live UI evidence is captured in `artifacts/section6/cited-answer.png` and `artifacts/section6/evidence-refusal.png`. During Railway diagnostics the CLI unexpectedly printed the OpenRouter secret into private task output; rotate that key after release and never reproduce it in artifacts.
 
 ## Key Learnings
 

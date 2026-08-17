@@ -1,14 +1,14 @@
 # Peptide-RAG Project Master Plan
 
-This roadmap implements the Gauntlet AI Relevance Engine assignment in six measurable sections. Sections 1 and 2 are complete. Sections 3–6 are governed by the detailed contracts below.
+This roadmap implements the Gauntlet AI Relevance Engine assignment in six measurable sections. Sections 1–5 and the Section 6 technical release gates are complete; demo recording and social publication remain owner actions. The detailed contracts and retained negative results remain below.
 
 ```mermaid
 flowchart LR
     A["1. Foundation & Corpus ✓"] --> B["2. Oracle & Boolean MVP ✓"]
-    B --> C["3. BM25 & Full IR Evaluation"]
-    C --> D["4. Retrieval Tuning & Hardening"]
-    D --> E["5. RAG & Hybrid Retrieval"]
-    E --> F["6. Final Evaluation & Submission"]
+    B --> C["3. BM25 & Full IR Evaluation ✓"]
+    C --> D["4. Retrieval Tuning & Hardening ✓"]
+    D --> E["5. RAG & Hybrid Retrieval ✓"]
+    E --> F["6. Technical Release ✓ · Owner Publication Pending"]
 ```
 
 ## Current state
@@ -19,8 +19,8 @@ flowchart LR
 | 2. Oracle and Boolean MVP | Complete |
 | 3. BM25 and full IR evaluation | Complete |
 | 4. Retrieval tuning and hardening | Complete |
-| 5. RAG and hybrid retrieval | In progress: retrieval frozen; GPT v2.5 passed 10/10 and judge-v2 measured 0.900 answered-only faithfulness; blind owner labels and holdout pending |
-| 6. Final evaluation and submission | In progress: 306 local and CI tests, offline runner, cost projection, refreshed service-memory evidence, and real local deployment smoke pass; the final refusal-source Opus review and both Node 24 CI runs passed; owner labels, RAG holdout, deployment, demo, and post remain pending |
+| 5. RAG and hybrid retrieval | Complete: accepted `openai/gpt-oss-20b` with `anthropic/claude-sonnet-4.6`; blind owner validation was 10/10 agreement and the untouched holdout passed all gates |
+| 6. Final evaluation and submission | Technical release gates complete: deployed CI run `32071964692` and `run_project.py` pass, Railway deployment `37dcb82b-a1cd-4524-ae52-ecc5481c34c3` is `SUCCESS`, and a timestamped Railway usage snapshot is saved; demo recording and social posting remain owner actions |
 
 The frozen corpus contains 2,000 PubMed records and has SHA-256 `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. The frozen qrels v2 contains 75 graded judgments across 15 queries. Neither artifact may be silently changed.
 
@@ -290,13 +290,17 @@ faithful(answer, chunks) -> JudgeVerdict
 ```
 
 - Send five numbered chunks.
-- Use temperature zero and at most 400 output tokens.
+- Use temperature zero and the measured 800-token output cap.
 - Require structured JSON.
-- Require a valid citation marker on every factual sentence.
+- Derive citation identities locally from valid visible `[n]` markers and
+  require a valid marker on every factual sentence.
 - Permit only supplied evidence.
 - Refuse when evidence is missing or conflicting.
 - Refuse personalized medical/dosing advice while permitting cited research summaries.
-- Attempt one structured-output repair, then fail closed as insufficient evidence.
+- Permit one shared secondary-attempt budget: repair malformed output, or
+  reconsider an initially valid refusal against all five passages, never both.
+  If the secondary attempt is unusable, retain an already validated safe
+  refusal; otherwise fail closed as insufficient evidence.
 
 ## 5.6 Generator bake-off and judge validation
 
@@ -310,13 +314,15 @@ Revalidate availability, context, structured output, and price. If unavailable, 
 
 Run all candidates with identical development questions, prompts, contexts, temperature, and token cap. Select by schema/citation validity, faithfulness, correct refusal, relevancy, citation correctness, cost, and p95 latency.
 
-Measured deviation after the initial bake-off: Qwen and Gemma produced no
-usable structured development answers, while generator-v2 moved GPT-OSS to
-9/10 answerable cases. The project owner therefore froze GPT-OSS as the sole
+Measured deviation after the initial bake-off: Qwen and GPT-OSS answered 0/10
+answerable cases, while Gemma answered only 2/10 and was provisional solely
+under the preregistered lexicographic rule. A later generator-v2 experiment
+moved GPT-OSS to 9/10. The project owner therefore froze GPT-OSS as the sole
 generator candidate for v2.2. The failed multi-model artifacts remain in the
 repository, and the narrowing is treated as an evidence-backed human decision,
-not as deletion of losing results. GPT-OSS must still pass 10/10 answerable and
-3/3 correct-refusal development gates before Claude judging or holdout access.
+not as deletion of losing results. GPT-OSS later passed the required 10/10
+answerable and 3/3 correct-refusal development gates before Claude judging and
+holdout access.
 
 Subsequent frozen diagnostics remained development-only. v2.2 measured 8/10
 answerable and 2/3 correct refusals; v2.3 measured 9/10, 3/3, and 13/13
@@ -333,16 +339,19 @@ cost-gated, and the holdout remains untouched.
 
 Use Claude as the different-family judge. It identifies atomic claims, evidence, unsupported claims, relevance, citation correctness, and refusal correctness. The judge-only runner consumes the accepted generator artifact and is prohibited from regenerating answers, retrieving new contexts, or opening holdout. Before using its results, deterministically sample 10 unique outputs across answerability classes for project-owner labels. With the owner-selected single generator, the sample contains seven answerable outputs and all three unanswerable outputs. Require at least 80% agreement and Cohen's kappa of 0.60; when kappa is undefined, report raw agreement and the confusion matrix. If validation fails, revise the rubric and use a disjoint sample.
 
-After owner agreement passes, freeze a hash-bound accepted-selection artifact.
-Export the seven holdout context lists exactly once under a `$0.01` query-
-embedding ceiling. Before the single generation/judge run, print a conservative
-estimate and enforce the frozen `$0.50` maximum. The run must use the accepted
-v2.5 prompt and model, Claude judge-v2, and the frozen model catalog. Save all
-seven outputs even if the quality gate fails; prohibit overwriting them and
-permit only an offline `--finalize-saved` recovery. Accept the final generator
-only with 7/7 structural and judged rows, 5/5 answerable responses, 2/2 correct
-refusals, 1.0 relevancy, at least 0.80 answered-only faithfulness, and at least
-0.80 citation correctness. Do not tune after viewing holdout results.
+Owner validation achieved 10/10 agreement with the Claude judge. Cohen's kappa
+is undefined because the labels had no variation; the predeclared raw-agreement
+fallback is therefore reported. The hash-bound accepted selection is
+`openai/gpt-oss-20b` with `anthropic/claude-sonnet-4.6`. The one-shot untouched
+holdout passed 7/7 structural and judged rows, 5/5 answerable responses, and
+2/2 correct refusals; faithfulness, relevancy, citation correctness, correct
+answer, and correct refusal were all 1.0. p95 latency was 8445.535 ms and
+actual holdout cost was `$0.06478416`. No post-holdout tuning occurred.
+
+Initial public smoke revealed one valid-refusal edge case: an optional
+reconsideration failure could discard a safe validated refusal. PR #8 fixes it
+by retaining that refusal and recording the failed reconsideration. Prompts,
+retrieval, and the holdout remain unchanged.
 
 ## 5.7 Public FastAPI application
 
@@ -369,7 +378,7 @@ Controls:
 - No raw query logging.
 - Budget/provider failure changes the app to retrieval-only mode.
 
-Deploy on Railway with a combined hosting/API target below `$10/month`, measured memory use, configured usage controls, and no user-downloaded model.
+The app is deployed at [peptide-rag-production.up.railway.app](https://peptide-rag-production.up.railway.app) from main commit `4c709558dd0796a416022eeebf7436259927e0de`; Railway deployment `37dcb82b-a1cd-4524-ae52-ecc5481c34c3` is `SUCCESS`. Public smoke passed health, metrics, same-origin behavior, BM25, a grounded answer with two citations, a model-originated `qa17` refusal, and controlled rate limiting (HTTP 429 exactly at probe 30). The cited-answer and refusal screenshots plus machine-readable smoke and Railway measurement artifacts are committed release evidence. The Railway snapshot is an early timestamped observation, not a monthly forecast or capacity test; historical development-machine memory metrics remain separate local evidence.
 
 ## 5.8 Completion gate
 
@@ -428,15 +437,15 @@ Use prices retrieved on the report date and identify where the single-instance a
 
 Complete architecture, AI development log, README, self-evaluation, deployment runbook, cost report, demo, screenshots, and social post. Distinguish human approval from Codex and Claude review.
 
-GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies the currently implemented artifact hashes, runs the offline evaluation, and fails if those checks mutate tracked evidence. A final stale-Markdown regeneration check remains gated on the completed RAG artifacts.
+GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies the currently implemented artifact hashes, runs the offline evaluation, and fails if those checks mutate tracked evidence. Deployed-runtime CI run `32071964692` passed with 307 tests; the final documentation/evidence suite passes 308 tests locally, and `python run_project.py` passes all offline gates.
 
 Release steps:
 
-1. Pass CI on the final branch.
-2. Deploy the tested commit to Railway.
-3. Smoke-test search, cited answers, refusal, rate limiting, and budget fallback.
-4. Confirm repository and deployment links.
-5. Merge and tag the final submission commit.
+1. Passed CI on main commit `4c709558dd0796a416022eeebf7436259927e0de`.
+2. Deployed that commit to Railway successfully.
+3. Passed the documented public smoke checks.
+4. Confirmed the public deployment URL.
+5. Demo recording and social posting remain pending.
 
 ## 6.5 Demo and social deliverables
 
@@ -454,6 +463,13 @@ Prepare architecture, search, and cited-answer/refusal screenshots plus an X or 
 - The public app demonstrates every required RAG behavior within budget controls.
 - GitHub contains every assignment deliverable.
 - Known failures remain visible.
+
+The completed technical release meets the first four evidence gates: the owner validation
+was 10/10 agreement (kappa undefined because labels had no variation), the
+holdout passed its pre-registered thresholds without retuning, and the public
+smoke checks passed. A short Railway billing/resource snapshot is saved but is
+not a monthly forecast. The remaining owner publication deliverables are the
+demo recording and social post.
 
 ## Explicit non-goals
 
