@@ -49,11 +49,21 @@ class RunProjectTests(unittest.TestCase):
         ))
         self.assertTrue(any(
             check.name == "RAG GPT v2.5 owner worksheet" and check.state == "PASS"
-            and "owner labels pending" in check.detail
+            and "owner labels complete" in check.detail
             for check in checks
         ))
         self.assertTrue(any(
-            check.name == "RAG accepted generator and QA holdout"
+            check.name == "RAG GPT v2.5 owner-judge agreement"
+            and check.state == "PASS"
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG accepted generator selection"
+            and check.state == "PASS"
+            for check in checks
+        ))
+        self.assertTrue(any(
+            check.name == "RAG seven-case QA holdout"
             and check.state == "TBD"
             for check in checks
         ))
@@ -61,8 +71,12 @@ class RunProjectTests(unittest.TestCase):
     def test_holdout_artifact_without_accepted_selection_fails_release(self) -> None:
         with TemporaryDirectory() as temp:
             orphan = Path(temp) / "rag_holdout_contexts.json"
+            missing_selection = Path(temp) / "accepted_generator_v2_5.json"
             orphan.write_text("{}", encoding="utf-8")
-            with patch.object(run_project, "RAG_HOLDOUT_CONTEXTS", orphan):
+            with (
+                patch.object(run_project, "ACCEPTED_GENERATOR_V2_5", missing_selection),
+                patch.object(run_project, "RAG_HOLDOUT_CONTEXTS", orphan),
+            ):
                 checks, failed = run_project.run()
         self.assertTrue(failed)
         self.assertTrue(any(
