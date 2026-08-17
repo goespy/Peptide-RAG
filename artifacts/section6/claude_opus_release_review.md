@@ -108,5 +108,7 @@ that the classification is exhaustive, reset per request, read on the same
 thread, provider-unspoofable, and limited to two non-sensitive public values.
 It returned **PASS** with no High or Medium findings. It also confirmed that the
 documented CLI cannot override the frozen QA path and that no error or result
-prints either supplied question. CI for this final delta remains a separate
-pending gate.
+prints either supplied question. Both GitHub push and pull-request workflows
+then passed 306 tests, the offline release runner, and the tracked-evidence
+mutation check on implementation commit `d68efe5` using the upgraded Node 24
+action majors.

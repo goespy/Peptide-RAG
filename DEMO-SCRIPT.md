@@ -28,7 +28,7 @@ Show the analyzer/index/BM25 → chunking/embeddings/RRF → structured answer/j
 - Ranked-search screenshot: `artifacts/section6/search-results.jpg`
 - Public URL: `TBD`
 - Last CI-tested hardening baseline: `5a20e30` (`305` tests; the final post-holdout release commit remains `TBD`)
-- Current local post-audit test count: `306`; final CI-tested count: `TBD`
+- Current local and CI-tested post-audit count: `306`
 - Frozen development hybrid Recall@5 / Evidence Hit@5: `0.810 / 0.900`
 - Frozen development answered-only faithfulness / correct refusal: `0.900 / 1.000`; untouched holdout result: `TBD`
 - Recording URL: `TBD`
