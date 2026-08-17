@@ -275,6 +275,49 @@ class HoldoutTests(unittest.TestCase):
             ):
                 holdout.validate_holdout_cost_bound(approved, estimate, 0.50)
 
+    def test_cost_estimate_freezes_a_conservative_reservation_per_case(self):
+        estimate = holdout.estimate_holdout_cost(
+            self.cases,
+            self.contexts,
+            {
+                "models": [{
+                    "id": WINNER,
+                    "input_cost_per_million": 0.03,
+                    "output_cost_per_million": 0.13,
+                }],
+                "judge": {
+                    "id": JUDGE,
+                    "input_cost_per_million": 3.0,
+                    "output_cost_per_million": 15.0,
+                },
+            },
+            WINNER,
+            JUDGE,
+            {
+                "max_tokens": 800,
+                "temperature": 0,
+                "prompt": "frozen",
+                "citation_mode": "derived_from_text_markers",
+                "require_supported_parameters": True,
+                "reasoning_effort": "low",
+                "exclude_reasoning": True,
+                "reconsider_insufficient_evidence": True,
+            },
+            {
+                "max_tokens": 600,
+                "require_supported_parameters": True,
+                "prompt_version": 2,
+            },
+        )
+        reservations = estimate["case_maximum_cost_usd"]
+        self.assertEqual(set(reservations), {case["id"] for case in self.cases})
+        self.assertTrue(all(value > 0 for value in reservations.values()))
+        self.assertAlmostEqual(
+            estimate["estimated_max_cost_usd"],
+            sum(reservations.values()),
+            places=12,
+        )
+
     def test_live_path_uses_frozen_v2_5_generator_and_judge_settings(self):
         generation = {
             "max_tokens": 800,
@@ -316,6 +359,153 @@ class HoldoutTests(unittest.TestCase):
         self.assertEqual(FakeJudge.expected.count(True), 5)
         self.assertEqual(FakeJudge.expected.count(False), 2)
         self.assertTrue(all(row["structurally_valid"] for row in rows))
+
+    def test_live_checkpoints_each_case_and_resume_skips_completed_work(self):
+        class CountingGenerator(FakeGenerator):
+            queries: list[str] = []
+
+            def answer(self, query, evidence):
+                type(self).queries.append(query)
+                return super().answer(query, evidence)
+
+        checkpoints: list[list[dict]] = []
+        with patch.object(holdout, "GroundedAnswerClient", CountingGenerator), patch.object(
+            holdout,
+            "AnswerJudge",
+            FakeJudge,
+        ):
+            rows = holdout.run_live(
+                self.cases,
+                self.contexts,
+                WINNER,
+                JUDGE,
+                SELECTION_HASH,
+                CONFIG_HASH,
+                CONTEXT_HASH,
+                "key",
+                {
+                    "max_tokens": 800,
+                    "temperature": 0,
+                    "prompt": "frozen",
+                    "citation_mode": "derived_from_text_markers",
+                    "require_supported_parameters": True,
+                },
+                {"max_tokens": 600, "prompt_version": 2},
+                existing_rows=[valid_row(self.cases[0])],
+                checkpoint=lambda current: checkpoints.append(copy.deepcopy(current)),
+            )
+        self.assertEqual(len(rows), 7)
+        self.assertEqual([len(items) for items in checkpoints], [2, 3, 4, 5, 6, 7])
+        self.assertEqual(len(CountingGenerator.queries), 6)
+        self.assertNotIn(self.cases[0]["question"], CountingGenerator.queries)
+
+    def test_live_failure_leaves_last_completed_checkpoint(self):
+        class FailingGenerator(FakeGenerator):
+            calls = 0
+
+            def answer(self, query, evidence):
+                type(self).calls += 1
+                if type(self).calls == 2:
+                    raise RuntimeError("provider interrupted")
+                return super().answer(query, evidence)
+
+        checkpoints: list[list[dict]] = []
+        with patch.object(holdout, "GroundedAnswerClient", FailingGenerator), patch.object(
+            holdout,
+            "AnswerJudge",
+            FakeJudge,
+        ), self.assertRaises(RuntimeError):
+            holdout.run_live(
+                self.cases,
+                self.contexts,
+                WINNER,
+                JUDGE,
+                SELECTION_HASH,
+                CONFIG_HASH,
+                CONTEXT_HASH,
+                "key",
+                {
+                    "max_tokens": 800,
+                    "temperature": 0,
+                    "prompt": "frozen",
+                    "citation_mode": "derived_from_text_markers",
+                    "require_supported_parameters": True,
+                },
+                {"max_tokens": 600, "prompt_version": 2},
+                checkpoint=lambda current: checkpoints.append(copy.deepcopy(current)),
+            )
+        self.assertEqual(len(checkpoints), 1)
+        self.assertEqual(checkpoints[0][0]["qa_id"], self.cases[0]["id"])
+
+    def test_partial_and_saved_packet_validation_fail_closed(self):
+        partial = [valid_row(self.cases[0])]
+        replayed = holdout.saved_rows(
+            {"outputs": partial},
+            self.cases,
+            self.contexts,
+            WINNER,
+            SELECTION_HASH,
+            CONFIG_HASH,
+            CONTEXT_HASH,
+            require_complete=False,
+        )
+        self.assertEqual(len(replayed), 1)
+        malformed = [valid_row(case) for case in self.cases]
+        malformed[0]["answer"] = None
+        with self.assertRaises(holdout.HoldoutError):
+            self._replay(malformed)
+        cost_estimate = {
+            "estimated_max_cost_usd": 0.2,
+            "case_maximum_cost_usd": {self.cases[0]["id"]: 0.2},
+        }
+        packet = holdout.build_output_packet(
+            selection_hash=SELECTION_HASH,
+            qa_hash="Q" * 64,
+            retriever_config_hash=CONFIG_HASH,
+            contexts_hash=CONTEXT_HASH,
+            catalog_hash="M" * 64,
+            cost_estimate=cost_estimate,
+            approved_max_cost_usd=0.25,
+            rows=partial,
+        )
+        self.assertEqual(
+            holdout.validate_output_packet(
+                packet,
+                selection_hash=SELECTION_HASH,
+                qa_hash="Q" * 64,
+                retriever_config_hash=CONFIG_HASH,
+                contexts_hash=CONTEXT_HASH,
+                catalog_hash="M" * 64,
+                cost_estimate=cost_estimate,
+                hard_cap=0.5,
+            ),
+            0.25,
+        )
+        packet["approved_max_cost_usd"] = float("nan")
+        with self.assertRaises(holdout.HoldoutError):
+            holdout.validate_output_packet(
+                packet,
+                selection_hash=SELECTION_HASH,
+                qa_hash="Q" * 64,
+                retriever_config_hash=CONFIG_HASH,
+                contexts_hash=CONTEXT_HASH,
+                catalog_hash="M" * 64,
+                cost_estimate=cost_estimate,
+                hard_cap=0.5,
+            )
+        packet["approved_max_cost_usd"] = 0.25
+        packet["attempt_counts"][self.cases[0]["id"]] = 2
+        with self.assertRaises(holdout.HoldoutError):
+            holdout.validate_output_packet(
+                packet,
+                selection_hash=SELECTION_HASH,
+                qa_hash="Q" * 64,
+                retriever_config_hash=CONFIG_HASH,
+                contexts_hash=CONTEXT_HASH,
+                catalog_hash="M" * 64,
+                cost_estimate=cost_estimate,
+                hard_cap=0.5,
+            )
 
     def test_final_config_binds_passing_summary(self):
         rows = self._replay([valid_row(case) for case in self.cases])

@@ -39,16 +39,24 @@ python run_project.py
 ```
 
 The context and holdout targets are one-shot artifacts and have no overwrite
-path. If provider calls finish but summary finalization is interrupted, use
+path. The live holdout atomically checkpoints every completed generator+judge
+pair to a hash-bound partial journal. After an interruption, inspect the error
+and use the same live command with `--resume-partial`; already completed cases
+are validated and skipped. Before every new or resumed case, the journal
+reserves that case's conservative maximum generator+judge cost; a retry is
+refused before any call if cumulative reservations would exceed the original
+owner-approved cap. If all provider calls finish but finalization is
+interrupted, use
 `python scripts/run_rag_holdout.py --finalize-saved`; it validates the saved
 rows and makes no provider request. Railway deployment remains closed until the
 holdout artifact is frozen and the offline release check passes.
 
 At runtime, generation also fails closed unless the final holdout config,
-accepted generator selection, frozen retriever, source v2.5 prompt hash, and
-all generation settings agree. Deployment therefore cannot silently replace
-the measured prompt, token cap, citation mode, reasoning settings, or refusal
-reconsideration behavior with application defaults.
+accepted generator selection, frozen retriever, source v2.5 prompt hash, actual
+holdout contexts, outputs, and passing summary all hash-match. Deployment
+therefore cannot silently replace the measured evidence, prompt, token cap,
+citation mode, reasoning settings, or refusal-reconsideration behavior with
+application defaults.
 
 ## Pending credentials and deployment
 
@@ -63,14 +71,19 @@ review the deployment details before activation.
 - `OPENROUTER_API_KEY` -- required for query embeddings and grounded answers.
 - `EMBEDDING_CACHE_PATH=artifacts/section5/embeddings_256_64.npz` -- selected cache matching the frozen RAG configuration.
 - `DAILY_ANSWER_CAP=200` -- default single-process budget guard.
+- `DAILY_EMBEDDING_CAP=5000` -- default paid query-embedding guard; exhaustion falls back visibly to BM25.
+- `PROVIDER_CONCURRENCY_LIMIT=8` -- maximum simultaneous provider-bound requests.
+- `PROVIDER_SLOT_TIMEOUT_SECONDS=0.1` -- maximum wait for a provider slot before a safe fallback.
 - `TRUST_PROXY_HEADERS=true` -- required on Railway so rate limits use the forwarded client IP; leave false for direct local serving.
 
 Synchronous retrieval/provider work is dispatched off the async event loop,
-and an answer-attempt budget slot is reserved before the provider await. This
-prevents a slow request from freezing unrelated endpoints and prevents
-concurrent requests from overshooting the single-process daily cap. Multiple
-Railway replicas would still require a shared external counter before the same
-claim could be made across instances.
+provider work is bounded by a semaphore, and answer/embedding budget slots are
+reserved before provider awaits. The answer cap is checked before semantic
+retrieval, so an exhausted answer budget cannot spend on an unnecessary query
+embedding. This keeps health/local BM25 responsive and prevents concurrent
+requests from overshooting single-process caps. Multiple Railway replicas would
+still require shared external counters before the same claim could be made
+across instances.
 
 Planned start command:
 
@@ -99,8 +112,8 @@ The offline development measurement is reproducible with:
 python scripts/benchmark_service.py --overwrite
 ```
 
-It observed `216,748,032` bytes RSS after initialization and a
-`278,310,912`-byte peak with the selected cache, 2,000-document index, and zero
+It observed `217,751,552` bytes RSS after initialization and a
+`278,065,152`-byte peak with the selected cache, 2,000-document index, and zero
 provider calls. The machine ran Windows and Python 3.12, so the artifact is a
 pre-deployment sizing signal only; Railway/Python 3.11 memory remains the
 authoritative production measurement.

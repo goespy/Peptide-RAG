@@ -1,15 +1,15 @@
 # Service Memory Benchmark
 
-- Measured: `2026-08-16T20:21:23.883744Z`
+- Measured: `2026-08-17T02:04:38.858784Z`
 - Platform: `Windows-11-10.0.26200-SP0`
 - Python: `3.12.13`
 - Cache: `artifacts/section5/embeddings_256_64.npz`
 - Documents: `2000`
-- Startup: `3519.262 ms`
-- RSS before load: `41,312,256 bytes`
-- RSS after load: `216,748,032 bytes`
-- RSS delta: `175,435,776 bytes`
-- Peak process RSS: `278,310,912 bytes`
+- Startup: `3514.957 ms`
+- RSS before load: `41,197,568 bytes`
+- RSS after load: `217,751,552 bytes`
+- RSS delta: `176,553,984 bytes`
+- Peak process RSS: `278,065,152 bytes`
 - Semantic retrieval available: `true`
 - Grounded generation available: `false`
 - Provider calls: `0`

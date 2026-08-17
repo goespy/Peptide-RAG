@@ -4,6 +4,7 @@ import asyncio
 import time
 import unittest
 from datetime import UTC, datetime, timedelta
+from unittest.mock import patch
 
 try:
     from fastapi.testclient import TestClient
@@ -29,6 +30,18 @@ class FakeService:
 
 @unittest.skipIf(TestClient is None, "FastAPI/httpx are not installed")
 class WebAppTests(unittest.TestCase):
+    def test_invalid_budget_environment_fails_startup_visibly(self):
+        with patch.dict("os.environ", {"PROVIDER_CONCURRENCY_LIMIT": "typo"}):
+            with self.assertRaisesRegex(ValueError, "PROVIDER_CONCURRENCY_LIMIT"):
+                create_app(FakeService())
+        for value in ("0.5s", "-5", "nan"):
+            with self.subTest(provider_slot_timeout=value), patch.dict(
+                "os.environ",
+                {"PROVIDER_SLOT_TIMEOUT_SECONDS": value},
+            ):
+                with self.assertRaisesRegex(ValueError, "PROVIDER_SLOT_TIMEOUT_SECONDS"):
+                    create_app(FakeService())
+
     def test_health_static_metrics_and_search_contract(self):
         client = TestClient(create_app(FakeService()))
         self.assertEqual(client.get("/healthz").json(), {"status": "ok"})
@@ -75,6 +88,66 @@ class WebAppTests(unittest.TestCase):
         self.assertEqual(client.post("/api/answer", json={"query": "peptide", "mode": "hybrid", "k": 1}).status_code, 200)
         self.assertEqual(service.search_calls, 1)
 
+    def test_embedding_budget_and_provider_saturation_fall_back_explicitly(self):
+        class Recording(FakeService):
+            def __init__(self):
+                self.modes = []
+
+            def search(self, query, mode, k):
+                self.modes.append(mode)
+                return super().search(query, mode, k)
+
+        budgeted = Recording()
+        client = TestClient(create_app(budgeted, daily_embedding_cap=1))
+        first = client.post(
+            "/api/search",
+            json={"query": "first", "mode": "semantic", "k": 1},
+        ).json()
+        second = client.post(
+            "/api/search",
+            json={"query": "second", "mode": "hybrid", "k": 1},
+        ).json()
+        self.assertEqual(first["mode"], "semantic")
+        self.assertEqual(second["requested_mode"], "hybrid")
+        self.assertEqual(second["mode"], "bm25")
+        self.assertIn("budget", second["fallback_reason"].lower())
+        self.assertEqual(budgeted.modes, ["semantic", "bm25"])
+
+        saturated = Recording()
+        saturated_client = TestClient(
+            create_app(
+                saturated,
+                provider_concurrency_limit=0,
+                provider_slot_timeout=0.001,
+            )
+        )
+        body = saturated_client.post(
+            "/api/search",
+            json={"query": "peptide", "mode": "semantic", "k": 1},
+        ).json()
+        self.assertEqual(body["mode"], "bm25")
+        self.assertIn("unavailable", body["fallback_reason"].lower())
+        self.assertEqual(saturated.modes, ["bm25"])
+
+    def test_exhausted_answer_budget_avoids_paid_retrieval(self):
+        class Recording(FakeService):
+            def __init__(self):
+                self.modes = []
+
+            def search(self, query, mode, k):
+                self.modes.append(mode)
+                return super().search(query, mode, k)
+
+        service = Recording()
+        client = TestClient(create_app(service, daily_answer_cap=0))
+        body = client.post(
+            "/api/answer",
+            json={"query": "peptide", "mode": "hybrid", "k": 1},
+        ).json()
+        self.assertTrue(body["retrieval_only"])
+        self.assertEqual(body["retrieval_mode"], "lexical")
+        self.assertEqual(service.modes, ["lexical"])
+
     def test_rate_and_daily_answer_limits(self):
         client = TestClient(create_app(FakeService(), daily_answer_cap=1))
         self.assertEqual(client.post("/api/answer", json={"query": "one"}).status_code, 200)
@@ -107,3 +180,41 @@ class AsyncBoundaryTests(unittest.IsolatedAsyncioTestCase):
         await asyncio.sleep(0.01)
         self.assertFalse(task.done())
         await task
+
+    async def test_daily_answer_cap_is_reserved_before_retrieval_await(self):
+        import httpx
+
+        class SlowService(FakeService):
+            def __init__(self):
+                self.answer_calls = 0
+
+            def search(self, query, mode, k):
+                if mode == "hybrid":
+                    time.sleep(0.05)
+                return super().search(query, mode, k)
+
+            def answer(self, query, mode, k, evidence):
+                self.answer_calls += 1
+                return super().answer(query, mode, k, evidence)
+
+        service = SlowService()
+        transport = httpx.ASGITransport(
+            app=create_app(service, daily_answer_cap=1)
+        )
+        async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+            first, second = await asyncio.gather(
+                client.post(
+                    "/api/answer",
+                    json={"query": "first", "mode": "hybrid", "k": 1},
+                ),
+                client.post(
+                    "/api/answer",
+                    json={"query": "second", "mode": "hybrid", "k": 1},
+                ),
+            )
+        bodies = [first.json(), second.json()]
+        self.assertEqual(service.answer_calls, 1)
+        self.assertEqual(
+            sum(body.get("reason") == "Daily answer budget is exhausted." for body in bodies),
+            1,
+        )

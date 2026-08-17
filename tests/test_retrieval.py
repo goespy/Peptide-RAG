@@ -33,6 +33,20 @@ class RetrievalTests(unittest.TestCase):
         self.assertEqual(self.retriever.retrieve("", 2, "semantic"), ())
         self.assertEqual(self.retriever.retrieve("unused", 1, "semantic")[0].chunk_id, "2:c0001")
 
+    def test_lexical_fallback_never_calls_the_query_embedder(self):
+        def unexpected_embedding(_query):
+            raise AssertionError("lexical retrieval must not embed the query")
+
+        retriever = Retriever(
+            self.chunks,
+            np.array([[1, 0], [0, 1], [1, 0]], dtype=float),
+            query_embedding=unexpected_embedding,
+        )
+        self.assertEqual(
+            [item.chunk_id for item in retriever.retrieve("peptide", 2, "lexical")],
+            ["2:c0001"],
+        )
+
     def test_validation(self):
         with self.assertRaises(ValueError):
             self.retriever.retrieve("q", 0)

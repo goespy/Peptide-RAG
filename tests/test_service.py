@@ -110,6 +110,9 @@ class ServiceTests(unittest.TestCase):
             source = directory / "generator_v2_5.json"
             accepted = directory / "accepted.json"
             final = directory / "generator.json"
+            holdout_summary = directory / "holdout_summary.json"
+            holdout_outputs = directory / "holdout_outputs.json"
+            holdout_contexts = directory / "holdout_contexts.json"
             frozen.write_text("{}", encoding="utf-8")
             prompt = "Use only measured evidence."
             generation = {
@@ -122,13 +125,14 @@ class ServiceTests(unittest.TestCase):
                 "require_supported_parameters": True,
                 "temperature": 0,
             }
-            source.write_text(json.dumps({
+            source_payload = {
                 "generator_candidates": ["openai/gpt-oss-20b"],
                 "generation": generation,
                 "holdout_status": "untouched",
                 "prompt": prompt,
                 "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest().upper(),
-            }), encoding="utf-8")
+            }
+            source.write_text(json.dumps(source_payload), encoding="utf-8")
             accepted.write_text(json.dumps({
                 "status": "accepted_for_holdout",
                 "holdout_status": "untouched",
@@ -137,14 +141,58 @@ class ServiceTests(unittest.TestCase):
                 "generator_config_sha256": hashlib.sha256(source.read_bytes()).hexdigest().upper(),
                 "generation": {**generation, "prompt": prompt},
             }), encoding="utf-8")
+            accepted_hash = hashlib.sha256(accepted.read_bytes()).hexdigest().upper()
+            frozen_hash = hashlib.sha256(frozen.read_bytes()).hexdigest().upper()
+            qa_hash = "A" * 64
+            holdout_contexts.write_text(json.dumps({
+                "retriever_config_sha256": frozen_hash,
+                "accepted_selection_sha256": accepted_hash,
+                "qa_sha256": qa_hash,
+                "contexts": [{"qa_id": f"qa{index}"} for index in range(7)],
+            }), encoding="utf-8")
+            contexts_hash = hashlib.sha256(holdout_contexts.read_bytes()).hexdigest().upper()
+            holdout_outputs.write_text(json.dumps({
+                "selection_sha256": accepted_hash,
+                "retriever_config_sha256": frozen_hash,
+                "contexts_sha256": contexts_hash,
+                "qa_sha256": qa_hash,
+                "outputs": [{"qa_id": f"qa{index}"} for index in range(7)],
+            }), encoding="utf-8")
+            outputs_hash = hashlib.sha256(holdout_outputs.read_bytes()).hexdigest().upper()
+            metrics = {"answerable_answer_rate": 1.0}
+            holdout_summary.write_text(json.dumps({
+                "schema_version": 2,
+                "passes": True,
+                "winner": "openai/gpt-oss-20b",
+                "accepted_selection_sha256": accepted_hash,
+                "retriever_config_sha256": frozen_hash,
+                "qa_sha256": qa_hash,
+                "contexts_sha256": contexts_hash,
+                "outputs_sha256": outputs_hash,
+                "metrics": metrics,
+            }), encoding="utf-8")
             final.write_text(json.dumps({
                 "schema_version": 2,
                 "status": "frozen_after_passing_holdout",
                 "winner": "openai/gpt-oss-20b",
-                "retriever_config_sha256": hashlib.sha256(frozen.read_bytes()).hexdigest().upper(),
-                "accepted_selection_sha256": hashlib.sha256(accepted.read_bytes()).hexdigest().upper(),
+                "retriever_config_sha256": frozen_hash,
+                "accepted_selection_sha256": accepted_hash,
+                "qa_sha256": qa_hash,
+                "holdout_contexts_sha256": contexts_hash,
+                "holdout_outputs_sha256": outputs_hash,
+                "holdout_summary_sha256": hashlib.sha256(holdout_summary.read_bytes()).hexdigest().upper(),
+                "holdout_metrics": metrics,
             }), encoding="utf-8")
-            client = load_release_answer_client(final, accepted, source, frozen)
+            paths = (
+                final,
+                accepted,
+                source,
+                frozen,
+                holdout_summary,
+                holdout_outputs,
+                holdout_contexts,
+            )
+            client = load_release_answer_client(*paths)
             self.assertIsNotNone(client)
             self.assertEqual(client.system_prompt, prompt)
             self.assertEqual(client.max_tokens, 800)
@@ -152,10 +200,21 @@ class ServiceTests(unittest.TestCase):
             self.assertTrue(client.exclude_reasoning)
             self.assertTrue(client.reconsider_insufficient_evidence)
 
-            source_payload = json.loads(source.read_text(encoding="utf-8"))
-            source_payload["prompt"] = "tampered"
+            tampered_source = dict(source_payload)
+            tampered_source["prompt"] = "tampered"
+            source.write_text(json.dumps(tampered_source), encoding="utf-8")
+            self.assertIsNone(load_release_answer_client(*paths))
             source.write_text(json.dumps(source_payload), encoding="utf-8")
-            self.assertIsNone(load_release_answer_client(final, accepted, source, frozen))
+            final_payload = json.loads(final.read_text(encoding="utf-8"))
+            missing_qa = dict(final_payload)
+            missing_qa.pop("qa_sha256")
+            final.write_text(json.dumps(missing_qa), encoding="utf-8")
+            self.assertIsNone(load_release_answer_client(*paths))
+            final.write_text(json.dumps(final_payload), encoding="utf-8")
+            summary_payload = json.loads(holdout_summary.read_text(encoding="utf-8"))
+            summary_payload["passes"] = False
+            holdout_summary.write_text(json.dumps(summary_payload), encoding="utf-8")
+            self.assertIsNone(load_release_answer_client(*paths))
 
     def test_lexical_answer_fails_closed_but_keeps_local_evidence(self):
         class RefusingClient:

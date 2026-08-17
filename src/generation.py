@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import re
+import threading
 import time
 from typing import Iterable, Literal, Sequence
 
@@ -156,6 +157,76 @@ def validate_answer_result(result: AnswerResult, contexts: Sequence[RetrievedChu
 class GroundedAnswerClient:
     """OpenRouter caller that never emits an unvalidated model answer."""
 
+    @property
+    def last_metadata(self) -> dict[str, object]:
+        """Return metadata for the current thread's most recent answer call."""
+
+        metadata = getattr(self._thread_state, "last_metadata", None)
+        if metadata is None:
+            metadata = {}
+            self._thread_state.last_metadata = metadata
+        return metadata
+
+    @last_metadata.setter
+    def last_metadata(self, value: dict[str, object]) -> None:
+        self._thread_state.last_metadata = value
+
+    @property
+    def _usage_complete(self) -> bool:
+        return bool(getattr(self._thread_state, "usage_complete", True))
+
+    @_usage_complete.setter
+    def _usage_complete(self, value: bool) -> None:
+        self._thread_state.usage_complete = bool(value)
+
+    @property
+    def _last_raw_output(self) -> str | None:
+        return getattr(self._thread_state, "last_raw_output", None)
+
+    @_last_raw_output.setter
+    def _last_raw_output(self, value: str | None) -> None:
+        self._thread_state.last_raw_output = value
+
+    @property
+    def _last_response_failure(self) -> str:
+        return str(
+            getattr(
+                self._thread_state,
+                "last_response_failure",
+                "provider_response_unusable",
+            )
+        )
+
+    @_last_response_failure.setter
+    def _last_response_failure(self, value: str) -> None:
+        self._thread_state.last_response_failure = value
+
+    def _http_session(self) -> requests.Session:
+        if self._provided_session is not None:
+            return self._provided_session
+        session = getattr(self._thread_state, "http_session", None)
+        if session is None:
+            session = requests.Session()
+            self._thread_state.http_session = session
+        return session
+
+    def _post(self, payload: dict[str, object]) -> requests.Response:
+        session = self._http_session()
+        request = {
+            "headers": {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            "json": payload,
+            "timeout": self.timeout,
+        }
+        if self._provided_session is None:
+            return session.post(OPENROUTER_CHAT_URL, **request)
+        # Tests and callers may inject one shared session. Protect that object;
+        # production-created sessions are thread-local and remain concurrent.
+        with self._session_lock:
+            return session.post(OPENROUTER_CHAT_URL, **request)
+
     def __init__(
         self,
         *,
@@ -205,7 +276,9 @@ class GroundedAnswerClient:
         self.reasoning_effort = reasoning_effort
         self.exclude_reasoning = exclude_reasoning
         self.reconsider_insufficient_evidence = reconsider_insufficient_evidence
-        self.session = session if session is not None else requests.Session()
+        self._thread_state = threading.local()
+        self._provided_session = session
+        self._session_lock = threading.Lock()
         self.last_metadata: dict[str, object] = {}
         self._usage_complete = True
         self._last_raw_output: str | None = None
@@ -465,12 +538,7 @@ class GroundedAnswerClient:
                 attempts.append(record)
             try:
                 self.last_metadata["provider_calls"] = int(self.last_metadata.get("provider_calls", 0)) + 1
-                response = self.session.post(
-                    OPENROUTER_CHAT_URL,
-                    headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
-                    json=payload,
-                    timeout=self.timeout,
-                )
+                response = self._post(payload)
                 status_code = getattr(response, "status_code", None)
                 record["http_status"] = status_code if isinstance(status_code, int) else None
                 if response.status_code in {429, 500, 502, 503, 504} and attempt < self.retries:

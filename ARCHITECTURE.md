@@ -397,28 +397,35 @@ The single-process FastAPI service exposes `/healthz`, `/api/metrics`,
 `/api/search`, and `/api/answer`. Local Boolean and frozen tuned-BM25 search
 work without a provider. Semantic/hybrid retrieval activates only when the
 configured cache matches the selected chunk, corpus, and model identities.
-Without it, explicit semantic/hybrid requests return no fabricated downgrade;
-Q&A returns retrieved evidence and an insufficient-evidence status.
+Without it, explicit semantic/hybrid requests return no fabricated semantic
+result. When a configured provider is saturated or the daily query-embedding
+budget is exhausted, the API makes a visible BM25 fallback and reports both the
+requested and actual mode plus the reason.
 
 Grounded generation has a second, independent activation gate. The service
 requires the final passing-holdout status, the exact accepted-selection hash,
 the frozen retriever hash, the source v2.5 generator-config hash, the prompt
-hash, and every recorded generation setting to agree. It then constructs the
-client with those measured settings; it never falls back to the library's
-default prompt or token cap. Missing or altered evidence leaves generation
-disabled while local retrieval remains available.
+hash, every recorded generation setting, and the exact saved holdout contexts,
+outputs, and passing summary hashes to agree. It then constructs the client
+with those measured settings; it never falls back to the library's default
+prompt or token cap. Missing or altered evidence leaves generation disabled
+while local retrieval remains available.
 
 The browser renders corpus and model strings with text nodes, converts only
 the service's `[[query match]]` markers to safe `<mark>` elements, and creates
 PubMed citation links itself. Queries are capped at 500 characters, `k` at
 1--20 for search and 1--8 for Q&A, and the in-memory single-process limits are
 30 search requests and five answer requests per IP per minute plus 200 answer
-attempts per UTC day. Keys stay server-side and raw query text is not logged.
-These counters are explicitly single-instance controls, not a distributed
-rate-limiting claim. Synchronous index, embedding, and generation work runs in
-Starlette's thread pool so a provider request does not block the FastAPI event
-loop. The daily answer-attempt slot is reserved before that await, preventing
-concurrent requests from stepping past the configured single-process cap.
+attempts and 5,000 query embeddings per UTC day by default. Keys stay
+server-side and raw query text is not logged. These counters are explicitly
+single-instance controls, not a distributed rate-limiting claim. Synchronous
+index, embedding, and generation work runs in Starlette's thread pool, while a
+configurable semaphore bounds concurrent provider work. Answer and embedding
+slots are reserved before provider awaits, and an exhausted answer budget is
+checked before semantic retrieval. Provider-client request metadata is
+thread-local; production HTTP sessions are also per-thread, while explicitly
+injected shared test sessions are serialized. This prevents repair or usage
+state from crossing requests without negating the provider-concurrency limit.
 
 `python run_project.py` is the network-free release check. It validates the
 frozen lexical state, rebuilds the index, recomputes Boolean/BM25 metrics,

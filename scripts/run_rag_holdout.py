@@ -9,7 +9,7 @@ import os
 import sys
 import time
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Callable, Sequence
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,6 +60,7 @@ HOLDOUT_OUTPUT_FIELDS = {
     "model_catalog_sha256",
     "cost_estimate",
     "approved_max_cost_usd",
+    "attempt_counts",
     "outputs",
 }
 
@@ -194,6 +195,16 @@ def estimate_holdout_cost(
 ) -> dict[str, Any]:
     base = estimate_bakeoff_cost(cases, contexts, catalog, [winner], judge_model, generation)
     generation_estimate = base["generation"][0]
+    generator_catalog = next(
+        (
+            item
+            for item in catalog.get("models", [])
+            if isinstance(item, dict) and item.get("id") == winner
+        ),
+        None,
+    )
+    if not isinstance(generator_catalog, dict):
+        raise HoldoutError("generator pricing is absent from the frozen model catalog")
     judge_catalog = catalog.get("judge")
     if not isinstance(judge_catalog, dict) or judge_catalog.get("id") != judge_model:
         raise HoldoutError("judge pricing is absent from the frozen model catalog")
@@ -207,9 +218,57 @@ def estimate_holdout_cost(
         require_supported_parameters=bool(judge_settings.get("require_supported_parameters", False)),
         prompt_version=2,
     )
+    generator = GroundedAnswerClient(
+        api_key="cost-estimate",
+        model=winner,
+        max_tokens=int(generation["max_tokens"]),
+        temperature=float(generation["temperature"]),
+        system_prompt=str(generation["prompt"]),
+        citation_mode=str(generation["citation_mode"]),
+        require_supported_parameters=bool(generation["require_supported_parameters"]),
+        reasoning_effort=generation.get("reasoning_effort"),
+        exclude_reasoning=bool(generation.get("exclude_reasoning", False)),
+        reconsider_insufficient_evidence=bool(
+            generation.get("reconsider_insufficient_evidence", False)
+        ),
+    )
     judge_input = 0
+    case_maximum_cost_usd: dict[str, float] = {}
     for case in cases:
         selected = contexts[case["id"]]
+        previous_output = "x" * (int(generation["max_tokens"]) * 4)
+        initial_payload = generator._payload(case["question"], selected)
+        repair_payload = generator._payload(
+            case["question"],
+            selected,
+            repair=True,
+            previous_output=previous_output,
+            validation_error="conservative_repair_estimate",
+        )
+        secondary_payload = repair_payload
+        if generation.get("reconsider_insufficient_evidence", False):
+            reconsideration_payload = generator._payload(
+                case["question"],
+                selected,
+                reconsider_refusal=True,
+                previous_output=previous_output,
+            )
+            if len(json.dumps(reconsideration_payload, ensure_ascii=False, sort_keys=True)) > len(
+                json.dumps(repair_payload, ensure_ascii=False, sort_keys=True)
+            ):
+                secondary_payload = reconsideration_payload
+        generation_inputs = sum(
+            math.ceil(len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3)
+            * (generator.retries + 1)
+            for payload in (initial_payload, secondary_payload)
+        )
+        generation_outputs = (
+            2 * (generator.retries + 1) * int(generation["max_tokens"])
+        )
+        generation_cost = (
+            generation_inputs * float(generator_catalog["input_cost_per_million"])
+            + generation_outputs * float(generator_catalog["output_cost_per_million"])
+        ) / 1_000_000
         citations = tuple(
             Citation(index, chunk.pmid, chunk.chunk_id, chunk.title)
             for index, chunk in enumerate(selected[:5], 1)
@@ -220,13 +279,23 @@ def estimate_holdout_cost(
             citations,
         )
         payload = judge._payload(case["question"], worst_answer, selected)
-        judge_input += math.ceil(len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3)
+        case_judge_input = math.ceil(
+            len(json.dumps(payload, ensure_ascii=False, sort_keys=True)) / 3
+        )
+        judge_input += case_judge_input
+        case_judge_cost = (
+            case_judge_input * float(judge_catalog["input_cost_per_million"])
+            + max_tokens * float(judge_catalog["output_cost_per_million"])
+        ) / 1_000_000
+        case_maximum_cost_usd[case["id"]] = math.fsum(
+            (generation_cost, case_judge_cost)
+        )
     judge_output = len(cases) * max_tokens
     judge_cost = (
         judge_input * float(judge_catalog["input_cost_per_million"])
         + judge_output * float(judge_catalog["output_cost_per_million"])
     ) / 1_000_000
-    total = float(generation_estimate["estimated_cost_usd"]) + judge_cost
+    total = math.fsum(case_maximum_cost_usd.values())
     return {
         "method": "UTF-8 JSON characters/3; all generator retry/repair/reconsideration attempts; judge-v2 maximum output",
         "generation": generation_estimate,
@@ -239,6 +308,7 @@ def estimate_holdout_cost(
             "estimated_cost_usd": judge_cost,
         },
         "maximum_provider_calls": int(generation_estimate["provider_calls"]) + len(cases),
+        "case_maximum_cost_usd": case_maximum_cost_usd,
         "estimated_max_cost_usd": total,
     }
 
@@ -326,6 +396,10 @@ def run_live(
     api_key: str,
     generation: dict[str, Any],
     judge_settings: dict[str, Any],
+    *,
+    existing_rows: Sequence[dict[str, Any]] = (),
+    before_case: Callable[[str], None] | None = None,
+    checkpoint: Callable[[list[dict[str, Any]]], None] | None = None,
 ) -> list[dict[str, Any]]:
     generator = GroundedAnswerClient(
         api_key=api_key,
@@ -346,8 +420,20 @@ def run_live(
         require_supported_parameters=bool(judge_settings.get("require_supported_parameters", False)),
         prompt_version=2,
     )
-    result = []
+    result = [dict(row) for row in existing_rows]
+    completed = {row.get("qa_id") for row in result}
+    if (
+        any(not isinstance(row, dict) for row in existing_rows)
+        or any(not isinstance(qa_id, str) for qa_id in completed)
+        or len(completed) != len(result)
+        or not completed.issubset({case["id"] for case in cases})
+    ):
+        raise HoldoutError("partial holdout rows are malformed or duplicated")
     for case in cases:
+        if case["id"] in completed:
+            continue
+        if before_case is not None:
+            before_case(case["id"])
         started = time.perf_counter()
         answer = generator.answer(case["question"], contexts[case["id"]])
         generator_latency = (time.perf_counter() - started) * 1_000
@@ -380,7 +466,10 @@ def run_live(
             "judge_metadata": {**judge_metadata, "latency_ms": judge_latency},
             "metadata": combined_usage(generator_metadata, judge_metadata, generator_latency, judge_latency),
         })
-    return result
+        result.sort(key=lambda row: row["qa_id"])
+        if checkpoint is not None:
+            checkpoint([dict(row) for row in result])
+    return sorted(result, key=lambda row: row["qa_id"])
 
 
 def saved_rows(
@@ -391,17 +480,28 @@ def saved_rows(
     selection_hash: str,
     config_hash: str,
     context_hash: str,
+    *,
+    require_complete: bool = True,
 ) -> list[dict[str, Any]]:
     rows = outputs.get("outputs")
-    if not isinstance(rows, list) or len(rows) != len(cases):
-        raise HoldoutError("holdout output must contain exactly seven records")
+    if (
+        not isinstance(rows, list)
+        or len(rows) > len(cases)
+        or (require_complete and len(rows) != len(cases))
+    ):
+        expected_count = "exactly seven" if require_complete else "at most seven"
+        raise HoldoutError(f"holdout output must contain {expected_count} records")
     expected = {item["id"]: item for item in cases}
     qa_ids = [row.get("qa_id") for row in rows if isinstance(row, dict)]
     if (
         len(qa_ids) != len(rows)
         or not all(isinstance(qa_id, str) for qa_id in qa_ids)
         or len(set(qa_ids)) != len(qa_ids)
-        or set(qa_ids) != set(expected)
+        or (
+            set(qa_ids) != set(expected)
+            if require_complete
+            else not set(qa_ids).issubset(expected)
+        )
     ):
         raise HoldoutError("holdout output must contain each frozen question exactly once")
     result = []
@@ -417,19 +517,22 @@ def saved_rows(
             or row.get("contexts_sha256") != context_hash
         ):
             raise HoldoutError("holdout output provenance does not match the frozen selection")
-        structural = structurally_valid_answer(row.get("answer"), contexts[row["qa_id"]])
+        answer = row.get("answer")
+        if not isinstance(answer, dict):
+            raise HoldoutError("saved holdout answer must be a JSON object")
+        structural = structurally_valid_answer(answer, contexts[row["qa_id"]])
         if row.get("structurally_valid") is not structural:
             raise HoldoutError("saved holdout structural verdict does not replay")
         verdict = _saved_verdict(row.get("judge"))
         expected_refusal = (
-            row.get("answer", {}).get("status") == "insufficient_evidence"
+            answer.get("status") == "insufficient_evidence"
         ) == (case["answerability"] == "unanswerable")
         if (
             verdict is None
             or not validate_verdict(verdict, contexts[row["qa_id"]])
             or verdict.refusal_correct != expected_refusal
             or (
-                row.get("answer", {}).get("status") == "insufficient_evidence"
+                answer.get("status") == "insufficient_evidence"
                 and bool(verdict.claims)
             )
         ):
@@ -456,6 +559,103 @@ def saved_rows(
             raise HoldoutError("holdout combined usage metadata does not replay")
         result.append(dict(row))
     return sorted(result, key=lambda row: row["qa_id"])
+
+
+def build_output_packet(
+    *,
+    selection_hash: str,
+    qa_hash: str,
+    retriever_config_hash: str,
+    contexts_hash: str,
+    catalog_hash: str,
+    cost_estimate: dict[str, Any],
+    approved_max_cost_usd: float,
+    rows: Sequence[dict[str, Any]],
+    attempt_counts: dict[str, int] | None = None,
+) -> dict[str, Any]:
+    """Build the exact packet used for partial checkpoints and final evidence."""
+
+    return {
+        "schema_version": 2,
+        "selection_sha256": selection_hash,
+        "qa_sha256": qa_hash,
+        "retriever_config_sha256": retriever_config_hash,
+        "contexts_sha256": contexts_hash,
+        "model_catalog_sha256": catalog_hash,
+        "cost_estimate": cost_estimate,
+        "approved_max_cost_usd": approved_max_cost_usd,
+        "attempt_counts": (
+            dict(attempt_counts)
+            if attempt_counts is not None
+            else {str(row.get("qa_id")): 1 for row in rows}
+        ),
+        "outputs": [dict(row) for row in rows],
+    }
+
+
+def validate_output_packet(
+    packet: dict[str, Any],
+    *,
+    selection_hash: str,
+    qa_hash: str,
+    retriever_config_hash: str,
+    contexts_hash: str,
+    catalog_hash: str,
+    cost_estimate: dict[str, Any],
+    hard_cap: float,
+) -> float:
+    """Validate immutable bindings and the saved owner-approved cost bound."""
+
+    if set(packet) != HOLDOUT_OUTPUT_FIELDS:
+        raise HoldoutError("saved holdout output packet has unexpected fields")
+    expected_bindings = {
+        "selection_sha256": selection_hash,
+        "qa_sha256": qa_hash,
+        "retriever_config_sha256": retriever_config_hash,
+        "contexts_sha256": contexts_hash,
+        "model_catalog_sha256": catalog_hash,
+        "cost_estimate": cost_estimate,
+    }
+    if any(packet.get(field) != value for field, value in expected_bindings.items()):
+        raise HoldoutError("saved holdout output packet does not match frozen inputs")
+    approved = packet.get("approved_max_cost_usd")
+    validate_holdout_cost_bound(approved, cost_estimate["estimated_max_cost_usd"], hard_cap)
+    case_costs = cost_estimate.get("case_maximum_cost_usd")
+    attempt_counts = packet.get("attempt_counts")
+    if (
+        not isinstance(case_costs, dict)
+        or not case_costs
+        or any(
+            not isinstance(case_id, str)
+            or isinstance(cost, bool)
+            or not isinstance(cost, (int, float))
+            or not math.isfinite(cost)
+            or cost < 0
+            for case_id, cost in case_costs.items()
+        )
+        or not isinstance(attempt_counts, dict)
+        or any(
+            case_id not in case_costs
+            or isinstance(count, bool)
+            or not isinstance(count, int)
+            or count <= 0
+            for case_id, count in attempt_counts.items()
+        )
+    ):
+        raise HoldoutError("saved holdout cost reservations are malformed")
+    rows = packet.get("outputs")
+    completed_ids = {
+        row.get("qa_id") for row in rows if isinstance(row, dict)
+    } if isinstance(rows, list) else set()
+    if any(attempt_counts.get(case_id, 0) < 1 for case_id in completed_ids):
+        raise HoldoutError("completed holdout rows lack a cost reservation")
+    reserved_cost = math.fsum(
+        float(case_costs[case_id]) * count
+        for case_id, count in attempt_counts.items()
+    )
+    if reserved_cost > float(approved) + 1e-12:
+        raise HoldoutError("holdout attempt reservations exceed the approved cost cap")
+    return float(approved)
 
 
 def summarize(rows: list[dict[str, Any]]) -> tuple[dict[str, Any], bool]:
@@ -554,14 +754,22 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--result", type=Path, default=ROOT / "data/rag_holdout_summary.json")
     parser.add_argument("--frozen-generator-config", type=Path, default=ROOT / "artifacts/section5/generator_config.json")
     parser.add_argument("--live", action="store_true")
+    parser.add_argument(
+        "--resume-partial",
+        action="store_true",
+        help="resume a hash-validated partial live journal without rerunning completed cases",
+    )
     parser.add_argument("--estimate-only", action="store_true")
     parser.add_argument("--finalize-saved", action="store_true")
     parser.add_argument("--max-cost-usd", type=float)
     parser.add_argument("--confirm-cost", action="store_true")
     args = parser.parse_args(argv)
+    journal_path = args.outputs.with_name(f".{args.outputs.name}.partial.json")
     try:
         if sum((args.live, args.estimate_only, args.finalize_saved)) > 1:
             raise HoldoutError("choose only one of --live, --estimate-only, or --finalize-saved")
+        if args.resume_partial and not args.live:
+            raise HoldoutError("--resume-partial is valid only with --live")
         qa = load_json(args.qa)
         retriever_config = load_json(args.retriever_config)
         selection = load_json(args.selection)
@@ -606,7 +814,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         catalog_models = validate_model_catalog(
             catalog,
-            max_age_hours=24 if args.live or args.estimate_only else None,
+            max_age_hours=24
+            if (args.live and not args.resume_partial) or args.estimate_only
+            else None,
         )
         if winner not in catalog_models or validate_judge_catalog(catalog) != selection.get("judge_model"):
             raise HoldoutError("accepted generator or judge is absent from the frozen catalog")
@@ -633,6 +843,100 @@ def main(argv: Sequence[str] | None = None) -> int:
             api_key = os.environ.get("OPENROUTER_API_KEY")
             if not api_key:
                 raise HoldoutError("--live requires OPENROUTER_API_KEY; no provider call was made")
+            approved_cost = float(args.max_cost_usd)
+            if args.resume_partial:
+                if not journal_path.is_file():
+                    raise HoldoutError("--resume-partial requires the existing partial journal")
+                partial_packet = load_json(journal_path)
+                saved_approved = validate_output_packet(
+                    partial_packet,
+                    selection_hash=selection_hash,
+                    qa_hash=qa_hash,
+                    retriever_config_hash=retriever_config_hash,
+                    contexts_hash=context_hash,
+                    catalog_hash=catalog_hash,
+                    cost_estimate=estimate,
+                    hard_cap=hard_cap,
+                )
+                if saved_approved != approved_cost:
+                    raise HoldoutError("resume cost approval differs from the partial journal")
+                existing_rows = saved_rows(
+                    partial_packet,
+                    cases,
+                    contexts,
+                    winner,
+                    selection_hash,
+                    retriever_config_hash,
+                    context_hash,
+                    require_complete=False,
+                )
+                attempt_counts = dict(partial_packet["attempt_counts"])
+            else:
+                if journal_path.exists():
+                    raise HoldoutError(
+                        "partial holdout journal already exists; use --live --resume-partial"
+                    )
+                existing_rows = []
+                attempt_counts = {}
+                partial_packet = build_output_packet(
+                    selection_hash=selection_hash,
+                    qa_hash=qa_hash,
+                    retriever_config_hash=retriever_config_hash,
+                    contexts_hash=context_hash,
+                    catalog_hash=catalog_hash,
+                    cost_estimate=estimate,
+                    approved_max_cost_usd=approved_cost,
+                    rows=existing_rows,
+                    attempt_counts=attempt_counts,
+                )
+                write_json_atomic(journal_path, partial_packet, overwrite=False)
+
+            journal_rows = [dict(row) for row in existing_rows]
+
+            def checkpoint(rows: list[dict[str, Any]]) -> None:
+                nonlocal journal_rows
+                journal_rows = [dict(row) for row in rows]
+                packet = build_output_packet(
+                    selection_hash=selection_hash,
+                    qa_hash=qa_hash,
+                    retriever_config_hash=retriever_config_hash,
+                    contexts_hash=context_hash,
+                    catalog_hash=catalog_hash,
+                    cost_estimate=estimate,
+                    approved_max_cost_usd=approved_cost,
+                    rows=rows,
+                    attempt_counts=attempt_counts,
+                )
+                write_json_atomic(journal_path, packet, overwrite=True)
+
+            def reserve_case(case_id: str) -> None:
+                nonlocal attempt_counts
+                proposed = dict(attempt_counts)
+                proposed[case_id] = proposed.get(case_id, 0) + 1
+                packet = build_output_packet(
+                    selection_hash=selection_hash,
+                    qa_hash=qa_hash,
+                    retriever_config_hash=retriever_config_hash,
+                    contexts_hash=context_hash,
+                    catalog_hash=catalog_hash,
+                    cost_estimate=estimate,
+                    approved_max_cost_usd=approved_cost,
+                    rows=journal_rows,
+                    attempt_counts=proposed,
+                )
+                validate_output_packet(
+                    packet,
+                    selection_hash=selection_hash,
+                    qa_hash=qa_hash,
+                    retriever_config_hash=retriever_config_hash,
+                    contexts_hash=context_hash,
+                    catalog_hash=catalog_hash,
+                    cost_estimate=estimate,
+                    hard_cap=hard_cap,
+                )
+                attempt_counts = proposed
+                write_json_atomic(journal_path, packet, overwrite=True)
+
             live_rows = run_live(
                 cases,
                 contexts,
@@ -644,35 +948,70 @@ def main(argv: Sequence[str] | None = None) -> int:
                 api_key,
                 generation,
                 judge_settings,
+                existing_rows=existing_rows,
+                before_case=reserve_case,
+                checkpoint=checkpoint,
             )
-            output_packet = {
-                "schema_version": 2,
-                "selection_sha256": selection_hash,
-                "qa_sha256": qa_hash,
-                "retriever_config_sha256": retriever_config_hash,
-                "contexts_sha256": context_hash,
-                "model_catalog_sha256": catalog_hash,
-                "cost_estimate": estimate,
-                "approved_max_cost_usd": float(args.max_cost_usd),
-                "outputs": live_rows,
-            }
-            write_json_atomic(args.outputs, output_packet, overwrite=False)
+            checkpoint(live_rows)
+            output_packet = load_json(journal_path)
+            validate_output_packet(
+                output_packet,
+                selection_hash=selection_hash,
+                qa_hash=qa_hash,
+                retriever_config_hash=retriever_config_hash,
+                contexts_hash=context_hash,
+                catalog_hash=catalog_hash,
+                cost_estimate=estimate,
+                hard_cap=hard_cap,
+            )
+            saved_rows(
+                output_packet,
+                cases,
+                contexts,
+                winner,
+                selection_hash,
+                retriever_config_hash,
+                context_hash,
+            )
+            if args.outputs.exists():
+                raise HoldoutError("one-shot holdout target appeared during execution")
+            os.replace(journal_path, args.outputs)
         else:
+            if args.finalize_saved and not args.outputs.is_file() and journal_path.is_file():
+                partial_packet = load_json(journal_path)
+                validate_output_packet(
+                    partial_packet,
+                    selection_hash=selection_hash,
+                    qa_hash=qa_hash,
+                    retriever_config_hash=retriever_config_hash,
+                    contexts_hash=context_hash,
+                    catalog_hash=catalog_hash,
+                    cost_estimate=estimate,
+                    hard_cap=hard_cap,
+                )
+                saved_rows(
+                    partial_packet,
+                    cases,
+                    contexts,
+                    winner,
+                    selection_hash,
+                    retriever_config_hash,
+                    context_hash,
+                )
+                os.replace(journal_path, args.outputs)
             if not args.outputs.is_file():
                 raise HoldoutError("saved holdout outputs do not exist")
             output_packet = load_json(args.outputs)
-            if set(output_packet) != HOLDOUT_OUTPUT_FIELDS:
-                raise HoldoutError("saved holdout output packet has unexpected fields")
-            expected_bindings = {
-                "selection_sha256": selection_hash,
-                "qa_sha256": qa_hash,
-                "retriever_config_sha256": retriever_config_hash,
-                "contexts_sha256": context_hash,
-                "model_catalog_sha256": catalog_hash,
-                "cost_estimate": estimate,
-            }
-            if any(output_packet.get(field) != value for field, value in expected_bindings.items()):
-                raise HoldoutError("saved holdout output packet does not match frozen inputs")
+            validate_output_packet(
+                output_packet,
+                selection_hash=selection_hash,
+                qa_hash=qa_hash,
+                retriever_config_hash=retriever_config_hash,
+                contexts_hash=context_hash,
+                catalog_hash=catalog_hash,
+                cost_estimate=estimate,
+                hard_cap=hard_cap,
+            )
 
         rows = saved_rows(
             output_packet,

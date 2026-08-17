@@ -1,5 +1,7 @@
+from concurrent.futures import ThreadPoolExecutor
 import json
 import hashlib
+import threading
 import unittest
 from unittest.mock import Mock, patch
 
@@ -37,6 +39,70 @@ def response(payload, *, usage=None, finish_reason=None):
 
 
 class GenerationTests(unittest.TestCase):
+    def test_concurrent_answers_keep_request_metadata_thread_local(self):
+        barrier = threading.Barrier(2)
+
+        class QuerySession:
+            def post(self, _url, *, json, **_kwargs):
+                content = json["messages"][1]["content"]
+                tokens = 11 if "first question" in content else 22
+                return response(
+                    {
+                        "status": "answered",
+                        "text": f"Supported result {tokens}. [1]",
+                        "citation_ids": [1],
+                    },
+                    usage={"prompt_tokens": tokens, "completion_tokens": 3, "cost": tokens / 1_000_000},
+                )
+
+        client = GroundedAnswerClient(api_key="key", session=QuerySession())
+
+        def run(query):
+            result = client.answer(query, [context()])
+            barrier.wait(timeout=2)
+            return result.text, dict(client.last_metadata)
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            first = pool.submit(run, "first question")
+            second = pool.submit(run, "second question")
+            first_text, first_metadata = first.result(timeout=3)
+            second_text, second_metadata = second.result(timeout=3)
+        self.assertIn("11", first_text)
+        self.assertIn("22", second_text)
+        self.assertEqual(first_metadata["input_tokens"], 11)
+        self.assertEqual(second_metadata["input_tokens"], 22)
+
+    def test_production_http_sessions_are_thread_local_and_concurrent(self):
+        barrier = threading.Barrier(2)
+        created = []
+
+        class ConcurrentSession:
+            def post(self, _url, **_kwargs):
+                barrier.wait(timeout=2)
+                return response(
+                    {
+                        "status": "answered",
+                        "text": "Supported finding. [1]",
+                        "citation_ids": [1],
+                    }
+                )
+
+        def create_session():
+            session = ConcurrentSession()
+            created.append(session)
+            return session
+
+        with patch("src.generation.requests.Session", side_effect=create_session):
+            client = GroundedAnswerClient(api_key="key")
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                futures = [
+                    pool.submit(client.answer, query, [context()])
+                    for query in ("first", "second")
+                ]
+                results = [future.result(timeout=3) for future in futures]
+        self.assertEqual(len(created), 2)
+        self.assertTrue(all(result.status == "answered" for result in results))
+
     def test_no_key_fails_closed_without_http(self):
         session = Mock()
         result = GroundedAnswerClient(api_key=None, session=session).answer("question", [context()])

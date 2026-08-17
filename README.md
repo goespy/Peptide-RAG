@@ -280,12 +280,18 @@ requires the exact v2.5 10/3/13 generator result, complete judge-v2 evidence,
 and a passing blind owner report. Context export is one-shot and refuses an
 existing target. The holdout runner then requires that selection, its exact
 prompt/model/catalog hashes, and those frozen contexts; it has no overwrite
-mode. It saves all seven raw rows even when the preregistered quality thresholds
-fail, and only writes the final generator configuration after offline replay
-passes. A crashed post-call finalization can use `--finalize-saved` without
-making another paid call. Ordinary offline reruns make no provider calls. The
+mode. It atomically checkpoints each completed generator+judge pair to a
+hash-bound partial journal; after an interruption, repeat the exact live command
+with `--resume-partial` so completed cases are validated and skipped. It saves
+an owner-cap-checked worst-case reservation before every attempted case, saves
+all seven raw rows even when the preregistered quality thresholds fail, and only
+writes the final generator configuration after offline replay passes. A crashed
+post-call finalization can use `--finalize-saved` without making another paid
+call. Ordinary offline reruns make no provider calls. The
 independent Section 5/6 code audit and resolution trail is saved in
-[`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md).
+[`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md),
+with the final release-hardening audit in
+[`artifacts/section6/claude_opus_release_review.md`](artifacts/section6/claude_opus_release_review.md).
 
 The local application is available without provider credentials:
 
@@ -422,7 +428,7 @@ The selected hybrid service was also initialized once with the committed
 
 | Cold service startup | RSS before | RSS after | RSS delta | Peak process RSS | Provider calls |
 |---:|---:|---:|---:|---:|---:|
-| 3,519.262 ms | 41,312,256 bytes | 216,748,032 bytes | 175,435,776 bytes | 278,310,912 bytes | 0 |
+| 3,514.957 ms | 41,197,568 bytes | 217,751,552 bytes | 176,553,984 bytes | 278,065,152 bytes | 0 |
 
 This is an observed Windows/Python 3.12 development-machine measurement, not a
 Railway guarantee. It is regenerated explicitly by

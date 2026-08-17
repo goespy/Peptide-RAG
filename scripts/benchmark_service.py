@@ -60,8 +60,10 @@ def process_memory_bytes() -> tuple[int, int]:
 
         counters = ProcessMemoryCounters()
         counters.cb = ctypes.sizeof(counters)
-        get_current_process = ctypes.windll.kernel32.GetCurrentProcess
-        get_process_memory_info = ctypes.windll.psapi.GetProcessMemoryInfo
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        psapi = ctypes.WinDLL("psapi", use_last_error=True)
+        get_current_process = kernel32.GetCurrentProcess
+        get_process_memory_info = psapi.GetProcessMemoryInfo
         get_current_process.argtypes = []
         get_current_process.restype = wintypes.HANDLE
         get_process_memory_info.argtypes = [

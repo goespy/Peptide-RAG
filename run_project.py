@@ -54,6 +54,7 @@ from scripts.run_rag_holdout import (
     holdout_cases,
     saved_rows,
     validate_context_provenance,
+    validate_output_packet,
     validate_selection_bindings,
 )
 from scripts.validate_judge import (
@@ -1123,6 +1124,16 @@ def _validate_rag_holdout() -> list[Check]:
     }
     if any(output_packet.get(field) != value for field, value in expected_output_bindings.items()):
         raise ValueError("holdout outputs are not bound to their frozen inputs")
+    validate_output_packet(
+        output_packet,
+        selection_hash=selection_hash,
+        qa_hash=qa_hash,
+        retriever_config_hash=retriever_config_hash,
+        contexts_hash=sha256(RAG_HOLDOUT_CONTEXTS),
+        catalog_hash=catalog_hash,
+        cost_estimate=cost_estimate,
+        hard_cap=hard_cap,
+    )
     approved_max = output_packet.get("approved_max_cost_usd")
     if (
         isinstance(approved_max, bool)

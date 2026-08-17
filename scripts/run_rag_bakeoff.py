@@ -316,7 +316,10 @@ def contexts_from(
             chunks.append(RetrievedChunk(chunk, float(value.get("score", 0.0)), "stored"))
         if not chunks: raise BakeoffError(f"{entry['qa_id']} has no stored contexts")
         output[entry["qa_id"]] = tuple(chunks)
-    if set(output) != {case["id"] for case in cases}: raise BakeoffError("stored contexts must contain exactly the 13 development cases")
+    if set(output) != {case["id"] for case in cases}:
+        raise BakeoffError(
+            f"stored contexts must contain exactly the {len(cases)} requested cases"
+        )
     return output
 
 def _saved_answer(payload: Any) -> AnswerResult | None:
