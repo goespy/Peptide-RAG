@@ -80,3 +80,33 @@ release replay, and the provider-call-free smoke against a real local Uvicorn
 process. All passed. A narrow Opus resolution rerun immediately afterward hit
 the subscription session limit, which reports a 2:20 AM ET reset. Therefore no
 second Opus `PASS` is claimed in this addendum yet.
+
+## Refusal-source resolution
+
+When the subscription became available again, Opus performed the promised
+narrow resolution audit. It confirmed the prior preflight, metrics-claim,
+rate-limit, cost-language, session-lifecycle, and holdout-documentation fixes,
+but returned one remaining Medium finding instead of `PASS`: a malformed
+provider response on only the unanswerable request could still collapse into
+the same standard refusal text as a valid model decision.
+
+The application now maps the generator's thread-local `final_outcome` to a
+coarse public `refusal_source` value. Only the three validated model-refusal
+outcomes map to `model`; missing context, missing credentials, provider/parser
+failure, failed repair, and unknown injected-service values map to
+`failed_closed`. The paid smoke requires `refusal_source: model`, the standard
+text, no citations, hybrid retrieval, and no retrieval fallback. It also
+mechanically requires the supplied answerable and unanswerable questions to
+match the approved development QA split, so untouched holdout questions cannot
+be used through the release CLI.
+
+The source change intentionally invalidated the bound service-memory artifact.
+The primary agent regenerated it with zero network calls, then ran 306 tests,
+the complete offline release replay, and the provider-call-free smoke against a
+real local Uvicorn process. All passed. The final narrow Opus review confirmed
+that the classification is exhaustive, reset per request, read on the same
+thread, provider-unspoofable, and limited to two non-sensitive public values.
+It returned **PASS** with no High or Medium findings. It also confirmed that the
+documented CLI cannot override the frozen QA path and that no error or result
+prints either supplied question. CI for this final delta remains a separate
+pending gate.

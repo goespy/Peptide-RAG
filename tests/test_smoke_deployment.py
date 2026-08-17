@@ -1,3 +1,6 @@
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 
 from scripts.smoke_deployment import HOSTILE_ORIGIN, SmokeError, smoke
@@ -55,6 +58,31 @@ def free_responses(*, metrics_headers=None, search_headers=None, preflight_heade
 
 
 class DeploymentSmokeTests(unittest.TestCase):
+    def _qa_path(self):
+        directory = TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        questions = []
+        for index in range(1, 21):
+            development = index <= 10 or 16 <= index <= 18
+            answerable = index <= 15
+            question = f"Development answerable {index}?"
+            if index == 1:
+                question = "answerable"
+            elif index == 16:
+                question = "unanswerable"
+            questions.append({
+                "id": f"qa{index:02d}",
+                "question": question,
+                "answerable": answerable,
+                "split": "development" if development else "holdout",
+            })
+        path = Path(directory.name) / "qa.json"
+        path.write_text(
+            json.dumps({"status": "approved", "questions": questions}),
+            encoding="utf-8",
+        )
+        return path
+
     def test_default_smoke_is_retrieval_only(self):
         session = Session(free_responses())
         checks = smoke("https://example.test/", session=session)
@@ -73,12 +101,14 @@ class DeploymentSmokeTests(unittest.TestCase):
 
     def test_paid_answer_and_refusal_require_confirmation_and_validate_contract(self):
         session = Session([])
+        qa_path = self._qa_path()
         with self.assertRaisesRegex(SmokeError, "confirm-paid"):
             smoke(
                 "https://example.test",
                 session=session,
                 answer_query="answer",
                 refusal_query="refusal",
+                qa_path=qa_path,
             )
         self.assertEqual(session.requests, [])
 
@@ -88,6 +118,7 @@ class DeploymentSmokeTests(unittest.TestCase):
                 session=session,
                 answer_query="answer",
                 confirm_paid=True,
+                qa_path=qa_path,
             )
         with self.assertRaisesRegex(SmokeError, "must both contain text"):
             smoke(
@@ -96,6 +127,7 @@ class DeploymentSmokeTests(unittest.TestCase):
                 answer_query=" ",
                 refusal_query="unanswerable",
                 confirm_paid=True,
+                qa_path=qa_path,
             )
 
         session = Session([
@@ -119,6 +151,8 @@ class DeploymentSmokeTests(unittest.TestCase):
                 "retrieval_mode": "hybrid",
                 "retrieval_fallback": None,
                 "refusal": "Insufficient evidence in the retrieved research abstracts.",
+                "refusal_source": "model",
+                "citations": [],
             }),
         ])
         checks = smoke(
@@ -127,6 +161,7 @@ class DeploymentSmokeTests(unittest.TestCase):
             answer_query="answerable",
             refusal_query="unanswerable",
             confirm_paid=True,
+            qa_path=qa_path,
         )
         self.assertEqual(checks[-2].name, "grounded_answer")
         self.assertEqual(checks[-1].name, "refusal")
@@ -154,13 +189,59 @@ class DeploymentSmokeTests(unittest.TestCase):
                 "reason": "Answer generation is unavailable.",
             }),
         ])
-        with self.assertRaisesRegex(SmokeError, "standard evidence refusal"):
+        with self.assertRaisesRegex(SmokeError, "model-originated evidence refusal"):
             smoke(
                 "https://example.test",
                 session=outage,
                 answer_query="answerable",
                 refusal_query="unanswerable",
                 confirm_paid=True,
+                qa_path=qa_path,
+            )
+
+        per_query_fail_close = Session([
+            *free_responses(),
+            Response(200, {
+                "answer": "Supported finding. [1]",
+                "retrieval_only": False,
+                "retrieval_mode": "hybrid",
+                "retrieval_fallback": None,
+                "citations": [{
+                    "citation_id": 1,
+                    "pmid": "123",
+                    "chunk_id": "123:c0001",
+                    "title": "Measured result",
+                    "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/123/",
+                }],
+            }),
+            Response(200, {
+                "answer": None,
+                "retrieval_only": True,
+                "retrieval_mode": "hybrid",
+                "retrieval_fallback": None,
+                "refusal": "Insufficient evidence in the retrieved research abstracts.",
+                "refusal_source": "failed_closed",
+                "citations": [],
+            }),
+        ])
+        with self.assertRaisesRegex(SmokeError, "model-originated evidence refusal"):
+            smoke(
+                "https://example.test",
+                session=per_query_fail_close,
+                answer_query="answerable",
+                refusal_query="unanswerable",
+                confirm_paid=True,
+                qa_path=qa_path,
+            )
+
+        with self.assertRaisesRegex(SmokeError, "approved development QA"):
+            smoke(
+                "https://example.test",
+                session=Session([]),
+                answer_query="holdout or invented answer",
+                refusal_query="unanswerable",
+                confirm_paid=True,
+                qa_path=qa_path,
             )
 
     def test_rejects_bad_origin_ranked_result_and_missing_rate_limit(self):

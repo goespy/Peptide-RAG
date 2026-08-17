@@ -112,8 +112,8 @@ The offline development measurement is reproducible with:
 python scripts/benchmark_service.py --overwrite
 ```
 
-It observed `217,751,552` bytes RSS after initialization and a
-`278,065,152`-byte peak with the selected cache, 2,000-document index, and zero
+It observed `218,300,416` bytes RSS after initialization and a
+`278,355,968`-byte peak with the selected cache, 2,000-document index, and zero
 provider calls. The machine ran Windows and Python 3.12, so the artifact is a
 pre-deployment sizing signal only; Railway/Python 3.11 memory remains the
 authoritative production measurement.
@@ -129,6 +129,11 @@ python scripts/smoke_deployment.py --base-url https://YOUR-DOMAIN
 After selecting one owner-approved **development** answerable question and one
 development intentionally unanswerable question, the explicit paid smoke path
 is below. Never use untouched holdout questions for smoke testing or the demo.
+The smoke command verifies both supplied questions against the frozen approved
+development split before sending a request, and a refusal passes only when the
+generation client identifies it as a valid model refusal rather than a local
+fail-close.
+
 The command sends exactly two `/api/answer` HTTP requests; it does not enforce a
 dollar cap, so verify the server-side daily/provider caps and the OpenRouter
 account limit before confirming it.
@@ -148,7 +153,8 @@ prints the supplied questions.
 2. BM25 search returns scored PubMed records and safe highlighted snippets.
 3. Hybrid search uses the frozen cache; deleting or corrupting its identity must disable it.
 4. One approved answer contains clickable, chunk-bound citations.
-5. One frozen unanswerable question returns `insufficient_evidence`.
+5. One approved development unanswerable question returns a model-originated
+   `insufficient_evidence`, not a provider/parser fail-close.
 6. Personalized/dosing advice is refused before generation.
 7. Per-IP limits and the daily budget return retrieval evidence, not a generated fallback.
 8. No raw query or server secret appears in application logs or browser code.

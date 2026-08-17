@@ -429,7 +429,7 @@ The selected hybrid service was also initialized once with the committed
 
 | Cold service startup | RSS before | RSS after | RSS delta | Peak process RSS | Provider calls |
 |---:|---:|---:|---:|---:|---:|
-| 3,514.957 ms | 41,197,568 bytes | 217,751,552 bytes | 176,553,984 bytes | 278,065,152 bytes | 0 |
+| 3,482.187 ms | 41,349,120 bytes | 218,300,416 bytes | 176,951,296 bytes | 278,355,968 bytes | 0 |
 
 This is an observed Windows/Python 3.12 development-machine measurement, not a
 Railway guarantee. It is regenerated explicitly by

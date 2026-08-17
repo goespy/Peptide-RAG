@@ -77,6 +77,21 @@ class WebAppTests(unittest.TestCase):
         capped = capped_client.post("/api/answer", json={"query": "second"}).json()
         self.assertEqual(capped["reason"], "Daily answer budget is exhausted.")
 
+        class UnknownRefusalSource(FakeService):
+            def answer(self, *args):
+                return {
+                    "answer": None,
+                    "refusal": "Insufficient evidence.",
+                    "refusal_source": "untrusted",
+                    "citations": [],
+                }
+
+        refusal = TestClient(create_app(UnknownRefusalSource())).post(
+            "/api/answer",
+            json={"query": "peptide", "mode": "hybrid", "k": 1},
+        ).json()
+        self.assertEqual(refusal["refusal_source"], "failed_closed")
+
     def test_answer_endpoint_retrieves_evidence_once(self):
         class Counting(FakeService):
             def __init__(self): self.search_calls = 0

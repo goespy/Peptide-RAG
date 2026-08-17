@@ -6,7 +6,9 @@ from __future__ import annotations
 import argparse
 import json
 import math
+from pathlib import Path
 import sys
+import unicodedata
 from dataclasses import dataclass
 from typing import Any, Sequence
 from urllib.parse import urlparse
@@ -15,6 +17,7 @@ import requests
 
 
 DEFAULT_QUERY = "BPC 157 tissue regeneration"
+DEFAULT_QA_PATH = Path(__file__).resolve().parents[1] / "data" / "qa.json"
 HOSTILE_ORIGIN = "https://cross-origin-smoke.invalid"
 STANDARD_REFUSAL = "Insufficient evidence in the retrieved research abstracts."
 EXPECTED_SEARCH_LIMIT_PROBE = 30
@@ -78,6 +81,58 @@ def _reject_cross_origin(response: Any, name: str) -> None:
     headers = {str(key).casefold() for key in getattr(response, "headers", {})}
     if "access-control-allow-origin" in headers:
         raise SmokeError(f"{name} unexpectedly permits the hostile cross-origin probe")
+
+
+def _normalized_question(value: str) -> str:
+    return " ".join(unicodedata.normalize("NFKC", value).casefold().split())
+
+
+def _require_development_smoke_queries(
+    qa_path: Path,
+    answer_query: str,
+    refusal_query: str,
+) -> None:
+    """Require canonical approved development questions without echoing them."""
+
+    try:
+        payload = json.loads(Path(qa_path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SmokeError("cannot validate paid smoke questions against frozen QA") from exc
+    questions = payload.get("questions") if isinstance(payload, dict) else None
+    if (
+        not isinstance(payload, dict)
+        or payload.get("status") != "approved"
+        or not isinstance(questions, list)
+    ):
+        raise SmokeError("frozen QA is not an approved question set")
+    development = [
+        item
+        for item in questions
+        if isinstance(item, dict) and item.get("split") == "development"
+    ]
+    if len(questions) != 20 or len(development) != 13:
+        raise SmokeError("frozen QA does not contain the expected development split")
+    answerable = {
+        _normalized_question(item["question"])
+        for item in development
+        if item.get("answerable") is True
+        and isinstance(item.get("question"), str)
+        and item["question"].strip()
+    }
+    unanswerable = {
+        _normalized_question(item["question"])
+        for item in development
+        if item.get("answerable") is False
+        and isinstance(item.get("question"), str)
+        and item["question"].strip()
+    }
+    if len(answerable) != 10 or len(unanswerable) != 3:
+        raise SmokeError("frozen QA has an invalid development answerability split")
+    if (
+        _normalized_question(answer_query) not in answerable
+        or _normalized_question(refusal_query) not in unanswerable
+    ):
+        raise SmokeError("paid smoke questions must be approved development QA cases")
 
 
 def _smoke_with_client(
@@ -244,9 +299,13 @@ def _smoke_with_client(
             or refusal.get("retrieval_mode") != "hybrid"
             or refusal.get("retrieval_fallback") is not None
             or refusal.get("refusal") != STANDARD_REFUSAL
+            or refusal.get("refusal_source") != "model"
+            or refusal.get("citations") != []
             or "reason" in refusal
         ):
-            raise SmokeError("unanswerable smoke query did not return the standard evidence refusal")
+            raise SmokeError(
+                "unanswerable smoke query did not return a model-originated evidence refusal"
+            )
         _reject_cross_origin(refusal_response, "refusal")
         checks.append(SmokeCheck("refusal", "pass", "standard evidence refusal returned"))
 
@@ -287,11 +346,14 @@ def smoke(
     refusal_query: str | None = None,
     confirm_paid: bool = False,
     check_rate_limit: bool = False,
+    qa_path: Path = DEFAULT_QA_PATH,
 ) -> tuple[SmokeCheck, ...]:
     """Run public-contract checks and close only sessions created here."""
 
     if (answer_query is None) != (refusal_query is None):
         raise SmokeError("paid smoke requires both --answer-query and --refusal-query")
+    if answer_query is not None and not confirm_paid:
+        raise SmokeError("answer/refusal smoke calls require --confirm-paid")
     if answer_query is not None and (
         not isinstance(answer_query, str)
         or not answer_query.strip()
@@ -299,6 +361,12 @@ def smoke(
         or not refusal_query.strip()
     ):
         raise SmokeError("paid smoke queries must both contain text")
+    if answer_query is not None:
+        _require_development_smoke_queries(
+            Path(qa_path),
+            answer_query,
+            refusal_query,
+        )
     kwargs = {
         "timeout": timeout,
         "search_query": search_query,

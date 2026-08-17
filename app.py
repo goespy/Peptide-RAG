@@ -56,7 +56,11 @@ class LocalOnlyService:
         return []
 
     def answer(self, query: str, mode: str, k: int, evidence: list[dict[str, Any]]) -> dict[str, Any]:
-        return {"answer": None, "refusal": "No answer provider is configured; showing retrieved evidence only."}
+        return {
+            "answer": None,
+            "refusal": "No answer provider is configured; showing retrieved evidence only.",
+            "refusal_source": "failed_closed",
+        }
 
     def metrics(self) -> dict[str, Any]:
         return {"available": False, "message": "No evaluation metrics service is configured."}
@@ -353,7 +357,16 @@ def create_app(
         if isinstance(value, str):
             value = {"answer": value}
         if not isinstance(value, dict):
-            value = {"answer": None, "refusal": "Answer service returned no usable response."}
+            value = {
+                "answer": None,
+                "refusal": "Answer service returned no usable response.",
+                "refusal_source": "failed_closed",
+            }
+        elif not value.get("answer") and value.get("refusal_source") not in {
+            "model",
+            "failed_closed",
+        }:
+            value = {**value, "refusal_source": "failed_closed"}
         return {
             **value,
             "retrieval_only": not bool(value.get("answer")),

@@ -235,6 +235,37 @@ class ServiceTests(unittest.TestCase):
             self.assertEqual(client.contexts, ())
             self.assertIsNone(response["answer"])
             self.assertEqual(response["citations"], [])
+            self.assertEqual(response["refusal_source"], "failed_closed")
+
+    def test_refusal_source_distinguishes_model_result_from_fail_close(self):
+        class RefusingClient:
+            def __init__(self, final_outcome):
+                self.last_metadata = {"final_outcome": final_outcome}
+
+            def answer(self, query, contexts):
+                return insufficient_evidence()
+
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            corpus = self._corpus(directory)
+            config = self._lexical_config(directory, corpus)
+            for outcome, expected in (
+                ("model_insufficient_evidence", "model"),
+                ("model_insufficient_evidence_after_reconsideration", "model"),
+                ("model_insufficient_evidence_after_repair", "model"),
+                ("failed_closed_after_repair", "failed_closed"),
+                ("preflight_insufficient_evidence", "failed_closed"),
+                (None, "failed_closed"),
+            ):
+                with self.subTest(outcome=outcome):
+                    client = RefusingClient(outcome)
+                    service = LocalResearchService(
+                        corpus_path=corpus,
+                        lexical_config_path=config,
+                        answer_client=client,
+                    )
+                    response = service.answer("Question?", "lexical", 1, [])
+                    self.assertEqual(response["refusal_source"], expected)
 
     def test_answer_reuses_canonical_displayed_chunks_without_second_retrieval(self):
         class RecordingClient:

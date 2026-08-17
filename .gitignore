@@ -19,6 +19,10 @@ build/
 dist/
 *.egg-info/
 
+# Local Codex/session output (never release evidence)
+.codex-artifacts/
+outputs/
+
 # Temporary corpus writes (the completed corpus remains trackable)
 data/.*.tmp
 data/*.tmp

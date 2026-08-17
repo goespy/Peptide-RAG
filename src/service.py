@@ -37,6 +37,13 @@ DEFAULT_SOURCE_GENERATOR_CONFIG = ROOT / "artifacts" / "section5" / "generator_v
 DEFAULT_HOLDOUT_SUMMARY = ROOT / "data" / "rag_holdout_summary.json"
 DEFAULT_HOLDOUT_OUTPUTS = ROOT / "data" / "rag_holdout_outputs.json"
 DEFAULT_HOLDOUT_CONTEXTS = ROOT / "data" / "rag_holdout_contexts.json"
+MODEL_REFUSAL_OUTCOMES = frozenset(
+    {
+        "model_insufficient_evidence",
+        "model_insufficient_evidence_after_reconsideration",
+        "model_insufficient_evidence_after_repair",
+    }
+)
 
 
 def _sha256(path: Path) -> str:
@@ -48,6 +55,19 @@ def _is_sha256(value: object) -> bool:
         isinstance(value, str)
         and len(value) == 64
         and all(character in "0123456789ABCDEF" for character in value)
+    )
+
+
+def _refusal_source(answer_client: object) -> str:
+    """Expose only whether a refusal was a valid model result or a fail-close."""
+
+    metadata = getattr(answer_client, "last_metadata", None)
+    if not isinstance(metadata, dict):
+        return "failed_closed"
+    return (
+        "model"
+        if metadata.get("final_outcome") in MODEL_REFUSAL_OUTCOMES
+        else "failed_closed"
     )
 
 
@@ -404,10 +424,20 @@ class LocalResearchService:
 
     def answer(self, query: str, mode: str, k: int, evidence: list[dict[str, Any]]) -> dict[str, Any]:
         if self.answer_client is None:
-            return {"answer": None, "refusal": "Grounded generation is unavailable until the measured RAG configuration and holdout winner are frozen.", "citations": []}
+            return {
+                "answer": None,
+                "refusal": "Grounded generation is unavailable until the measured RAG configuration and holdout winner are frozen.",
+                "refusal_source": "failed_closed",
+                "citations": [],
+            }
         result: AnswerResult = self.answer_client.answer(query, self._contexts_from_evidence(evidence, k))
         if result.status != "answered":
-            return {"answer": None, "refusal": result.text, "citations": []}
+            return {
+                "answer": None,
+                "refusal": result.text,
+                "refusal_source": _refusal_source(self.answer_client),
+                "citations": [],
+            }
         return {
             "answer": result.text,
             "citations": [

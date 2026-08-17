@@ -60,8 +60,9 @@ was interrupted, run `python scripts/run_rag_holdout.py --finalize-saved`.
 ## 3. Release only after the offline runner passes the holdout
 
 Deploy the exact passing commit to Railway, configure the environment from
-`.env.example`, run the smoke checklist in [`DEPLOYMENT.md`](DEPLOYMENT.md)
-using development QA cases only (never the untouched holdout questions),
+`.env.example`, and run the smoke checklist in [`DEPLOYMENT.md`](DEPLOYMENT.md)
+using development QA cases only (never the untouched holdout questions). The
+smoke command checks this mechanically against the frozen QA split. Then
 capture the cited-answer/refusal screenshot, record the 3–5 minute demo, and
 replace the remaining submission placeholders where applicable in `README.md`,
 `DEMO-SCRIPT.md`, `SOCIAL-POST.md`, and `SELF-EVALUATION.md` with
