@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 import json
 import os
 from typing import Sequence
@@ -39,21 +40,45 @@ def validate_verdict(verdict: JudgeVerdict, contexts: Sequence[RetrievedChunk]) 
         return False
     if not isinstance(verdict.citations_correct, bool) or not isinstance(verdict.refusal_correct, bool):
         return False
-    return all(
+    claims_valid = all(
         isinstance(claim.text, str) and bool(claim.text.strip()) and isinstance(claim.supported, bool)
         and all(isinstance(item, int) and not isinstance(item, bool) and item in allowed for item in claim.citation_ids)
         for claim in verdict.claims
     )
+    return claims_valid and verdict.faithful is all(claim.supported for claim in verdict.claims)
 
 
 class AnswerJudge:
     """Conservative judge; invalid/provider responses produce no verdict."""
 
-    def __init__(self, *, api_key: str | None = None, model: str = DEFAULT_JUDGE_MODEL, timeout: float = 30.0, session: requests.Session | None = None) -> None:
-        if not isinstance(model, str) or not model or timeout <= 0:
-            raise ValueError("model must be non-empty and timeout must be positive")
+    def __init__(
+        self,
+        *,
+        api_key: str | None = None,
+        model: str = DEFAULT_JUDGE_MODEL,
+        timeout: float = 30.0,
+        max_tokens: int = 600,
+        require_supported_parameters: bool = False,
+        prompt_version: int = 1,
+        session: requests.Session | None = None,
+    ) -> None:
+        if (
+            not isinstance(model, str)
+            or not model
+            or timeout <= 0
+            or isinstance(max_tokens, bool)
+            or not isinstance(max_tokens, int)
+            or max_tokens <= 0
+            or not isinstance(require_supported_parameters, bool)
+            or isinstance(prompt_version, bool)
+            or prompt_version not in {1, 2}
+        ):
+            raise ValueError("invalid judge model, timeout, token cap, or provider configuration")
         self.api_key = api_key if api_key is not None else os.environ.get("OPENROUTER_API_KEY")
         self.model, self.timeout = model, timeout
+        self.max_tokens = max_tokens
+        self.require_supported_parameters = require_supported_parameters
+        self.prompt_version = prompt_version
         self.session = session if session is not None else requests.Session()
         self.last_metadata: dict[str, object] = {}
 
@@ -73,20 +98,28 @@ class AnswerJudge:
             "cost_usd": 0.0,
             "provider": None,
         }
-        if not isinstance(query, str) or not query.strip() or not self.api_key:
+        if not isinstance(query, str) or not query.strip() or not self.api_key or not isinstance(expected_answerable, bool):
             return None
         try:
             self.last_metadata["provider_calls"] = 1
-            response = self.session.post(OPENROUTER_CHAT_URL, headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}, json=self._payload(query, answer, selected, expected_answerable=expected_answerable), timeout=self.timeout)
+            response = self.session.post(OPENROUTER_CHAT_URL, headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}, json=self._payload(query, answer, selected), timeout=self.timeout)
             response.raise_for_status()
             response_payload = response.json()
             self._record_usage(response_payload)
             content = response_payload["choices"][0]["message"]["content"]
-            payload = json.loads(content) if isinstance(content, str) else content
-            refusal_correct = False if expected_answerable is None else (
-                (answer.status == "insufficient_evidence") == (not expected_answerable)
+            raw_content = (
+                content
+                if isinstance(content, str)
+                else json.dumps(content, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
             )
+            self.last_metadata["raw_output_sha256"] = hashlib.sha256(
+                raw_content.encode("utf-8")
+            ).hexdigest().upper()
+            payload = json.loads(content) if isinstance(content, str) else content
+            refusal_correct = (answer.status == "insufficient_evidence") == (not expected_answerable)
             verdict = self._parse(payload, refusal_correct=refusal_correct)
+            if self.prompt_version >= 2 and answer.status == "insufficient_evidence" and verdict.claims:
+                return None
             return verdict if validate_verdict(verdict, selected) else None
         except (requests.RequestException, OSError, KeyError, IndexError, TypeError, ValueError, json.JSONDecodeError):
             return None
@@ -117,12 +150,18 @@ class AnswerJudge:
         query: str,
         answer: AnswerResult,
         contexts: Sequence[RetrievedChunk],
-        *,
-        expected_answerable: bool | None,
     ) -> dict[str, object]:
         evidence = "\n\n".join(f"[{i}] PMID {chunk.pmid} | {chunk.title}\n{chunk.text}" for i, chunk in enumerate(contexts, 1))
         schema = {"name": "faithfulness_verdict", "strict": True, "schema": {"type": "object", "additionalProperties": False, "required": ["claims", "faithful", "relevant", "citations_correct"], "properties": {"claims": {"type": "array", "items": {"type": "object", "additionalProperties": False, "required": ["text", "supported", "citation_ids"], "properties": {"text": {"type": "string"}, "supported": {"type": "boolean"}, "citation_ids": {"type": "array", "items": {"type": "integer"}}}}}, "faithful": {"type": "boolean"}, "relevant": {"type": "boolean"}, "citations_correct": {"type": "boolean"}}}}
-        return {"model": self.model, "temperature": 0, "max_tokens": 600, "response_format": {"type": "json_schema", "json_schema": schema}, "messages": [{"role": "system", "content": "Judge only supplied evidence. Extract atomic claims and mark support. Do not infer missing facts. Evaluate faithfulness, relevance, and citation correctness only; refusal correctness is computed outside the model."}, {"role": "user", "content": f"Question: {query}\nAnswer status: {answer.status}\nAnswer: {answer.text}\nCitations: {tuple((c.citation_id, c.pmid, c.chunk_id) for c in answer.citations)}\n\nEvidence:\n{evidence}"}]}
+        system_prompt = (
+            "Judge only supplied evidence. Extract atomic claims and mark support. Do not infer missing facts. Evaluate faithfulness, relevance, and citation correctness only; refusal correctness is computed outside the model."
+            if self.prompt_version == 1
+            else "Judge only the supplied answer against the supplied evidence. Extract atomic factual claims from the answer text only, never from the evidence itself. Mark each answer claim supported only when the cited evidence supports its exact population, species, scope, polarity, and uncertainty. Faithful must equal whether every extracted answer claim is supported. For an insufficient_evidence answer with no factual study claim, return an empty claims list and faithful true; refusal correctness is computed outside the model. Evaluate relevance and citation correctness without inventing missing facts."
+        )
+        payload: dict[str, object] = {"model": self.model, "temperature": 0, "max_tokens": self.max_tokens, "response_format": {"type": "json_schema", "json_schema": schema}, "messages": [{"role": "system", "content": system_prompt}, {"role": "user", "content": f"Question: {query}\nAnswer status: {answer.status}\nAnswer: {answer.text}\nCitations: {tuple((c.citation_id, c.pmid, c.chunk_id) for c in answer.citations)}\n\nEvidence:\n{evidence}"}]}
+        if self.require_supported_parameters:
+            payload["provider"] = {"require_parameters": True}
+        return payload
 
     @staticmethod
     def _parse(payload: object, *, refusal_correct: bool) -> JudgeVerdict:

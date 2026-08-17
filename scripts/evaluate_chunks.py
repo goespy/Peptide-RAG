@@ -16,7 +16,14 @@ from scripts.embed_chunks import ChunkEmbeddingError, load_chunk_artifact
 from src.analysis import ANALYSIS_CONFIGS, AnalysisConfig
 from src.bm25 import BM25Config
 from src.chunks import Chunk, embedding_text, span_contained
-from src.embeddings import EmbeddingCacheManifest, EmbeddingClient, load_embedding_cache
+from src.embeddings import (
+    DEFAULT_EMBEDDING_MODEL,
+    EmbeddingCacheManifest,
+    EmbeddingClient,
+    load_embedding_cache,
+    normalize_embeddings,
+    save_embedding_cache,
+)
 from src.generation import GENERATION_MAX_TOKENS, GENERATION_TEMPERATURE, SYSTEM_PROMPT
 from src.retrieval import Retriever
 
@@ -40,20 +47,119 @@ def development_answerable(qa: dict[str, Any]) -> tuple[dict[str, Any], ...]:
         if not isinstance(case.get("question"), str) or not isinstance(case.get("supporting_spans"), list) or not case["supporting_spans"]: raise ChunkEvaluationError(f"{case.get('id')} has no usable evidence")
     return cases
 
+def development_questions(qa: dict[str, Any]) -> tuple[dict[str, Any], ...]:
+    cases = tuple(sorted(
+        (case for case in qa["questions"] if isinstance(case, dict) and case.get("split") == "development"),
+        key=lambda case: str(case.get("id", "")),
+    ))
+    if len(cases) != 13:
+        raise ChunkEvaluationError("approved QA set must contain 13 development questions")
+    ids = [case.get("id") for case in cases]
+    if (
+        len(set(ids)) != len(ids)
+        or any(not isinstance(case_id, str) or not case_id for case_id in ids)
+        or any(not isinstance(case.get("question"), str) or not case["question"].strip() for case in cases)
+    ):
+        raise ChunkEvaluationError("development questions must have unique IDs and nonempty text")
+    return cases
+
 def _cache_for(
     chunks: tuple[Chunk, ...],
     chunk_manifest: dict[str, Any],
     cache_path: Path,
+    expected_model: str,
 ) -> tuple[np.ndarray, str]:
     try:
         with np.load(cache_path, allow_pickle=False) as stored:
             raw = json.loads(stored["manifest"].item())
         raw["input_hashes"] = tuple(raw["input_hashes"]); raw["chunk_ids"] = tuple(raw["chunk_ids"])
-        expected = EmbeddingCacheManifest.create(model=raw["model"], dimension=int(raw["dimension"]), corpus_hash=chunk_manifest["corpus_sha256"], chunk_hash=chunk_manifest["chunk_sha256"], inputs=[embedding_text(c) for c in chunks], chunk_ids=[c.chunk_id for c in chunks])
+        expected = EmbeddingCacheManifest.create(model=expected_model, dimension=int(raw["dimension"]), corpus_hash=chunk_manifest["corpus_sha256"], chunk_hash=chunk_manifest["chunk_sha256"], inputs=[embedding_text(c) for c in chunks], chunk_ids=[c.chunk_id for c in chunks])
         vectors = load_embedding_cache(cache_path, expected)
     except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc: raise ChunkEvaluationError(f"invalid embedding cache {cache_path}: {exc}") from exc
     if vectors is None: raise ChunkEvaluationError(f"embedding cache does not match chunk artifact: {cache_path}")
-    return vectors, str(raw["model"])
+    return vectors, expected_model
+
+def query_embeddings(
+    qa: dict[str, Any],
+    *,
+    cache_path: Path,
+    model: str,
+    corpus_hash: str,
+    qa_hash: str,
+    client: EmbeddingClient | None = None,
+    overwrite: bool = False,
+) -> tuple[dict[str, np.ndarray], dict[str, object]]:
+    """Load or create the versioned embeddings for all development questions."""
+
+    cases = development_questions(qa)
+    inputs = [str(case["question"]) for case in cases]
+    case_ids = [str(case["id"]) for case in cases]
+    path = Path(cache_path)
+    usage_path = path.with_suffix(path.suffix + ".usage.json")
+    if path.exists():
+        try:
+            with np.load(path, allow_pickle=False) as stored:
+                raw = json.loads(stored["manifest"].item())
+            raw["input_hashes"] = tuple(raw["input_hashes"])
+            raw["chunk_ids"] = tuple(raw["chunk_ids"])
+            expected = EmbeddingCacheManifest.create(
+                model=model,
+                dimension=int(raw["dimension"]),
+                corpus_hash=corpus_hash,
+                chunk_hash=qa_hash,
+                inputs=inputs,
+                chunk_ids=case_ids,
+            )
+            vectors = load_embedding_cache(path, expected)
+            usage_packet = json.loads(usage_path.read_text(encoding="utf-8"))
+            if (
+                not isinstance(usage_packet, dict)
+                or usage_packet.get("schema_version") != 1
+                or usage_packet.get("model") != model
+                or usage_packet.get("corpus_sha256") != corpus_hash
+                or usage_packet.get("qa_sha256") != qa_hash
+                or usage_packet.get("query_cache_sha256") != sha256(path)
+                or usage_packet.get("question_count") != len(cases)
+                or not isinstance(usage_packet.get("provider_usage"), dict)
+            ):
+                raise ChunkEvaluationError("development-query usage metadata does not match its cache")
+        except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+            if not overwrite:
+                raise ChunkEvaluationError(f"invalid development-query embedding cache: {exc}") from exc
+            vectors = None
+        if vectors is not None:
+            return dict(zip(inputs, vectors)), {"source": "frozen_query_cache", "creation": usage_packet["provider_usage"]}
+        if not overwrite:
+            raise ChunkEvaluationError("development-query embedding cache does not match the approved QA set")
+
+    embedding_client = client if client is not None else EmbeddingClient(model=model)
+    vectors = normalize_embeddings(embedding_client.embed(inputs, batch_size=100))
+    if vectors.ndim != 2 or vectors.shape[0] != len(inputs) or vectors.shape[1] <= 0:
+        raise ChunkEvaluationError("embedding client returned invalid development-query vectors")
+    manifest = EmbeddingCacheManifest.create(
+        model=model,
+        dimension=int(vectors.shape[1]),
+        corpus_hash=corpus_hash,
+        chunk_hash=qa_hash,
+        inputs=inputs,
+        chunk_ids=case_ids,
+    )
+    save_embedding_cache(path, vectors, manifest)
+    usage = dict(embedding_client.total_metadata)
+    usage_packet = {
+        "schema_version": 1,
+        "model": model,
+        "corpus_sha256": corpus_hash,
+        "qa_sha256": qa_hash,
+        "query_cache_sha256": sha256(path),
+        "question_count": len(cases),
+        "provider_usage": usage,
+    }
+    _atomic(usage_path, json.dumps(usage_packet, indent=2, sort_keys=True) + "\n", overwrite)
+    stored_vectors = load_embedding_cache(path, manifest)
+    if stored_vectors is None:
+        raise ChunkEvaluationError("saved development-query embedding cache failed immediate validation")
+    return dict(zip(inputs, stored_vectors)), {"source": "frozen_query_cache", "creation": usage}
 
 def relevant_chunk_ids(case: dict[str, Any], chunks: Sequence[Chunk]) -> set[str]:
     relevant: set[str] = set()
@@ -62,13 +168,14 @@ def relevant_chunk_ids(case: dict[str, Any], chunks: Sequence[Chunk]) -> set[str
         pmid, start, end = span.get("pmid"), span.get("start_char"), span.get("end_char")
         if not isinstance(pmid, str) or not isinstance(start, int) or not isinstance(end, int): raise ChunkEvaluationError(f"{case.get('id')} malformed span")
         relevant.update(chunk.chunk_id for chunk in chunks if chunk.pmid == pmid and span_contained(chunk, start, end))
-    if not relevant: raise ChunkEvaluationError(f"{case.get('id')} has no chunk fully containing its approved evidence")
     return relevant
 
 def _metric(rankings: dict[str, list[str]], gold: dict[str, set[str]], cutoff: int) -> tuple[float, float]:
     recalls, hits = [], []
     for case_id, wanted in gold.items():
-        found = set(rankings[case_id][:cutoff]); recalls.append(len(found & wanted) / len(wanted)); hits.append(1.0 if found & wanted else 0.0)
+        found = set(rankings[case_id][:cutoff])
+        recalls.append(len(found & wanted) / len(wanted) if wanted else 0.0)
+        hits.append(1.0 if wanted and found & wanted else 0.0)
     return mean(recalls), mean(hits)
 
 def evaluate_retriever(cases: Sequence[dict[str, Any]], retriever: Retriever, *, alpha: float | None = None) -> dict[str, Any]:
@@ -135,7 +242,7 @@ def _atomic(path: Path, content: str, overwrite: bool) -> None:
         raise
 
 def main(argv: Sequence[str] | None = None) -> int:
-    p = argparse.ArgumentParser(description=__doc__); p.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); p.add_argument("--corpus", type=Path, default=ROOT / "data/corpus.jsonl"); p.add_argument("--lexical-config", type=Path, default=ROOT / "data/lexical_config.json"); p.add_argument("--candidate", action="append", nargs=4, metavar=("NAME", "CHUNKS", "MANIFEST", "CACHE"), required=True); p.add_argument("--output-json", type=Path, required=True); p.add_argument("--output-md", type=Path, required=True); p.add_argument("--frozen-config", type=Path, required=True); p.add_argument("--contexts-output", type=Path); p.add_argument("--overwrite", action="store_true"); args = p.parse_args(argv)
+    p = argparse.ArgumentParser(description=__doc__); p.add_argument("--qa", type=Path, default=ROOT / "data/qa.json"); p.add_argument("--corpus", type=Path, default=ROOT / "data/corpus.jsonl"); p.add_argument("--lexical-config", type=Path, default=ROOT / "data/lexical_config.json"); p.add_argument("--candidate", action="append", nargs=4, metavar=("NAME", "CHUNKS", "MANIFEST", "CACHE"), required=True); p.add_argument("--embedding-model", default=DEFAULT_EMBEDDING_MODEL); p.add_argument("--query-cache", type=Path, default=ROOT / "artifacts/section5/query_embeddings.npz"); p.add_argument("--output-json", type=Path, required=True); p.add_argument("--output-md", type=Path, required=True); p.add_argument("--frozen-config", type=Path, required=True); p.add_argument("--contexts-output", type=Path); p.add_argument("--overwrite", action="store_true"); args = p.parse_args(argv)
     try:
         targets = (args.output_json, args.output_md, args.frozen_config) + ((args.contexts_output,) if args.contexts_output else ())
         for target in targets:
@@ -159,16 +266,26 @@ def main(argv: Sequence[str] | None = None) -> int:
             chunks, manifest = load_chunk_artifact(Path(chunks_path), Path(manifest_path))
             if manifest.get("corpus_sha256") != corpus_hash:
                 raise ChunkEvaluationError(f"{name} chunks are not bound to the approved QA corpus")
-            vectors, model = _cache_for(chunks, manifest, Path(cache_path))
+            vectors, model = _cache_for(chunks, manifest, Path(cache_path), args.embedding_model)
             if cache_model is not None and model != cache_model:
                 raise ChunkEvaluationError("all candidate caches must use the same embedding model")
             cache_model = model
             loaded.append((name, chunks, vectors, manifest.get("config", {})))
-        client = EmbeddingClient(model=cache_model or ""); query_cache: dict[str, np.ndarray] = {}
+        qa_hash = sha256(args.qa)
+        query_cache, query_usage = query_embeddings(
+            qa,
+            cache_path=args.query_cache,
+            model=cache_model or "",
+            corpus_hash=corpus_hash,
+            qa_hash=qa_hash,
+            overwrite=args.overwrite,
+        )
         def embed(query: str) -> np.ndarray:
-            if query not in query_cache: query_cache[query] = client.embed([query])[0]
-            return query_cache[query]
-        report = evaluate_candidates(qa, loaded, embed, bm25_config=lexical_bm25, analysis_config=lexical_analysis); report.update({"qa_sha256": sha256(args.qa), "corpus_sha256": sha256(args.corpus), "embedding_model": cache_model, "lexical_config_sha256": sha256(args.lexical_config)})
+            try:
+                return query_cache[query]
+            except KeyError as exc:
+                raise ChunkEvaluationError("query is not present in the frozen development cache") from exc
+        report = evaluate_candidates(qa, loaded, embed, bm25_config=lexical_bm25, analysis_config=lexical_analysis); report.update({"qa_sha256": qa_hash, "corpus_sha256": sha256(args.corpus), "embedding_model": cache_model, "lexical_config_sha256": sha256(args.lexical_config), "query_embedding_cache_sha256": sha256(args.query_cache), "query_embedding_usage": query_usage})
         report_json = json.dumps(report, indent=2, sort_keys=True) + "\n"
         _atomic(args.output_json, report_json, args.overwrite); _atomic(args.output_md, markdown(report), args.overwrite)
         chosen = next(item for item in report["chunk_configurations"] if item["name"] == report["selected_chunk_config"]); frozen = {
@@ -207,15 +324,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 bm25_config=lexical_bm25,
                 analysis_config=lexical_analysis,
             )
-            development = sorted(
-                (
-                    question for question in qa["questions"]
-                    if isinstance(question, dict) and question.get("split") == "development"
-                ),
-                key=lambda question: str(question.get("id", "")),
-            )
-            if len(development) != 13:
-                raise ChunkEvaluationError("approved QA set must contain 13 development questions")
+            development = development_questions(qa)
             contexts = []
             for question in development:
                 retrieved = selected_retriever.retrieve(str(question["question"]), k=5, mode="hybrid")

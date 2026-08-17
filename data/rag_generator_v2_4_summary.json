@@ -1,0 +1,75 @@
+{
+  "actual_usage": {
+    "aggregate": {
+      "cost_usd": 0.001276115,
+      "input_tokens": 30697,
+      "output_tokens": 1132,
+      "provider_calls": 15,
+      "rows": 13,
+      "status": "provider_reported_complete"
+    },
+    "by_model": {
+      "openai/gpt-oss-20b": {
+        "cost_usd": 0.001276115,
+        "input_tokens": 30697,
+        "output_tokens": 1132,
+        "provider_calls": 15,
+        "rows": 13,
+        "status": "provider_reported_complete"
+      }
+    }
+  },
+  "approved_max_cost_usd": 0.02,
+  "config_sha256": "311F09FE5E23578321A6DD9EE5CA009C0699FA673A20861A1D6916125C219430",
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "cost_estimate": {
+    "estimated_max_cost_usd": 0.0115379,
+    "generation": [
+      {
+        "conservative_input_tokens": 204330,
+        "estimated_cost_usd": 0.0115379,
+        "maximum_output_tokens": 41600,
+        "model": "openai/gpt-oss-20b",
+        "provider_calls": 52
+      }
+    ],
+    "judge_calls": 0,
+    "judge_cost_usd": 0.0,
+    "maximum_provider_calls": 52,
+    "method": "UTF-8 JSON characters/3 for conservative input tokens; all generation repair and retry attempts; maximum outputs"
+  },
+  "diagnostic": {
+    "candidates": {
+      "openai/gpt-oss-20b": {
+        "answerable_answer_count": 10,
+        "answerable_case_count": 10,
+        "final_outcomes": {
+          "answered": 9,
+          "answered_after_refusal_reconsideration": 1,
+          "model_insufficient_evidence_after_reconsideration": 2,
+          "preflight_insufficient_evidence": 1
+        },
+        "finish_reasons": {
+          "stop": 15
+        },
+        "ready_for_paid_judging": true,
+        "structurally_valid_count": 13,
+        "total_case_count": 13,
+        "unanswerable_case_count": 3,
+        "unanswerable_correct_system_refusal_count": 3,
+        "unanswerable_insufficient_evidence_shape_count": 3,
+        "unanswerable_model_refusal_count": 2,
+        "unanswerable_policy_refusal_count": 1,
+        "validation_errors": {}
+      }
+    },
+    "selection_status": "diagnostic_only_not_judged",
+    "winner": null
+  },
+  "experiment": "generator-v2.4-general-refusal-reconsideration",
+  "live_calls": true,
+  "model_catalog_sha256": "8873788CDDED3CFF2003CE2A8EB78984CE38EA619D81EAE24F1DCEE9B50AFA00",
+  "outputs_sha256": "1955084A553A3F445413D97E6CE7C2A68474A0B75D61F11F23607E9CCA52A527",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "schema_version": 2
+}

@@ -32,10 +32,43 @@ DEFAULT_LEXICAL_CONFIG = ROOT / "data" / "lexical_config.json"
 DEFAULT_LEXICAL_EVALUATION = ROOT / "artifacts" / "section4" / "holdout.json"
 DEFAULT_FROZEN_CONFIG = ROOT / "artifacts" / "section5" / "frozen_config.json"
 DEFAULT_GENERATOR_CONFIG = ROOT / "artifacts" / "section5" / "generator_config.json"
+DEFAULT_ACCEPTED_SELECTION = ROOT / "artifacts" / "section5" / "accepted_generator_v2_5.json"
+DEFAULT_SOURCE_GENERATOR_CONFIG = ROOT / "artifacts" / "section5" / "generator_v2_5_config.json"
+DEFAULT_HOLDOUT_SUMMARY = ROOT / "data" / "rag_holdout_summary.json"
+DEFAULT_HOLDOUT_OUTPUTS = ROOT / "data" / "rag_holdout_outputs.json"
+DEFAULT_HOLDOUT_CONTEXTS = ROOT / "data" / "rag_holdout_contexts.json"
+MODEL_REFUSAL_OUTCOMES = frozenset(
+    {
+        "model_insufficient_evidence",
+        "model_insufficient_evidence_after_reconsideration",
+        "model_insufficient_evidence_after_repair",
+    }
+)
 
 
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest().upper()
+
+
+def _is_sha256(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(character in "0123456789ABCDEF" for character in value)
+    )
+
+
+def _refusal_source(answer_client: object) -> str:
+    """Expose only whether a refusal was a valid model result or a fail-close."""
+
+    metadata = getattr(answer_client, "last_metadata", None)
+    if not isinstance(metadata, dict):
+        return "failed_closed"
+    return (
+        "model"
+        if metadata.get("final_outcome") in MODEL_REFUSAL_OUTCOMES
+        else "failed_closed"
+    )
 
 
 def _load_chunks(path: Path, manifest_path: Path) -> tuple[tuple[Chunk, ...], dict[str, Any]]:
@@ -145,8 +178,119 @@ def load_semantic_retriever(
         if embeddings is None:
             return None
         api_key = os.environ.get("OPENROUTER_API_KEY")
-        embedder = EmbeddingClient(api_key=api_key, model=expected.model) if api_key else None
+        embedder = (
+            EmbeddingClient(api_key=api_key, model=expected.model, retries=1)
+            if api_key
+            else None
+        )
         return Retriever(chunks, embeddings, embedding_client=embedder, alpha=float(frozen.get("rrf_alpha", 0.5)), bm25_config=bm25_config, analysis_config=analysis_config)
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
+        return None
+
+
+def load_release_answer_client(
+    final_config_path: Path,
+    accepted_selection_path: Path,
+    source_generator_config_path: Path,
+    frozen_config_path: Path,
+    holdout_summary_path: Path,
+    holdout_outputs_path: Path,
+    holdout_contexts_path: Path,
+) -> GroundedAnswerClient | None:
+    """Load only the exact generator contract accepted by the replayed holdout."""
+
+    try:
+        final = json.loads(Path(final_config_path).read_text(encoding="utf-8"))
+        accepted = json.loads(Path(accepted_selection_path).read_text(encoding="utf-8"))
+        source = json.loads(Path(source_generator_config_path).read_text(encoding="utf-8"))
+        summary = json.loads(Path(holdout_summary_path).read_text(encoding="utf-8"))
+        outputs = json.loads(Path(holdout_outputs_path).read_text(encoding="utf-8"))
+        contexts = json.loads(Path(holdout_contexts_path).read_text(encoding="utf-8"))
+        if not all(
+            isinstance(value, dict)
+            for value in (final, accepted, source, summary, outputs, contexts)
+        ):
+            return None
+        winner = final.get("winner")
+        if (
+            final.get("schema_version") != 2
+            or final.get("status") != "frozen_after_passing_holdout"
+            or not all(
+                _is_sha256(final.get(field))
+                for field in (
+                    "qa_sha256",
+                    "retriever_config_sha256",
+                    "accepted_selection_sha256",
+                    "holdout_contexts_sha256",
+                    "holdout_outputs_sha256",
+                    "holdout_summary_sha256",
+                )
+            )
+            or not isinstance(final.get("holdout_metrics"), dict)
+            or final.get("retriever_config_sha256") != _sha256(Path(frozen_config_path))
+            or final.get("accepted_selection_sha256") != _sha256(Path(accepted_selection_path))
+            or not isinstance(winner, str)
+            or not winner
+            or accepted.get("status") != "accepted_for_holdout"
+            or accepted.get("holdout_status") != "untouched"
+            or accepted.get("winner") != winner
+            or accepted.get("retriever_config_sha256") != final.get("retriever_config_sha256")
+            or accepted.get("generator_config_sha256") != _sha256(Path(source_generator_config_path))
+            or source.get("generator_candidates") != [winner]
+            or source.get("holdout_status") != "untouched"
+            or final.get("holdout_summary_sha256") != _sha256(Path(holdout_summary_path))
+            or final.get("holdout_outputs_sha256") != _sha256(Path(holdout_outputs_path))
+            or final.get("holdout_contexts_sha256") != _sha256(Path(holdout_contexts_path))
+            or summary.get("schema_version") != 2
+            or summary.get("passes") is not True
+            or summary.get("winner") != winner
+            or summary.get("accepted_selection_sha256") != final.get("accepted_selection_sha256")
+            or summary.get("retriever_config_sha256") != final.get("retriever_config_sha256")
+            or summary.get("outputs_sha256") != final.get("holdout_outputs_sha256")
+            or summary.get("contexts_sha256") != final.get("holdout_contexts_sha256")
+            or summary.get("qa_sha256") != final.get("qa_sha256")
+            or summary.get("metrics") != final.get("holdout_metrics")
+            or outputs.get("selection_sha256") != final.get("accepted_selection_sha256")
+            or outputs.get("retriever_config_sha256") != final.get("retriever_config_sha256")
+            or outputs.get("contexts_sha256") != final.get("holdout_contexts_sha256")
+            or outputs.get("qa_sha256") != final.get("qa_sha256")
+            or not isinstance(outputs.get("outputs"), list)
+            or len(outputs["outputs"]) != 7
+            or contexts.get("retriever_config_sha256") != final.get("retriever_config_sha256")
+            or contexts.get("accepted_selection_sha256") != final.get("accepted_selection_sha256")
+            or contexts.get("qa_sha256") != final.get("qa_sha256")
+            or not isinstance(contexts.get("contexts"), list)
+            or len(contexts["contexts"]) != 7
+        ):
+            return None
+        prompt = source.get("prompt")
+        source_generation = source.get("generation")
+        accepted_generation = accepted.get("generation")
+        if (
+            not isinstance(prompt, str)
+            or not prompt.strip()
+            or source.get("prompt_sha256")
+            != hashlib.sha256(prompt.encode("utf-8")).hexdigest().upper()
+            or not isinstance(source_generation, dict)
+            or not isinstance(accepted_generation, dict)
+        ):
+            return None
+        expected_generation = {**source_generation, "prompt": prompt}
+        if accepted_generation != expected_generation or accepted_generation.get("repair_attempts") != 1:
+            return None
+        return GroundedAnswerClient(
+            model=winner,
+            max_tokens=int(accepted_generation["max_tokens"]),
+            temperature=float(accepted_generation["temperature"]),
+            system_prompt=prompt,
+            citation_mode=str(accepted_generation["citation_mode"]),
+            require_supported_parameters=bool(accepted_generation["require_supported_parameters"]),
+            reasoning_effort=accepted_generation.get("reasoning_effort"),
+            exclude_reasoning=bool(accepted_generation.get("exclude_reasoning", False)),
+            reconsider_insufficient_evidence=bool(
+                accepted_generation.get("reconsider_insufficient_evidence", False)
+            ),
+        )
     except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError):
         return None
 
@@ -162,6 +306,11 @@ class LocalResearchService:
         lexical_evaluation_path: Path = DEFAULT_LEXICAL_EVALUATION,
         frozen_config_path: Path = DEFAULT_FROZEN_CONFIG,
         generator_config_path: Path = DEFAULT_GENERATOR_CONFIG,
+        accepted_selection_path: Path = DEFAULT_ACCEPTED_SELECTION,
+        source_generator_config_path: Path = DEFAULT_SOURCE_GENERATOR_CONFIG,
+        holdout_summary_path: Path = DEFAULT_HOLDOUT_SUMMARY,
+        holdout_outputs_path: Path = DEFAULT_HOLDOUT_OUTPUTS,
+        holdout_contexts_path: Path = DEFAULT_HOLDOUT_CONTEXTS,
         embedding_cache_path: Path | None = None,
         answer_client: GroundedAnswerClient | None = None,
     ) -> None:
@@ -192,19 +341,15 @@ class LocalResearchService:
         )
         self.answer_client = answer_client
         if self.answer_client is None and self.semantic_retriever is not None:
-            try:
-                generator = json.loads(Path(generator_config_path).read_text(encoding="utf-8"))
-                if (
-                    not isinstance(generator, dict)
-                    or generator.get("status") != "frozen_after_complete_holdout"
-                    or generator.get("rag_config_sha256") != _sha256(Path(frozen_config_path))
-                    or not isinstance(generator.get("winner"), str)
-                    or not generator["winner"]
-                ):
-                    raise ValueError("generator configuration is not release-frozen")
-                self.answer_client = GroundedAnswerClient(model=generator["winner"])
-            except (OSError, TypeError, ValueError, json.JSONDecodeError):
-                self.answer_client = None
+            self.answer_client = load_release_answer_client(
+                Path(generator_config_path),
+                Path(accepted_selection_path),
+                Path(source_generator_config_path),
+                Path(frozen_config_path),
+                Path(holdout_summary_path),
+                Path(holdout_outputs_path),
+                Path(holdout_contexts_path),
+            )
 
     def _record(self, document_id: str, query: str, score: float | None = None) -> dict[str, Any]:
         document = self.index.documents[document_id]
@@ -241,8 +386,8 @@ class LocalResearchService:
         if mode in {"lexical", "semantic", "hybrid"} and self.semantic_retriever is not None:
             try:
                 return [self._chunk_record(item) for item in self.semantic_retriever.retrieve(query, k=k, mode=mode)]
-            except (RuntimeError, ValueError):
-                return []
+            except (RuntimeError, ValueError) as exc:
+                raise RuntimeError("semantic retrieval is temporarily unavailable") from exc
         # A missing semantic cache never downgrades an explicit semantic request
         # to an unannounced lexical result. Hybrid similarly fails closed.
         return []
@@ -279,10 +424,20 @@ class LocalResearchService:
 
     def answer(self, query: str, mode: str, k: int, evidence: list[dict[str, Any]]) -> dict[str, Any]:
         if self.answer_client is None:
-            return {"answer": None, "refusal": "Grounded generation is unavailable until the measured RAG configuration and holdout winner are frozen.", "citations": []}
+            return {
+                "answer": None,
+                "refusal": "Grounded generation is unavailable until the measured RAG configuration and holdout winner are frozen.",
+                "refusal_source": "failed_closed",
+                "citations": [],
+            }
         result: AnswerResult = self.answer_client.answer(query, self._contexts_from_evidence(evidence, k))
         if result.status != "answered":
-            return {"answer": None, "refusal": result.text, "citations": []}
+            return {
+                "answer": None,
+                "refusal": result.text,
+                "refusal_source": _refusal_source(self.answer_client),
+                "citations": [],
+            }
         return {
             "answer": result.text,
             "citations": [

@@ -1,0 +1,265 @@
+{
+  "case_ids": [
+    "qa01",
+    "qa02",
+    "qa03",
+    "qa04",
+    "qa05",
+    "qa06",
+    "qa07",
+    "qa08",
+    "qa09",
+    "qa10"
+  ],
+  "chunk_configurations": [
+    {
+      "average_context_tokens": 119.8830230010953,
+      "chunk_count": 4565,
+      "config": {
+        "overlap": 32,
+        "words": 128
+      },
+      "evaluation": {
+        "case_count": 10,
+        "modes": {
+          "lexical": {
+            "@1": {
+              "evidence_hit": 0.3,
+              "recall": 0.23333333333333334
+            },
+            "@10": {
+              "evidence_hit": 0.9,
+              "recall": 0.6916666666666667
+            },
+            "@3": {
+              "evidence_hit": 0.5,
+              "recall": 0.43333333333333335
+            },
+            "@5": {
+              "evidence_hit": 0.9,
+              "recall": 0.5583333333333333
+            }
+          },
+          "semantic": {
+            "@1": {
+              "evidence_hit": 0.4,
+              "recall": 0.3333333333333333
+            },
+            "@10": {
+              "evidence_hit": 0.9,
+              "recall": 0.8416666666666667
+            },
+            "@3": {
+              "evidence_hit": 0.6,
+              "recall": 0.5333333333333333
+            },
+            "@5": {
+              "evidence_hit": 0.8,
+              "recall": 0.7
+            }
+          }
+        }
+      },
+      "name": "128_32"
+    },
+    {
+      "average_context_tokens": 189.45122950819672,
+      "chunk_count": 2440,
+      "config": {
+        "overlap": 64,
+        "words": 256
+      },
+      "evaluation": {
+        "case_count": 10,
+        "modes": {
+          "lexical": {
+            "@1": {
+              "evidence_hit": 0.6,
+              "recall": 0.47
+            },
+            "@10": {
+              "evidence_hit": 0.9,
+              "recall": 0.83
+            },
+            "@3": {
+              "evidence_hit": 0.7,
+              "recall": 0.59
+            },
+            "@5": {
+              "evidence_hit": 0.9,
+              "recall": 0.71
+            }
+          },
+          "semantic": {
+            "@1": {
+              "evidence_hit": 0.4,
+              "recall": 0.35
+            },
+            "@10": {
+              "evidence_hit": 0.8,
+              "recall": 0.73
+            },
+            "@3": {
+              "evidence_hit": 0.8,
+              "recall": 0.69
+            },
+            "@5": {
+              "evidence_hit": 0.8,
+              "recall": 0.71
+            }
+          }
+        }
+      },
+      "name": "256_64"
+    },
+    {
+      "average_context_tokens": 213.28550074738416,
+      "chunk_count": 2007,
+      "config": {
+        "overlap": 128,
+        "words": 512
+      },
+      "evaluation": {
+        "case_count": 10,
+        "modes": {
+          "lexical": {
+            "@1": {
+              "evidence_hit": 0.6,
+              "recall": 0.5333333333333333
+            },
+            "@10": {
+              "evidence_hit": 0.9,
+              "recall": 0.85
+            },
+            "@3": {
+              "evidence_hit": 0.7,
+              "recall": 0.5833333333333334
+            },
+            "@5": {
+              "evidence_hit": 0.8,
+              "recall": 0.7166666666666667
+            }
+          },
+          "semantic": {
+            "@1": {
+              "evidence_hit": 0.6,
+              "recall": 0.48333333333333334
+            },
+            "@10": {
+              "evidence_hit": 0.8,
+              "recall": 0.7666666666666666
+            },
+            "@3": {
+              "evidence_hit": 0.7,
+              "recall": 0.6666666666666666
+            },
+            "@5": {
+              "evidence_hit": 0.7,
+              "recall": 0.6666666666666666
+            }
+          }
+        }
+      },
+      "name": "512_128"
+    }
+  ],
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "embedding_model": "openai/text-embedding-3-small",
+  "lexical_config_sha256": "D3A3002D0ECB1E141BA9FD73843880E01FE268AB8AEF9770E32466003D34E4D0",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "query_embedding_cache_sha256": "CAF4C172B66E209D5CD448DDF41B1D7ED4B8DD8EBC105939C94873A589323668",
+  "query_embedding_usage": {
+    "creation": {
+      "cost_usd": 3.6e-06,
+      "input_tokens": 180,
+      "provider": "OpenAI",
+      "provider_calls": 1
+    },
+    "source": "frozen_query_cache"
+  },
+  "rrf_alphas": [
+    {
+      "alpha": 0.25,
+      "evaluation": {
+        "case_count": 10,
+        "modes": {
+          "hybrid": {
+            "@1": {
+              "evidence_hit": 0.6,
+              "recall": 0.5
+            },
+            "@10": {
+              "evidence_hit": 0.9,
+              "recall": 0.83
+            },
+            "@3": {
+              "evidence_hit": 0.8,
+              "recall": 0.69
+            },
+            "@5": {
+              "evidence_hit": 0.8,
+              "recall": 0.71
+            }
+          }
+        }
+      }
+    },
+    {
+      "alpha": 0.5,
+      "evaluation": {
+        "case_count": 10,
+        "modes": {
+          "hybrid": {
+            "@1": {
+              "evidence_hit": 0.7,
+              "recall": 0.52
+            },
+            "@10": {
+              "evidence_hit": 0.9,
+              "recall": 0.9
+            },
+            "@3": {
+              "evidence_hit": 0.8,
+              "recall": 0.59
+            },
+            "@5": {
+              "evidence_hit": 0.9,
+              "recall": 0.81
+            }
+          }
+        }
+      }
+    },
+    {
+      "alpha": 0.75,
+      "evaluation": {
+        "case_count": 10,
+        "modes": {
+          "hybrid": {
+            "@1": {
+              "evidence_hit": 0.6,
+              "recall": 0.47
+            },
+            "@10": {
+              "evidence_hit": 0.9,
+              "recall": 0.9
+            },
+            "@3": {
+              "evidence_hit": 0.9,
+              "recall": 0.69
+            },
+            "@5": {
+              "evidence_hit": 0.9,
+              "recall": 0.78
+            }
+          }
+        }
+      }
+    }
+  ],
+  "schema_version": 1,
+  "selected_alpha": 0.5,
+  "selected_chunk_config": "256_64",
+  "selection_rule": "max min(lexical,semantic) Recall@5; then mean Recall@5; then fewer average context tokens; RRF max Recall@5 then EvidenceHit@5 then alpha closest to 0.5",
+  "selection_scope": "approved answerable development QA cases only"
+}

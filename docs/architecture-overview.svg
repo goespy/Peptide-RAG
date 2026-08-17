@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">Peptide-RAG measured retrieval and grounded answer architecture</title>
+  <desc id="description">A three-lane architecture diagram showing frozen evidence, custom retrieval, RAG generation, human validation, untouched holdout, and deployment gates.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#eef4ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#10233f" flood-opacity="0.10"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#66809f"/>
+    </marker>
+    <style>
+      .title { font: 700 38px 'Segoe UI', Arial, sans-serif; fill: #10233f; }
+      .subtitle { font: 400 20px 'Segoe UI', Arial, sans-serif; fill: #536a85; }
+      .lane { font: 700 16px 'Segoe UI', Arial, sans-serif; letter-spacing: 2px; fill: #36526f; }
+      .box-title { font: 700 20px 'Segoe UI', Arial, sans-serif; fill: #10233f; }
+      .body { font: 400 16px 'Segoe UI', Arial, sans-serif; fill: #455c76; }
+      .metric { font: 600 15px 'Segoe UI', Arial, sans-serif; fill: #143b72; }
+      .chip { font: 700 12px 'Segoe UI', Arial, sans-serif; letter-spacing: .7px; }
+      .foot { font: 500 15px 'Segoe UI', Arial, sans-serif; fill: #f8fafc; }
+      .arrow { stroke: #66809f; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .evidence { fill: #ffffff; stroke: #2a6fb0; stroke-width: 2.5; }
+      .retrieval { fill: #ecfdf5; stroke: #168466; stroke-width: 2.5; }
+      .rag { fill: #f4f0ff; stroke: #7154c8; stroke-width: 2.5; }
+      .pending { fill: #fff7e8; stroke: #d98a19; stroke-width: 2.5; }
+      .locked { fill: #f1f4f8; stroke: #8796a8; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#background)"/>
+  <text x="70" y="70" class="title">Peptide-RAG: measured retrieval → grounded answers</text>
+  <text x="72" y="105" class="subtitle">Every capability is opened by evidence; the oracle is built before the system it scores.</text>
+
+  <g transform="translate(1110 50)">
+    <rect x="0" y="0" width="118" height="28" rx="14" fill="#d9f8ec"/>
+    <text x="59" y="19" text-anchor="middle" class="chip" fill="#0d7658">MEASURED</text>
+    <rect x="130" y="0" width="118" height="28" rx="14" fill="#fff0ce"/>
+    <text x="189" y="19" text-anchor="middle" class="chip" fill="#a45b00">PENDING</text>
+    <rect x="260" y="0" width="118" height="28" rx="14" fill="#e4e9ef"/>
+    <text x="319" y="19" text-anchor="middle" class="chip" fill="#5d6c7d">LOCKED</text>
+  </g>
+
+  <text x="70" y="175" class="lane">1 · FROZEN EVIDENCE</text>
+  <line x1="255" y1="169" x2="1530" y2="169" stroke="#cad5e3" stroke-width="2"/>
+
+  <g filter="url(#shadow)">
+    <rect x="100" y="205" width="280" height="120" rx="18" class="evidence"/>
+    <rect x="425" y="205" width="280" height="120" rx="18" class="evidence"/>
+    <rect x="750" y="205" width="280" height="120" rx="18" class="evidence"/>
+    <rect x="1075" y="205" width="220" height="120" rx="18" class="pending"/>
+    <rect x="1340" y="205" width="190" height="120" rx="18" class="locked"/>
+  </g>
+  <text x="240" y="245" text-anchor="middle" class="box-title">PubMed corpus</text>
+  <text x="240" y="275" text-anchor="middle" class="body">2,000 records · fixed SHA-256</text>
+  <text x="240" y="301" text-anchor="middle" class="metric">complete</text>
+
+  <text x="565" y="245" text-anchor="middle" class="box-title">IR oracle</text>
+  <text x="565" y="275" text-anchor="middle" class="body">15 queries · 75 judgments</text>
+  <text x="565" y="301" text-anchor="middle" class="metric">qrels v2 frozen</text>
+
+  <text x="890" y="245" text-anchor="middle" class="box-title">QA oracle</text>
+  <text x="890" y="275" text-anchor="middle" class="body">15 answerable · 5 unanswerable</text>
+  <text x="890" y="301" text-anchor="middle" class="metric">owner-approved before tuning</text>
+
+  <text x="1185" y="245" text-anchor="middle" class="box-title">Blind labels</text>
+  <text x="1185" y="275" text-anchor="middle" class="body">10 owner judgments</text>
+  <text x="1185" y="301" text-anchor="middle" class="metric" fill="#a45b00">pending human gate</text>
+
+  <text x="1435" y="245" text-anchor="middle" class="box-title">QA holdout</text>
+  <text x="1435" y="275" text-anchor="middle" class="body">7 cases · one shot</text>
+  <text x="1435" y="301" text-anchor="middle" class="metric" fill="#5d6c7d">untouched</text>
+
+  <text x="70" y="400" class="lane">2 · RETRIEVAL BUILT FROM SCRATCH</text>
+  <line x1="405" y1="394" x2="1530" y2="394" stroke="#cad5e3" stroke-width="2"/>
+
+  <g filter="url(#shadow)">
+    <rect x="100" y="430" width="250" height="135" rx="18" class="retrieval"/>
+    <rect x="410" y="430" width="250" height="135" rx="18" class="retrieval"/>
+    <rect x="720" y="430" width="250" height="135" rx="18" class="retrieval"/>
+    <rect x="1030" y="430" width="250" height="135" rx="18" class="retrieval"/>
+    <rect x="1340" y="430" width="190" height="135" rx="18" class="retrieval"/>
+  </g>
+  <text x="225" y="470" text-anchor="middle" class="box-title">Analyze + index</text>
+  <text x="225" y="500" text-anchor="middle" class="body">NFKC · casefold</text>
+  <text x="225" y="526" text-anchor="middle" class="body">positions + document frequency</text>
+  <text x="225" y="550" text-anchor="middle" class="metric">19,023 terms</text>
+
+  <text x="535" y="470" text-anchor="middle" class="box-title">Boolean + BM25</text>
+  <text x="535" y="500" text-anchor="middle" class="body">custom scoring and metrics</text>
+  <text x="535" y="526" text-anchor="middle" class="metric">NDCG@10 .716 → .926</text>
+  <text x="535" y="550" text-anchor="middle" class="body">reference match ≤ 1e-6</text>
+
+  <text x="845" y="470" text-anchor="middle" class="box-title">Measured chunks</text>
+  <text x="845" y="500" text-anchor="middle" class="body">128/32 · 256/64 · 512/128</text>
+  <text x="845" y="526" text-anchor="middle" class="metric">256/64 selected on development</text>
+  <text x="845" y="550" text-anchor="middle" class="body">exact evidence spans retained</text>
+
+  <text x="1155" y="470" text-anchor="middle" class="box-title">Lexical + semantic</text>
+  <text x="1155" y="500" text-anchor="middle" class="body">BM25 · cached embeddings</text>
+  <text x="1155" y="526" text-anchor="middle" class="body">brute-force cosine similarity</text>
+  <text x="1155" y="550" text-anchor="middle" class="metric">reproducible offline cache</text>
+
+  <text x="1435" y="470" text-anchor="middle" class="box-title">Hybrid RRF</text>
+  <text x="1435" y="500" text-anchor="middle" class="body">rank fusion · α 0.5</text>
+  <text x="1435" y="526" text-anchor="middle" class="metric">dev Recall@5 .810</text>
+  <text x="1435" y="550" text-anchor="middle" class="body">top-five evidence</text>
+
+  <path d="M350 497 H400" class="arrow"/>
+  <path d="M660 497 H710" class="arrow"/>
+  <path d="M970 497 H1020" class="arrow"/>
+  <path d="M1280 497 H1330" class="arrow"/>
+  <path d="M240 325 V420" class="arrow"/>
+  <path d="M565 325 V420 H535" class="arrow"/>
+  <path d="M890 325 V420 H845" class="arrow"/>
+
+  <text x="70" y="635" class="lane">3 · GROUNDED ANSWERS AND RELEASE GATES</text>
+  <line x1="465" y1="629" x2="1530" y2="629" stroke="#cad5e3" stroke-width="2"/>
+
+  <g filter="url(#shadow)">
+    <rect x="100" y="665" width="250" height="135" rx="18" class="rag"/>
+    <rect x="410" y="665" width="250" height="135" rx="18" class="rag"/>
+    <rect x="720" y="665" width="250" height="135" rx="18" class="rag"/>
+    <rect x="1030" y="665" width="250" height="135" rx="18" class="pending"/>
+    <rect x="1340" y="665" width="190" height="135" rx="18" class="locked"/>
+  </g>
+  <text x="225" y="705" text-anchor="middle" class="box-title">Frozen GPT-OSS</text>
+  <text x="225" y="735" text-anchor="middle" class="body">structured JSON · top 5 only</text>
+  <text x="225" y="761" text-anchor="middle" class="metric">dev: 10/10 answers · 3/3 refusals</text>
+  <text x="225" y="785" text-anchor="middle" class="body">research-only safety preflight</text>
+
+  <text x="535" y="705" text-anchor="middle" class="box-title">Validate + cite</text>
+  <text x="535" y="735" text-anchor="middle" class="body">sentence citations bind to chunks</text>
+  <text x="535" y="761" text-anchor="middle" class="body">invalid output fails closed</text>
+  <text x="535" y="785" text-anchor="middle" class="metric">no unsupported fallback answer</text>
+
+  <text x="845" y="705" text-anchor="middle" class="box-title">Different-family judge</text>
+  <text x="845" y="735" text-anchor="middle" class="body">Claude judge-v2 · 13 cases</text>
+  <text x="845" y="761" text-anchor="middle" class="metric">answered faithfulness .900</text>
+  <text x="845" y="785" text-anchor="middle" class="body">blind human comparison required</text>
+
+  <text x="1155" y="705" text-anchor="middle" class="box-title">Owner → holdout</text>
+  <text x="1155" y="735" text-anchor="middle" class="body">≥80% agreement · κ ≥ .60</text>
+  <text x="1155" y="761" text-anchor="middle" class="metric" fill="#a45b00">labels pending · holdout sealed</text>
+  <text x="1155" y="785" text-anchor="middle" class="body">SHA-bound · no overwrite path</text>
+
+  <text x="1435" y="705" text-anchor="middle" class="box-title">Public app</text>
+  <text x="1435" y="735" text-anchor="middle" class="body">FastAPI · Railway</text>
+  <text x="1435" y="761" text-anchor="middle" class="body">budget + rate fallback</text>
+  <text x="1435" y="785" text-anchor="middle" class="metric" fill="#5d6c7d">deploy after gates</text>
+
+  <path d="M1435 565 V625 H225 V655" class="arrow"/>
+  <path d="M350 732 H400" class="arrow"/>
+  <path d="M660 732 H710" class="arrow"/>
+  <path d="M970 732 H1020" class="arrow"/>
+  <path d="M1280 732 H1330" class="arrow"/>
+  <path d="M1185 325 V655" stroke="#d98a19" stroke-width="3" stroke-dasharray="8 7" fill="none" marker-end="url(#arrow)"/>
+  <path d="M1435 325 V655" stroke="#8796a8" stroke-width="3" stroke-dasharray="8 7" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="840" width="1460" height="38" rx="19" fill="#10233f"/>
+  <text x="800" y="865" text-anchor="middle" class="foot">Production IR + metrics are hand-built · bm25s is test-only · artifacts are hash-bound · QA holdout remains untouched</text>
+</svg>

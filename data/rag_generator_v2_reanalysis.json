@@ -1,0 +1,153 @@
+{
+  "actual_usage": {
+    "aggregate": {
+      "cost_usd": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "provider_calls": 123,
+      "rows": 39,
+      "status": "unknown_not_exposed_by_provider"
+    },
+    "by_model": {
+      "google/gemma-3-12b-it": {
+        "cost_usd": null,
+        "input_tokens": null,
+        "output_tokens": null,
+        "provider_calls": 52,
+        "rows": 13,
+        "status": "unknown_not_exposed_by_provider"
+      },
+      "openai/gpt-oss-20b": {
+        "cost_usd": 0.00204214,
+        "input_tokens": 37473,
+        "output_tokens": 5048,
+        "provider_calls": 19,
+        "rows": 13,
+        "status": "provider_reported_complete"
+      },
+      "qwen/qwen3.7-flash": {
+        "cost_usd": 0.0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "provider_calls": 52,
+        "rows": 13,
+        "status": "provider_reported_complete"
+      }
+    }
+  },
+  "approved_max_cost_usd": null,
+  "config_sha256": "FB2318099E7C4C3FC3F8CA13431441676C385B38103BD1CC263231573DD6865B",
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "cost_estimate": {
+    "estimated_max_cost_usd": 0.03835482,
+    "generation": [
+      {
+        "conservative_input_tokens": 193602,
+        "estimated_cost_usd": 0.01121606,
+        "maximum_output_tokens": 41600,
+        "model": "qwen/qwen3.7-flash",
+        "provider_calls": 52
+      },
+      {
+        "conservative_input_tokens": 193602,
+        "estimated_cost_usd": 0.01121606,
+        "maximum_output_tokens": 41600,
+        "model": "openai/gpt-oss-20b",
+        "provider_calls": 52
+      },
+      {
+        "conservative_input_tokens": 193654,
+        "estimated_cost_usd": 0.0159227,
+        "maximum_output_tokens": 41600,
+        "model": "google/gemma-3-12b-it",
+        "provider_calls": 52
+      }
+    ],
+    "judge_calls": 0,
+    "judge_cost_usd": 0.0,
+    "maximum_provider_calls": 156,
+    "method": "UTF-8 JSON characters/3 for conservative input tokens; all generation repair and retry attempts; maximum outputs"
+  },
+  "diagnostic": {
+    "candidates": {
+      "google/gemma-3-12b-it": {
+        "answerable_answer_count": 0,
+        "answerable_case_count": 10,
+        "final_outcomes": {
+          "failed_closed_after_repair": 13
+        },
+        "finish_reasons": {
+          "None": 52
+        },
+        "ready_for_paid_judging": false,
+        "structurally_valid_count": 13,
+        "total_case_count": 13,
+        "unanswerable_case_count": 3,
+        "unanswerable_correct_system_refusal_count": 0,
+        "unanswerable_insufficient_evidence_shape_count": 3,
+        "unanswerable_model_refusal_count": 0,
+        "unanswerable_policy_refusal_count": 0,
+        "validation_errors": {
+          "request_or_response_error": 26
+        }
+      },
+      "openai/gpt-oss-20b": {
+        "answerable_answer_count": 9,
+        "answerable_case_count": 10,
+        "final_outcomes": {
+          "answered": 5,
+          "answered_after_repair": 4,
+          "failed_closed_after_repair": 2,
+          "model_insufficient_evidence": 2
+        },
+        "finish_reasons": {
+          "length": 1,
+          "stop": 18
+        },
+        "ready_for_paid_judging": false,
+        "structurally_valid_count": 13,
+        "total_case_count": 13,
+        "unanswerable_case_count": 3,
+        "unanswerable_correct_system_refusal_count": 2,
+        "unanswerable_insufficient_evidence_shape_count": 3,
+        "unanswerable_model_refusal_count": 2,
+        "unanswerable_policy_refusal_count": 0,
+        "validation_errors": {
+          "citation_markers_do_not_match_declared_ids": 4,
+          "non_object_json": 1,
+          "refusal_has_citations": 1,
+          "uncited_factual_sentence": 2
+        }
+      },
+      "qwen/qwen3.7-flash": {
+        "answerable_answer_count": 0,
+        "answerable_case_count": 10,
+        "final_outcomes": {
+          "failed_closed_after_repair": 13
+        },
+        "finish_reasons": {
+          "None": 52
+        },
+        "ready_for_paid_judging": false,
+        "structurally_valid_count": 13,
+        "total_case_count": 13,
+        "unanswerable_case_count": 3,
+        "unanswerable_correct_system_refusal_count": 0,
+        "unanswerable_insufficient_evidence_shape_count": 3,
+        "unanswerable_model_refusal_count": 0,
+        "unanswerable_policy_refusal_count": 0,
+        "validation_errors": {
+          "request_or_response_error": 26
+        }
+      }
+    },
+    "selection_status": "diagnostic_only_not_judged",
+    "winner": null
+  },
+  "experiment": "generator-v2-800-diagnostics",
+  "live_calls": false,
+  "model_catalog_sha256": "B15A12E5422D4DBA4A1FD2A60CD01CA98788F562FE89CF482C989D52E6DF78FD",
+  "outputs_sha256": "8982E49A16EB962C469387D19F57AE9823133C4C1F629BAB1CF1D7598A5D22DC",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "schema_version": 2
+}

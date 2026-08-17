@@ -15,9 +15,18 @@ class RenderQAReviewTests(unittest.TestCase):
     def test_render_contains_decision_fields(self):
         packet = build_packet(ROOT / "data/corpus.jsonl", ROOT / "data/qrels_v2.json")
         worksheet = render(packet)
-        self.assertIn("Candidate pool only", worksheet)
+        self.assertIn("Review in progress", worksheet)
         self.assertIn("Decision: [ ] Approve", worksheet)
         self.assertIn("qa20", worksheet)
+
+    def test_render_marks_checked_in_approved_packet_complete(self):
+        import json
+
+        packet = json.loads((ROOT / "data/qa_draft.json").read_text(encoding="utf-8"))
+        worksheet = render(packet)
+        self.assertIn("Human review complete", worksheet)
+        self.assertIn("Decision: [x] Approve", worksheet)
+        self.assertIn("Strict conjunction candidates requiring manual review", worksheet)
 
     def test_cli_smoke(self):
         with tempfile.TemporaryDirectory() as temporary:

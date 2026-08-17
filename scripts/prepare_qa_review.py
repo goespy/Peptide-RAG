@@ -146,7 +146,7 @@ def build_packet(corpus_path: Path, qrels_path: Path) -> dict[str, Any]:
     return {"version": 1, "status": "candidate_pool_requires_human_review", "corpus_sha256": corpus_hash, "qrels_v2_sha256": qrels_hash, "source_qrels": str(qrels_path).replace("\\", "/"), "development_case_ids": list(DEVELOPMENT_IDS), "holdout_case_ids": list(HOLDOUT_IDS), "cases": cases, "review_notice": "This candidate pool is not approved and must not be used to tune or evaluate RAG until project-owner review is recorded."}
 
 
-def validate_packet(packet: dict[str, Any], corpus_path: Path, qrels_path: Path) -> None:
+def validate_packet(packet: dict[str, Any], corpus_path: Path, qrels_path: Path, *, require_unapproved: bool = False) -> None:
     if packet.get("status") != "candidate_pool_requires_human_review": raise QAReviewPreparationError("Packet must remain candidate_pool_requires_human_review")
     if packet.get("corpus_sha256") != FROZEN_CORPUS_SHA256 or packet.get("qrels_v2_sha256") != FROZEN_QRELS_V2_SHA256: raise QAReviewPreparationError("Packet must name the frozen Section 5 input hashes")
     if packet.get("corpus_sha256") != file_sha256(corpus_path) or packet.get("qrels_v2_sha256") != file_sha256(qrels_path): raise QAReviewPreparationError("Packet frozen input hashes do not match")
@@ -160,9 +160,16 @@ def validate_packet(packet: dict[str, Any], corpus_path: Path, qrels_path: Path)
     if sum(case["answerability"] == "answerable" for case in cases if case["split"] == "development") != 10 or sum(case["answerability"] == "unanswerable" for case in cases if case["split"] == "development") != 3: raise QAReviewPreparationError("Development distribution must be 10/3")
     if sum(case["answerability"] == "answerable" for case in cases if case["split"] == "holdout") != 5 or sum(case["answerability"] == "unanswerable" for case in cases if case["split"] == "holdout") != 2: raise QAReviewPreparationError("Holdout distribution must be 5/2")
     for case in cases:
-        if case.get("human_review", {}).get("approved") is not False: raise QAReviewPreparationError(f"{case['id']} must remain unapproved")
+        review = case.get("human_review")
+        if not isinstance(review, dict) or not isinstance(review.get("approved"), bool) or review.get("decision") not in {"pending", "approve"} or not isinstance(review.get("reviewer"), str) or not isinstance(review.get("notes"), str):
+            raise QAReviewPreparationError(f"{case['id']} has malformed human review metadata")
+        if review["approved"]:
+            if review["decision"] != "approve" or not review["reviewer"].strip(): raise QAReviewPreparationError(f"{case['id']} approved review needs an approve decision and reviewer")
+        elif review["decision"] != "pending": raise QAReviewPreparationError(f"{case['id']} pending review has an inconsistent decision")
+        if require_unapproved and review["approved"] is not False: raise QAReviewPreparationError(f"{case['id']} generated candidate must remain unapproved")
         if case["answerability"] == "answerable":
-            if len(case.get("pmids", [])) != 1 or not case.get("evidence_spans") or not case.get("acceptable_answer"): raise QAReviewPreparationError(f"{case['id']} needs a PMID, at least one span, and an answer")
+            pmids = case.get("pmids")
+            if not isinstance(pmids, list) or not pmids or len(pmids) != len(set(pmids)) or any(not isinstance(pmid, str) or pmid not in corpus for pmid in pmids) or not case.get("evidence_spans") or not case.get("acceptable_answer"): raise QAReviewPreparationError(f"{case['id']} needs unique corpus PMIDs, at least one span, and an answer")
             if {span.get("pmid") for span in case["evidence_spans"]} != set(case["pmids"]): raise QAReviewPreparationError(f"{case['id']} evidence PMIDs do not match")
             for span in case["evidence_spans"]:
                 abstract = corpus[span["pmid"]]["text"]
@@ -183,7 +190,7 @@ def write_json_atomic(payload: dict[str, Any], output: Path, overwrite: bool) ->
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__); parser.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS); parser.add_argument("--qrels", type=Path, default=DEFAULT_QRELS); parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT); parser.add_argument("--overwrite", action="store_true"); args = parser.parse_args(argv)
     try:
-        packet = build_packet(args.corpus, args.qrels); validate_packet(packet, args.corpus, args.qrels); write_json_atomic(packet, args.output, args.overwrite)
+        packet = build_packet(args.corpus, args.qrels); validate_packet(packet, args.corpus, args.qrels, require_unapproved=True); write_json_atomic(packet, args.output, args.overwrite)
     except (OSError, QAReviewPreparationError, KeyError, TypeError) as exc:
         print(f"Error: {exc}", file=sys.stderr); return 1
     print(f"Wrote 20 unapproved QA cases to {args.output}"); return 0

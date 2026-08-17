@@ -1,0 +1,29 @@
+{
+  "answerable_answer_count": 9,
+  "answerable_case_count": 10,
+  "actual_cost_usd": 0.0011381849999999999,
+  "actual_provider_calls": 12,
+  "conclusion": "The v2.3 prompt and low-reasoning setting fixed the prior QA01 structural failure, answered the general animal-evidence QA07 case, and correctly refused all three unanswerable cases. QA04 remained an unsupported model refusal even though the unchanged top-five context contained direct human evidence in PMID 10496658. This is a generation evidence-review failure, not a retrieval failure.",
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "experiment": "generator-v2.3-gpt-scope-and-reasoning-control",
+  "failed_case": {
+    "answer_status": "insufficient_evidence",
+    "direct_evidence": {
+      "chunk_id": "10496658:c0001",
+      "context_rank": 5,
+      "evidence_summary": "A healthy-male-volunteer PK/PD study reports that ipamorelin induced a growth-hormone release episode at every tested dose.",
+      "pmid": "10496658"
+    },
+    "failure_class": "model_refusal_despite_direct_supplied_evidence",
+    "qa_id": "qa04",
+    "question": "Does ipamorelin increase growth hormone?"
+  },
+  "holdout_status": "untouched",
+  "outputs_sha256": "4D00BB41F1E062E08B561E5FDDB4B2641D6D42B4CBEDA04A3CB951CD643EF808",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "ready_for_paid_judging": false,
+  "schema_version": 1,
+  "summary_sha256": "F4F75420A2CC071D9B2995AF8F37B6A7E8CF96E619365910CFDA424E26FDF8E3",
+  "unanswerable_correct_system_refusal_count": 3,
+  "unanswerable_case_count": 3
+}

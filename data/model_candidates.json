@@ -1,0 +1,64 @@
+{
+  "checked_at": "2026-08-14T22:03:23.2976506Z",
+  "judge": {
+    "available": true,
+    "context_length": 1000000,
+    "family": "anthropic",
+    "id": "anthropic/claude-sonnet-4.6",
+    "input_cost_per_million": 3.0,
+    "output_cost_per_million": 15.0,
+    "structured_json": true,
+    "supported_parameters": [
+      "response_format",
+      "structured_outputs"
+    ]
+  },
+  "models": [
+    {
+      "available": true,
+      "context_length": 1000000,
+      "family": "qwen",
+      "id": "qwen/qwen3.7-flash",
+      "input_cost_per_million": 0.03,
+      "output_cost_per_million": 0.13,
+      "structured_json": true,
+      "supported_parameters": [
+        "response_format"
+      ]
+    },
+    {
+      "available": true,
+      "context_length": 131072,
+      "family": "openai",
+      "id": "openai/gpt-oss-20b",
+      "input_cost_per_million": 0.03,
+      "output_cost_per_million": 0.13,
+      "structured_json": true,
+      "supported_parameters": [
+        "response_format",
+        "structured_outputs"
+      ]
+    },
+    {
+      "available": true,
+      "context_length": 131072,
+      "family": "google",
+      "id": "google/gemma-3-12b-it",
+      "input_cost_per_million": 0.05,
+      "output_cost_per_million": 0.15,
+      "structured_json": true,
+      "supported_parameters": [
+        "response_format",
+        "structured_outputs"
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "sources": [
+    "https://openrouter.ai/api/v1/models",
+    "https://openrouter.ai/qwen/qwen3.7-flash/api",
+    "https://openrouter.ai/openai/gpt-oss-20b/api",
+    "https://openrouter.ai/google/gemma-3-12b-it/api",
+    "https://openrouter.ai/anthropic/claude-sonnet-4.6/api"
+  ]
+}

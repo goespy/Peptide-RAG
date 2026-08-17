@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import tempfile
+import threading
 import time
 from typing import Iterable, Sequence
 
@@ -89,6 +90,52 @@ class EmbeddingCacheManifest:
 class EmbeddingClient:
     """Small retrying client for OpenRouter's OpenAI-compatible embeddings API."""
 
+    @property
+    def last_metadata(self) -> dict[str, object]:
+        """Return metadata for the current thread's most recent embed call."""
+
+        metadata = getattr(self._thread_state, "last_metadata", None)
+        if metadata is None:
+            metadata = {}
+            self._thread_state.last_metadata = metadata
+        return metadata
+
+    @last_metadata.setter
+    def last_metadata(self, value: dict[str, object]) -> None:
+        self._thread_state.last_metadata = value
+
+    @property
+    def _usage_complete(self) -> bool:
+        return bool(getattr(self._thread_state, "usage_complete", True))
+
+    @_usage_complete.setter
+    def _usage_complete(self, value: bool) -> None:
+        self._thread_state.usage_complete = bool(value)
+
+    def _http_session(self) -> requests.Session:
+        if self._provided_session is not None:
+            return self._provided_session
+        session = getattr(self._thread_state, "http_session", None)
+        if session is None:
+            session = requests.Session()
+            self._thread_state.http_session = session
+        return session
+
+    def _post(self, inputs: Sequence[str]) -> requests.Response:
+        session = self._http_session()
+        request = {
+            "headers": {
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            "json": {"model": self.model, "input": list(inputs)},
+            "timeout": self.timeout,
+        }
+        if self._provided_session is None:
+            return session.post(OPENROUTER_EMBEDDINGS_URL, **request)
+        with self._session_lock:
+            return session.post(OPENROUTER_EMBEDDINGS_URL, **request)
+
     def __init__(
         self,
         *,
@@ -104,7 +151,10 @@ class EmbeddingClient:
             raise ValueError("timeout must be positive and retries non-negative")
         self.api_key = api_key if api_key is not None else os.environ.get("OPENROUTER_API_KEY")
         self.model, self.timeout, self.retries = model, timeout, retries
-        self.session = session if session is not None else requests.Session()
+        self._thread_state = threading.local()
+        self._provided_session = session
+        self._session_lock = threading.Lock()
+        self._total_lock = threading.Lock()
         self.last_metadata: dict[str, object] = {}
         self.total_metadata: dict[str, object] = {
             "provider": "OpenRouter",
@@ -134,34 +184,37 @@ class EmbeddingClient:
         if isinstance(batch_size, bool) or not isinstance(batch_size, int) or batch_size <= 0:
             raise ValueError("batch_size must be a positive integer")
         vectors: list[list[float]] = []
-        for start in range(0, len(values), batch_size):
-            vectors.extend(self._embed_batch(values[start : start + batch_size]))
-        result = normalize_embeddings(vectors)
+        try:
+            for start in range(0, len(values), batch_size):
+                vectors.extend(self._embed_batch(values[start : start + batch_size]))
+            result = normalize_embeddings(vectors)
+        except BaseException:
+            self._accumulate_total()
+            raise
         self._accumulate_total()
         return result
 
     def _accumulate_total(self) -> None:
-        self.total_metadata["provider"] = self.last_metadata.get("provider", "OpenRouter")
-        self.total_metadata["provider_calls"] = int(self.total_metadata["provider_calls"]) + int(self.last_metadata["provider_calls"])
-        if self.total_metadata.get("input_tokens") is None or self.last_metadata.get("input_tokens") is None:
-            self.total_metadata["input_tokens"] = None
-            self.total_metadata["cost_usd"] = None
-        else:
-            self.total_metadata["input_tokens"] = int(self.total_metadata["input_tokens"]) + int(self.last_metadata["input_tokens"])
-            self.total_metadata["cost_usd"] = float(self.total_metadata["cost_usd"]) + float(self.last_metadata["cost_usd"])
+        current = dict(self.last_metadata)
+        with self._total_lock:
+            self.total_metadata["provider"] = current.get("provider", "OpenRouter")
+            self.total_metadata["provider_calls"] = int(self.total_metadata["provider_calls"]) + int(current["provider_calls"])
+            if self.total_metadata.get("input_tokens") is None or current.get("input_tokens") is None:
+                self.total_metadata["input_tokens"] = None
+                self.total_metadata["cost_usd"] = None
+            else:
+                self.total_metadata["input_tokens"] = int(self.total_metadata["input_tokens"]) + int(current["input_tokens"])
+                self.total_metadata["cost_usd"] = float(self.total_metadata["cost_usd"]) + float(current["cost_usd"])
 
     def _embed_batch(self, inputs: Sequence[str]) -> list[list[float]]:
-        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
         last_error: Exception | None = None
         for attempt in range(self.retries + 1):
             try:
                 self.last_metadata["provider_calls"] = int(self.last_metadata["provider_calls"]) + 1
-                response = self.session.post(
-                    OPENROUTER_EMBEDDINGS_URL, headers=headers,
-                    json={"model": self.model, "input": list(inputs)}, timeout=self.timeout,
-                )
+                response = self._post(inputs)
                 if response.status_code in (429, 500, 502, 503, 504):
                     if attempt < self.retries:
+                        self._usage_complete = False
                         retry_after = response.headers.get("Retry-After")
                         try:
                             delay = max(0.0, float(retry_after)) if retry_after is not None else 0.25 * (2 ** attempt)
@@ -186,8 +239,12 @@ class EmbeddingClient:
                 return result  # type: ignore[return-value]
             except (requests.RequestException, ValueError) as error:
                 last_error = error
+                self._usage_complete = False
                 if attempt < self.retries:
                     time.sleep(0.25 * (2 ** attempt))
+        if not self._usage_complete:
+            self.last_metadata["input_tokens"] = None
+            self.last_metadata["cost_usd"] = None
         raise RuntimeError("OpenRouter embeddings request failed") from last_error
 
     def _record_usage(self, payload: object) -> None:

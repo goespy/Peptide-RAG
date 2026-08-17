@@ -1,6 +1,10 @@
 # Peptide-RAG
 
+![Peptide-RAG measured architecture](docs/architecture-overview.svg)
+
 A from-scratch relevance engine over a custom corpus of therapeutic-peptide research from PubMed. The project follows the Gauntlet AI rule **measured, not vibed**: freeze human relevance judgments before tuning retrieval, calculate metrics ourselves, and do not add an LLM until lexical retrieval is objectively evaluated.
+
+Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 3](Post-Stack%20Refinement.md) · [Architecture](ARCHITECTURE.md) · [Project master plan](Project-Master-Plan.md)
 
 ## Project status
 
@@ -19,7 +23,15 @@ A from-scratch relevance engine over a custom corpus of therapeutic-peptide rese
 - [x] Ranked CLI results with scores, snippets, and PubMed links
 - [x] Section 3 Boolean/BM25 baseline saved as JSON and Markdown
 - [x] Section 4 lexical tuning and hardening
-- [ ] Section 5 semantic/hybrid RAG
+- [x] Section 5 RAG foundations: approved QA oracle, chunk artifacts, retrieval contracts, grounded-answer validation, and local web shell
+- [x] Project-owner approval of the 20-case QA oracle
+- [x] Paid semantic/chunk development evaluation and frozen hybrid retrieval configuration
+- [x] Three-model development bake-off preserved and reanalyzed as a negative result
+- [x] GPT-only v2.2 through v2.5 diagnostics measured; v2.4 and v2.5 reached 10/10 answerable, 3/3 correct refusals, and 13/13 structural validity
+- [x] Claude judge-v2 development run completed for v2.5: 0.900 answered-only faithfulness, 1.000 relevancy, 0.900 citation correctness, and 1.000 correct refusal
+- [x] Blind, evidence-bound 10-output owner worksheet frozen with oracle answers, answerability targets, and Claude verdicts hidden
+- [ ] Owner judge labeling, untouched QA holdout, and public Railway deployment
+- [x] Section 6 offline release-check, CI, self-evaluation, cost, and Railway config foundations
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
 
@@ -34,10 +46,10 @@ The exact query returned 2,000 PMIDs, below the configured maximum of 3,000. Rec
 ## Prerequisites and setup
 
 - Python 3.11 or newer
-- Internet access for the corpus fetch only
+- Internet access for corpus fetching and, later, explicitly approved hosted RAG evaluation
 - A valid contact email for NCBI E-utilities
 
-Create an environment and install the sole runtime dependency:
+Create an environment and install the runtime dependencies:
 
 ```bash
 python -m venv .venv
@@ -149,7 +161,198 @@ The command writes [`artifacts/section3/baseline.json`](artifacts/section3/basel
 and [`artifacts/section3/baseline.md`](artifacts/section3/baseline.md), including
 corpus/qrels hashes, code revision, exact configuration, rankings, and metrics.
 
+The current whole-project offline check is:
+
+```bash
+python run_project.py
+```
+
+It makes no network or paid calls. It verifies the frozen core hashes, rebuilds
+the index, recomputes Boolean/BM25 metrics, validates every committed chunk
+manifest, replays the development bake-off from saved outputs, and labels the
+owner-validation/holdout gate as `TBD` instead of inventing a pass. `python
+run_project.py --live-eval` is a readiness check only; it never calls a
+provider.
+
+## Section 5 RAG workflow
+
+All 20 cases passed project-owner review and are frozen in `data/qa.json` with
+exact evidence spans and corpus/qrels hashes. The QA SHA-256 is
+`196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725`.
+The approval history remains in [`QA-REVIEW.md`](QA-REVIEW.md) and
+`data/qa_draft.json`.
+
+```bash
+python scripts/freeze_qa.py
+```
+
+The three candidate chunk snapshots are already deterministic and hash-bound:
+
+| Window | Overlap | Chunks | Artifact SHA-256 |
+|---:|---:|---:|---|
+| 128 words | 32 | 4,565 | `81B45B34429419CCC44C42AA27FFB7715012491F731A64576A14DBC7BAB7D41D` |
+| 256 words | 64 | 2,440 | `85B62B8AF56DAFD6AE4A1D1B5C87DA950828BB767FDDF9633445E53CA5567B9C` |
+| 512 words | 128 | 2,007 | `AF83690E677750BC7E884DF04C70FB203D3103938FA141AB8D9EA031966FCFAF` |
+
+Each candidate now has a corpus-bound embedding cache. The evaluator uses only
+the 10 answerable development cases to select chunk size and RRF alpha, while a
+separate 13-question embedding cache supports all development contexts. The
+holdout remains excluded. Repeating the command without a key reproduced the
+evaluation JSON, Markdown, frozen configuration, and contexts byte-for-byte.
+
+```bash
+python scripts/embed_chunks.py --chunks artifacts/section5/chunks_128_32.jsonl --output artifacts/section5/embeddings_128_32.npz
+python scripts/embed_chunks.py --chunks artifacts/section5/chunks_256_64.jsonl --output artifacts/section5/embeddings_256_64.npz
+python scripts/embed_chunks.py --chunks artifacts/section5/chunks_512_128.jsonl --output artifacts/section5/embeddings_512_128.npz
+python scripts/evaluate_chunks.py --candidate 128_32 artifacts/section5/chunks_128_32.jsonl artifacts/section5/chunks_128_32.jsonl.manifest.json artifacts/section5/embeddings_128_32.npz --candidate 256_64 artifacts/section5/chunks_256_64.jsonl artifacts/section5/chunks_256_64.jsonl.manifest.json artifacts/section5/embeddings_256_64.npz --candidate 512_128 artifacts/section5/chunks_512_128.jsonl artifacts/section5/chunks_512_128.jsonl.manifest.json artifacts/section5/embeddings_512_128.npz --embedding-model openai/text-embedding-3-small --query-cache artifacts/section5/query_embeddings.npz --output-json artifacts/section5/chunk_evaluation.json --output-md artifacts/section5/chunk_evaluation.md --frozen-config artifacts/section5/frozen_config.json --contexts-output data/rag_development_contexts.json
+```
+
+The original three-family bake-off is immutable negative evidence. After its
+measured provider and answer-quality failures, the project owner selected GPT-OSS
+as the only continuing generator; Qwen and Gemma are not silently retried. The
+current catalog still records all original candidates plus the different-family
+Anthropic judge so historical runs remain reproducible. Live execution rejects
+a catalog older than 24 hours and requires a separate explicit cost bound for
+each paid stage:
+
+```bash
+python scripts/run_generator_diagnostic.py --estimate-only
+# The owner-approved v2.5 run used this command and stayed below the bound:
+python scripts/run_generator_diagnostic.py --live --max-cost-usd 0.02 --confirm-cost
+
+# v2.5 passed 10/10, 3/3, and 13/13, so the judge config is now frozen:
+python scripts/freeze_generator_judge_config.py --hard-cost-cap-usd 0.25
+python scripts/run_generator_judge.py --estimate-only
+# After a separate approval of the displayed judge-only maximum:
+python scripts/run_generator_judge.py --live --max-cost-usd 0.25 --confirm-cost
+python scripts/validate_judge.py
+python scripts/render_judge_validation.py
+# Label the 10 unique outputs from their frozen question, response, and evidence.
+# The GPT-only worksheet contains 7 answerable and all 3 unanswerable cases.
+# Oracle answers, answerability targets, and Claude verdicts remain hidden;
+# no holdout case appears in this worksheet.
+python scripts/validate_judge.py --validate
+# This creates the accepted-selection artifact only after the blind labels pass.
+python scripts/freeze_generator_selection.py
+# The seven query embeddings have their own frozen $0.01 hard ceiling.
+python scripts/export_rag_holdout_contexts.py --cache artifacts/section5/embeddings_256_64.npz --max-cost-usd 0.01 --confirm-cost
+# Freeze a fresh availability/price snapshot; it is separate from development.
+python scripts/refresh_model_catalog.py --output artifacts/section5/holdout_model_catalog.json
+# Inspect the frozen generator + Claude judge-v2 maximum before the one-shot run.
+python scripts/run_rag_holdout.py --estimate-only
+python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
+```
+
+The readable packet is [`JUDGE-VALIDATION-REVIEW.md`](JUDGE-VALIDATION-REVIEW.md).
+Its cases use opaque, hash-mixed IDs. For a valid blind review, do not consult
+`data/qa.json` or the judged-output JSON until all owner labels are frozen.
+The concise human handoff is [`OWNER-RETURN-CHECKLIST.md`](OWNER-RETURN-CHECKLIST.md).
+
+The first paid development run is preserved as a negative result. All 39 rows
+were structurally valid and judged, but Qwen and GPT-OSS answered none of the
+10 answerable questions and Gemma answered only two. The corrected offline
+reanalysis therefore marks Gemma as a provisional lexicographic selection,
+not an accepted generator. The holdout remains untouched. Claude Opus's
+independent findings and the fixes are recorded in
+[`artifacts/section5/claude_bakeoff_review.md`](artifacts/section5/claude_bakeoff_review.md).
+
+Four later GPT-only generator diagnostics changed neither QA nor retrieval and
+made no holdout calls. v2.2 measured 8/10 answerable and 2/3 correct
+refusals for `$0.001690265`; v2.3 measured 9/10, 3/3, and 13/13 structural
+validity for `$0.001138185`. v2.3's remaining QA04 failure is documented as a
+model refusal despite direct supplied human evidence at context rank 5. v2.4
+uses one general refusal-reconsideration stage, contains no QA ID or expected
+answer, and measured 10/10 answerable, 3/3 correct refusals, and 13/13
+structurally valid for `$0.001276115`. QA04 was answered only after the general
+reconsideration, showing that its prior miss was synthesis behavior rather than
+missing retrieved evidence. Its first Claude judge measured `0.800`
+answered-only faithfulness and exposed scope overclaims in qa02 and qa07. The
+general v2.5 prompt correction changed no QA, retrieval, contexts, model, or
+holdout data and cost `$0.001613150`; it preserved 10/10, 3/3, and 13/13.
+Judge-v2 then cost `$0.123666000` and measured `0.900` answered-only
+faithfulness, `1.000` relevancy, `0.900` citation correctness, and `1.000`
+correct refusal. The remaining qa08 failure is an over-citation: citation 4 does
+not independently support every clause in a sentence also supported by
+citations 1 and 2. Claude Opus returned `PASS` on the corrected judge-v2 evidence
+chain before that paid run. Owner validation and holdout remain pending.
+
+The bridge to holdout is hash-bound end to end: the accepted-selection artifact
+requires the exact v2.5 10/3/13 generator result, complete judge-v2 evidence,
+and a passing blind owner report. Context export is one-shot and refuses an
+existing target. The holdout runner then requires that selection, its exact
+prompt/model/catalog hashes, and those frozen contexts; it has no overwrite
+mode. It atomically checkpoints each completed generator+judge pair to a
+hash-bound partial journal; after an interruption, repeat the exact live command
+with `--resume-partial` so completed cases are validated and skipped. It saves
+an owner-cap-checked worst-case reservation before every attempted case, saves
+all seven raw rows even when the preregistered quality thresholds fail, and only
+writes the final generator configuration after offline replay passes. A crashed
+post-call finalization can use `--finalize-saved` without making another paid
+call. Ordinary offline reruns make no provider calls. The
+independent Section 5/6 code audit and resolution trail is saved in
+[`artifacts/section6/claude_opus_review.md`](artifacts/section6/claude_opus_review.md),
+with the final release-hardening audit in
+[`artifacts/section6/claude_opus_release_review.md`](artifacts/section6/claude_opus_release_review.md).
+
+The local application is available without provider credentials:
+
+```bash
+python -m uvicorn app:app --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000`. Boolean and tuned BM25 search work entirely
+offline. Semantic/hybrid modes activate only when `EMBEDDING_CACHE_PATH` points
+to a cache matching the selected chunk artifact. Grounded Q&A fails closed as
+retrieval-only until that measured configuration exists; `OPENROUTER_API_KEY`
+is server-side only.
+
+`railway.json` now pins Railpack, the `$PORT` start command, `/healthz`, and a
+bounded restart policy. This is deployment packaging, not a deployment claim:
+no Railway project, public domain, or Railway secret has been created yet.
+
 ## Metrics Report
+
+### Section 5 RAG metrics
+
+The following are development-set retrieval measurements over the selected
+256-word/64-word-overlap chunks. They are not QA holdout results. Hybrid uses
+weighted RRF with `alpha=0.5`; selection and all losing configurations are saved
+in [`artifacts/section5/chunk_evaluation.json`](artifacts/section5/chunk_evaluation.json).
+
+| Retrieval mode | Recall@1 | Recall@3 | Recall@5 | Recall@10 | Evidence Hit@5 |
+|---|---:|---:|---:|---:|---:|
+| Lexical chunks | 0.470 | 0.590 | 0.710 | 0.830 | 0.900 |
+| Semantic chunks | 0.350 | 0.690 | 0.710 | 0.730 | 0.800 |
+| Hybrid chunks | 0.520 | 0.590 | 0.810 | 0.900 | 0.900 |
+
+| Generator | Answered / 10 | Correct answer | Faithfulness | Correct refusal | Relevancy | Citation correctness | Cost | Status |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| `qwen/qwen3.7-flash` | 0 | 0.000 | 0.308 | 1.000 | 0.846 | 0.000 | $0.154619640 | Development failure |
+| `openai/gpt-oss-20b` | 0 | 0.000 | 0.308 | 1.000 | 0.846 | 0.000 | $0.142342395 | Development failure |
+| `google/gemma-3-12b-it` | 2 | 0.200 | 0.385 | 1.000 | 0.769 | 1.000 on 2 answers | $0.148686400 | Provisional selection only |
+
+These are Claude-judge development scores, not human-validated or holdout
+scores. Citation correctness for Gemma has a denominator of only two answers;
+it does not erase eight missed answerable questions. Total provider-reported
+bake-off spend was `$0.445648435` across 122 calls, 234,700 input tokens, and
+35,334 output tokens, below the approved `$0.86` ceiling. The immutable live
+outputs and corrected offline reanalysis are saved in
+`data/rag_bakeoff_outputs.json` and `data/rag_bakeoff_reanalysis.json`.
+
+Later GPT-only generator diagnostics and their separately gated judge results
+are reported without overwriting earlier negative evidence:
+
+| Experiment | Answered / 10 | Refusals / 3 | Structural / 13 | Generator cost | Answered faithfulness | Citation correctness | Judge cost | Status |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| GPT v2.2 | 8 | 2 | 13 | $0.001690265 | TBD | TBD | — | Did not reach judge gate |
+| GPT v2.3 | 9 | 3 | 13 | $0.001138185 | TBD | TBD | — | Did not reach judge gate |
+| GPT v2.4 | 10 | 3 | 13 | $0.001276115 | 0.800 | 1.000 | $0.130374000 | Superseded development result |
+| GPT v2.5 | 10 | 3 | 13 | $0.001613150 | 0.900 | 0.900 | $0.123666000 | Owner validation pending |
+
+Final generator acceptance and holdout metrics remain `TBD` until owner
+validation of the Claude judge and a versioned response-quality decision. See
+[`SELF-EVALUATION.md`](SELF-EVALUATION.md) for the live gate status and
+[`COST-REPORT.md`](COST-REPORT.md) for measured embedding spend.
 
 ### Section 3 ranked-retrieval baseline
 
@@ -220,6 +423,20 @@ level guarantees. See
 Claude's specification-only audit challenged the practical significance of the
 small holdout gains; the concern and decision not to retune on holdout are
 preserved in [`artifacts/section4/claude_review.md`](artifacts/section4/claude_review.md).
+
+The selected hybrid service was also initialized once with the committed
+256/64 embedding cache and no provider key:
+
+| Cold service startup | RSS before | RSS after | RSS delta | Peak process RSS | Provider calls |
+|---:|---:|---:|---:|---:|---:|
+| 3,482.187 ms | 41,349,120 bytes | 218,300,416 bytes | 176,951,296 bytes | 278,355,968 bytes | 0 |
+
+This is an observed Windows/Python 3.12 development-machine measurement, not a
+Railway guarantee. It is regenerated explicitly by
+`python scripts/benchmark_service.py --overwrite`
+and hash-bound in
+[`artifacts/section6/service_memory.json`](artifacts/section6/service_memory.json).
+The deployed Python 3.11 process must still be checked in Railway's own metrics.
 
 ### Historical Day 1 Boolean report
 
@@ -297,4 +514,4 @@ Version 2 reveals that the version-1 Recall@5 of `1.000` was a known-item artifa
 4. **Implement Boolean retrieval.** Support deterministic `AND`/`OR`, `AND` precedence, and implicit `AND`, plus empty and unknown-term robustness.
 5. **Stub and run the red harness.** Calculate precision@k and recall@k directly against the frozen qrels, print aggregate and per-query Markdown tables, and paste the unaltered output into this report before tuning.
 
-Architecture details and the judgment protocol live in [`ARCHITECTURE.md`](ARCHITECTURE.md). AI-assisted development evidence lives in [`AI-LOG.md`](AI-LOG.md).
+Architecture details and the judgment protocol live in [`ARCHITECTURE.md`](ARCHITECTURE.md). The required one-page AI-development submission is [`AI-LOG.md`](AI-LOG.md), with the complete chronological audit trail retained in [`AI-LOG-DETAIL.md`](AI-LOG-DETAIL.md). The current release evidence and remaining gates are tracked in [`SELF-EVALUATION.md`](SELF-EVALUATION.md), [`COST-REPORT.md`](COST-REPORT.md), and [`DEPLOYMENT.md`](DEPLOYMENT.md). [`DEMO-SCRIPT.md`](DEMO-SCRIPT.md) and [`SOCIAL-POST.md`](SOCIAL-POST.md) are explicitly unfilled submission templates, not claims that those deliverables have been published.

@@ -1,0 +1,54 @@
+{
+  "model": "openai/text-embedding-3-small",
+  "pricing": {
+    "as_of": "2026-08-14",
+    "input_usd_per_million_tokens": 0.02,
+    "source": "https://openrouter.ai/openai/text-embedding-3-small/api"
+  },
+  "recorded_at": "2026-08-14T21:56:49.8058504Z",
+  "runs": [
+    {
+      "artifact": "artifacts/section5/embeddings_128_32.npz",
+      "artifact_sha256": "72958FC63352CD02AB7CD7CA5519A209478A56E49A0B072281DCE5FB3B97ED5B",
+      "cost_usd": 0.0177865,
+      "embedding_inputs": 4565,
+      "input_tokens": 889325,
+      "provider": "OpenAI",
+      "provider_calls": 46
+    },
+    {
+      "artifact": "artifacts/section5/embeddings_256_64.npz",
+      "artifact_sha256": "8811AA37E3ACA4897DB73D8D3AC0B097C3BCC06972B457123D241A10724E9FE5",
+      "cost_usd": 0.01488888,
+      "embedding_inputs": 2440,
+      "input_tokens": 744444,
+      "provider": "OpenAI",
+      "provider_calls": 25
+    },
+    {
+      "artifact": "artifacts/section5/embeddings_512_128.npz",
+      "artifact_sha256": "2D3ED480F7FC9519391EA2F663EDACEED7A29BB457273DDC10FF32F74F4BCF34",
+      "cost_usd": 0.0137536,
+      "embedding_inputs": 2007,
+      "input_tokens": 687680,
+      "provider": "OpenAI",
+      "provider_calls": 21
+    },
+    {
+      "artifact": "artifacts/section5/query_embeddings.npz",
+      "artifact_sha256": "CAF4C172B66E209D5CD448DDF41B1D7ED4B8DD8EBC105939C94873A589323668",
+      "cost_usd": 0.0000036,
+      "embedding_inputs": 13,
+      "input_tokens": 180,
+      "provider": "OpenAI",
+      "provider_calls": 1
+    }
+  ],
+  "schema_version": 1,
+  "totals": {
+    "cost_usd": 0.04643258,
+    "embedding_inputs": 9025,
+    "input_tokens": 2321629,
+    "provider_calls": 93
+  }
+}

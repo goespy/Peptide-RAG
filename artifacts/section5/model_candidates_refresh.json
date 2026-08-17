@@ -1,0 +1,122 @@
+{
+  "checked_at": "2026-08-15T02:10:10.107625Z",
+  "judge": {
+    "available": true,
+    "context_length": 1000000,
+    "family": "anthropic",
+    "id": "anthropic/claude-sonnet-4.6",
+    "input_cost_per_million": 3.0,
+    "output_cost_per_million": 15.0,
+    "structured_json": true,
+    "supported_parameters": [
+      "include_reasoning",
+      "max_completion_tokens",
+      "max_tokens",
+      "reasoning",
+      "reasoning_effort",
+      "response_format",
+      "stop",
+      "structured_outputs",
+      "temperature",
+      "tool_choice",
+      "tools",
+      "top_k",
+      "top_p",
+      "verbosity"
+    ]
+  },
+  "models": [
+    {
+      "available": true,
+      "context_length": 262144,
+      "family": "qwen",
+      "id": "qwen/qwen3-30b-a3b-instruct-2507",
+      "input_cost_per_million": 0.04815,
+      "output_cost_per_million": 0.19305,
+      "replacement_for": "qwen/qwen3.7-flash",
+      "replacement_rule": "lowest combined input/output price in the same provider family with strict structured outputs, >=32K context, input <=$0.10/M, and output <=$0.50/M",
+      "structured_json": true,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "available": true,
+      "context_length": 131072,
+      "family": "openai",
+      "id": "openai/gpt-oss-20b",
+      "input_cost_per_million": 0.03,
+      "output_cost_per_million": 0.13,
+      "structured_json": true,
+      "supported_parameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ]
+    },
+    {
+      "available": true,
+      "context_length": 131072,
+      "family": "google",
+      "id": "google/gemma-3-12b-it",
+      "input_cost_per_million": 0.05,
+      "output_cost_per_million": 0.15,
+      "structured_json": true,
+      "supported_parameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ]
+    }
+  ],
+  "schema_version": 2,
+  "sources": [
+    "https://openrouter.ai/api/v1/models",
+    "https://openrouter.ai/docs/guides/features/structured-outputs",
+    "https://openrouter.ai/docs/guides/routing/provider-selection"
+  ]
+}

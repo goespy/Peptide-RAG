@@ -1,0 +1,75 @@
+{
+  "actual_usage": {
+    "aggregate": {
+      "cost_usd": 0.00161315,
+      "input_tokens": 35889,
+      "output_tokens": 1088,
+      "provider_calls": 17,
+      "rows": 13,
+      "status": "provider_reported_complete"
+    },
+    "by_model": {
+      "openai/gpt-oss-20b": {
+        "cost_usd": 0.00161315,
+        "input_tokens": 35889,
+        "output_tokens": 1088,
+        "provider_calls": 17,
+        "rows": 13,
+        "status": "provider_reported_complete"
+      }
+    }
+  },
+  "approved_max_cost_usd": 0.02,
+  "config_sha256": "F5E782C2968FA53BB3DC6AC07A26D41726A929439E2E2D13BE6A0F385E54940F",
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "cost_estimate": {
+    "estimated_max_cost_usd": 0.01184732,
+    "generation": [
+      {
+        "conservative_input_tokens": 214644,
+        "estimated_cost_usd": 0.01184732,
+        "maximum_output_tokens": 41600,
+        "model": "openai/gpt-oss-20b",
+        "provider_calls": 52
+      }
+    ],
+    "judge_calls": 0,
+    "judge_cost_usd": 0.0,
+    "maximum_provider_calls": 52,
+    "method": "UTF-8 JSON characters/3 for conservative input tokens; all generation repair and retry attempts; maximum outputs"
+  },
+  "diagnostic": {
+    "candidates": {
+      "openai/gpt-oss-20b": {
+        "answerable_answer_count": 10,
+        "answerable_case_count": 10,
+        "final_outcomes": {
+          "answered": 7,
+          "answered_after_refusal_reconsideration": 3,
+          "model_insufficient_evidence_after_reconsideration": 2,
+          "preflight_insufficient_evidence": 1
+        },
+        "finish_reasons": {
+          "stop": 17
+        },
+        "ready_for_paid_judging": true,
+        "structurally_valid_count": 13,
+        "total_case_count": 13,
+        "unanswerable_case_count": 3,
+        "unanswerable_correct_system_refusal_count": 3,
+        "unanswerable_insufficient_evidence_shape_count": 3,
+        "unanswerable_model_refusal_count": 2,
+        "unanswerable_policy_refusal_count": 1,
+        "validation_errors": {}
+      }
+    },
+    "selection_status": "diagnostic_only_not_judged",
+    "winner": null
+  },
+  "experiment": "generator-v2.5-supported-scope-only",
+  "live_calls": true,
+  "model_catalog_sha256": "5915A387E0DD751FA309C0508E9063C093874340F9137F84908C24B20AD1A817",
+  "outputs_sha256": "29095C16BA51AED3AAFDE5148E92C6168BB25D7280FE5809A221BCCFB96B4B60",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "schema_version": 2
+}

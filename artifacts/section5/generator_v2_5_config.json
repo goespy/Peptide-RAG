@@ -1,0 +1,65 @@
+{
+  "acceptance_target": {
+    "answerable_answer_rate": "10/10 development cases",
+    "citation_structure": "13/13 structurally valid with identities derived from visible [n] markers",
+    "faithfulness": "10/10 answered development responses have every factual claim supported by supplied evidence",
+    "unanswerable_system_refusal_rate": "3/3 development cases"
+  },
+  "artifact_paths": {
+    "outputs": "data/rag_generator_v2_5_outputs.json",
+    "summary": "data/rag_generator_v2_5_summary.json"
+  },
+  "changes_from_v2_4": [
+    "Review all five supplied passages that are relevant to the question before composing the answer.",
+    "Attach population or species qualifiers only to the exact clause supported at that scope; never distribute a qualifier across an unsupported conjunct.",
+    "Do not infer no evidence, no benefit, ineffectiveness, or absence from silence; state a negative finding only when a supplied passage explicitly reports it at the requested scope.",
+    "When passages support different populations or models, state those scopes separately."
+  ],
+  "contexts_sha256": "1F6DD4B862EEC99C89CACD00FDED4D586D8E37EE411CF7AE9EE92637EFB4F00F",
+  "experiment_id": "generator-v2.5-supported-scope-only",
+  "generation": {
+    "citation_mode": "derived_from_text_markers",
+    "exclude_reasoning": true,
+    "max_tokens": 800,
+    "reasoning_effort": "low",
+    "reconsider_insufficient_evidence": true,
+    "repair_attempts": 1,
+    "require_supported_parameters": true,
+    "temperature": 0
+  },
+  "generator_candidates": [
+    "openai/gpt-oss-20b"
+  ],
+  "generator_diagnostic": {
+    "hard_cost_cap_usd": 0.02,
+    "judge_calls": 0,
+    "reviewed_estimate_usd": 0.01184732
+  },
+  "holdout_status": "untouched",
+  "hypotheses": [
+    "The general scope rules will remove unsupported population qualifiers and absence-of-evidence conclusions without encoding any QA ID, question, PMID, expected answer, or case-specific fact.",
+    "The unchanged refusal-reconsideration stage will retain the v2.4 10/10 answerable and 3/3 refusal behavior.",
+    "Retrieval, contexts, QA labels, and holdout remain unchanged, so any measured difference is attributable to the generator prompt."
+  ],
+  "model_catalog_sha256": "5915A387E0DD751FA309C0508E9063C093874340F9137F84908C24B20AD1A817",
+  "parent_config_sha256": "311F09FE5E23578321A6DD9EE5CA009C0699FA673A20861A1D6916125C219430",
+  "parent_judge_config_sha256": "A281B767AB6D81DF09BF537BDFA2CCB73206B6FC075BC6AB59DF3007A2FA0B02",
+  "parent_judge_outputs_sha256": "E1C4CE1CA4175710E919FA28F6B3964FB6305D02D38376D55FE1E6F092E846B5",
+  "parent_judge_summary_sha256": "95C287E7E907FEDFBDB853D363171D73D832FBEF1A8A57C62B7A090A73E8EA5D",
+  "parent_outputs_sha256": "1955084A553A3F445413D97E6CE7C2A68474A0B75D61F11F23607E9CCA52A527",
+  "parent_review_sha256": "0D9FA7808D3DB45099E6592C904096644743506BBCD5D051ED0849C39719453C",
+  "parent_summary_sha256": "6B66075D8A3A96E53285CD452D4456630E64BA1BC2A7DB8F16DB273CDF783CF0",
+  "prompt": "You are a research-literature assistant. Use only the supplied PubMed abstract evidence. Classify the question's evidence scope before answering. If the question explicitly asks about humans, human recovery, human effectiveness, safety in humans, or clinical use, answer only when at least one supplied passage directly reports evidence in humans; animal, in-vitro, or equine evidence alone requires insufficient_evidence. If the question is general and a supplied animal or in-vitro passage directly reports a relevant finding, answer with the species or model and explicitly state that it is not proof of human efficacy; do not refuse solely because the evidence is nonhuman. Answer whenever at least one supplied passage directly reports a finding relevant to the question. State the study population or species and preserve uncertainty. Before composing the answer, review all five supplied passages that are relevant to the question and reconcile their scopes. Apply a population or species qualifier only to the specific clause that the passage supports at that scope; never spread a qualifier across another claim in the same sentence. Do not infer no evidence, no benefit, ineffectiveness, or absence from silence; make a negative statement only when a supplied passage explicitly reports that negative finding at the requested scope. If supplied passages support different populations or models, state those scopes separately. Do not give personalized medical, treatment, or dosing advice. Return insufficient_evidence only when the passages do not support an answer, materially conflict, the explicitly requested human evidence is absent, or the question requests personalized medical or dosing advice. Prefer one concise factual sentence and use no more than three. Every sentence containing a study fact, outcome, number, mechanism, or limitation must include one or more [citation_id] markers. Return only the required JSON object.",
+  "prompt_sha256": "9BAE2A01C294B810514556B577E8FDCD7016B15A99651325965E04C31387AEC9",
+  "provider_parameter_sources": [
+    "https://openrouter.ai/docs/guides/best-practices/reasoning-tokens",
+    "https://openrouter.ai/openai/gpt-oss-20b/pricing"
+  ],
+  "qa_or_retrieval_changes": false,
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 7,
+  "selected": true,
+  "selection_scope": "approved 13-case development split only; no holdout access",
+  "status": "frozen_generator_v2_5_before_development_rerun"
+}

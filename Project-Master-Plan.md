@@ -19,8 +19,8 @@ flowchart LR
 | 2. Oracle and Boolean MVP | Complete |
 | 3. BM25 and full IR evaluation | Complete |
 | 4. Retrieval tuning and hardening | Complete |
-| 5. RAG and hybrid retrieval | Next |
-| 6. Final evaluation and submission | Not started |
+| 5. RAG and hybrid retrieval | In progress: retrieval frozen; GPT v2.5 passed 10/10 and judge-v2 measured 0.900 answered-only faithfulness; blind owner labels and holdout pending |
+| 6. Final evaluation and submission | In progress: 306 local and CI tests, offline runner, cost projection, refreshed service-memory evidence, and real local deployment smoke pass; the final refusal-source Opus review and both Node 24 CI runs passed; owner labels, RAG holdout, deployment, demo, and post remain pending |
 
 The frozen corpus contains 2,000 PubMed records and has SHA-256 `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. The frozen qrels v2 contains 75 graded judgments across 15 queries. Neither artifact may be silently changed.
 
@@ -310,7 +310,39 @@ Revalidate availability, context, structured output, and price. If unavailable, 
 
 Run all candidates with identical development questions, prompts, contexts, temperature, and token cap. Select by schema/citation validity, faithfulness, correct refusal, relevancy, citation correctness, cost, and p95 latency.
 
-Use Claude as the different-family judge. It identifies atomic claims, evidence, unsupported claims, relevance, citation correctness, and refusal correctness. Before using its results, deterministically sample 10 outputs across models and answerability classes for project-owner labels. Require at least 80% agreement and Cohen's kappa of 0.60; when kappa is undefined, report raw agreement and the confusion matrix. If validation fails, revise the rubric and use a disjoint sample.
+Measured deviation after the initial bake-off: Qwen and Gemma produced no
+usable structured development answers, while generator-v2 moved GPT-OSS to
+9/10 answerable cases. The project owner therefore froze GPT-OSS as the sole
+generator candidate for v2.2. The failed multi-model artifacts remain in the
+repository, and the narrowing is treated as an evidence-backed human decision,
+not as deletion of losing results. GPT-OSS must still pass 10/10 answerable and
+3/3 correct-refusal development gates before Claude judging or holdout access.
+
+Subsequent frozen diagnostics remained development-only. v2.2 measured 8/10
+answerable and 2/3 correct refusals; v2.3 measured 9/10, 3/3, and 13/13
+structural validity. v2.3 exposed one model refusal even though direct human
+evidence appeared at context rank 5. The measured v2.4 response used a single
+general refusal-reconsideration stage that rechecks all supplied passages; it
+does not encode a QA ID, expected answer, PMID, or question-specific hint and
+does not alter QA, retrieval, or holdout. Correct refusals remain valid,
+failed-closed attempts do not count as correct refusals, and the generator still
+had to meet 10/10, 3/3, and 13/13 before the judge-only pipeline could open.
+It passed that gate for `$0.001276115`; QA04 was recovered by the general
+reconsideration. The separately frozen judge stage remains owner-approved and
+cost-gated, and the holdout remains untouched.
+
+Use Claude as the different-family judge. It identifies atomic claims, evidence, unsupported claims, relevance, citation correctness, and refusal correctness. The judge-only runner consumes the accepted generator artifact and is prohibited from regenerating answers, retrieving new contexts, or opening holdout. Before using its results, deterministically sample 10 unique outputs across answerability classes for project-owner labels. With the owner-selected single generator, the sample contains seven answerable outputs and all three unanswerable outputs. Require at least 80% agreement and Cohen's kappa of 0.60; when kappa is undefined, report raw agreement and the confusion matrix. If validation fails, revise the rubric and use a disjoint sample.
+
+After owner agreement passes, freeze a hash-bound accepted-selection artifact.
+Export the seven holdout context lists exactly once under a `$0.01` query-
+embedding ceiling. Before the single generation/judge run, print a conservative
+estimate and enforce the frozen `$0.50` maximum. The run must use the accepted
+v2.5 prompt and model, Claude judge-v2, and the frozen model catalog. Save all
+seven outputs even if the quality gate fails; prohibit overwriting them and
+permit only an offline `--finalize-saved` recovery. Accept the final generator
+only with 7/7 structural and judged rows, 5/5 answerable responses, 2/2 correct
+refusals, 1.0 relevancy, at least 0.80 answered-only faithfulness, and at least
+0.80 citation correctness. Do not tune after viewing holdout results.
 
 ## 5.7 Public FastAPI application
 
@@ -396,7 +428,7 @@ Use prices retrieved on the report date and identify where the single-instance a
 
 Complete architecture, AI development log, README, self-evaluation, deployment runbook, cost report, demo, screenshots, and social post. Distinguish human approval from Codex and Claude review.
 
-GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies artifact hashes, runs the offline evaluation, and fails on stale generated metrics.
+GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies the currently implemented artifact hashes, runs the offline evaluation, and fails if those checks mutate tracked evidence. A final stale-Markdown regeneration check remains gated on the completed RAG artifacts.
 
 Release steps:
 
