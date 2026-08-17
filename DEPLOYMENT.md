@@ -120,6 +120,30 @@ authoritative production measurement.
 
 ### Smoke-test checklist
 
+Run the provider-call-free-by-default deployment probe first:
+
+```text
+python scripts/smoke_deployment.py --base-url https://YOUR-DOMAIN
+```
+
+After selecting one owner-approved **development** answerable question and one
+development intentionally unanswerable question, the explicit paid smoke path
+is below. Never use untouched holdout questions for smoke testing or the demo.
+The command sends exactly two `/api/answer` HTTP requests; it does not enforce a
+dollar cap, so verify the server-side daily/provider caps and the OpenRouter
+account limit before confirming it.
+
+```text
+python scripts/smoke_deployment.py --base-url https://YOUR-DOMAIN --answer-query "..." --refusal-query "..." --confirm-paid
+```
+
+Add `--check-rate-limit` only in a controlled window; it deliberately sends up
+to 35 additional BM25 requests to the deployed domain and requires the expected
+30th probe to return HTTP 429. Wait at least 60 seconds after prior search
+traffic, run this last, and expect the source IP's search route to remain
+rate-limited for the rest of that one-minute window. The smoke report never
+prints the supplied questions.
+
 1. `/healthz` returns `{"status":"ok"}`.
 2. BM25 search returns scored PubMed records and safe highlighted snippets.
 3. Hybrid search uses the frozen cache; deleting or corrupting its identity must disable it.

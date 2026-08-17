@@ -18,7 +18,8 @@
 | One-shot RAG holdout gate | `scripts/freeze_generator_selection.py`; `scripts/export_rag_holdout_contexts.py`; `scripts/run_rag_holdout.py`; focused tests | Implemented and replay/tamper-tested; remains closed until owner labels pass |
 | Independent implementation review | `artifacts/section6/claude_opus_review.md` | Opus re-review passed after fixes |
 | Generator-v2.5 independent review | `artifacts/section5/claude_generator_v2_5_review.md`; `artifacts/section5/claude_generator_v2_5_judge_review.md` | Opus passed the prompt-only experiment and corrected judge-v2 evidence chain before paid calls |
-| Final release audit | New code-only Opus review artifact | Pending: Claude subscription reports a 7:10 PM ET session reset; no verdict claimed |
+| Final release audit | `artifacts/section6/claude_opus_release_review.md` | Pass: blind-safe Opus review resolved all High/Medium findings; final focused verdict `PASS` |
+| Deployment smoke and owner handoff audit | `scripts/smoke_deployment.py`; `tests/test_smoke_deployment.py`; release-review addendum | Opus found a false refusal pass and CORS/evidence wording gaps; fixes pass 305 local tests, offline replay, and a real local smoke; narrow Opus resolution verdict pending the 2:20 AM ET subscription reset |
 | Public deployment | `app.py`; `railway.json`; `DEPLOYMENT.md`; service-memory artifact | Local shell, packaging, and a 278,065,152-byte peak development measurement complete; project/domain/secrets/deploy pending |
 | Cost report | `COST-REPORT.md`; `artifacts/section6/cost_projection.json`; frozen provider catalog and usage ledgers | Development spend and replayed 100/1K/10K/100K projections complete; actual Railway resource usage pending deployment |
 | Demo and social evidence | `DEMO-SCRIPT.md`; `SOCIAL-POST.md`; `docs/architecture-overview.svg`; `artifacts/section6/search-results.jpg` | Architecture and ranked-search assets complete; cited-answer/refusal, video, and public post pending |
@@ -40,5 +41,5 @@
 
 ## Pending credentials / deployment
 
-- Claude development judging is complete. The final holdout still requires owner-validation passage, configured provider credentials, and a separately approved paid-run budget.
+- Claude development judging is complete. The final holdout still requires owner-validation passage and its separately cost-gated live commands; provider credentials remain server-side.
 - Deployment is not represented as complete. See [DEPLOYMENT.md](DEPLOYMENT.md) for the explicit release gates.

@@ -5,7 +5,7 @@
 ## Tools & Workflow
 
 - **Codex** was the primary pair programmer and integrator. It read the assignment first, implemented the custom index/BM25/metrics/RAG code, delegated bounded modules after interfaces were frozen, ran tests, and maintained hash-bound artifacts.
-- **Claude Code (Opus)** was the independent reviewer. Its read-only reviews found evaluation-design and artifact-integrity defects that green tests had missed. The final release audit is still pending because the subscription session limit had not reset at the latest attempt; it is not represented as a pass.
+- **Claude Code (Opus)** was the independent reviewer. Its read-only reviews found evaluation-design, concurrency, recovery, and artifact-integrity defects that green tests had missed. After evidence-backed fixes, the final release-hardening review returned `PASS`; the blind owner labels and untouched holdout data were excluded from its scope.
 - **OpenRouter** supplied hosted embeddings, GPT-OSS generation, and a different-family Claude Sonnet judge for explicitly approved, cost-capped evaluations. Production code uses no prebuilt IR or metrics library; `bm25s` is differential-test-only.
 - **Human owner** wrote/approved relevance and QA judgments, chose the generator family, and approved every paid evaluation ceiling. The remaining blind judge-validation labels are explicitly pending; AI review never substitutes for human oracle approval.
 
@@ -39,6 +39,7 @@ Approximately **100% of source/test code was AI-generated or AI-edited** and **0
 - Claude found a self-confirming judge worksheet and an offline release check that reported pass without comparing saved metrics. Blind/hash-bound labels and full replay comparisons replaced both.
 - The production service expected the wrong final-generator status/hash fields and would have ignored the measured v2.5 prompt settings. A release-loader regression test now requires the accepted selection, retriever hash, prompt hash, and exact generation settings to agree before generation can activate.
 - A release audit found that ranked scores existed in the API but were invisible in the web UI. The API now emits explicit ranks, the client renders stable rank/score metadata, and an in-app browser run verified the result users actually see.
+- Opus's release audit also caught shared provider-call state, non-resumable paid holdout work, and a daily-cap concurrency race. Request-local state, atomic cost-reserved checkpoints, and a true concurrent regression test now guard those boundaries.
 
 ## Key Learnings
 

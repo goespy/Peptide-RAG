@@ -246,6 +246,7 @@ python scripts/run_rag_holdout.py --live --max-cost-usd 0.50 --confirm-cost
 The readable packet is [`JUDGE-VALIDATION-REVIEW.md`](JUDGE-VALIDATION-REVIEW.md).
 Its cases use opaque, hash-mixed IDs. For a valid blind review, do not consult
 `data/qa.json` or the judged-output JSON until all owner labels are frozen.
+The concise human handoff is [`OWNER-RETURN-CHECKLIST.md`](OWNER-RETURN-CHECKLIST.md).
 
 The first paid development run is preserved as a negative result. All 39 rows
 were structurally valid and judged, but Qwen and GPT-OSS answered none of the

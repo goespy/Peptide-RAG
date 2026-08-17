@@ -49,3 +49,34 @@ The final narrowly scoped Opus check returned **PASS** with no remaining High or
 Medium finding. Opus did not inspect blind labels or holdout evidence and did
 not independently execute the complete suite. The primary agent's local
 verification is recorded separately in the repository and CI.
+
+## Deployment-smoke and owner-handoff delta
+
+Opus later reviewed the uncommitted deployment-smoke automation and human
+handoff documents under the same blindness exclusions. That audit did **not**
+pass the first draft. It found that the refusal probe accepted provider outages
+and budget failures as if they were a correct scientific refusal. It also found
+that the same-origin probe omitted browser preflights, the earlier 302-test
+`PASS` was blurred with later 305-test work, and the social draft reported the
+all-query tuned score without the lexical-holdout qualification.
+
+The response now:
+
+- accepts only the exact standard evidence refusal from hybrid retrieval with
+  no fallback or infrastructure-failure reason;
+- exercises hostile-origin GET and JSON-POST preflights for both public POST
+  endpoints and rejects permissive CORS headers;
+- verifies NCBI attribution and the exact 30-requests/minute/IP boundary;
+- closes internally created HTTP sessions and caps the explicit paid smoke at
+  one development answerable plus one development unanswerable HTTP request;
+- forbids untouched holdout questions in smoke/demo evidence;
+- separates commit `8785c40` and its 302-test Opus pass from the later local
+  305-test deployment-smoke tree; and
+- reports the all-query `0.926` result as descriptive alongside the frozen
+  lexical-holdout delta from `0.838` to `0.841`.
+
+After those changes, the primary agent ran 305 tests, the complete offline
+release replay, and the provider-call-free smoke against a real local Uvicorn
+process. All passed. A narrow Opus resolution rerun immediately afterward hit
+the subscription session limit, which reports a 2:20 AM ET reset. Therefore no
+second Opus `PASS` is claimed in this addendum yet.
