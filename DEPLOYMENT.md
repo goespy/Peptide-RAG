@@ -6,7 +6,7 @@ The public service is live at https://peptide-rag-production.up.railway.app.
 
 - Deployed `main` commit: `4c709558dd0796a416022eeebf7436259927e0de`
 - Railway project/service/deployment: `cb2e8529-ebca-4a99-9f36-9811e5bdede1` / `bcd52c1e-5128-40db-8823-77ff9180b42b` / `37dcb82b-a1cd-4524-ae52-ecc5481c34c3` (`SUCCESS`)
-- Deployed-runtime CI run `32071964692` (307 tests): pass; final documentation/evidence suite (308 local tests) and offline runner: pass
+- Deployed-runtime CI run `32071964692` (307 tests): pass; current release branch (312 local tests) and offline runner: pass
 - Public smoke: pass for `/healthz`, metrics, same-origin behavior, BM25, a grounded answer with two citations, and the model-originated `qa17` refusal. Controlled rate-limit smoke returned HTTP 429 exactly at probe 30.
 
 Live public-UI evidence is retained at `artifacts/section6/cited-answer.png` and `artifacts/section6/evidence-refusal.png`.
@@ -19,7 +19,7 @@ The initial production smoke used `qa16`; it was a correct deterministic safety 
 
 ### Operational follow-up
 
-Railway reported `$0.0019362454475925924` total usage for the billing period beginning 2026-08-14T23:31Z and scheduled to end 2026-08-17T23:59Z; the snapshot itself was captured at 2026-08-17T21:45Z, before the period ended. It comprised `$0.00017385344907407406` CPU, `$0.0017422829985185185` memory, and `$0.000020109` egress. One live hour reported CPU average/max `0.006207` / `0.1637622` vCPU (limit 2), memory average/current/max `136.7066` / `348.1314` / `677.4262` MB (limit `1023.9974` MB), 78 HTTP requests (62 2xx, 16 controlled 4xx CORS/rate-limit probes, 0 5xx), error rate 0, and p95 3 ms. There is no volume/disk usage. This is a short early window, not a monthly forecast. A local benchmark measured peak RSS of 278,188,032 bytes and startup of 3,616.166 ms; it remains a separate sizing signal. During Railway diagnostics, the CLI unexpectedly printed the OpenRouter secret into private task output. Rotate that key before closing the release; do not copy it into docs, logs, screenshots, or tickets.
+Railway reported `$0.0019362454475925924` total usage for the billing period beginning 2026-08-14T23:31Z and scheduled to end 2026-08-17T23:59Z; the snapshot itself was captured at 2026-08-17T21:45Z, before the period ended. It comprised `$0.00017385344907407406` CPU, `$0.0017422829985185185` memory, and `$0.000020109` egress. One live hour reported CPU average/max `0.006207` / `0.1637622` vCPU (limit 2), memory average/current/max `136.7066` / `348.1314` / `677.4262` MB (limit `1023.9974` MB), 78 HTTP requests (62 2xx, 16 controlled 4xx CORS/rate-limit probes, 0 5xx), error rate 0, and p95 3 ms. There is no volume/disk usage. This is a short early window, not a monthly forecast. The refreshed local benchmark measured peak RSS of 278,568,960 bytes and startup of 3,582.723 ms; it remains a separate sizing signal. During Railway diagnostics, the CLI unexpectedly printed the OpenRouter secret into private task output. Rotate that key before closing the release; do not copy it into docs, logs, screenshots, or tickets.
 
 ## Complete locally
 
@@ -133,8 +133,8 @@ The offline development measurement is reproducible with:
 python scripts/benchmark_service.py --overwrite
 ```
 
-It observed `217,669,632` bytes RSS after initialization, a
-`278,188,032`-byte peak, and `3,616.166 ms` startup with the selected cache,
+It observed `217,960,448` bytes RSS after initialization, a
+`278,568,960`-byte peak, and `3,582.723 ms` startup with the selected cache,
 2,000-document index, and zero provider calls. The machine ran Windows and
 Python 3.12, so the artifact is a separate local sizing signal; the early
 Railway/Python 3.11 measurement above is the production observation.
@@ -177,5 +177,8 @@ prints the supplied questions.
 5. One approved development unanswerable question returns a model-originated
    `insufficient_evidence`, not a provider/parser fail-close.
 6. Personalized/dosing advice is refused before generation.
+7. The response exposes exactly one safe public category—medical safety,
+   insufficient evidence, service unavailable, or budget limit—without raw
+   provider details, and the UI still displays retrieved evidence.
 7. Per-IP limits and the daily budget return retrieval evidence, not a generated fallback.
 8. No raw query or server secret appears in application logs or browser code.

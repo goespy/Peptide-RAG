@@ -32,7 +32,7 @@ Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 
 - [x] Blind, evidence-bound 10-output owner validation: 10/10 agreement with Claude; kappa undefined because labels had no variation
 - [x] Untouched QA holdout: 5/5 answerable, 2/2 correct refusals, 7/7 structural; faithfulness, relevancy, citation correctness, correct answer, and correct refusal all 1.0
 - [x] Accepted generator `openai/gpt-oss-20b` with judge `anthropic/claude-sonnet-4.6`
-- [x] Section 6 release evidence: `run_project.py` passes all gates; deployed-runtime CI run `32071964692` passed 307 tests, and the final documentation/evidence suite passes 308 tests locally
+- [x] Section 6 release evidence: `run_project.py` passes all gates; deployed-runtime CI run `32071964692` passed 307 tests, and the current release branch passes 312 tests locally
 - [x] Public Railway deployment: [peptide-rag-production.up.railway.app](https://peptide-rag-production.up.railway.app)
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
@@ -326,6 +326,20 @@ Railway billing/resource evidence live in
 `artifacts/section6/railway_release_measurement.json`; the Railway snapshot is
 not a monthly forecast or capacity test.
 
+Every retrieval-only Q&A response now includes a safe `refusal_reason` and a
+fixed explanation while still displaying retrieved evidence:
+
+| `refusal_reason` | User-facing explanation |
+|---|---|
+| `medical_safety` | I can summarize doses reported in research, but I can’t recommend what you should take. |
+| `insufficient_evidence` | The retrieved abstracts don’t contain enough evidence to answer. |
+| `service_unavailable` | Answer generation failed, so retrieved evidence is shown instead. |
+| `budget_limit` | Daily answer budget is exhausted. |
+
+Private provider and validation details are never sent to the browser. Questions
+about doses reported in a named study remain allowed; personalized or
+prescriptive dosing requests receive the medical-safety explanation.
+
 ## Metrics Report
 
 ### Section 5 RAG metrics
@@ -448,7 +462,7 @@ The selected hybrid service was also initialized once with the committed
 
 | Cold service startup | RSS before | RSS after | RSS delta | Peak process RSS | Provider calls |
 |---:|---:|---:|---:|---:|---:|
-| 3,616.166 ms | 41,222,144 bytes | 217,669,632 bytes | 176,447,488 bytes | 278,188,032 bytes | 0 |
+| 3,582.723 ms | 41,209,856 bytes | 217,960,448 bytes | 176,750,592 bytes | 278,568,960 bytes | 0 |
 
 This is an observed Windows/Python 3.12 development-machine measurement, not a
 Railway guarantee. It is regenerated explicitly by

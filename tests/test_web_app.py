@@ -6,6 +6,14 @@ import unittest
 from datetime import UTC, datetime, timedelta
 from unittest.mock import patch
 
+from src.refusals import (
+    BUDGET_LIMIT,
+    INSUFFICIENT_EVIDENCE,
+    MEDICAL_SAFETY,
+    REFUSAL_MESSAGES,
+    SERVICE_UNAVAILABLE,
+)
+
 try:
     from fastapi.testclient import TestClient
     from app import BudgetExceeded, SlidingRateLimiter, _call, create_app
@@ -58,6 +66,8 @@ class WebAppTests(unittest.TestCase):
         script = client.get("/static/app.js").text
         self.assertIn('details.push(`Rank ${item.rank}`)', script)
         self.assertIn('details.push(`Score ${item.score.toFixed(6)}`)', script)
+        self.assertIn('medical_safety: "Medical-safety refusal"', script)
+        self.assertIn('service_unavailable: "Service unavailable"', script)
 
     def test_validation_and_answer_fallback_preserve_evidence(self):
         class Failing(FakeService):
@@ -71,11 +81,17 @@ class WebAppTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()["retrieval_only"])
         self.assertEqual(response.json()["evidence"][0]["pmid"], "12345")
+        self.assertEqual(response.json()["refusal_reason"], SERVICE_UNAVAILABLE)
+        self.assertEqual(
+            response.json()["refusal"], REFUSAL_MESSAGES[SERVICE_UNAVAILABLE]
+        )
 
         capped_client = TestClient(create_app(Failing(), daily_answer_cap=1))
         self.assertTrue(capped_client.post("/api/answer", json={"query": "first"}).json()["retrieval_only"])
         capped = capped_client.post("/api/answer", json={"query": "second"}).json()
         self.assertEqual(capped["reason"], "Daily answer budget is exhausted.")
+        self.assertEqual(capped["refusal_reason"], BUDGET_LIMIT)
+        self.assertEqual(capped["refusal"], REFUSAL_MESSAGES[BUDGET_LIMIT])
 
         class UnknownRefusalSource(FakeService):
             def answer(self, *args):
@@ -91,6 +107,36 @@ class WebAppTests(unittest.TestCase):
             json={"query": "peptide", "mode": "hybrid", "k": 1},
         ).json()
         self.assertEqual(refusal["refusal_source"], "failed_closed")
+        self.assertEqual(refusal["refusal_reason"], SERVICE_UNAVAILABLE)
+        self.assertEqual(refusal["refusal"], REFUSAL_MESSAGES[SERVICE_UNAVAILABLE])
+
+        class CategorizedRefusal(FakeService):
+            def __init__(self, reason, source):
+                self.reason = reason
+                self.source = source
+
+            def answer(self, *args):
+                return {
+                    "answer": None,
+                    "refusal": REFUSAL_MESSAGES[self.reason],
+                    "refusal_reason": self.reason,
+                    "refusal_source": self.source,
+                    "citations": [],
+                }
+
+        for reason, source in (
+            (MEDICAL_SAFETY, "failed_closed"),
+            (INSUFFICIENT_EVIDENCE, "model"),
+        ):
+            with self.subTest(reason=reason):
+                categorized = TestClient(
+                    create_app(CategorizedRefusal(reason, source))
+                ).post(
+                    "/api/answer",
+                    json={"query": "peptide", "mode": "hybrid", "k": 1},
+                ).json()
+                self.assertEqual(categorized["refusal_reason"], reason)
+                self.assertEqual(categorized["refusal"], REFUSAL_MESSAGES[reason])
 
     def test_answer_endpoint_retrieves_evidence_once(self):
         class Counting(FakeService):

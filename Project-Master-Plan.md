@@ -364,7 +364,7 @@ POST /api/search
 POST /api/answer
 ```
 
-The vanilla HTML/CSS/JavaScript interface contains search and grounded-Q&A views, retrieval-mode selection, ranked snippets, PubMed links, citations, metrics, refusal state, research-only disclaimer, and NCBI attribution.
+The vanilla HTML/CSS/JavaScript interface contains search and grounded-Q&A views, retrieval-mode selection, ranked snippets, PubMed links, citations, metrics, refusal state, research-only disclaimer, and NCBI attribution. Retrieval-only responses distinguish `medical_safety`, `insufficient_evidence`, `service_unavailable`, and `budget_limit` with fixed public messages while keeping retrieved evidence visible; private provider errors remain hidden.
 
 Controls:
 
@@ -437,7 +437,7 @@ Use prices retrieved on the report date and identify where the single-instance a
 
 Complete architecture, AI development log, README, self-evaluation, deployment runbook, cost report, demo, screenshots, and social post. Distinguish human approval from Codex and Claude review.
 
-GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies the currently implemented artifact hashes, runs the offline evaluation, and fails if those checks mutate tracked evidence. Deployed-runtime CI run `32071964692` passed with 307 tests; the final documentation/evidence suite passes 308 tests locally, and `python run_project.py` passes all offline gates.
+GitHub Actions on Python 3.11 installs dependencies, runs unit/integration/differential tests, verifies the currently implemented artifact hashes, runs the offline evaluation, and fails if those checks mutate tracked evidence. Deployed-runtime CI run `32071964692` passed with 307 tests; the current release branch passes 312 tests locally, and `python run_project.py` passes all offline gates.
 
 Release steps:
 

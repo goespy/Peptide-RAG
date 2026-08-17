@@ -20,9 +20,15 @@ from src.bm25 import BM25Config, rank_bm25
 from src.boolean import search_boolean
 from src.chunks import Chunk, embedding_text
 from src.embeddings import EmbeddingCacheManifest, EmbeddingClient, load_embedding_cache
-from src.generation import AnswerResult, GroundedAnswerClient
+from src.generation import AnswerResult, GroundedAnswerClient, requires_medical_refusal
 from src.index import InvertedIndex
 from src.retrieval import RetrievedChunk, Retriever
+from src.refusals import (
+    INSUFFICIENT_EVIDENCE,
+    MEDICAL_SAFETY,
+    SERVICE_UNAVAILABLE,
+    refusal_message,
+)
 from src.snippets import make_snippet
 
 
@@ -70,6 +76,22 @@ def _refusal_source(answer_client: object) -> str:
         if metadata.get("final_outcome") in MODEL_REFUSAL_OUTCOMES
         else "failed_closed"
     )
+
+
+def _public_refusal_reason(answer_client: object) -> str:
+    """Map private generation metadata to a small, safe public category."""
+
+    metadata = getattr(answer_client, "last_metadata", None)
+    if not isinstance(metadata, dict):
+        return SERVICE_UNAVAILABLE
+    if metadata.get("failure_reason") == "personalized_or_dosing_request":
+        return MEDICAL_SAFETY
+    if (
+        metadata.get("final_outcome") in MODEL_REFUSAL_OUTCOMES
+        or metadata.get("failure_reason") == "no_retrieved_context"
+    ):
+        return INSUFFICIENT_EVIDENCE
+    return SERVICE_UNAVAILABLE
 
 
 def _load_chunks(path: Path, manifest_path: Path) -> tuple[tuple[Chunk, ...], dict[str, Any]]:
@@ -424,18 +446,29 @@ class LocalResearchService:
         return tuple(contexts)
 
     def answer(self, query: str, mode: str, k: int, evidence: list[dict[str, Any]]) -> dict[str, Any]:
+        if requires_medical_refusal(query):
+            return {
+                "answer": None,
+                "refusal": refusal_message(MEDICAL_SAFETY),
+                "refusal_reason": MEDICAL_SAFETY,
+                "refusal_source": "failed_closed",
+                "citations": [],
+            }
         if self.answer_client is None:
             return {
                 "answer": None,
-                "refusal": "Grounded generation is unavailable until the measured RAG configuration and holdout winner are frozen.",
+                "refusal": refusal_message(SERVICE_UNAVAILABLE),
+                "refusal_reason": SERVICE_UNAVAILABLE,
                 "refusal_source": "failed_closed",
                 "citations": [],
             }
         result: AnswerResult = self.answer_client.answer(query, self._contexts_from_evidence(evidence, k))
         if result.status != "answered":
+            reason = _public_refusal_reason(self.answer_client)
             return {
                 "answer": None,
-                "refusal": result.text,
+                "refusal": refusal_message(reason),
+                "refusal_reason": reason,
                 "refusal_source": _refusal_source(self.answer_client),
                 "citations": [],
             }

@@ -41,3 +41,7 @@ between the deployed 307-test runtime CI run and the final 308-test local
 documentation/evidence suite. It also confirmed that demo and social
 publication are honestly disclosed as owner actions and that no secret value
 appears in the audited repository files.
+
+The 308-test figure above is the state Claude reviewed. A subsequent
+owner-requested refusal-explanation change added four tests; the current branch
+passes 312 tests and requires a fresh follow-up Opus verdict before release.

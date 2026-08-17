@@ -29,7 +29,7 @@ Show the analyzer/index/BM25 → chunking/embeddings/RRF → structured answer/j
 - Live cited-answer screenshot: `artifacts/section6/cited-answer.png`
 - Live evidence-refusal screenshot: `artifacts/section6/evidence-refusal.png`
 - Public URL: https://peptide-rag-production.up.railway.app
-- Final deployed runtime commit: `4c709558dd0796a416022eeebf7436259927e0de` (CI run `32071964692`; `307` tests). The final documentation/evidence suite passes `308` tests locally, and the offline runner passes.
+- Final deployed runtime commit: `4c709558dd0796a416022eeebf7436259927e0de` (CI run `32071964692`; `307` tests). The current release branch passes `312` tests locally, and the offline runner passes.
 - Frozen development hybrid Recall@5 / Evidence Hit@5: `0.810 / 0.900`
 - Untouched holdout faithfulness / relevancy / citation / correct answer / correct refusal: `1.000 / 1.000 / 1.000 / 1.000 / 1.000` (5/5 answers; 2/2 refusals; 7/7 structure; p95 `8,445.535 ms`)
 - Controlled rate-limit smoke: HTTP `429` exactly at probe `30`

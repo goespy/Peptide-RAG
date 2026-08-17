@@ -70,7 +70,7 @@ end at 23:59Z, not a monthly forecast. The one-hour live resource snapshot
 reported CPU average/max `0.006207` / `0.1637622` vCPU (limit 2), memory
 average/current/max `136.7066` / `348.1314` / `677.4262` MB (limit
 `1023.9974` MB), and no volume/disk use. Local-only service sizing measured
-`278,188,032` bytes peak RSS and `3,616.166 ms` startup.
+`278,568,960` bytes peak RSS and `3,582.723 ms` startup.
 
 The holdout used 11 generator calls, 7 judge calls, and 7 embedding calls. The
 total counted provider-call floor across recorded development and holdout work

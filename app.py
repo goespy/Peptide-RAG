@@ -17,6 +17,14 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from starlette.concurrency import run_in_threadpool
 
+from src.refusals import (
+    BUDGET_LIMIT,
+    INSUFFICIENT_EVIDENCE,
+    PUBLIC_REFUSAL_REASONS,
+    SERVICE_UNAVAILABLE,
+    refusal_message,
+)
+
 
 RESEARCH_DISCLAIMER = "Research use only. This tool does not provide medical advice."
 NCBI_ATTRIBUTION = "Literature records and PubMed links are attributed to the National Center for Biotechnology Information (NCBI)."
@@ -58,7 +66,8 @@ class LocalOnlyService:
     def answer(self, query: str, mode: str, k: int, evidence: list[dict[str, Any]]) -> dict[str, Any]:
         return {
             "answer": None,
-            "refusal": "No answer provider is configured; showing retrieved evidence only.",
+            "refusal": refusal_message(SERVICE_UNAVAILABLE),
+            "refusal_reason": SERVICE_UNAVAILABLE,
             "refusal_source": "failed_closed",
         }
 
@@ -318,7 +327,10 @@ def create_app(
             return {
                 "answer": None,
                 "retrieval_only": True,
-                "reason": "Daily answer budget is exhausted.",
+                "refusal": refusal_message(BUDGET_LIMIT),
+                "refusal_reason": BUDGET_LIMIT,
+                "refusal_source": "failed_closed",
+                "reason": refusal_message(BUDGET_LIMIT),
                 "retrieval_mode": "lexical",
                 "requested_mode": payload.mode,
                 "evidence": evidence,
@@ -346,7 +358,10 @@ def create_app(
             return {
                 "answer": None,
                 "retrieval_only": True,
-                "reason": "Answer generation is unavailable; showing retrieved evidence only.",
+                "refusal": refusal_message(SERVICE_UNAVAILABLE),
+                "refusal_reason": SERVICE_UNAVAILABLE,
+                "refusal_source": "failed_closed",
+                "reason": refusal_message(SERVICE_UNAVAILABLE),
                 "retrieval_mode": retrieval_mode,
                 "requested_mode": payload.mode,
                 "retrieval_fallback": retrieval_fallback,
@@ -359,14 +374,23 @@ def create_app(
         if not isinstance(value, dict):
             value = {
                 "answer": None,
-                "refusal": "Answer service returned no usable response.",
+                "refusal": refusal_message(SERVICE_UNAVAILABLE),
+                "refusal_reason": SERVICE_UNAVAILABLE,
                 "refusal_source": "failed_closed",
             }
-        elif not value.get("answer") and value.get("refusal_source") not in {
-            "model",
-            "failed_closed",
-        }:
-            value = {**value, "refusal_source": "failed_closed"}
+        elif not value.get("answer"):
+            source = value.get("refusal_source")
+            if source not in {"model", "failed_closed"}:
+                source = "failed_closed"
+            reason = value.get("refusal_reason")
+            if reason not in PUBLIC_REFUSAL_REASONS:
+                reason = INSUFFICIENT_EVIDENCE if source == "model" else SERVICE_UNAVAILABLE
+            value = {
+                **value,
+                "refusal": refusal_message(reason),
+                "refusal_reason": reason,
+                "refusal_source": source,
+            }
         return {
             **value,
             "retrieval_only": not bool(value.get("answer")),

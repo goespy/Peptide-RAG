@@ -307,6 +307,13 @@ paths cannot both execute for one case. Personalized or prescriptive dosing
 requests are rejected deterministically before a provider call; questions
 about doses reported in a named study remain research queries.
 
+The public API does not collapse every refusal into “insufficient evidence.” It
+maps private generation metadata to four fixed, non-sensitive categories:
+`medical_safety`, `insufficient_evidence`, `service_unavailable`, and
+`budget_limit`. The UI labels the category, shows its approved explanation, and
+keeps the retrieved passages visible. Raw provider errors and validation codes
+remain server-side.
+
 The historical three-model development bake-off required identical stored
 contexts and hashes. After Qwen/Gemma provider failures and insufficient GPT
 answer coverage, the project owner selected GPT-OSS as the sole continuing
