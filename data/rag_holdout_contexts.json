@@ -1,0 +1,472 @@
+{
+  "accepted_selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+  "approved_max_cost_usd": 0.01,
+  "contexts": [
+    {
+      "chunks": [
+        {
+          "chunk_id": "22962027:c0001",
+          "end_char": 596,
+          "lexical_rank": 3,
+          "pmid": "22962027",
+          "score": 0.016133229247983348,
+          "semantic_rank": 1,
+          "start_char": 0,
+          "text": "The formulation TB-500 is suspected to be used as doping agent in sport. This work describes the detection and the identification of the N-terminal acetylated 17-23 fragment of human thymosin beta 4 (Ac-LKKTETQ) in TB-500 by means of high-performance liquid chromatography/high resolution mass spectrometry using an Orbitrap Exactive benchtop mass spectrometer. Ac-LKKTETQ was also synthesized by solid-phase peptide synthesis, and an analytical strategy for detection in plasma and urine by high-performance liquid chromatography/low resolution triple-quadrupole mass spectrometry was suggested.",
+          "title": "Synthesis and characterization of the N-terminal acetylated 17-23 fragment of thymosin beta 4 identified in TB-500, a product suspected to possess doping potential.",
+          "token_count": 79
+        },
+        {
+          "chunk_id": "23084823:c0001",
+          "end_char": 1720,
+          "lexical_rank": 1,
+          "pmid": "23084823",
+          "score": 0.016133229247983348,
+          "semantic_rank": 3,
+          "start_char": 0,
+          "text": "A veterinary preparation known as TB-500 and containing a synthetic version of the naturally occurring peptide LKKTETQ has emerged. The peptide segment (17)LKKTETQ(23) is the active site within the protein thymosin \u03b2(4) responsible for actin binding, cell migration and wound healing. The key ingredient of TB-500 is the peptide LKKTETQ with artificial acetylation of the N-terminus. TB-500 is claimed to promote endothelial cell differentiation, angiogenesis in dermal tissues, keratinocyte migration, collagen deposition and decrease inflammation. In order to control the misuse of TB-500 in equine sports, a method to definitely identify its prior use in horses is required. This study describes a method for the simultaneous detection of N-acetylated LKKTETQ and its metabolites in equine urine and plasma samples. The possible metabolites of N-acetylated LKKTETQ were first identified from in vitro studies. The parent peptide and its metabolites were isolated from equine urine or plasma by solid-phase extraction using ion-exchange cartridges, and analysed by liquid chromatography-mass spectrometry (LC/MS). These analytes were identified according to their LC retention times and relative abundances of the major product ions. The peptide N-acetylated LKKTETQ could be detected and confirmed at 0.02 ng/mL in equine plasma and 0.01 ng/mL in equine urine. This method was successful in confirming the presence of N-acetylated LKKTETQ and its metabolites in equine urine and plasma collected from horses administered with a single dose of TB-500 (containing 10mg of N-acetylated LKKTETQ). To our knowledge, this is the first identification of TB-500 and its metabolites in post-administration samples from horses.",
+          "title": "Doping control analysis of TB-500, a synthetic version of an active region of thymosin \u03b24, in equine urine and plasma by liquid chromatography-mass spectrometry.",
+          "token_count": 249
+        },
+        {
+          "chunk_id": "17468232:c0001",
+          "end_char": 1712,
+          "lexical_rank": 43,
+          "pmid": "17468232",
+          "score": 0.012207310108509423,
+          "semantic_rank": 8,
+          "start_char": 0,
+          "text": "The development of thymosin beta(4) from a thymic hormone to an actin-sequestering peptide and back to a cytokine supporting wound healing will be outlined. Thymosin fraction 5 consists of a mixture of polypeptides and improves immune response. Starting with fraction 5, several main peptides (thymosin alpha(1), polypeptide beta(1), and thymosin beta(4)) were isolated and tested for biological activity. However, none of the isolated peptides were really thymic hormones. They are all biological important peptides with diverse functions. Polypeptide beta(1) is identical to ubiquitin truncated by two C-terminal glycine residues. Several peptides related to thymosin beta(4) were isolated and sequenced from various species. Large amounts of thymosin beta(4) were found in many cells. It was postulated that the beta-thymosins might have a general function. The identification of a biological function of thymosin beta(4) was tedious. In 1990, Dan Safer and his colleagues recognized that thymosin beta(4) sequesters G-actin. The dissociation constant of the complex in the micromolar range allows for fast binding and release of G-actin. beta-Thymosins are the main intracellular G-actin-sequestering peptides in most vertebrate cells. Thymosin beta(4) is unstructured but folds into a stable conformation on binding to G-actin. It is present in the nucleus as well as the cytoplasm and might be responsible for sequestering nuclear actin. Several biological effects are attributed to thymosin beta(4), oxidized thymosin beta(4), or to ac-SDKP possibly generated from thymosin beta(4). However, very little is known about molecular mechanisms mediating the effects attributed to extracellular beta-thymosins.",
+          "title": "beta-Thymosins.",
+          "token_count": 243
+        },
+        {
+          "chunk_id": "38382158:c0001",
+          "end_char": 1784,
+          "lexical_rank": 16,
+          "pmid": "38382158",
+          "score": 0.011480908152734778,
+          "semantic_rank": 42,
+          "start_char": 0,
+          "text": "BACKGROUND: TB-500 (Ac-LKKTETQ), derived from the active site of thymosin \u03b24 (T\u03b24), has various biological functions in its unacetylated form, LKKTETQ. These functions include actin binding, dermal wound healing, angiogenesis, and skin repair. The biological effects of TB-500, however, have not been documented. And the analysis of TB-500 and its metabolites have been neither simultaneously quantified nor structurally identified using synthesized authentic standards. METHODS: This study was aimed to investigating simultaneous analytical methods of TB-500 and its metabolites in in-vitro and urine samples by using UHPLC-Q-Exactive orbitrap MS, and to comparing the biological activity of its metabolites with the parent TB-500. The metabolism of TB-500 was investigated in human serum, various in-vitro enzyme systems, and urine samples from rats treated with TB-500, and their biological activities measured by cytotoxicity and wound healing experiments were also evaluated in fibroblasts. RESULTS: The simultaneous analytical method for TB-500 and its metabolites was developed and validated. The study found that Ac-LK was the primary metabolite with the highest concentration in rats at 0-6 h intervals. Also, the metabolite Ac-LKK was a long-term metabolite of TB-500 detected up to 72 hr. No cytotoxicity of the parent and its metabolites was found. Ac-LKKTE only showed a significant wound healing activity compared to the control. CONCLUSION: The study provides a valuable tool for quantifying TB-500 and its metabolites, contributing to the understanding of metabolism and potential therapeutic applications. Our results also suggest that the previously reported wound-healing activity of TB-500 in literature may be due to its metabolite Ac-LKKTE rather than the parent",
+          "title": "Simultaneous quantification of TB-500 and its metabolites in in-vitro experiments and rats by UHPLC-Q-Exactive orbitrap MS/MS and their screening by wound healing activities in-vitro.",
+          "token_count": 256
+        },
+        {
+          "chunk_id": "41476424:c0001",
+          "end_char": 1918,
+          "lexical_rank": 2,
+          "pmid": "41476424",
+          "score": 0.008064516129032258,
+          "semantic_rank": null,
+          "start_char": 0,
+          "text": "BACKGROUND: Therapeutic peptides are short-chain amino acids that regulate cellular functions and facilitate biochemical processes. In recent years, there has been significant growth in the global market for therapeutic peptides and thus its popularity among patients. Given the increase in the development of peptides and increased marketing to patients for orthopaedic injuries, it is critical for orthopaedic surgeons to understand the current evidence behind these therapeutic peptides. PURPOSE: To evaluate the current evidence and applications of injectable peptide therapy, focusing on its potential in regenerative medicine and sports performance, to help orthopaedic providers better understand the current state of different therapeutic peptide approaches. STUDY DESIGN: Narrative review. METHODS: A comprehensive literature search was conducted using PubMed to identify biochemical and clinical studies on the most popular types of injectable peptide therapy. Key peptides evaluated included BPC-157, TB-4, TB-500, CJC-1295 + ipamorelin, tesamorelin, and GHK-Cu. RESULTS: BPC-157 demonstrated potential benefits in tendon and muscle repair, but these findings are largely unvalidated in human trials. A single human case series reported improvements in pain after intra-articular knee injections of BPC-157, although significant methodological flaws and a lack of controls limit its applicability and reliability. TB-4 and its derivative TB-500 promoted angiogenesis and tissue repair in preclinical models, but human orthopaedic data are lacking, and both remain banned substances in sports. CJC-1295 combined with ipamorelin showed significantly improved maximum tetanic tension in murine models with glucocorticoid-induced muscle loss, but these findings are limited to animal studies. Tesamorelin, approved for treating HIV-associated lipodystrophy, has no supporting orthopaedic evidence. GHK-Cu showed",
+          "title": "Injectable Peptide Therapy: A Primer for Orthopaedic and Sports Medicine Physicians.",
+          "token_count": 256
+        }
+      ],
+      "qa_id": "qa11"
+    },
+    {
+      "chunks": [
+        {
+          "chunk_id": "10373343:c0001",
+          "end_char": 1463,
+          "lexical_rank": 12,
+          "pmid": "10373343",
+          "score": 0.015141165755919854,
+          "semantic_rank": 1,
+          "start_char": 0,
+          "text": "Ipamorelin is a new and potent synthetic pentapeptide which has distinct and specific growth hormone (GH)-releasing properties. With the objective of investigating the effects on longitudinal bone growth rate (LGR), body weight (BW), and GH release, ipamorelin in different doses (0, 18, 90 and 450 microg/day) was injected s.c. three times daily for 15 days to adult female rats. After intravital tetracycline labelling on days 0, 6, and 13, LGR was determined by measuring the distance between the respective fluorescent bands in the proximal tibia metaphysis. Ipamorelin dose-dependently increased LGR from 42 microm/day in the vehicle group to 44, 50, and 52 microm/day in the treatment groups (P<0.0001). There was also a pronounced and dose-dependent effect on BW gain. The treatment did not affect total IGF-I levels, IGFBPs, or serum markers of bone formation and resorption. The number of tartrate-resistant acid phosphatase-positive multinuclear cells in the metaphysis of the tibia did not change significantly with treatment. The responsiveness of the pituitary to a provocative i.v. dose of ipamorelin or GHRH showed that the plasma GH response was marginally reduced (P<0.03) after ipamorelin, but unchanged after GHRH. The pituitary GH content was unchanged by ipamorelin treatment. Whether ipamorelin or other GH secretagogues may have a place in the treatment of children with growth retardation requires demonstration in future clinical studies.",
+          "title": "Ipamorelin, a new growth-hormone-releasing peptide, induces longitudinal bone growth in rats.",
+          "token_count": 219
+        },
+        {
+          "chunk_id": "19289567:c0001",
+          "end_char": 1441,
+          "lexical_rank": 10,
+          "pmid": "19289567",
+          "score": 0.013899613899613899,
+          "semantic_rank": 14,
+          "start_char": 0,
+          "text": "Ghrelin and ghrelin mimetics stimulate appetite and enhance gastric motility. The present study investigates whether ipamorelin, a selective growth hormone secretagogue and agonist of the ghrelin receptor, would accelerate gastrointestinal transit and ameliorate the symptoms in a rodent model of postoperative ileus (POI). Fasted male rats were subjected to laparotomy and intestinal manipulation. At the end of surgery, a dye marker was infused in the proximal colon to evaluate postsurgical colonic transit time, which was the time to the first bowel movement. In addition, fecal pellet output, food intake, and body weight were monitored regularly for 48 h. Ipamorelin (0.01-1 mg/kg), growth hormone-releasing peptide (GHRP)-6 (20 microg/kg), or vehicle (saline) were administered via intravenous bolus infusion after a single dosing or a 2-day repetitive dosing regimen (four doses a day at 3-h intervals). Compared with the vehicle, a single dose of ipamorelin (1 mg/kg) or GHRP-6 (20 microg/kg) decreased the time to the first bowel movement but had no effect on cumulative fecal output, food intake, or body weight gain measured 48 h after the surgery. In contrast, repetitive dosing of ipamorelin (0.1 or 1 mg/kg) significantly increased the cumulative fecal pellet output, food intake, and body weight gain. The results suggest that postsurgical intravenous infusions of ipamorelin may ameliorate the symptoms in patients with POI.",
+          "title": "Efficacy of ipamorelin, a novel ghrelin mimetic, in a rodent model of postoperative ileus.",
+          "token_count": 216
+        },
+        {
+          "chunk_id": "11162489:c0001",
+          "end_char": 987,
+          "lexical_rank": 1,
+          "pmid": "11162489",
+          "score": 0.013878539493293592,
+          "semantic_rank": 28,
+          "start_char": 0,
+          "text": "Growth hormone secretagogues (GHSs) stimulate growth hormone (GH) secretion, which is lipolytic. Here we compared the effects of twice daily s.c. treatment of GH and the GHS, ipamorelin, on body fat in GH-deficient (lit/lit) and in GH-intact (+/lit and +/+) mice. In +/lit and lit/lit mice ipamorelin induced a small (15%) increase in body weight by 2 weeks, that was not further augmented by 9 weeks. GH treatment markedly enhanced body weight in both groups. Ipamorelin also increased fat pad weights relative to body weight in both lit/lit and +/lit mice. Two weeks GHS treatment (ipamorelin or GHRP-6) also increased relative body fat, quantified by in vivo dual energy X-ray absorpiometry (DEXA) in GH-intact mice. GH decreased relative fat mass in lit/lit mice and had no effect in GH-intact mice. Treatment with GHS, but not GH, increased serum leptin and food intake in GH-intact mice. Thus, GHSs increase body fat by GH-independent mechanisms that may include increased feeding.",
+          "title": "Growth hormone (GH)-independent stimulation of adiposity by GH secretagogues.",
+          "token_count": 158
+        },
+        {
+          "chunk_id": "20101189:c0001",
+          "end_char": 1755,
+          "lexical_rank": 6,
+          "pmid": "20101189",
+          "score": 0.013528138528138528,
+          "semantic_rank": 24,
+          "start_char": 0,
+          "text": "BACKGROUND: HIV-infected patients receiving antiretroviral therapy often demonstrate excess visceral fat. A growth hormone-releasing factor, tesamorelin, may selectively reduce visceral fat in this population. We investigated the effects of tesamorelin (GHRH(1-44)) in HIV-infected patients with central fat accumulation. METHODS: A 12-month study of 404 HIV-infected patients with excess abdominal fat in the context of antiretroviral therapy was conducted between January 2007 and October 2008. The study consisted of 2 sequential phases. In the primary efficacy phase (months 0-6), patients were randomly assigned to receive tesamorelin [2 mg subcutaneous (SC) every day] or placebo in a 2:1 ratio. In the extension phase (months 6-12), patients receiving tesamorelin were rerandomized to continue on tesamorelin (2 mg SC every day) or switch to placebo. Patients initially randomized to placebo switched to tesamorelin. Patients and investigators were blinded to treatment assignment throughout the study. The primary endpoint was visceral adipose tissue (VAT). Secondary endpoints included body image, IGF-I, safety measures, including glucose, and other body composition measures. RESULTS: VAT decreased by -10.9% (-21 cm(2)) in the tesamorelin group vs. -0.6% (-1 cm(2)) in the placebo group in the 6-month efficacy phase, P < 0.0001. Trunk fat (P < 0.001), waist circumference (P = 0.02), and waist-hip-ratio (P = 0.001) improved, with no change in limb or abdominal SC fat. Insulin-like growth factor-1 increased (P < 0.001), but no change in glucose parameters was observed. Patient rating of belly appearance distress (P = 0.02) and physician rating of belly profile (P = 0.02) were significantly improved in the tesamorelin vs. placebo-treated",
+          "title": "Effects of tesamorelin, a growth hormone-releasing factor, in HIV-infected patients with abdominal fat accumulation: a randomized placebo-controlled trial with a safety extension.",
+          "token_count": 256
+        },
+        {
+          "chunk_id": "41545261:c0001",
+          "end_char": 1786,
+          "lexical_rank": 11,
+          "pmid": "41545261",
+          "score": 0.013139814496736516,
+          "semantic_rank": 22,
+          "start_char": 0,
+          "text": "BACKGROUND: HIV-associated lipodystrophy leads to visceral fat accumulation, metabolic complications, body image concerns, medication non-adherence, and increased cardiovascular risks. We thought to assess the effects of Tesamorelin, a synthetic growth hormone-releasing hormone analogue, that has been proposed as a targeted therapy. METHODS: We systematically searched PubMed, Embase, Scopus, Web of Science, and CENTRAL through July 2025 for randomized controlled trials (RCTs) evaluating Tesamorelin versus placebo in adults with HIV. Random-effects meta-analysis was applied. Outcomes included changes in body composition, hepatic and metabolic parameters, hormonal markers, and adverse events. Risk of bias was assessed with RoB 2.0, and certainty of evidence with GRADE. RESULTS: Five RCTs evaluating Tesamorelin were included in the analysis. Tesamorelin was associated with significant reduction in visceral adipose tissue (MD=-27.71 cm2, 95 % CI [-38.37, -17.06]; P < 0.001), trunk fat (MD=-1.18 kg, 95 % CI [-1.40, -0.96]; P < 0.001), limb fat (MD=-0.22 kg, 95 % CI [-0.35, -0.08]; P = 0.001), hepatic fat percentage (MD=-4.28 %, 95 % CI [-6.31, -2.24]; P < 0.001), and waist circumference (MD=-1.61 cm, 95 % CI [-2.28, -0.95]; P < 0.001). A significant increase in lean body mass was observed (MD=1.42 kg, 95 % CI [1.13, 1.71]; P < 0.001). However, no significant reductions in subcutaneous adipose tissue or BMI were observed. Tesamorelin showed no significant change in CD4 + T-cell counts. Tesamorelin was associated with adverse events, including arthralgia, myalgia, paresthesia, and injection-site reactions like erythema. CONCLUSION: Tesamorelin improves body composition, hepatic fat, lean body mass, and IGF-1 levels in HIV-associated lipodystrophy, without serious",
+          "title": "Body composition, hepatic fat, metabolic, and safety outcomes of Tesamorelin, a GHRH analogue, in HIV-associated lipodystrophy: A meta-analysis of randomized controlled trials.",
+          "token_count": 256
+        }
+      ],
+      "qa_id": "qa12"
+    },
+    {
+      "chunks": [
+        {
+          "chunk_id": "18057338:c0002",
+          "end_char": 2038,
+          "lexical_rank": 1,
+          "pmid": "18057338",
+          "score": 0.016133229247983348,
+          "semantic_rank": 3,
+          "start_char": 1288,
+          "text": "(P<0.001 for all comparisons). Levels of total cholesterol and HDL cholesterol also improved significantly in the tesamorelin group. Levels of IGF-I increased by 81.0% in the tesamorelin group and decreased by 5.0% in the placebo group (P<0.001). Adverse events did not differ significantly between the two study groups, but more patients in the tesamorelin group withdrew from the study because of an adverse event. No significant differences were observed in glycemic measures. CONCLUSIONS: Daily tesamorelin for 26 weeks decreased visceral fat and improved lipid profiles, effects that might be useful in HIV-infected patients who have treatment-associated central fat accumulation. (ClinicalTrials.gov number, NCT00123253 [ClinicalTrials.gov] .).",
+          "title": "Metabolic effects of a growth hormone-releasing factor in patients with HIV.",
+          "token_count": 104
+        },
+        {
+          "chunk_id": "25038357:c0001",
+          "end_char": 1715,
+          "lexical_rank": 8,
+          "pmid": "25038357",
+          "score": 0.015549662487945998,
+          "semantic_rank": 1,
+          "start_char": 0,
+          "text": "IMPORTANCE: Among patients infected with human immunodeficiency virus (HIV), visceral adiposity is associated with metabolic dysregulation and ectopic fat accumulation. Tesamorelin, a growth hormone-releasing hormone analog, specifically targets visceral fat reduction but its effects on liver fat are unknown. OBJECTIVE: To investigate the effect of tesamorelin on visceral and liver fat. DESIGN, SETTING, AND PATIENTS: Double-blind, randomized, placebo-controlled trial conducted among 50 antiretroviral-treated HIV-infected men and women with abdominal fat accumulation at Massachusetts General Hospital in Boston. The first patient was enrolled on January 10, 2011; for the final patient, the 6-month study visit was completed on September 6, 2013. INTERVENTIONS: Participants were randomized to receive tesamorelin, 2 mg (n=28), or placebo (n=22), subcutaneously daily for 6 months. MAIN OUTCOMES AND MEASURES: Primary end points were changes in visceral adipose tissue and liver fat. Secondary end points included glucose levels and other metabolic end points. RESULTS: Forty-eight patients received treatment with study drug. Tesamorelin significantly reduced visceral adipose tissue (mean change, -34 cm2 [95% CI, -53 to -15 cm2] with tesamorelin vs 8 cm2 [95% CI, -14 to 30 cm2] with placebo; treatment effect, -42 cm2 [95% CI, -71 to -14 cm2]; P = .005) and liver fat (median change in lipid to water percentage, -2.0% [interquartile range {IQR}, -6.4% to 0.1%] with tesamorelin vs 0.9% [IQR, -0.6% to 3.7%] with placebo; P = .003) over 6 months, for a net treatment effect of -2.9% in lipid to water percentage. Fasting glucose increased in the tesamorelin group at 2 weeks (mean change, 9 mg/dL [95% CI,",
+          "title": "Effect of tesamorelin on visceral fat and liver fat in HIV-infected patients with abdominal fat accumulation: a randomized clinical trial.",
+          "token_count": 256
+        },
+        {
+          "chunk_id": "38905488:c0001",
+          "end_char": 1788,
+          "lexical_rank": 2,
+          "pmid": "38905488",
+          "score": 0.014821272885789015,
+          "semantic_rank": 14,
+          "start_char": 0,
+          "text": "OBJECTIVE: Tesamorelin is the only FDA-approved therapy to treat abdominal fat accumulation in people with HIV (PWH). Phase III clinical trials were conducted prior to the introduction of integrase inhibitors (INSTIs), which are now a mainstay of HIV antiretroviral therapy. DESIGN: We leveraged a randomized double-blind trial of 61 PWH and metabolic dysfunction-associated steatotic liver disease to evaluate the efficacy and safety of tesamorelin 2 mg once daily vs. identical placebo among participants on INSTI-based regimens at baseline. METHODS: In the parent clinical trial, visceral fat cross-sectional area, hepatic fat fraction, and trunk-to-appendicular fat ratio were quantified using magnetic resonance imaging, proton magnetic resonance spectroscopy, and dual-energy x-ray absorptiometry, respectively, at baseline and 12 months. Metabolic and safety outcomes were compared between treatment arms. RESULTS: Among 38 participants on INSTI-based regimens at baseline, 15 individuals on tesamorelin and 16 individuals on placebo completed the 12-month study. Tesamorelin led to significant declines in visceral fat (median [interquartile range]: -25 [-93, -2] vs. 14 [3, 41] cm 2 , P = 0.001), hepatic fat (-4.2% [-12.3%, -2.7%] vs. -0.5% [-3.9%, 2.7%], P = 0.01), and trunk-to-appendicular fat ratio (-0.1 [-0.3, 0.0] vs. 0.0 [-0.1, 0.1], P = 0.03). Tesamorelin was well tolerated with a similar frequency of adverse events, including hyperglycemia, between groups. CONCLUSIONS: The current analysis provides the first dedicated data on the efficacy and safety of tesamorelin among PWH on INSTI-based regimens. Despite the association of INSTI use with weight gain and adipose tissue dysfunction, tesamorelin had beneficial effects on body composition with no exacerbation of",
+          "title": "Efficacy and safety of tesamorelin in people with HIV on integrase inhibitors.",
+          "token_count": 256
+        },
+        {
+          "chunk_id": "18690162:c0001",
+          "end_char": 1683,
+          "lexical_rank": 5,
+          "pmid": "18690162",
+          "score": 0.014636752136752137,
+          "semantic_rank": 12,
+          "start_char": 0,
+          "text": "OBJECTIVE: Treatment of HIV patients with daily tesamorelin, a growth hormone-releasing factor analogue, for 26 weeks resulted in a significant decrease in visceral adipose tissue (VAT) and improvement in lipids. The objective of the 26-week extension phase was to evaluate long-term safety and effects of tesamorelin. DESIGN: HIV patients with central fat accumulation in the context of antiretroviral therapy were randomized to tesamorelin 2 mg (n = 273) or placebo (n = 137) s.c. daily for 26 weeks. At week 26, patients originally on tesamorelin were rerandomized to 2 mg tesamorelin (T-T group, n = 154) or placebo (T-P group, n = 50), whereas patients originally on placebo were switched to tesamorelin (P-T group, n = 111). METHODS: Safety included adverse events and glucose parameters. RESULTS: Tesamorelin was generally well tolerated. The prevalence of adverse events and serious adverse events during the extension phase was comparable with the initial phase. Changes in glucose parameters over 52 weeks were not clinically significant and similar to those after 26 weeks. The change in VAT was sustained at -18% over 52 weeks of treatment (P < 0.001 versus baseline) as was the change in triglycerides (-51 mg/dl, P < 0.001 versus baseline). Similar sustained beneficial effects were seen for total cholesterol, but high-density lipoprotein decreased minimally over 52 weeks. Upon discontinuation of tesamorelin, VAT reaccumulated. CONCLUSION: Treatment with tesamorelin was generally well tolerated and resulted in sustained decreases in VAT and triglycerides over 52 weeks without aggravating glucose. Though effects on VAT are sustained during treatment for 52 weeks,",
+          "title": "Long-term safety and effects of tesamorelin, a growth hormone-releasing factor analogue, in HIV patients with abdominal fat accumulation.",
+          "token_count": 256
+        },
+        {
+          "chunk_id": "41545261:c0001",
+          "end_char": 1786,
+          "lexical_rank": 15,
+          "pmid": "41545261",
+          "score": 0.014479166666666668,
+          "semantic_rank": 4,
+          "start_char": 0,
+          "text": "BACKGROUND: HIV-associated lipodystrophy leads to visceral fat accumulation, metabolic complications, body image concerns, medication non-adherence, and increased cardiovascular risks. We thought to assess the effects of Tesamorelin, a synthetic growth hormone-releasing hormone analogue, that has been proposed as a targeted therapy. METHODS: We systematically searched PubMed, Embase, Scopus, Web of Science, and CENTRAL through July 2025 for randomized controlled trials (RCTs) evaluating Tesamorelin versus placebo in adults with HIV. Random-effects meta-analysis was applied. Outcomes included changes in body composition, hepatic and metabolic parameters, hormonal markers, and adverse events. Risk of bias was assessed with RoB 2.0, and certainty of evidence with GRADE. RESULTS: Five RCTs evaluating Tesamorelin were included in the analysis. Tesamorelin was associated with significant reduction in visceral adipose tissue (MD=-27.71 cm2, 95 % CI [-38.37, -17.06]; P < 0.001), trunk fat (MD=-1.18 kg, 95 % CI [-1.40, -0.96]; P < 0.001), limb fat (MD=-0.22 kg, 95 % CI [-0.35, -0.08]; P = 0.001), hepatic fat percentage (MD=-4.28 %, 95 % CI [-6.31, -2.24]; P < 0.001), and waist circumference (MD=-1.61 cm, 95 % CI [-2.28, -0.95]; P < 0.001). A significant increase in lean body mass was observed (MD=1.42 kg, 95 % CI [1.13, 1.71]; P < 0.001). However, no significant reductions in subcutaneous adipose tissue or BMI were observed. Tesamorelin showed no significant change in CD4 + T-cell counts. Tesamorelin was associated with adverse events, including arthralgia, myalgia, paresthesia, and injection-site reactions like erythema. CONCLUSION: Tesamorelin improves body composition, hepatic fat, lean body mass, and IGF-1 levels in HIV-associated lipodystrophy, without serious",
+          "title": "Body composition, hepatic fat, metabolic, and safety outcomes of Tesamorelin, a GHRH analogue, in HIV-associated lipodystrophy: A meta-analysis of randomized controlled trials.",
+          "token_count": 256
+        }
+      ],
+      "qa_id": "qa13"
+    },
+    {
+      "chunks": [
+        {
+          "chunk_id": "11524632:c0001",
+          "end_char": 522,
+          "lexical_rank": 1,
+          "pmid": "11524632",
+          "score": 0.01626123744050767,
+          "semantic_rank": 2,
+          "start_char": 0,
+          "text": "UNLABELLED: The OBJECTIVE of this research was to investigate the regulatory effect of Epitalon on the production of melatonin and cortisol in senescent monkeys. MATERIAL AND METHODS: We investigated the character of melatonin and cortisol secretion by immunoferment assay in Epitalon-administered female Macaca mulatta in different age periods. RESULTS: Epitalon was proven to significantly stimulate melatonin synthesis in senescent monkeys in the evening, thereby normalising the circadian rhythm of cortisol secretion.",
+          "title": "Synthetic tetrapeptide epitalon restores disturbed neuroendocrine regulation in senescent monkeys.",
+          "token_count": 71
+        },
+        {
+          "chunk_id": "11550036:c0001",
+          "end_char": 259,
+          "lexical_rank": 2,
+          "pmid": "11550036",
+          "score": 0.01626123744050767,
+          "semantic_rank": 1,
+          "start_char": 0,
+          "text": "The effect of Epithalon on melatonin and cortisol secretion in female rhesus monkeys of various ages was evaluated by enzyme immunoassay. Epithalon stimulated evening melatonin production and normalized circadian rhythms of cortisol production in old monkeys.",
+          "title": "Regulatory effect of Epithalon on production of melatonin and cortisol in old monkeys.",
+          "token_count": 36
+        },
+        {
+          "chunk_id": "14743609:c0001",
+          "end_char": 1517,
+          "lexical_rank": 3,
+          "pmid": "14743609",
+          "score": 0.01562881562881563,
+          "semantic_rank": 5,
+          "start_char": 0,
+          "text": "Investigation of the age-related changes of the pineal gland function and possible ways for their overcoming on nonhuman monkey model was the purpose of this study. Hormonal function of the pineal gland was studied in 38 Macaca mulatta females of two age groups: 6-8 years old, n = 18 and 20-26 years old, n = 20. Pineal function was studied in basal conditions and after administration of pineal peptide preparations--epithalamin and epitalon, both developed in the St. Petersburg Institute of Bioregulation and Gerontology (Russia). It has been revealed that plasma melatonin concentration in monkeys has well expressed high amplitude diurnal rhythm. Minimum is manifested at 4 p.m. and maximum--at 10 p.m.-3 a.m. In aging the mean diurnal melatonin concentration decreases by 1.5-2 times as well as in different points of the day: 9 p.m., 10 p.m., 3 a.m. and 4 a.m. Administration of pineal peptides--epithalamin (at the dose 5 mg/animal/day intramuscularly during 10 consecutive days) or epitalon (at the dose 10 micrograms/animal/day intramuscularly during 7-10 consecutive days) induced significant increase in the night plasma melatonin in old monkeys, but the treatment did not change the melatonin level in young monkeys. Taking into consideration that melatonin is very important for regulation of the diurnal rhythm of functioning of some organs and systems it should be suggested that applying epithalamin and epitalon are perspective in the correction of age-related hormonal imbalance and age pathology.",
+          "title": "[Peptide correction of age-related pineal disturbances in monkeys].",
+          "token_count": 232
+        },
+        {
+          "chunk_id": "17969590:c0001",
+          "end_char": 862,
+          "lexical_rank": 4,
+          "pmid": "17969590",
+          "score": 0.015625,
+          "semantic_rank": 4,
+          "start_char": 0,
+          "text": "In the course of aging both monkeys and people reveal decreased night and average daily level of melatonin in the blood plasma and reduced hormone circadian rhythm amplitude, which evidence the disorder of the pineal gland melatonin releasing function. Peptide preparations of the pineal gland (Epithalamin--a complex of peptides isolated from the pineal gland and Epitalon--synthetic tetrapeptide) recover night release of endogenous melatonin and lead to the normalization of the hormone circadian rhythm in the blood plasma. In elderly people Epithalamin and Epitalon modulate pineal gland functional state: people with pineal gland functional insufficiency report an increase of night melatonin level. The preparations of the pineal gland, effectively increasing melatonin concentration and having no side effects, can be used in clinical geriatric practice.",
+          "title": "[Normalizing effect of the pineal gland peptides on the daily melatonin rhythm in old monkeys and elderly people].",
+          "token_count": 123
+        },
+        {
+          "chunk_id": "15664732:c0001",
+          "end_char": 1353,
+          "lexical_rank": 7,
+          "pmid": "15664732",
+          "score": 0.015399194503672116,
+          "semantic_rank": 3,
+          "start_char": 0,
+          "text": "The purpose of this research was to study age-related changes in functioning of pineal and pancreatic glands of non-human primates, rhesus monkeys, and to elucidate the possibility of their corrections with the help of epitalon, a synthetic analogue of the pharmacopoeia drug epithalamin. In old (20-27 years) animals, the basal plasma levels of glucose and insulin were found to be higher, while the night melatonin level was lower in comparison with (6-8 years) young animals. After the glucose administration to old monkeys, a larger area under the curve of the plasma glucose response, a reduced glucose 'disappearance' rate, and a reduced insulin peak (5 min after the glucose administration) were observed in comparison with young animals in similar experiments. The epitalon administration to old monkeys caused the decrease in the basal levels of glucose and insulin and the increase in the basal night melatonin level. Additionally, in the case of old monkeys, epitalon decreased the area under the plasma glucose response curve, markedly increased the glucose 'disappearance' rate and normalized the plasma insulin dynamics in response to glucose administration. Yet, it has not affected the hormonal and metabolic changes in young animals. Thus, epitalon is a promising factor for restoring the age-related endocrine dysfunctions of primates.",
+          "title": "Pineal peptides restore the age-related disturbances in hormonal functions of the pineal gland and the pancreas.",
+          "token_count": 206
+        }
+      ],
+      "qa_id": "qa14"
+    },
+    {
+      "chunks": [
+        {
+          "chunk_id": "26289118:c0001",
+          "end_char": 501,
+          "lexical_rank": 2,
+          "pmid": "26289118",
+          "score": 0.01626123744050767,
+          "semantic_rank": 1,
+          "start_char": 0,
+          "text": "Mitochondrial-derived peptides (MDP) are encoded by functional short open reading frames in the mitochondrial DNA (mtDNA). These include humanin, and the recently discovered mitochondrial open reading frame of the 12S rRNA-c (MOTS-c). Although more research is needed, we suggest that the m.1382A>C polymorphism located in the MOTS-c encoding mtDNA, which is specific for the Northeast Asian population, may be among the putative biological mechanisms explaining the high longevity of Japanese people.",
+          "title": "The mitochondrial-derived peptide MOTS-c: a player in exceptional longevity?",
+          "token_count": 71
+        },
+        {
+          "chunk_id": "34728329:c0001",
+          "end_char": 1721,
+          "lexical_rank": 1,
+          "pmid": "34728329",
+          "score": 0.01626123744050767,
+          "semantic_rank": 2,
+          "start_char": 0,
+          "text": "Human skeletal muscle fiber is heterogenous due to its diversity of slow- and fast-twitch fibers. In human, slow-twitched fiber gene expression is correlated to MOTS-c, a mitochondria-derived peptide that has been characterized as an exercise mimetic. Within the MOTS-c open reading frame, there is an East Asian-specific m.1382A>C polymorphism (rs111033358) that changes the 14th amino acid of MOTS-c (i.e., K14Q), a variant of MOTS-c that has less biological activity. Here, we examined the influence of the m.1382A>C polymorphism causing MOTS-c K14Q on skeletal muscle fiber composition and physical performance. The myosin heavy chain (MHC) isoforms (MHC-I, MHC-IIa, and MHC-IIx) as an indicator of muscle fiber composition were assessed in 211 Japanese healthy individuals (102 men and 109 women). Muscular strength was measured in 86 physically active young Japanese men by using an isokinetic dynamometer. The allele frequency of the m.1382A>C polymorphism was assessed in 721 Japanese athletes and 873 ethnicity-matched controls. The m.1382A>C polymorphism genotype was analyzed by TaqMan SNP Genotyping Assay. Individuals with the C allele of the m.1382A>C exhibited a higher proportion of MHC-IIx, an index of fast-twitched fiber, than the A allele carriers. Men with the C allele of m.1382A>C exhibited significantly higher peak torques of leg flexion and extension. Furthermore, the C allele frequency was higher in the order of sprint/power athletes (6.5%), controls (5.1%), and endurance athletes (2.9%). Additionally, young male mice were injected with the MOTS-c neutralizing antibody once a week for four weeks to mimic the C allele of the m.1382A>C and assessed for protein expression levels of MHC-fast",
+          "title": "The MOTS-c K14Q polymorphism in the mtDNA is associated with muscle fiber composition and muscular performance.",
+          "token_count": 256
+        },
+        {
+          "chunk_id": "34728329:c0002",
+          "end_char": 2058,
+          "lexical_rank": 4,
+          "pmid": "34728329",
+          "score": 0.015749007936507936,
+          "semantic_rank": 3,
+          "start_char": 1294,
+          "text": "m.1382A>C exhibited significantly higher peak torques of leg flexion and extension. Furthermore, the C allele frequency was higher in the order of sprint/power athletes (6.5%), controls (5.1%), and endurance athletes (2.9%). Additionally, young male mice were injected with the MOTS-c neutralizing antibody once a week for four weeks to mimic the C allele of the m.1382A>C and assessed for protein expression levels of MHC-fast and MHC-slow. Mice injected with MOTS-c neutralizing antibody showed a higher expression of MHC-fast than the control mice. These results suggest that the C allele of the East Asian-specific m.1382A>C polymorphism leads to the MOTS-c K14Q contributes to the sprint/power performance through regulating skeletal muscle fiber composition.",
+          "title": "The MOTS-c K14Q polymorphism in the mtDNA is associated with muscle fiber composition and muscular performance.",
+          "token_count": 111
+        },
+        {
+          "chunk_id": "33468709:c0001",
+          "end_char": 1293,
+          "lexical_rank": 5,
+          "pmid": "33468709",
+          "score": 0.015504807692307693,
+          "semantic_rank": 4,
+          "start_char": 0,
+          "text": "Type 2 Diabetes (T2D) is an emerging public health problem in Asia. Although ethnic specific mtDNA polymorphisms have been shown to contribute to T2D risk, the functional effects of the mtDNA polymorphisms and the therapeutic potential of mitochondrial-derived peptides at the mtDNA polymorphisms are underexplored. Here, we showed an Asian-specific mitochondrial DNA variation m.1382A>C (rs111033358) leads to a K14Q amino acid replacement in MOTS-c, an insulin sensitizing mitochondrial-derived peptide. Meta-analysis of three cohorts (n = 27,527, J-MICC, MEC, and TMM) show that males but not females with the C-allele exhibit a higher prevalence of T2D. In J-MICC, only males with the C-allele in the lowest tertile of physical activity increased their prevalence of T2D, demonstrating a kinesio-genomic interaction. High-fat fed, male mice injected with MOTS-c showed reduced weight and improved glucose tolerance, but not K14Q-MOTS-c treated mice. Like the human data, female mice were unaffected. Mechanistically, K14Q-MOTS-c leads to diminished insulin-sensitization in vitro. Thus, the m.1382A>C polymorphism is associated with susceptibility to T2D in men, possibly interacting with exercise, and contributing to the risk of T2D in sedentary males by reducing the activity of MOTS-c.",
+          "title": "A pro-diabetogenic mtDNA polymorphism in the mitochondrial-derived peptide, MOTS-c.",
+          "token_count": 185
+        },
+        {
+          "chunk_id": "39457696:c0001",
+          "end_char": 1554,
+          "lexical_rank": 6,
+          "pmid": "39457696",
+          "score": 0.015268065268065269,
+          "semantic_rank": 5,
+          "start_char": 0,
+          "text": "Background/objectives: An East Asian-specific 1382A>C polymorphism in the mitochondrial open reading frame of the 12S rRNA type-c results in an amino acid substitution from Lys (K) to Gln (Q) at the 14th amino acid residue. This study investigated the association between m.1382A>C polymorphism and sarcopenia, blood lipids, and mental health in older Korean adults. Methods: The study included 683 community-dwelling Korean adults (345 men and 338 women) aged 65 years and older. The m.1382A>C polymorphism was genotyped with a 7500 real-time PCR system. Handgrip strength (HGS) was measured, and appendicular skeletal muscle (ASM) mass was calculated. Demographics, blood lipids, falling risk, nutritional intake, cognition function, and depression were additionally measured. Results: Men carrying the C allele had significantly higher ASM (21.6 \u00b1 3.0 vs. 19.5 \u00b1 2.2 kg, p = 0.018), ASM/height2 (7.76 \u00b1 0.76 vs. 7.14 \u00b1 0.62 kg/m2, p = 0.012), lean mass (53.3 \u00b1 6.2 vs. 46.5 \u00b1 4.0 kg, p < 0.001), left HGS (33.3 \u00b1 5.0 vs. 28.9 \u00b1 4.0 kg, p = 0.010), and right HGS (35.6 \u00b1 5.3 vs. 30.9 \u00b1 4.3 kg, p = 0.009) than men carrying the A allele. The genotype differences in ASM (p = 0.017), ASM/height2 (p = 0.011), lean mass (p < 0.001), left HGS (p = 0.010), and right HGS (p = 0.009) remained significant even after adjusting for all measured covariates. By contrast, no significant differences in other measured parameters were found between women carrying the A and C alleles. Conclusions: Our study findings indicate that the m.1382A>C polymorphism may be",
+          "title": "The Relationship Between MOTS-c K14Q Polymorphism and Sarcopenia, Blood Lipids, and Mental Health in Older Korean Adults.",
+          "token_count": 256
+        }
+      ],
+      "qa_id": "qa15"
+    },
+    {
+      "chunks": [
+        {
+          "chunk_id": "10373343:c0001",
+          "end_char": 1463,
+          "lexical_rank": 7,
+          "pmid": "10373343",
+          "score": 0.01565940787863959,
+          "semantic_rank": 1,
+          "start_char": 0,
+          "text": "Ipamorelin is a new and potent synthetic pentapeptide which has distinct and specific growth hormone (GH)-releasing properties. With the objective of investigating the effects on longitudinal bone growth rate (LGR), body weight (BW), and GH release, ipamorelin in different doses (0, 18, 90 and 450 microg/day) was injected s.c. three times daily for 15 days to adult female rats. After intravital tetracycline labelling on days 0, 6, and 13, LGR was determined by measuring the distance between the respective fluorescent bands in the proximal tibia metaphysis. Ipamorelin dose-dependently increased LGR from 42 microm/day in the vehicle group to 44, 50, and 52 microm/day in the treatment groups (P<0.0001). There was also a pronounced and dose-dependent effect on BW gain. The treatment did not affect total IGF-I levels, IGFBPs, or serum markers of bone formation and resorption. The number of tartrate-resistant acid phosphatase-positive multinuclear cells in the metaphysis of the tibia did not change significantly with treatment. The responsiveness of the pituitary to a provocative i.v. dose of ipamorelin or GHRH showed that the plasma GH response was marginally reduced (P<0.03) after ipamorelin, but unchanged after GHRH. The pituitary GH content was unchanged by ipamorelin treatment. Whether ipamorelin or other GH secretagogues may have a place in the treatment of children with growth retardation requires demonstration in future clinical studies.",
+          "title": "Ipamorelin, a new growth-hormone-releasing peptide, induces longitudinal bone growth in rats.",
+          "token_count": 219
+        },
+        {
+          "chunk_id": "10496658:c0001",
+          "end_char": 1466,
+          "lexical_rank": 11,
+          "pmid": "10496658",
+          "score": 0.01510676965015902,
+          "semantic_rank": 2,
+          "start_char": 0,
+          "text": "PURPOSE: To examine the pharmacokinetics (PK) and pharmacodynamics (PD) of ipamorelin, a growth hormone (GH) releasing peptide, in healthy volunteers. METHODS: A trial was conducted with a dose escalation design comprising 5 different infusion rates (4.21, 14.02, 42.13, 84.27 and 140.45 nmol/kg over 15 minutes) with eight healthy male subjects at each dose level. Concentrations of ipamorelin and growth hormone were measured. RESULTS: The PK parameters showed dose-proportionality, with a short terminal half-life of 2 hours, a clearance of 0.078 L/h/kg and a volume of distribution at steady-state of 0.22 L/kg. The time course of GH stimulation by ipamorelin showed a single episode of GH release with a peak at 0.67 hours and an exponential decline to negligible GH concentration at all doses. The ipamorelin-GH concentration relationship was characterized using an indirect response model and population fitting. The model employed a zero-order GH release rate over a finite duration of time to describe the episodic release of GH. Ipamorelin induces the release of GH at all dose levels with the concentration (SC50) required for half-maximal GH stimulation of 214 nmol/L and a maximal GH production rate of 694 mIU/L/h. The inter-individual variability of the PD parameters was larger than that of the PK parameters. CONCLUSIONS: The proposed PK/PD model provides a useful characterization of ipamorelin disposition and GH responses across a range of doses.",
+          "title": "Pharmacokinetic-pharmacodynamic modeling of ipamorelin, a growth hormone releasing peptide, in human volunteers.",
+          "token_count": 224
+        },
+        {
+          "chunk_id": "19289567:c0001",
+          "end_char": 1441,
+          "lexical_rank": 3,
+          "pmid": "19289567",
+          "score": 0.014785823005001086,
+          "semantic_rank": 13,
+          "start_char": 0,
+          "text": "Ghrelin and ghrelin mimetics stimulate appetite and enhance gastric motility. The present study investigates whether ipamorelin, a selective growth hormone secretagogue and agonist of the ghrelin receptor, would accelerate gastrointestinal transit and ameliorate the symptoms in a rodent model of postoperative ileus (POI). Fasted male rats were subjected to laparotomy and intestinal manipulation. At the end of surgery, a dye marker was infused in the proximal colon to evaluate postsurgical colonic transit time, which was the time to the first bowel movement. In addition, fecal pellet output, food intake, and body weight were monitored regularly for 48 h. Ipamorelin (0.01-1 mg/kg), growth hormone-releasing peptide (GHRP)-6 (20 microg/kg), or vehicle (saline) were administered via intravenous bolus infusion after a single dosing or a 2-day repetitive dosing regimen (four doses a day at 3-h intervals). Compared with the vehicle, a single dose of ipamorelin (1 mg/kg) or GHRP-6 (20 microg/kg) decreased the time to the first bowel movement but had no effect on cumulative fecal output, food intake, or body weight gain measured 48 h after the surgery. In contrast, repetitive dosing of ipamorelin (0.1 or 1 mg/kg) significantly increased the cumulative fecal pellet output, food intake, and body weight gain. The results suggest that postsurgical intravenous infusions of ipamorelin may ameliorate the symptoms in patients with POI.",
+          "title": "Efficacy of ipamorelin, a novel ghrelin mimetic, in a rodent model of postoperative ileus.",
+          "token_count": 216
+        },
+        {
+          "chunk_id": "10629165:c0001",
+          "end_char": 1427,
+          "lexical_rank": 2,
+          "pmid": "10629165",
+          "score": 0.014474772539288668,
+          "semantic_rank": 18,
+          "start_char": 0,
+          "text": "The present study was undertaken to study the growth hormone-releasing properties and growth-promoting effect of a GH secretagogue ipamorelin (IPA) in rats given the synthetic glucocorticoid methylprednisolone (MP). In a first experiment, rats received either saline or MP (5.0 mg/kg) for 8 days. Treatment with MP significantly (P< 0.001) decreased body weight gain, but the acute response to either IPA or growth hormone releasing hormone (GHRH) in terms of plasma GH was not changed. In a second experiment, venous catheters were surgically implanted. On the next day, rats were randomly allocated to receive saline alone, MP alone (5.0 mg/kg) or MP plus IPA in doses of 0.4 or 1.6 mg/kg/day for 10 days. IPA was administered intravenously four times a day.MP treatment significantly (P< 0.05) retarded recovery from surgery in terms of body weight. Thus, saline treated animals lost 4.0 +/- 3.5 g over the entire experimental period, whereas animals receiving MP lost 13. 6 +/- 2.9 g. When IPA was given together with MP, losses in body weight were significantly (P< 0.05) reduced to 2.3 +/- 2.0 and 1.6 +/- 2.0 g in animals given the high and low dose of IPA, respectively. In parallel with this IGF-I levels increased. In conclusion, this work shows that MP does not disrupt the response of the GH-IGF-I axis to an exogenous stimulus like IPA, and repeated stimulation leads to increases in IGF-I and of body weight gain.",
+          "title": "Methylprednisolone does not inhibit the release of growth hormone after intravenous injection of a novel growth hormone secretagogue in rats.",
+          "token_count": 236
+        },
+        {
+          "chunk_id": "11735244:c0001",
+          "end_char": 899,
+          "lexical_rank": 20,
+          "pmid": "11735244",
+          "score": 0.0140625,
+          "semantic_rank": 4,
+          "start_char": 0,
+          "text": "The ability of the growth hormone secretagogue (GHS) Ipamorelin to counteract the catabolic effects of glucocorticoid (GC) on skeletal muscles and bone was investigated in vivo in an adult rat model. Groups of 8-month-old female rats were injected subcutaneously for 3 months with GC (methylprednisolone) 9 mg/kg/day or GHS (Ipamorelin) 100 microg/kg three times daily, or both GC and GHS in combination. The maximum tetanic tension of the calf muscles was determined in vivo in a materials testing machine. The maximum tetanic tension was increased significantly, and the periosteal bone formation rate increased four-fold in animals injected with GC and GHS in combination, compared with the group injected with GC alone. In conclusion, the decrease in muscle strength and bone formation found in GC-injected rats was counteracted by simultaneous administration of the growth hormone secretagogue.",
+          "title": "The growth hormone secretagogue ipamorelin counteracts glucocorticoid-induced decrease in bone formation of adult rats.",
+          "token_count": 135
+        }
+      ],
+      "qa_id": "qa19"
+    },
+    {
+      "chunks": [
+        {
+          "chunk_id": "14999221:c0001",
+          "end_char": 1265,
+          "lexical_rank": 3,
+          "pmid": "14999221",
+          "score": 0.016133229247983348,
+          "semantic_rank": 1,
+          "start_char": 0,
+          "text": "PT-141, a cyclic heptapeptide melanocortin analog, was evaluated following subcutaneous administration to healthy male subjects and to patients with erectile dysfunction (ED) who report an inadequate response to Viagra. An inadequate response was defined for this study by patient report indicating that achievement of an erection suitable for vaginal penetration occurred < or =50% of the time while taking 100 mg Viagra. Erectile responses were assessed by RigiScan in healthy subjects in the absence of visual sexual stimulation (VSS) and in ED patients in the presence of VSS. Doses ranging from 0.3 to 10 mg were administered to healthy male subjects, resulting in a statistically significant erectile response at doses greater than 1.0 mg. ED patients were treated with placebo, 4 or 6 mg PT-141 in a crossover design in the presence of VSS. The erectile response induced by PT-141 was statistically significant at both doses. PT-141 was safe and well tolerated in both studies. The erectogenic potential of PT-141, its tolerability profile and its ability to cause significant erections in patients who do not have an adequate response to a PDE5 inhibitor suggest that PT-141 may provide an alternative treatment for ED with a potentially broad patient base.",
+          "title": "Evaluation of the safety, pharmacokinetics and pharmacodynamic effects of subcutaneously administered PT-141, a melanocortin receptor agonist, in healthy male subjects and in patients with an inadequate response to Viagra.",
+          "token_count": 199
+        },
+        {
+          "chunk_id": "15833522:c0001",
+          "end_char": 1273,
+          "lexical_rank": 1,
+          "pmid": "15833522",
+          "score": 0.016009221311475412,
+          "semantic_rank": 4,
+          "start_char": 0,
+          "text": "OBJECTIVES: To evaluate the safety and pharmacodynamic effect of co-administration of subtherapeutic doses of PT-141, a cyclic heptapeptide melanocortin analogue, and sildenafil to patients with erectile dysfunction. METHODS: Nineteen patients with erectile dysfunction who were responders to either Viagra or Levitra by self-report were given 25 mg sildenafil and 7.5 mg intranasal PT-141, 25 mg sildenafil and an intranasal placebo spray, and a placebo tablet and an intranasal placebo spray in a randomized cross-over design. Erectile activity in response to two 30-minute episodes of visual sexual stimulation was assessed by RigiScan during a 6-hour postdose period. RESULTS: The erectile response induced by co-administration of PT-141 and sildenafil was significantly greater than the response elicited by administration of sildenafil alone. Co-administration of PT-141 and sildenafil was safe and well-tolerated and did not result in new adverse events or adverse events that were increased in frequency or severity compared with monotherapy. CONCLUSIONS: Co-administration of intranasal PT-141 and a phosphodiesterase type 5 inhibitor may constitute a treatment alternative for patients in whom higher doses of a single therapy are not effective or well tolerated.",
+          "title": "Co-administration of low doses of intranasal PT-141, a melanocortin receptor agonist, and sildenafil to men with erectile dysfunction results in an enhanced erectile response.",
+          "token_count": 181
+        },
+        {
+          "chunk_id": "12851303:c0001",
+          "end_char": 769,
+          "lexical_rank": 2,
+          "pmid": "12851303",
+          "score": 0.016001024065540194,
+          "semantic_rank": 3,
+          "start_char": 0,
+          "text": "PT-141, a synthetic peptide analogue of alpha-MSH, is an agonist at melanocortin receptors including the MC3R and MC4R, which are expressed primarily in the central nervous system. Administration of PT-141 to rats and nonhuman primates results in penile erections. Systemic administration of PT-141 to rats activates neurons in the hypothalamus as shown by an increase in c-Fos immunoreactivity. Neurons in the same region of the central nervous system take up pseudorabies virus injected into the corpus cavernosum of the rat penis. Administration of PT-141 to normal men and to patients with erectile dysfunction resulted in a rapid dose-dependent increase in erectile activity. The results suggest that PT-141 holds promise as a new treatment for sexual dysfunction.",
+          "title": "PT-141: a melanocortin agonist for the treatment of sexual dysfunction.",
+          "token_count": 116
+        },
+        {
+          "chunk_id": "14963471:c0001",
+          "end_char": 1175,
+          "lexical_rank": 6,
+          "pmid": "14963471",
+          "score": 0.015640273704789834,
+          "semantic_rank": 2,
+          "start_char": 0,
+          "text": "PT-141, a cyclic heptapeptide melanocortin analog, was evaluated following intranasal administration in healthy male subjects and in Viagra-responsive erectile dysfunction (ED) patients. Erectile response was assessed by RigiScan trade mark in healthy subjects without visual sexual stimulation (VSS) and in Viagra-responsive ED patients with VSS. In healthy subjects, mean C(max) and AUC((0-t)) increased in a dose-dependent manner. Median T(max) was 0.50 h and mean t(1/2) ranged from 1.85 to 2.09 h. In both studies, an erectile response induced by PT-141 administration was statistically significant, compared to placebo, at doses greater than 7 mg, with the onset of the first erection occurring in approximately 30 min. PT-141 was safely administered and well tolerated in both studies. A maximum-tolerated dose was not identified. Flushing and nausea were the most common adverse events reported in both studies and no clinically significant changes in vital signs, laboratory tests, ECGs, or physical exams were observed. Based upon its erectogenic potential and tolerability profile, PT-141 is a promising candidate for further evaluation as a treatment for male ED.",
+          "title": "Double-blind, placebo-controlled evaluation of the safety, pharmacokinetic properties and pharmacodynamic effects of intranasal PT-141, a melanocortin receptor agonist, in healthy males and patients with mild-to-moderate erectile dysfunction.",
+          "token_count": 172
+        },
+        {
+          "chunk_id": "15134289:c0001",
+          "end_char": 390,
+          "lexical_rank": 4,
+          "pmid": "15134289",
+          "score": 0.015504807692307693,
+          "semantic_rank": 5,
+          "start_char": 0,
+          "text": "Palatin, under license from Competitive Technology, is developing the peptide PT-141, a synthetically modified analog of PT-14, as a nasal spray for the potential treatment of erectile dysfunction (ED) and female sexual dysfunction. In September 2003, Palatin had completed a phase IIb trial in patients with ED and in February 2004, Palatin planned to start phase III trials in early 2005.",
+          "title": "PT-141 Palatin.",
+          "token_count": 61
+        }
+      ],
+      "qa_id": "qa20"
+    }
+  ],
+  "cost_estimate_usd": 1.592e-05,
+  "embedding_usage": {
+    "cost_usd": 2.7e-06,
+    "input_tokens": 135,
+    "provider": "OpenAI",
+    "provider_calls": 7
+  },
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 2,
+  "selection_scope": "seven frozen holdout questions after generator and judge-development gates"
+}

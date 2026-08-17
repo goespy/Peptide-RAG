@@ -1,0 +1,1540 @@
+{
+  "approved_max_cost_usd": 0.5,
+  "attempt_counts": {
+    "qa11": 1,
+    "qa12": 1,
+    "qa13": 1,
+    "qa14": 1,
+    "qa15": 1,
+    "qa19": 1,
+    "qa20": 1
+  },
+  "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+  "cost_estimate": {
+    "case_maximum_cost_usd": {
+      "qa11": 0.02743118,
+      "qa12": 0.027047420000000003,
+      "qa13": 0.02744678,
+      "qa14": 0.023915,
+      "qa15": 0.02533142,
+      "qa19": 0.0262487,
+      "qa20": 0.02454206
+    },
+    "estimated_max_cost_usd": 0.18196256,
+    "generation": {
+      "conservative_input_tokens": 113852,
+      "estimated_cost_usd": 0.0063275599999999994,
+      "maximum_output_tokens": 22400,
+      "model": "openai/gpt-oss-20b",
+      "provider_calls": 28
+    },
+    "judge": {
+      "conservative_input_tokens": 37545,
+      "estimated_cost_usd": 0.175635,
+      "maximum_output_tokens": 4200,
+      "model": "anthropic/claude-sonnet-4.6",
+      "prompt_version": 2,
+      "provider_calls": 7
+    },
+    "maximum_provider_calls": 35,
+    "method": "UTF-8 JSON characters/3; all generator retry/repair/reconsideration attempts; judge-v2 maximum output"
+  },
+  "model_catalog_sha256": "6A7CC9AB4451487D0AAC39618E28E6C2FA2640D9725514E679F84BA871A35E2D",
+  "outputs": [
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "22962027:c0001",
+            "citation_id": 1,
+            "pmid": "22962027",
+            "title": "Synthesis and characterization of the N-terminal acetylated 17-23 fragment of thymosin beta 4 identified in TB-500, a product suspected to possess doping potential."
+          },
+          {
+            "chunk_id": "23084823:c0001",
+            "citation_id": 2,
+            "pmid": "23084823",
+            "title": "Doping control analysis of TB-500, a synthetic version of an active region of thymosin \u03b24, in equine urine and plasma by liquid chromatography-mass spectrometry."
+          }
+        ],
+        "status": "answered",
+        "text": "Researchers identified the N\u2011terminal acetylated 17\u201123 fragment of thymosin \u03b24, Ac\u2011LKKTETQ, as the key ingredient of TB\u2011500; this peptide is a synthetic version of the active site within the human thymosin \u03b24 protein that binds actin and promotes wound healing. [1][2]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+      "generator_metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 299,
+            "raw_output_sha256": "759493902A69EA6AB1D22CDF3B310E94DA19D962F52277D05284641E1261629B",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 9.082e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2308,
+        "latency_ms": 1798.818899987964,
+        "output_tokens": 166,
+        "provider": "CoreWeave",
+        "provider_calls": 1
+      },
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Researchers identified the N-terminal acetylated 17-23 fragment of thymosin \u03b24, Ac-LKKTETQ, as the key ingredient of TB-500."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "Ac-LKKTETQ is a synthetic version of the active site within the human thymosin \u03b24 protein."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "The active site binds actin."
+          },
+          {
+            "citation_ids": [
+              2
+            ],
+            "supported": true,
+            "text": "The active site promotes wound healing."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "judge_metadata": {
+        "cost_usd": 0.01071,
+        "input_tokens": 2715,
+        "latency_ms": 5034.499900008086,
+        "output_tokens": 171,
+        "provider": "Anthropic",
+        "provider_calls": 1,
+        "raw_output_sha256": "090EE72DDE6E8A4026DE842EB6342B947CB45B9CD81244EAB69EEBDB079ADB28"
+      },
+      "metadata": {
+        "cost_usd": 0.010800820000000001,
+        "generator_latency_ms": 1798.818899987964,
+        "generator_usage": {
+          "attempts": [
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 299,
+              "raw_output_sha256": "759493902A69EA6AB1D22CDF3B310E94DA19D962F52277D05284641E1261629B",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "initial",
+              "validation_error": null
+            }
+          ],
+          "cost_usd": 9.082e-05,
+          "final_outcome": "answered",
+          "generation_max_tokens": 800,
+          "input_tokens": 2308,
+          "output_tokens": 166,
+          "provider": "CoreWeave",
+          "provider_calls": 1
+        },
+        "input_tokens": 5023,
+        "judge_latency_ms": 5034.499900008086,
+        "judge_usage": {
+          "cost_usd": 0.01071,
+          "input_tokens": 2715,
+          "output_tokens": 171,
+          "provider": "Anthropic",
+          "provider_calls": 1,
+          "raw_output_sha256": "090EE72DDE6E8A4026DE842EB6342B947CB45B9CD81244EAB69EEBDB079ADB28"
+        },
+        "latency_ms": 6833.31879999605,
+        "output_tokens": 337,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa11",
+      "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "11162489:c0001",
+            "citation_id": 3,
+            "pmid": "11162489",
+            "title": "Growth hormone (GH)-independent stimulation of adiposity by GH secretagogues."
+          }
+        ],
+        "status": "answered",
+        "text": "Ipamorelin increased body fat in mice, as shown by increased fat pad weights and relative body fat in GH\u2011intact and GH\u2011deficient mice [3]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+      "generator_metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 102,
+            "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 168,
+            "raw_output_sha256": "C0E1356BB8728D474AED8CBEE49B8266CC55E718FF8C0A787F16AE0E4AE02C9D",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "refusal_reconsideration",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00017541,
+        "final_outcome": "answered_after_refusal_reconsideration",
+        "generation_max_tokens": 800,
+        "input_tokens": 5119,
+        "latency_ms": 2067.1102999767754,
+        "output_tokens": 156,
+        "provider": "DeepInfra",
+        "provider_calls": 2
+      },
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "Ipamorelin increased body fat in mice"
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "Ipamorelin increased fat pad weights in GH-intact and GH-deficient mice"
+          },
+          {
+            "citation_ids": [
+              3
+            ],
+            "supported": true,
+            "text": "Ipamorelin increased relative body fat in GH-intact and GH-deficient mice"
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "judge_metadata": {
+        "cost_usd": 0.010389,
+        "input_tokens": 2853,
+        "latency_ms": 3484.5477999770083,
+        "output_tokens": 122,
+        "provider": "Anthropic",
+        "provider_calls": 1,
+        "raw_output_sha256": "C3A387F8166833920EF914A02552883B12CD29C4A73606656F4F4D042F13078F"
+      },
+      "metadata": {
+        "cost_usd": 0.010564410000000002,
+        "generator_latency_ms": 2067.1102999767754,
+        "generator_usage": {
+          "attempts": [
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 102,
+              "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "initial",
+              "validation_error": null
+            },
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 168,
+              "raw_output_sha256": "C0E1356BB8728D474AED8CBEE49B8266CC55E718FF8C0A787F16AE0E4AE02C9D",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "refusal_reconsideration",
+              "validation_error": null
+            }
+          ],
+          "cost_usd": 0.00017541,
+          "final_outcome": "answered_after_refusal_reconsideration",
+          "generation_max_tokens": 800,
+          "input_tokens": 5119,
+          "output_tokens": 156,
+          "provider": "DeepInfra",
+          "provider_calls": 2
+        },
+        "input_tokens": 7972,
+        "judge_latency_ms": 3484.5477999770083,
+        "judge_usage": {
+          "cost_usd": 0.010389,
+          "input_tokens": 2853,
+          "output_tokens": 122,
+          "provider": "Anthropic",
+          "provider_calls": 1,
+          "raw_output_sha256": "C3A387F8166833920EF914A02552883B12CD29C4A73606656F4F4D042F13078F"
+        },
+        "latency_ms": 5551.658099953784,
+        "output_tokens": 278,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa12",
+      "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "18057338:c0002",
+            "citation_id": 1,
+            "pmid": "18057338",
+            "title": "Metabolic effects of a growth hormone-releasing factor in patients with HIV."
+          },
+          {
+            "chunk_id": "18690162:c0001",
+            "citation_id": 4,
+            "pmid": "18690162",
+            "title": "Long-term safety and effects of tesamorelin, a growth hormone-releasing factor analogue, in HIV patients with abdominal fat accumulation."
+          }
+        ],
+        "status": "answered",
+        "text": "In a 26\u2011week randomized trial of HIV\u2011infected adults, daily tesamorelin reduced visceral adipose tissue by about 18% and lowered triglycerides by 51\u202fmg/dL, with no clinically significant worsening of glucose; adverse events were similar to placebo, though more tesamorelin patients withdrew because of an adverse event. [1][4]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+      "generator_metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 63,
+            "raw_output_sha256": "C6F2969088580401B566FE0015F23834767BD912A4F67555DB201A05F00E4026",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 357,
+            "raw_output_sha256": "F1DB87A8D329CF5EA4D231A730277C1A7E96437A1614B2E5D30F3FD22BB7515A",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "refusal_reconsideration",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00023358,
+        "final_outcome": "answered_after_refusal_reconsideration",
+        "generation_max_tokens": 800,
+        "input_tokens": 5328,
+        "latency_ms": 3883.879999979399,
+        "output_tokens": 133,
+        "provider": "multiple",
+        "provider_calls": 2
+      },
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "In a 26-week randomized trial of HIV-infected adults, daily tesamorelin reduced visceral adipose tissue by about 18%"
+          },
+          {
+            "citation_ids": [
+              4
+            ],
+            "supported": true,
+            "text": "tesamorelin lowered triglycerides by 51 mg/dL"
+          },
+          {
+            "citation_ids": [
+              1,
+              4
+            ],
+            "supported": true,
+            "text": "no clinically significant worsening of glucose"
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "adverse events were similar to placebo"
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "more tesamorelin patients withdrew because of an adverse event"
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "judge_metadata": {
+        "cost_usd": 0.011736,
+        "input_tokens": 3007,
+        "latency_ms": 4561.6549999977,
+        "output_tokens": 181,
+        "provider": "Anthropic",
+        "provider_calls": 1,
+        "raw_output_sha256": "B4B3B3BF0C41B5202FE8D431751C2025788A00AB7DBAC57ECC9350D2E569C611"
+      },
+      "metadata": {
+        "cost_usd": 0.01196958,
+        "generator_latency_ms": 3883.879999979399,
+        "generator_usage": {
+          "attempts": [
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 63,
+              "raw_output_sha256": "C6F2969088580401B566FE0015F23834767BD912A4F67555DB201A05F00E4026",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "initial",
+              "validation_error": null
+            },
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 357,
+              "raw_output_sha256": "F1DB87A8D329CF5EA4D231A730277C1A7E96437A1614B2E5D30F3FD22BB7515A",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "refusal_reconsideration",
+              "validation_error": null
+            }
+          ],
+          "cost_usd": 0.00023358,
+          "final_outcome": "answered_after_refusal_reconsideration",
+          "generation_max_tokens": 800,
+          "input_tokens": 5328,
+          "output_tokens": 133,
+          "provider": "multiple",
+          "provider_calls": 2
+        },
+        "input_tokens": 8335,
+        "judge_latency_ms": 4561.6549999977,
+        "judge_usage": {
+          "cost_usd": 0.011736,
+          "input_tokens": 3007,
+          "output_tokens": 181,
+          "provider": "Anthropic",
+          "provider_calls": 1,
+          "raw_output_sha256": "B4B3B3BF0C41B5202FE8D431751C2025788A00AB7DBAC57ECC9350D2E569C611"
+        },
+        "latency_ms": 8445.534999977099,
+        "output_tokens": 314,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa13",
+      "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "11524632:c0001",
+            "citation_id": 1,
+            "pmid": "11524632",
+            "title": "Synthetic tetrapeptide epitalon restores disturbed neuroendocrine regulation in senescent monkeys."
+          },
+          {
+            "chunk_id": "11550036:c0001",
+            "citation_id": 2,
+            "pmid": "11550036",
+            "title": "Regulatory effect of Epithalon on production of melatonin and cortisol in old monkeys."
+          },
+          {
+            "chunk_id": "14743609:c0001",
+            "citation_id": 3,
+            "pmid": "14743609",
+            "title": "[Peptide correction of age-related pineal disturbances in monkeys]."
+          },
+          {
+            "chunk_id": "15664732:c0001",
+            "citation_id": 5,
+            "pmid": "15664732",
+            "title": "Pineal peptides restore the age-related disturbances in hormonal functions of the pineal gland and the pancreas."
+          }
+        ],
+        "status": "answered",
+        "text": "In older Macaca\u202fmulatta, Epitalon significantly increased evening melatonin production and restored the normal circadian rhythm of cortisol secretion. [1][2][3][5]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+      "generator_metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 194,
+            "raw_output_sha256": "1466A352971974EA3C8F63034F12845EBC2C2BDC23384EED63024E9542EBD3B0",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 8.106e-05,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 1584,
+        "latency_ms": 2487.584299989976,
+        "output_tokens": 118,
+        "provider": "Phala",
+        "provider_calls": 1
+      },
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1,
+              2,
+              3,
+              5
+            ],
+            "supported": true,
+            "text": "Epitalon significantly increased evening melatonin production in older Macaca mulatta"
+          },
+          {
+            "citation_ids": [
+              1,
+              2
+            ],
+            "supported": true,
+            "text": "Epitalon restored the normal circadian rhythm of cortisol secretion in older Macaca mulatta"
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "judge_metadata": {
+        "cost_usd": 0.007251,
+        "input_tokens": 1897,
+        "latency_ms": 2248.0188999907114,
+        "output_tokens": 104,
+        "provider": "Anthropic",
+        "provider_calls": 1,
+        "raw_output_sha256": "A2570A6E47AAF3973BAC7E3711B8D32AE31C40D5792361E2C07156D7EF635ECC"
+      },
+      "metadata": {
+        "cost_usd": 0.00733206,
+        "generator_latency_ms": 2487.584299989976,
+        "generator_usage": {
+          "attempts": [
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 194,
+              "raw_output_sha256": "1466A352971974EA3C8F63034F12845EBC2C2BDC23384EED63024E9542EBD3B0",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "initial",
+              "validation_error": null
+            }
+          ],
+          "cost_usd": 8.106e-05,
+          "final_outcome": "answered",
+          "generation_max_tokens": 800,
+          "input_tokens": 1584,
+          "output_tokens": 118,
+          "provider": "Phala",
+          "provider_calls": 1
+        },
+        "input_tokens": 3481,
+        "judge_latency_ms": 2248.0188999907114,
+        "judge_usage": {
+          "cost_usd": 0.007251,
+          "input_tokens": 1897,
+          "output_tokens": 104,
+          "provider": "Anthropic",
+          "provider_calls": 1,
+          "raw_output_sha256": "A2570A6E47AAF3973BAC7E3711B8D32AE31C40D5792361E2C07156D7EF635ECC"
+        },
+        "latency_ms": 4735.603199980687,
+        "output_tokens": 222,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa14",
+      "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [
+          {
+            "chunk_id": "26289118:c0001",
+            "citation_id": 1,
+            "pmid": "26289118",
+            "title": "The mitochondrial-derived peptide MOTS-c: a player in exceptional longevity?"
+          }
+        ],
+        "status": "answered",
+        "text": "The authors hypothesize that the East Asian\u2013specific m.1382A>C polymorphism in the MOTS\u2011c gene may be a biological mechanism underlying the high longevity observed in Japanese people. [1]"
+      },
+      "answerability": "answerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+      "generator_metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 218,
+            "raw_output_sha256": "2C76A2A0C245CF213AC443F83AFCF084E459631B7D67F667AE37C1336F618436",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00010691,
+        "final_outcome": "answered",
+        "generation_max_tokens": 800,
+        "input_tokens": 2129,
+        "latency_ms": 1683.0262999865226,
+        "output_tokens": 145,
+        "provider": "Novita",
+        "provider_calls": 1
+      },
+      "judge": {
+        "citations_correct": true,
+        "claims": [
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The East Asian\u2013specific m.1382A>C polymorphism is located in the MOTS-c encoding mtDNA."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The authors hypothesize that the m.1382A>C polymorphism may be among the putative biological mechanisms explaining the high longevity of Japanese people."
+          },
+          {
+            "citation_ids": [
+              1
+            ],
+            "supported": true,
+            "text": "The m.1382A>C polymorphism is specific for the Northeast Asian population."
+          }
+        ],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "judge_metadata": {
+        "cost_usd": 0.009759,
+        "input_tokens": 2488,
+        "latency_ms": 3978.7713999976404,
+        "output_tokens": 153,
+        "provider": "Anthropic",
+        "provider_calls": 1,
+        "raw_output_sha256": "FAF2E15ACF92BD2EB1BC025958D90D3F33780623AED11116B426A3B558E181BB"
+      },
+      "metadata": {
+        "cost_usd": 0.00986591,
+        "generator_latency_ms": 1683.0262999865226,
+        "generator_usage": {
+          "attempts": [
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 218,
+              "raw_output_sha256": "2C76A2A0C245CF213AC443F83AFCF084E459631B7D67F667AE37C1336F618436",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "initial",
+              "validation_error": null
+            }
+          ],
+          "cost_usd": 0.00010691,
+          "final_outcome": "answered",
+          "generation_max_tokens": 800,
+          "input_tokens": 2129,
+          "output_tokens": 145,
+          "provider": "Novita",
+          "provider_calls": 1
+        },
+        "input_tokens": 4617,
+        "judge_latency_ms": 3978.7713999976404,
+        "judge_usage": {
+          "cost_usd": 0.009759,
+          "input_tokens": 2488,
+          "output_tokens": 153,
+          "provider": "Anthropic",
+          "provider_calls": 1,
+          "raw_output_sha256": "FAF2E15ACF92BD2EB1BC025958D90D3F33780623AED11116B426A3B558E181BB"
+        },
+        "latency_ms": 5661.797699984163,
+        "output_tokens": 298,
+        "provider": "OpenRouter",
+        "provider_calls": 2,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa15",
+      "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+      "generator_metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 102,
+            "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 102,
+            "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "refusal_reconsideration",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00013177,
+        "final_outcome": "model_insufficient_evidence_after_reconsideration",
+        "generation_max_tokens": 800,
+        "input_tokens": 4595,
+        "latency_ms": 3044.9892999895383,
+        "output_tokens": 112,
+        "provider": "Parasail",
+        "provider_calls": 2
+      },
+      "judge": {
+        "citations_correct": true,
+        "claims": [],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "judge_metadata": {
+        "cost_usd": 0.007905,
+        "input_tokens": 2525,
+        "latency_ms": 1786.0604999877978,
+        "output_tokens": 22,
+        "provider": "Anthropic",
+        "provider_calls": 1,
+        "raw_output_sha256": "C8F2FD12469B8F829618C0E9273E10633586EEF1979F0651D2940046EF696289"
+      },
+      "metadata": {
+        "cost_usd": 0.00803677,
+        "generator_latency_ms": 3044.9892999895383,
+        "generator_usage": {
+          "attempts": [
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 102,
+              "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "initial",
+              "validation_error": null
+            },
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 102,
+              "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "refusal_reconsideration",
+              "validation_error": null
+            }
+          ],
+          "cost_usd": 0.00013177,
+          "final_outcome": "model_insufficient_evidence_after_reconsideration",
+          "generation_max_tokens": 800,
+          "input_tokens": 4595,
+          "output_tokens": 112,
+          "provider": "Parasail",
+          "provider_calls": 2
+        },
+        "input_tokens": 7120,
+        "judge_latency_ms": 1786.0604999877978,
+        "judge_usage": {
+          "cost_usd": 0.007905,
+          "input_tokens": 2525,
+          "output_tokens": 22,
+          "provider": "Anthropic",
+          "provider_calls": 1,
+          "raw_output_sha256": "C8F2FD12469B8F829618C0E9273E10633586EEF1979F0651D2940046EF696289"
+        },
+        "latency_ms": 4831.049799977336,
+        "output_tokens": 134,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa19",
+      "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+      "structurally_valid": true
+    },
+    {
+      "answer": {
+        "citations": [],
+        "status": "insufficient_evidence",
+        "text": "Insufficient evidence in the retrieved research abstracts."
+      },
+      "answerability": "unanswerable",
+      "config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+      "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+      "generator_metadata": {
+        "attempts": [
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 102,
+            "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "initial",
+            "validation_error": null
+          },
+          {
+            "finish_reason": "stop",
+            "http_status": 200,
+            "native_finish_reason": "stop",
+            "outcome": "parsed_candidate",
+            "raw_output_characters": 102,
+            "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+            "response_choice_count": 1,
+            "response_choice_keys": [
+              "finish_reason",
+              "index",
+              "logprobs",
+              "message",
+              "native_finish_reason"
+            ],
+            "response_json_available": true,
+            "response_message_keys": [
+              "content",
+              "refusal",
+              "role"
+            ],
+            "response_top_level_keys": [
+              "choices",
+              "created",
+              "id",
+              "model",
+              "object",
+              "provider",
+              "service_tier",
+              "system_fingerprint",
+              "usage"
+            ],
+            "retry_index": 0,
+            "stage": "refusal_reconsideration",
+            "validation_error": null
+          }
+        ],
+        "cost_usd": 0.00014261,
+        "final_outcome": "model_insufficient_evidence_after_reconsideration",
+        "generation_max_tokens": 800,
+        "input_tokens": 3564,
+        "latency_ms": 2076.1090999876615,
+        "output_tokens": 128,
+        "provider": "multiple",
+        "provider_calls": 2
+      },
+      "judge": {
+        "citations_correct": true,
+        "claims": [],
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true
+      },
+      "judge_metadata": {
+        "cost_usd": 0.006072,
+        "input_tokens": 1914,
+        "latency_ms": 2154.6491000044625,
+        "output_tokens": 22,
+        "provider": "Anthropic",
+        "provider_calls": 1,
+        "raw_output_sha256": "C8F2FD12469B8F829618C0E9273E10633586EEF1979F0651D2940046EF696289"
+      },
+      "metadata": {
+        "cost_usd": 0.00621461,
+        "generator_latency_ms": 2076.1090999876615,
+        "generator_usage": {
+          "attempts": [
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 102,
+              "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "initial",
+              "validation_error": null
+            },
+            {
+              "finish_reason": "stop",
+              "http_status": 200,
+              "native_finish_reason": "stop",
+              "outcome": "parsed_candidate",
+              "raw_output_characters": 102,
+              "raw_output_sha256": "F9F42C1D078449729480C7FF494E5AC622F1EFFA8B5F91FA7388961218A6EA07",
+              "response_choice_count": 1,
+              "response_choice_keys": [
+                "finish_reason",
+                "index",
+                "logprobs",
+                "message",
+                "native_finish_reason"
+              ],
+              "response_json_available": true,
+              "response_message_keys": [
+                "content",
+                "refusal",
+                "role"
+              ],
+              "response_top_level_keys": [
+                "choices",
+                "created",
+                "id",
+                "model",
+                "object",
+                "provider",
+                "service_tier",
+                "system_fingerprint",
+                "usage"
+              ],
+              "retry_index": 0,
+              "stage": "refusal_reconsideration",
+              "validation_error": null
+            }
+          ],
+          "cost_usd": 0.00014261,
+          "final_outcome": "model_insufficient_evidence_after_reconsideration",
+          "generation_max_tokens": 800,
+          "input_tokens": 3564,
+          "output_tokens": 128,
+          "provider": "multiple",
+          "provider_calls": 2
+        },
+        "input_tokens": 5478,
+        "judge_latency_ms": 2154.6491000044625,
+        "judge_usage": {
+          "cost_usd": 0.006072,
+          "input_tokens": 1914,
+          "output_tokens": 22,
+          "provider": "Anthropic",
+          "provider_calls": 1,
+          "raw_output_sha256": "C8F2FD12469B8F829618C0E9273E10633586EEF1979F0651D2940046EF696289"
+        },
+        "latency_ms": 4230.758199992124,
+        "output_tokens": 150,
+        "provider": "OpenRouter",
+        "provider_calls": 3,
+        "token_cost_status": "provider_reported"
+      },
+      "model": "openai/gpt-oss-20b",
+      "qa_id": "qa20",
+      "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+      "structurally_valid": true
+    }
+  ],
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 2,
+  "selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6"
+}

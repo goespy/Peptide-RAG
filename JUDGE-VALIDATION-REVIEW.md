@@ -8,7 +8,7 @@ For an answered response, label `faithful`, `relevant`,
 For a refusal, leave `faithful` and `citations_correct` as `null`, then
 label `relevant` and `refusal_correct` from the evidence shown.
 
-Canonical packet SHA-256: `1978BA5D0616AD402180F25D98E5C236C170653BA79E3B71E3C9CA71D6D3266D`
+Canonical packet SHA-256: `E96006841CCDCE10C58DFFDD8CCD9CAB0547A8257AF9D13FBE8153A1F2103429`
 
 ## 1. review-1034AEB4BE34C212
 
@@ -58,11 +58,11 @@ Chunk: `14501183:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `true`
+- Relevant: `true`
+- Citations correct: `true`
+- Refusal correct: `true`
 
 ## 2. review-22D01D1AEB5F1C4E
 
@@ -112,11 +112,11 @@ Chunk: `20536458:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `true`
+- Relevant: `true`
+- Citations correct: `true`
+- Refusal correct: `true`
 
 ## 3. review-32783A1AF196B48F
 
@@ -166,11 +166,11 @@ Chunk: `25731775:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `true`
+- Relevant: `true`
+- Citations correct: `true`
+- Refusal correct: `true`
 
 ## 4. review-7F14C3BBEFCE52BE
 
@@ -216,11 +216,11 @@ Chunk: `18668315:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `null`
+- Relevant: `true`
+- Citations correct: `null`
+- Refusal correct: `true`
 
 ## 5. review-AA352F6D4D358358
 
@@ -271,11 +271,11 @@ Chunk: `9403790:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `true`
+- Relevant: `true`
+- Citations correct: `true`
+- Refusal correct: `true`
 
 ## 6. review-BB4536303A262284
 
@@ -321,11 +321,11 @@ Chunk: `37062921:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `null`
+- Relevant: `true`
+- Citations correct: `null`
+- Refusal correct: `true`
 
 ## 7. review-BB529F4CB3934314
 
@@ -376,11 +376,11 @@ Chunk: `20101189:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `true`
+- Relevant: `true`
+- Citations correct: `true`
+- Refusal correct: `true`
 
 ## 8. review-D3BA6A15D8991AFB
 
@@ -430,11 +430,11 @@ Chunk: `42266945:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `true`
+- Relevant: `true`
+- Citations correct: `true`
+- Refusal correct: `true`
 
 ## 9. review-EF51BF8EF0420A90
 
@@ -480,11 +480,11 @@ Chunk: `23084823:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `null`
+- Relevant: `true`
+- Citations correct: `null`
+- Refusal correct: `true`
 
 ## 10. review-F3873AA4A4DB2EA7
 
@@ -534,8 +534,8 @@ Chunk: `10496658:c0001`
 
 ### Owner labels
 
-- Reviewer: `TBD`
-- Faithful: `TBD`
-- Relevant: `TBD`
-- Citations correct: `TBD`
-- Refusal correct: `TBD`
+- Reviewer: `Mike Goewey`
+- Faithful: `true`
+- Relevant: `true`
+- Citations correct: `true`
+- Refusal correct: `true`

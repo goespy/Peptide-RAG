@@ -1,0 +1,35 @@
+{
+  "accepted_selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+  "holdout_contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+  "holdout_metrics": {
+    "answerability_classification": 1.0,
+    "answerable_answer_rate": 1.0,
+    "answered_faithfulness": 1.0,
+    "citation_correctness": 1.0,
+    "correct_answer": 1.0,
+    "correct_refusal": 1.0,
+    "cost_usd": 0.06478416000000001,
+    "denominators": {
+      "all_valid": 7,
+      "answerable": 5,
+      "answered": 5,
+      "unanswerable": 2
+    },
+    "faithfulness": 1.0,
+    "judged_outputs": 7,
+    "outputs": 7,
+    "p95_latency_ms": 8445.534999977099,
+    "relevancy": 1.0,
+    "structural_validity": 1.0,
+    "valid_outputs": 7
+  },
+  "holdout_outputs_sha256": "B22460A540CE07842014A54E1E0F31A58158AB6B05A0E12867CC5EF047465905",
+  "holdout_summary_sha256": "89D7C66861B2609FE4214481854B7277B62CC389B2C888602E4F318B0EF9B47A",
+  "judge_model": "anthropic/claude-sonnet-4.6",
+  "owner_validation_report_sha256": "7AF1F747395DCC20026E2A139B871DFD9C7B094554359BD5DE214E16EC28CA4A",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 2,
+  "status": "frozen_after_passing_holdout",
+  "winner": "openai/gpt-oss-20b"
+}

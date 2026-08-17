@@ -1,0 +1,64 @@
+{
+  "dimensions": {
+    "citations_correct": {
+      "agreement": 1.0,
+      "kappa": null,
+      "kappa_defined": false,
+      "matrix": {
+        "human_false_judge_false": 0,
+        "human_false_judge_true": 0,
+        "human_true_judge_false": 0,
+        "human_true_judge_true": 7
+      },
+      "n": 7,
+      "passes": true,
+      "status": "pass_raw_agreement_undefined_kappa"
+    },
+    "faithful": {
+      "agreement": 1.0,
+      "kappa": null,
+      "kappa_defined": false,
+      "matrix": {
+        "human_false_judge_false": 0,
+        "human_false_judge_true": 0,
+        "human_true_judge_false": 0,
+        "human_true_judge_true": 7
+      },
+      "n": 7,
+      "passes": true,
+      "status": "pass_raw_agreement_undefined_kappa"
+    },
+    "refusal_correct": {
+      "agreement": 1.0,
+      "kappa": null,
+      "kappa_defined": false,
+      "matrix": {
+        "human_false_judge_false": 0,
+        "human_false_judge_true": 0,
+        "human_true_judge_false": 0,
+        "human_true_judge_true": 10
+      },
+      "n": 10,
+      "passes": true,
+      "status": "pass_raw_agreement_undefined_kappa"
+    },
+    "relevant": {
+      "agreement": 1.0,
+      "kappa": null,
+      "kappa_defined": false,
+      "matrix": {
+        "human_false_judge_false": 0,
+        "human_false_judge_true": 0,
+        "human_true_judge_false": 0,
+        "human_true_judge_true": 10
+      },
+      "n": 10,
+      "passes": true,
+      "status": "pass_raw_agreement_undefined_kappa"
+    }
+  },
+  "n": 10,
+  "passes": true,
+  "source_outputs_sha256": "18AEB2B68E35425636CBC77D229F8360091A2D7064704058393E24483F3B12FC",
+  "worksheet_sha256": "DDC42A46DB8CD3739CE8C1A467723AA07A78D00F25D270EEDD7B72D65D9FE564"
+}

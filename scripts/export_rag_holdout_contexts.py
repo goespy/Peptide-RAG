@@ -156,10 +156,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         chunk_config = config.get("chunk_config")
         if not isinstance(chunk_config, dict):
             raise HoldoutContextError("frozen RAG config has no selected chunk configuration")
+        expected_model = config.get("embedding_model")
+        if not isinstance(expected_model, str) or not expected_model.strip():
+            raise HoldoutContextError("frozen RAG config has no embedding model")
         chunks_path = args.config.parent / f"chunks_{chunk_config.get('words')}_{chunk_config.get('overlap')}.jsonl"
         chunks, manifest = load_chunk_artifact(chunks_path, chunks_path.with_suffix(chunks_path.suffix + ".manifest.json"))
-        vectors, cache_model = _cache_for(chunks, manifest, args.cache)
-        if cache_model != config.get("embedding_model"):
+        vectors, cache_model = _cache_for(chunks, manifest, args.cache, expected_model)
+        if cache_model != expected_model:
             raise HoldoutContextError("embedding cache model differs from the frozen selection")
 
         lexical_path = ROOT / "data/lexical_config.json"

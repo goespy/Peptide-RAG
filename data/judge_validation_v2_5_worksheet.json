@@ -23,11 +23,11 @@
         "text": "Developmental exposure to Epitalon increased adult fruit\u2011fly lifespan by 11\u201316% in Drosophila melanogaster. [1]"
       },
       "owner_label": {
-        "citations_correct": null,
-        "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "citations_correct": true,
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "What effect did developmental exposure to Epitalon have on adult fruit-fly lifespan?",
       "retrieved_evidence": [
@@ -93,11 +93,11 @@
         "text": "TB\u2011500 improved tendon healing in a rat Achilles tendon repair model, showing higher biomechanical strength and better histopathology compared to controls. [1]"
       },
       "owner_label": {
-        "citations_correct": null,
-        "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "citations_correct": true,
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "Does TB-500 help injuries or wounds heal?",
       "retrieved_evidence": [
@@ -163,11 +163,11 @@
         "text": "In humans, GHK-Cu has been shown to increase hair follicle size and improve hair transplant success, indicating a potential for hair regrowth. [1]"
       },
       "owner_label": {
-        "citations_correct": null,
-        "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "citations_correct": true,
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "Does GHK or GHK-Cu help regrow hair?",
       "retrieved_evidence": [
@@ -228,9 +228,9 @@
       "owner_label": {
         "citations_correct": null,
         "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "What is the safest effective BPC-157 dose for healing a human tendon injury?",
       "retrieved_evidence": [
@@ -302,11 +302,11 @@
         "text": "BPC\u2011157 significantly prevented liver necrosis, fatty changes, and histopathological damage in rat models of bile duct+hepatic artery ligation, restraint stress, CCl\u2084 administration, and lower\u2011extremity ischemia\u2011reperfusion injury, as evidenced by reduced sinusoidal dilation, necrotic cells, and mononuclear infiltration [1][2]"
       },
       "owner_label": {
-        "citations_correct": null,
-        "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "citations_correct": true,
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "What effect did BPC-157 have on liver injury in the reported rat models?",
       "retrieved_evidence": [
@@ -367,9 +367,9 @@
       "owner_label": {
         "citations_correct": null,
         "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "Does injectable GHK-Cu reverse human skin aging better than topical GHK-Cu?",
       "retrieved_evidence": [
@@ -441,11 +441,11 @@
         "text": "Tesamorelin reduces visceral belly fat in HIV\u2011infected patients, with an average 18% decrease in VAT over 12\u202fmonths and sustained reductions up to 52\u202fweeks, while sparing subcutaneous fat. [1][2]"
       },
       "owner_label": {
-        "citations_correct": null,
-        "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "citations_correct": true,
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "Does tesamorelin reduce belly fat?",
       "retrieved_evidence": [
@@ -511,11 +511,11 @@
         "text": "In diet\u2011induced obese mice, MOTS\u2011c injection reduced body weight and improved insulin sensitivity, lowering plasma sphingolipid, monoacylglycerol, and dicarboxylate metabolites, indicating a metabolic benefit. [3]"
       },
       "owner_label": {
-        "citations_correct": null,
-        "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "citations_correct": true,
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "Does MOTS-c help with weight loss or metabolism?",
       "retrieved_evidence": [
@@ -576,9 +576,9 @@
       "owner_label": {
         "citations_correct": null,
         "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "Does TB-500 speed recovery after surgery in humans?",
       "retrieved_evidence": [
@@ -644,11 +644,11 @@
         "text": "Ipamorelin increases growth hormone release in humans, as shown by a dose\u2011dependent rise in GH levels in healthy volunteers. [5]"
       },
       "owner_label": {
-        "citations_correct": null,
-        "faithful": null,
-        "refusal_correct": null,
-        "relevant": null,
-        "reviewer": ""
+        "citations_correct": true,
+        "faithful": true,
+        "refusal_correct": true,
+        "relevant": true,
+        "reviewer": "Mike Goewey"
       },
       "question": "Does ipamorelin increase growth hormone?",
       "retrieved_evidence": [

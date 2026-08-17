@@ -1,0 +1,57 @@
+{
+  "development_metrics": {
+    "answerability_classification": 1.0,
+    "answerable_answer_rate": 1.0,
+    "citation_correctness": 0.9,
+    "correct_answer": 1.0,
+    "correct_refusal": 1.0,
+    "cost_usd": 0.12527915,
+    "denominators": {
+      "all_valid": 13,
+      "answerable": 10,
+      "answered": 10,
+      "unanswerable": 3
+    },
+    "faithfulness": 0.9230769230769231,
+    "judged_outputs": 13,
+    "outputs": 13,
+    "p95_latency_ms": 9769.641999999294,
+    "relevancy": 1.0,
+    "structural_validity": 1.0,
+    "valid_outputs": 13
+  },
+  "generation": {
+    "citation_mode": "derived_from_text_markers",
+    "exclude_reasoning": true,
+    "max_tokens": 800,
+    "prompt": "You are a research-literature assistant. Use only the supplied PubMed abstract evidence. Classify the question's evidence scope before answering. If the question explicitly asks about humans, human recovery, human effectiveness, safety in humans, or clinical use, answer only when at least one supplied passage directly reports evidence in humans; animal, in-vitro, or equine evidence alone requires insufficient_evidence. If the question is general and a supplied animal or in-vitro passage directly reports a relevant finding, answer with the species or model and explicitly state that it is not proof of human efficacy; do not refuse solely because the evidence is nonhuman. Answer whenever at least one supplied passage directly reports a finding relevant to the question. State the study population or species and preserve uncertainty. Before composing the answer, review all five supplied passages that are relevant to the question and reconcile their scopes. Apply a population or species qualifier only to the specific clause that the passage supports at that scope; never spread a qualifier across another claim in the same sentence. Do not infer no evidence, no benefit, ineffectiveness, or absence from silence; make a negative statement only when a supplied passage explicitly reports that negative finding at the requested scope. If supplied passages support different populations or models, state those scopes separately. Do not give personalized medical, treatment, or dosing advice. Return insufficient_evidence only when the passages do not support an answer, materially conflict, the explicitly requested human evidence is absent, or the question requests personalized medical or dosing advice. Prefer one concise factual sentence and use no more than three. Every sentence containing a study fact, outcome, number, mechanism, or limitation must include one or more [citation_id] markers. Return only the required JSON object.",
+    "reasoning_effort": "low",
+    "reconsider_insufficient_evidence": true,
+    "repair_attempts": 1,
+    "require_supported_parameters": true,
+    "temperature": 0
+  },
+  "generator_config_sha256": "F5E782C2968FA53BB3DC6AC07A26D41726A929439E2E2D13BE6A0F385E54940F",
+  "generator_outputs_sha256": "29095C16BA51AED3AAFDE5148E92C6168BB25D7280FE5809A221BCCFB96B4B60",
+  "generator_prompt_sha256": "9BAE2A01C294B810514556B577E8FDCD7016B15A99651325965E04C31387AEC9",
+  "generator_summary_sha256": "780706898711467E8E8E8245CB5FC24A6AF58BC373795255DEBC14F3BB95A6C6",
+  "holdout_cost_caps": {
+    "context_embedding_usd": 0.01,
+    "generation_and_judging_usd": 0.5
+  },
+  "holdout_status": "untouched",
+  "judge_config_sha256": "7766F48DB4E8A5FE936287C3458141E98F29AE74CD3E6B0056D46D70B59020A0",
+  "judge_model": "anthropic/claude-sonnet-4.6",
+  "judge_outputs_sha256": "18AEB2B68E35425636CBC77D229F8360091A2D7064704058393E24483F3B12FC",
+  "judge_prompt_version": 2,
+  "judge_summary_sha256": "DB3AC31729C9CD6D5087D67AE4817043601E000B3CA1CB89548F99E9658634B3",
+  "model_catalog_sha256": "5915A387E0DD751FA309C0508E9063C093874340F9137F84908C24B20AD1A817",
+  "owner_validation_report_sha256": "7AF1F747395DCC20026E2A139B871DFD9C7B094554359BD5DE214E16EC28CA4A",
+  "owner_worksheet_sha256": "DDC42A46DB8CD3739CE8C1A467723AA07A78D00F25D270EEDD7B72D65D9FE564",
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 1,
+  "selection_reason": "10/3/13 generator gate, complete judge-v2 evidence, and passing blind owner agreement",
+  "status": "accepted_for_holdout",
+  "winner": "openai/gpt-oss-20b"
+}
