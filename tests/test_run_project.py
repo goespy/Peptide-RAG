@@ -64,7 +64,10 @@ class RunProjectTests(unittest.TestCase):
         ))
         self.assertTrue(any(
             check.name == "RAG seven-case QA holdout"
-            and check.state == "TBD"
+            and check.state == "PASS"
+            and "accepted=True" in check.detail
+            and "answered faithfulness=1.000" in check.detail
+            and "citation correctness=1.000" in check.detail
             for check in checks
         ))
 

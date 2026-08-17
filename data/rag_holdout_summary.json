@@ -1,0 +1,74 @@
+{
+  "acceptance_thresholds": {
+    "answerable_answer_rate": 1.0,
+    "answered_faithfulness_minimum": 0.8,
+    "citation_correctness_minimum": 0.8,
+    "correct_refusal": 1.0,
+    "relevancy": 1.0,
+    "structural_validity": 1.0
+  },
+  "accepted_selection_sha256": "4A0931C9C70EB0269F1D2449DFC5FA445909FBA64F2FB1A3ABA4C3BE053D5ED6",
+  "approved_max_cost_usd": 0.5,
+  "contexts_sha256": "DA7733891F407ABEF440F47BE82385931FD383E86767488CA112E32F0C1609CC",
+  "cost_estimate": {
+    "case_maximum_cost_usd": {
+      "qa11": 0.02743118,
+      "qa12": 0.027047420000000003,
+      "qa13": 0.02744678,
+      "qa14": 0.023915,
+      "qa15": 0.02533142,
+      "qa19": 0.0262487,
+      "qa20": 0.02454206
+    },
+    "estimated_max_cost_usd": 0.18196256,
+    "generation": {
+      "conservative_input_tokens": 113852,
+      "estimated_cost_usd": 0.0063275599999999994,
+      "maximum_output_tokens": 22400,
+      "model": "openai/gpt-oss-20b",
+      "provider_calls": 28
+    },
+    "judge": {
+      "conservative_input_tokens": 37545,
+      "estimated_cost_usd": 0.175635,
+      "maximum_output_tokens": 4200,
+      "model": "anthropic/claude-sonnet-4.6",
+      "prompt_version": 2,
+      "provider_calls": 7
+    },
+    "maximum_provider_calls": 35,
+    "method": "UTF-8 JSON characters/3; all generator retry/repair/reconsideration attempts; judge-v2 maximum output"
+  },
+  "holdout_scope": "five answerable and two unanswerable cases evaluated once",
+  "judge_model": "anthropic/claude-sonnet-4.6",
+  "metrics": {
+    "answerability_classification": 1.0,
+    "answerable_answer_rate": 1.0,
+    "answered_faithfulness": 1.0,
+    "citation_correctness": 1.0,
+    "correct_answer": 1.0,
+    "correct_refusal": 1.0,
+    "cost_usd": 0.06478416000000001,
+    "denominators": {
+      "all_valid": 7,
+      "answerable": 5,
+      "answered": 5,
+      "unanswerable": 2
+    },
+    "faithfulness": 1.0,
+    "judged_outputs": 7,
+    "outputs": 7,
+    "p95_latency_ms": 8445.534999977099,
+    "relevancy": 1.0,
+    "structural_validity": 1.0,
+    "valid_outputs": 7
+  },
+  "model_catalog_sha256": "6A7CC9AB4451487D0AAC39618E28E6C2FA2640D9725514E679F84BA871A35E2D",
+  "outputs_sha256": "B22460A540CE07842014A54E1E0F31A58158AB6B05A0E12867CC5EF047465905",
+  "owner_validation_report_sha256": "7AF1F747395DCC20026E2A139B871DFD9C7B094554359BD5DE214E16EC28CA4A",
+  "passes": true,
+  "qa_sha256": "196A09FD748ABED07E30B59501703CBAEA0F1B9A1B0EF5738DBE323E93DBA725",
+  "retriever_config_sha256": "63CDFFFE4350B35AE8D21EF249E675DC710FFB74AE3A00A10A6CCCEF8A83C266",
+  "schema_version": 2,
+  "winner": "openai/gpt-oss-20b"
+}
