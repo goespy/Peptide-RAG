@@ -344,7 +344,13 @@ class GroundedAnswerClient:
                     else "model_insufficient_evidence_after_reconsideration"
                 )
                 return candidate
-            self.last_metadata["final_outcome"] = "failed_closed_after_refusal_reconsideration"
+            # The initial refusal already passed schema and local validation. A
+            # broken optional second-look response cannot make that safe result
+            # less valid, so retain the standardized refusal while preserving
+            # the reconsideration failure in metadata.
+            self.last_metadata["final_outcome"] = (
+                "model_insufficient_evidence_after_failed_reconsideration"
+            )
             self.last_metadata["failure_reason"] = validation_error
             return insufficient_evidence()
         if candidate is not None and validation_error is None:

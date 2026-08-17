@@ -220,7 +220,7 @@ class GenerationTests(unittest.TestCase):
             "model_insufficient_evidence_after_reconsideration",
         )
 
-    def test_refusal_reconsideration_fails_closed_if_second_output_is_invalid(self):
+    def test_refusal_reconsideration_retains_valid_refusal_if_second_output_is_invalid(self):
         session = Mock()
         session.post.side_effect = [
             response(
@@ -242,7 +242,11 @@ class GenerationTests(unittest.TestCase):
         self.assertEqual(session.post.call_count, 2)
         self.assertEqual(
             client.last_metadata["final_outcome"],
-            "failed_closed_after_refusal_reconsideration",
+            "model_insufficient_evidence_after_failed_reconsideration",
+        )
+        self.assertEqual(
+            client.last_metadata["failure_reason"],
+            "answered_missing_text_or_citations",
         )
 
     def test_invalid_schema_gets_one_repair_then_fails_closed(self):

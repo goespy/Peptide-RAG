@@ -311,14 +311,22 @@ class GeneratorDiagnosticTests(unittest.TestCase):
         failed_closed["metadata"]["final_outcome"] = (
             "failed_closed_after_refusal_reconsideration"
         )
+        recovered = json.loads(json.dumps(retained))
+        recovered["metadata"]["final_outcome"] = (
+            "model_insufficient_evidence_after_failed_reconsideration"
+        )
 
         retained_result = diagnostic.summarize({"model": [retained]})["candidates"]["model"]
         failed_result = diagnostic.summarize({"model": [failed_closed]})["candidates"]["model"]
+        recovered_result = diagnostic.summarize({"model": [recovered]})["candidates"]["model"]
 
         self.assertEqual(retained_result["unanswerable_model_refusal_count"], 1)
         self.assertEqual(retained_result["unanswerable_correct_system_refusal_count"], 1)
         self.assertTrue(retained_result["ready_for_paid_judging"])
         self.assertEqual(failed_result["unanswerable_model_refusal_count"], 0)
+        self.assertEqual(recovered_result["unanswerable_model_refusal_count"], 1)
+        self.assertEqual(recovered_result["unanswerable_correct_system_refusal_count"], 1)
+        self.assertTrue(recovered_result["ready_for_paid_judging"])
         self.assertEqual(failed_result["unanswerable_correct_system_refusal_count"], 0)
         self.assertFalse(failed_result["ready_for_paid_judging"])
 
