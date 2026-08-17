@@ -225,6 +225,7 @@ def summarize(grouped: dict[str, list[dict[str, Any]]]) -> dict[str, Any]:
             and row.get("metadata", {}).get("final_outcome")
             in {
                 "model_insufficient_evidence",
+                "model_insufficient_evidence_after_failed_reconsideration",
                 "model_insufficient_evidence_after_repair",
                 "model_insufficient_evidence_after_reconsideration",
             }

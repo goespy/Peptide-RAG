@@ -251,6 +251,7 @@ class ServiceTests(unittest.TestCase):
             config = self._lexical_config(directory, corpus)
             for outcome, expected in (
                 ("model_insufficient_evidence", "model"),
+                ("model_insufficient_evidence_after_failed_reconsideration", "model"),
                 ("model_insufficient_evidence_after_reconsideration", "model"),
                 ("model_insufficient_evidence_after_repair", "model"),
                 ("failed_closed_after_repair", "failed_closed"),

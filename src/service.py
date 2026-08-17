@@ -40,6 +40,7 @@ DEFAULT_HOLDOUT_CONTEXTS = ROOT / "data" / "rag_holdout_contexts.json"
 MODEL_REFUSAL_OUTCOMES = frozenset(
     {
         "model_insufficient_evidence",
+        "model_insufficient_evidence_after_failed_reconsideration",
         "model_insufficient_evidence_after_reconsideration",
         "model_insufficient_evidence_after_repair",
     }
