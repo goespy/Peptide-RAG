@@ -26,18 +26,20 @@ flowchart LR
     O["Approved QA oracle"] --> R["Chunk/evidence evaluation"]
     H --> R
     H --> T["Top-five evidence"]
-    T --> G["Frozen GPT-OSS contract"]
+    T --> G["Accepted GPT-OSS contract"]
     G --> V["Citation + safety validator"]
     V --> X["Answered or insufficient evidence"]
     X --> J["Different-family Claude judge"]
-    J --> P["Blind owner validation"]
-    P --> U["One-shot seven-case holdout"]
-    U --> F["Hash-bound release config"]
+    J --> P["Owner validation: 10/10 agreement"]
+    P --> U["Completed seven-case holdout"]
+    U --> F["Accepted hash-bound release config"]
     F --> W["FastAPI / Railway"]
 ```
 
-The lower path cannot activate in the public application until development
-selection, blind human judge validation, and the untouched holdout all pass.
+The lower path is active in the public application because development
+selection, blind human judge validation, and the untouched holdout passed. The
+accepted generator is `openai/gpt-oss-20b`; the different-family judge is
+`anthropic/claude-sonnet-4.6`.
 
 ## Frozen corpus input
 
@@ -254,8 +256,8 @@ this public shape:
 ```
 
 The fixed split is 10 answerable plus three unanswerable development cases and
-five answerable plus two unanswerable holdout cases. Holdout is not available
-to chunk, fusion, or generator selection.
+five answerable plus two unanswerable holdout cases. Holdout was unavailable to
+chunk, fusion, or generator selection and remains excluded from those choices.
 
 Chunking uses exact abstract-relative character offsets and deterministic
 whitespace-word windows: 128/32, 256/64, and 512/128 words/overlap. Titles are
@@ -304,6 +306,13 @@ that same single budget for a general recheck of all five passages. The two
 paths cannot both execute for one case. Personalized or prescriptive dosing
 requests are rejected deterministically before a provider call; questions
 about doses reported in a named study remain research queries.
+
+The public API does not collapse every refusal into “insufficient evidence.” It
+maps private generation metadata to four fixed, non-sensitive categories:
+`medical_safety`, `insufficient_evidence`, `service_unavailable`, and
+`budget_limit`. The UI labels the category, shows its approved explanation, and
+keeps the retrieved passages visible. Raw provider errors and validation codes
+remain server-side.
 
 The historical three-model development bake-off required identical stored
 contexts and hashes. After Qwen/Gemma provider failures and insufficient GPT
@@ -373,23 +382,24 @@ only from the answer, validates exact scope and polarity, requires a hashed raw
 response, and replays copied and combined metadata. Its measured v2.5 result is
 `0.900` answered-only faithfulness, `1.000` relevancy, `0.900` citation
 correctness, and `1.000` correct refusal. The remaining qa08 failure is retained
-as over-citation evidence pending owner validation.
+as over-citation evidence. Owner validation subsequently reached 10/10 agreement
+with the Claude judge; kappa is undefined because neither label series varied,
+so the documented raw-agreement fallback applies.
 
-The holdout bridge is deliberately separate from generator tuning. A frozen
-selection can be created only from the exact v2.5 generator, judge-v2, blind
-worksheet, and passing owner-agreement hashes. Only then may seven holdout query
-embeddings be purchased under a `$0.01` ceiling and their top-five hybrid
-contexts written once. The final runner revalidates the accepted model, prompt,
-provider-parameter contract, different-family judge, fresh model catalog,
-contexts, and a conservative `$0.50` generation-plus-judging ceiling before any
-call. Saved rows contain exact QA/provenance identities, citation-bound answers,
-judge-v2 verdicts and raw-response hashes, and recomputable usage metadata.
-Duplicate cases, malformed claims, altered answerability, changed citations,
-and metadata drift fail offline replay. The preregistered holdout gate is 7/7
-structural and judged outputs, 5/5 answerable responses, 2/2 correct refusals,
-1.0 relevancy, at least 0.80 answered-only faithfulness, and at least 0.80
-citation correctness. A failed holdout is retained as evidence and cannot emit
-an accepted final generator configuration; no post-holdout tuning is permitted.
+The holdout bridge remains deliberately separate from generator tuning. Its
+hash-bound selection used the exact v2.5 generator, judge-v2, blind worksheet,
+and passing owner-agreement hashes. The completed one-shot holdout passed 7/7
+structural and judged outputs, 5/5 answerable responses, and 2/2 correct
+refusals. Faithfulness, relevancy, citation correctness, correct answer, and
+correct refusal all measured 1.0; p95 latency was 8445.535 ms and actual cost
+was `$0.06478416`. Saved rows retain exact QA/provenance identities,
+citation-bound answers, judge verdicts, raw-response hashes, and recomputable
+usage metadata. No post-holdout tuning occurred.
+
+Public smoke then exposed a valid-refusal edge case: failure of optional
+reconsideration could discard a safe validated refusal. PR #8 retains the safe
+refusal and records the failed reconsideration. It changes neither prompts,
+retrieval, nor the untouched holdout.
 
 ## Application and release boundary
 
@@ -433,9 +443,15 @@ compares the complete per-query and aggregate reports with saved evidence, and
 validates committed chunk manifests. The approved QA, retrieval caches, and
 first bake-off plus GPT v2.2/v2.3/v2.4/v2.5 diagnostics and the v2.4/v2.5 judge
 runs are saved evidence. The runner replays their outputs, metrics, usage,
-cost-estimate bounds, worksheets, and frozen hashes. Human judge labels, an
-independently accepted generator, QA holdout metrics, and a
-public deployment remain `TBD`; they are not converted into zeros or passing
-claims. Railway config-as-code is checked in with Railpack, Python 3.11, a
-`$PORT`-aware Uvicorn start command, `/healthz`, and bounded restart behavior;
-this packaging is not represented as a completed deployment.
+cost-estimate bounds, worksheets, and frozen hashes. The final offline run
+passes every gate. The accepted generator is `openai/gpt-oss-20b`, the judge is
+`anthropic/claude-sonnet-4.6`, and the public deployment is
+[peptide-rag-production.up.railway.app](https://peptide-rag-production.up.railway.app),
+from main commit `4c709558dd0796a416022eeebf7436259927e0de` (Railway deployment
+`37dcb82b-a1cd-4524-ae52-ecc5481c34c3`, `SUCCESS`). Public smoke passed health,
+metrics, same-origin behavior, BM25, a grounded two-citation answer, a
+model-originated `qa17` refusal, and controlled rate limiting (HTTP 429 exactly
+at probe 30). A short, timestamped Railway billing and resource snapshot is
+saved in `artifacts/section6/railway_release_measurement.json`; it is operational
+evidence, not a monthly forecast or a capacity test. Historical
+development-machine memory measurements remain separate sizing evidence.

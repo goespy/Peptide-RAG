@@ -12,6 +12,12 @@ from src.chunks import Chunk, embedding_text
 from src.embeddings import EmbeddingCacheManifest, save_embedding_cache
 from src.generation import insufficient_evidence
 from src.retrieval import RetrievedChunk
+from src.refusals import (
+    INSUFFICIENT_EVIDENCE,
+    MEDICAL_SAFETY,
+    REFUSAL_MESSAGES,
+    SERVICE_UNAVAILABLE,
+)
 from src.service import (
     LocalResearchService,
     _load_lexical_metrics,
@@ -236,6 +242,27 @@ class ServiceTests(unittest.TestCase):
             self.assertIsNone(response["answer"])
             self.assertEqual(response["citations"], [])
             self.assertEqual(response["refusal_source"], "failed_closed")
+            self.assertEqual(response["refusal_reason"], SERVICE_UNAVAILABLE)
+            self.assertEqual(response["refusal"], REFUSAL_MESSAGES[SERVICE_UNAVAILABLE])
+
+    def test_medical_safety_reason_does_not_require_a_provider(self):
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            corpus = self._corpus(directory)
+            service = LocalResearchService(
+                corpus_path=corpus,
+                lexical_config_path=self._lexical_config(directory, corpus),
+                answer_client=None,
+            )
+            response = service.answer(
+                "What dose should I take?",
+                "lexical",
+                1,
+                service.search("dose", "lexical", 1),
+            )
+            self.assertEqual(response["refusal_reason"], MEDICAL_SAFETY)
+            self.assertEqual(response["refusal_source"], "failed_closed")
+            self.assertEqual(response["refusal"], REFUSAL_MESSAGES[MEDICAL_SAFETY])
 
     def test_refusal_source_distinguishes_model_result_from_fail_close(self):
         class RefusingClient:
@@ -267,6 +294,45 @@ class ServiceTests(unittest.TestCase):
                     )
                     response = service.answer("Question?", "lexical", 1, [])
                     self.assertEqual(response["refusal_source"], expected)
+                    reason = (
+                        INSUFFICIENT_EVIDENCE
+                        if expected == "model"
+                        else SERVICE_UNAVAILABLE
+                    )
+                    self.assertEqual(response["refusal_reason"], reason)
+                    self.assertEqual(response["refusal"], REFUSAL_MESSAGES[reason])
+
+    def test_public_refusal_reason_distinguishes_medical_policy_and_missing_evidence(self):
+        class RefusingClient:
+            def __init__(self, failure_reason):
+                self.last_metadata = {
+                    "final_outcome": "preflight_insufficient_evidence",
+                    "failure_reason": failure_reason,
+                }
+
+            def answer(self, query, contexts):
+                return insufficient_evidence()
+
+        with TemporaryDirectory() as temp:
+            directory = Path(temp)
+            corpus = self._corpus(directory)
+            config = self._lexical_config(directory, corpus)
+            for private_reason, public_reason in (
+                ("personalized_or_dosing_request", MEDICAL_SAFETY),
+                ("no_retrieved_context", INSUFFICIENT_EVIDENCE),
+                ("missing_api_key", SERVICE_UNAVAILABLE),
+            ):
+                with self.subTest(private_reason=private_reason):
+                    service = LocalResearchService(
+                        corpus_path=corpus,
+                        lexical_config_path=config,
+                        answer_client=RefusingClient(private_reason),
+                    )
+                    response = service.answer("Question?", "lexical", 1, [])
+                    self.assertEqual(response["refusal_reason"], public_reason)
+                    self.assertEqual(
+                        response["refusal"], REFUSAL_MESSAGES[public_reason]
+                    )
 
     def test_answer_reuses_canonical_displayed_chunks_without_second_retrieval(self):
         class RecordingClient:

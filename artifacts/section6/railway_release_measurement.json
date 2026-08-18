@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "measured_at_utc": "2026-08-17T21:45:42.4142229Z",
+  "source": "Railway CLI 5.41.2 usage and metrics commands",
+  "project": {
+    "id": "cb2e8529-ebca-4a99-9f36-9811e5bdede1",
+    "name": "Peptide-RAG"
+  },
+  "service": {
+    "id": "bcd52c1e-5128-40db-8823-77ff9180b42b",
+    "name": "peptide-rag",
+    "environment": "production",
+    "deployment_id": "37dcb82b-a1cd-4524-ae52-ecc5481c34c3",
+    "deployment_status": "SUCCESS",
+    "public_url": "https://peptide-rag-production.up.railway.app"
+  },
+  "release": {
+    "git_commit": "4c709558dd0796a416022eeebf7436259927e0de",
+    "github_ci_run": 32071964692,
+    "github_ci_status": "success"
+  },
+  "billing_period": {
+    "start_utc": "2026-08-14T23:31:06.847+00:00",
+    "end_utc": "2026-08-17T23:59:59.999+00:00",
+    "project_usage_usd": 0.0019362454475925924,
+    "cpu_usd": 0.00017385344907407406,
+    "memory_usd": 0.0017422829985185185,
+    "egress_usd": 0.000020109,
+    "volume_usd": 0.0,
+    "backup_usd": 0.0
+  },
+  "metrics_window": {
+    "start_utc": "2026-08-17T20:45:20.818077700+00:00",
+    "end_utc": "2026-08-17T21:45:22.350938700+00:00"
+  },
+  "cpu": {
+    "average_vcpu": 0.006206999173553719,
+    "current_vcpu": 0.0,
+    "max_vcpu": 0.16376220000000002,
+    "limit_vcpu": 2.0
+  },
+  "memory": {
+    "average_mb": 136.7065794644628,
+    "current_mb": 348.131426304,
+    "max_mb": 677.426233344,
+    "limit_mb": 1023.99737856
+  },
+  "http": {
+    "total": 78,
+    "status_2xx": 62,
+    "status_3xx": 0,
+    "status_4xx": 16,
+    "status_5xx": 0,
+    "reported_error_rate": 0.0,
+    "p50_ms": 3,
+    "p90_ms": 3,
+    "p95_ms": 3,
+    "p99_ms": 3
+  },
+  "public_network_traffic": {
+    "egress_average_mb": 0.003403572892561983,
+    "egress_max_mb": 0.06833664,
+    "ingress_average_mb": 0.002076807404958678,
+    "ingress_max_mb": 0.043949056
+  },
+  "limitations": [
+    "This is an early one-hour operational snapshot, not a monthly forecast.",
+    "The 4xx responses include intentional hostile-origin and rate-limit probes.",
+    "Provider generation latency is measured separately from Railway HTTP summary latency."
+  ]
+}

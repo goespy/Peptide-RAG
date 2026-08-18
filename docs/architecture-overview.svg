@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
   <title id="title">Peptide-RAG measured retrieval and grounded answer architecture</title>
-  <desc id="description">A three-lane architecture diagram showing frozen evidence, custom retrieval, RAG generation, human validation, untouched holdout, and deployment gates.</desc>
+  <desc id="description">A three-lane architecture diagram showing frozen evidence, custom retrieval, RAG generation, completed human validation, one-shot holdout results, and the deployed public application.</desc>
   <defs>
     <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#f8fafc"/>
@@ -50,8 +50,8 @@
     <rect x="100" y="205" width="280" height="120" rx="18" class="evidence"/>
     <rect x="425" y="205" width="280" height="120" rx="18" class="evidence"/>
     <rect x="750" y="205" width="280" height="120" rx="18" class="evidence"/>
-    <rect x="1075" y="205" width="220" height="120" rx="18" class="pending"/>
-    <rect x="1340" y="205" width="190" height="120" rx="18" class="locked"/>
+    <rect x="1075" y="205" width="220" height="120" rx="18" class="evidence"/>
+    <rect x="1340" y="205" width="190" height="120" rx="18" class="evidence"/>
   </g>
   <text x="240" y="245" text-anchor="middle" class="box-title">PubMed corpus</text>
   <text x="240" y="275" text-anchor="middle" class="body">2,000 records · fixed SHA-256</text>
@@ -67,11 +67,11 @@
 
   <text x="1185" y="245" text-anchor="middle" class="box-title">Blind labels</text>
   <text x="1185" y="275" text-anchor="middle" class="body">10 owner judgments</text>
-  <text x="1185" y="301" text-anchor="middle" class="metric" fill="#a45b00">pending human gate</text>
+  <text x="1185" y="301" text-anchor="middle" class="metric">10/10 agreement · κ undefined</text>
 
   <text x="1435" y="245" text-anchor="middle" class="box-title">QA holdout</text>
   <text x="1435" y="275" text-anchor="middle" class="body">7 cases · one shot</text>
-  <text x="1435" y="301" text-anchor="middle" class="metric" fill="#5d6c7d">untouched</text>
+  <text x="1435" y="301" text-anchor="middle" class="metric">5 answers · 2 refusals</text>
 
   <text x="70" y="400" class="lane">2 · RETRIEVAL BUILT FROM SCRATCH</text>
   <line x1="405" y1="394" x2="1530" y2="394" stroke="#cad5e3" stroke-width="2"/>
@@ -123,8 +123,8 @@
     <rect x="100" y="665" width="250" height="135" rx="18" class="rag"/>
     <rect x="410" y="665" width="250" height="135" rx="18" class="rag"/>
     <rect x="720" y="665" width="250" height="135" rx="18" class="rag"/>
-    <rect x="1030" y="665" width="250" height="135" rx="18" class="pending"/>
-    <rect x="1340" y="665" width="190" height="135" rx="18" class="locked"/>
+    <rect x="1030" y="665" width="250" height="135" rx="18" class="retrieval"/>
+    <rect x="1340" y="665" width="190" height="135" rx="18" class="retrieval"/>
   </g>
   <text x="225" y="705" text-anchor="middle" class="box-title">Frozen GPT-OSS</text>
   <text x="225" y="735" text-anchor="middle" class="body">structured JSON · top 5 only</text>
@@ -142,23 +142,23 @@
   <text x="845" y="785" text-anchor="middle" class="body">blind human comparison required</text>
 
   <text x="1155" y="705" text-anchor="middle" class="box-title">Owner → holdout</text>
-  <text x="1155" y="735" text-anchor="middle" class="body">≥80% agreement · κ ≥ .60</text>
-  <text x="1155" y="761" text-anchor="middle" class="metric" fill="#a45b00">labels pending · holdout sealed</text>
-  <text x="1155" y="785" text-anchor="middle" class="body">SHA-bound · no overwrite path</text>
+  <text x="1155" y="735" text-anchor="middle" class="body">10/10 raw agreement</text>
+  <text x="1155" y="761" text-anchor="middle" class="metric">holdout faithfulness 1.000</text>
+  <text x="1155" y="785" text-anchor="middle" class="body">7/7 accepted · SHA-bound</text>
 
   <text x="1435" y="705" text-anchor="middle" class="box-title">Public app</text>
   <text x="1435" y="735" text-anchor="middle" class="body">FastAPI · Railway</text>
-  <text x="1435" y="761" text-anchor="middle" class="body">budget + rate fallback</text>
-  <text x="1435" y="785" text-anchor="middle" class="metric" fill="#5d6c7d">deploy after gates</text>
+  <text x="1435" y="761" text-anchor="middle" class="body">answer · evidence · refusal</text>
+  <text x="1435" y="785" text-anchor="middle" class="metric">live · smoke passed</text>
 
   <path d="M1435 565 V625 H225 V655" class="arrow"/>
   <path d="M350 732 H400" class="arrow"/>
   <path d="M660 732 H710" class="arrow"/>
   <path d="M970 732 H1020" class="arrow"/>
   <path d="M1280 732 H1330" class="arrow"/>
-  <path d="M1185 325 V655" stroke="#d98a19" stroke-width="3" stroke-dasharray="8 7" fill="none" marker-end="url(#arrow)"/>
-  <path d="M1435 325 V655" stroke="#8796a8" stroke-width="3" stroke-dasharray="8 7" fill="none" marker-end="url(#arrow)"/>
+  <path d="M1185 325 V655" class="arrow"/>
+  <path d="M1435 325 V655" class="arrow"/>
 
   <rect x="70" y="840" width="1460" height="38" rx="19" fill="#10233f"/>
-  <text x="800" y="865" text-anchor="middle" class="foot">Production IR + metrics are hand-built · bm25s is test-only · artifacts are hash-bound · QA holdout remains untouched</text>
+  <text x="800" y="865" text-anchor="middle" class="foot">Production IR + metrics are hand-built · bm25s is test-only · artifacts are hash-bound · one-shot QA holdout passed</text>
 </svg>

@@ -29,26 +29,53 @@ ceiling. The immutable provider responses report:
 | GPT v2.4 Claude judge | 31,388 | 2,414 | 13 | $0.130374000 |
 | GPT-only v2.5 diagnostic | 35,889 | 1,088 | 17 | $0.001613150 |
 | GPT v2.5 Claude judge-v2 | 32,232 | 1,798 | 13 | $0.123666000 |
-| **Known OpenRouter development total** | **2,737,777** | **46,533** | **299** | **$0.751838730** |
+| **Cost/token-accounted development subtotal** | **2,737,777** | **46,533** | **299** | **$0.751838730** |
 
 The generator/judge total is recomputed from all 39 saved rows in
 `data/rag_bakeoff_outputs.json` and bound in
-`data/rag_bakeoff_reanalysis.json`. Railway has not been deployed yet, so actual
-hosting usage is `unknown/not exposed`. Coding-agent subscription tokens are
-also `unknown/not exposed`; neither quantity is represented as zero.
+`data/rag_bakeoff_reanalysis.json`. Railway is deployed and has an early
+timestamped resource/billing measurement reported below; it is not yet a
+monthly usage forecast. Coding-agent subscription tokens are `unknown/not
+exposed` and are not represented as zero.
 
 Generator-v2 made 123 provider calls under an approved `$0.04` ceiling and a
 `$0.03457764` conservative estimate, but the saved provider responses did not
 expose complete token or cost fields. Its actual spend is therefore recorded as
 `unknown/not exposed` and is not silently included as zero in the known total.
+The recorded development call count is therefore 422 (299 cost/token-accounted
+calls plus 123 generator-v2 calls), even though the cost of those 123 calls is
+unknown.
 The owner-approved v2.4 generator run cost `$0.001276115`, and its separately
 gated judge cost `$0.130374000`. The prompt-only v2.5 correction cost
 `$0.001613150` for generation. Its 13-call Claude Sonnet 4.6 judge-v2 run had a
 conservative `$0.235458` estimate under a frozen `$0.25` cap and actually cost
 `$0.123666000`. Both v2.4 and v2.5 passed the 10/10 answerable, 3/3 refusal, and
 13/13 structural generator gates. The v2.5 judge measured `0.900`
-answered-only faithfulness and `0.900` citation correctness; owner validation is
-pending, and the seven-case QA holdout remains untouched.
+answered-only faithfulness and `0.900` citation correctness; owner validation
+was pending at this historical point, and the one-shot QA holdout is now complete.
+
+## Final holdout and release spend
+
+The untouched QA holdout used 7 context-embedding calls (135 tokens) at a cost
+of `$0.0000027`. Its accepted GPT-OSS generation and Claude Sonnet 4.6 judging
+cost was `$0.06478416`, with p95 end-to-end latency of `8,445.535 ms`. Thus the
+newly measured holdout/release-evaluation cost is `$0.06478686`, bringing known
+OpenRouter development and release-evaluation spend to `$0.816625590`.
+Railway's
+early billing-period snapshot is
+`$0.0019362454475925924`: CPU `$0.00017385344907407406`, memory
+`$0.0017422829985185185`, and egress `$0.000020109`. This short window is
+observed usage captured at 2026-08-17T21:45Z for a billing period scheduled to
+end at 23:59Z, not a monthly forecast. The one-hour live resource snapshot
+reported CPU average/max `0.006207` / `0.1637622` vCPU (limit 2), memory
+average/current/max `136.7066` / `348.1314` / `677.4262` MB (limit
+`1023.9974` MB), and no volume/disk use. Local-only service sizing measured
+`278,568,960` bytes peak RSS and `3,582.723 ms` startup.
+
+The holdout used 11 generator calls, 7 judge calls, and 7 embedding calls. The
+total counted provider-call floor across recorded development and holdout work
+is therefore 447. Public smoke provider calls are `unknown/not exposed` and are
+not silently represented as zero.
 
 ## Production projection
 
@@ -108,5 +135,5 @@ claimed to support them.
 `python run_project.py --live-eval` remains a readiness check and makes no paid
 calls. Each generator, judge, and holdout stage requires its own versioned
 experiment, fresh price check, and explicit owner cost approval. The untouched
-holdout remains blocked on owner validation of the judge and an accepted
-generator.
+historical holdout gate is now satisfied: owner validation accepted GPT-OSS and
+Claude Sonnet 4.6, and the untouched holdout met all frozen thresholds.

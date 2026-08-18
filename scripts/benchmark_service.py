@@ -167,7 +167,8 @@ def render_markdown(report: dict[str, Any]) -> str:
             "- Provider calls: `0`",
             "",
             "This is an observed cold-start footprint on one development machine, not a",
-            "Railway service-level guarantee. Railway memory must still be checked after deployment.",
+            "Railway service-level guarantee. Compare it with the separate live Railway",
+            "snapshot; neither short measurement is a capacity test.",
             "",
         ]
     )
