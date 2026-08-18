@@ -1,6 +1,7 @@
 """Contract tests for the optional FastAPI web shell."""
 
 import asyncio
+import json
 import time
 import unittest
 from datetime import UTC, datetime, timedelta
@@ -16,13 +17,20 @@ from src.refusals import (
 
 try:
     from fastapi.testclient import TestClient
-    from app import BudgetExceeded, SlidingRateLimiter, _call, create_app
+    from app import (
+        BudgetExceeded,
+        SlidingRateLimiter,
+        _call,
+        _safe_provider_failure_diagnostic,
+        create_app,
+    )
 except ImportError:  # Standard-library test discovery works without web extras.
     TestClient = None
     BudgetExceeded = RuntimeError
     create_app = None
     SlidingRateLimiter = None
     _call = None
+    _safe_provider_failure_diagnostic = None
 
 
 class FakeService:
@@ -38,6 +46,36 @@ class FakeService:
 
 @unittest.skipIf(TestClient is None, "FastAPI/httpx are not installed")
 class WebAppTests(unittest.TestCase):
+    def test_provider_diagnostic_is_allowlisted_and_secret_free(self):
+        class AnswerClient:
+            model = "test/model"
+            api_key = "sk-or-secret-value"
+            last_metadata = {
+                "provider_calls": 1,
+                "provider": None,
+                "final_outcome": "failed_closed_after_repair",
+                "failure_reason": "request_or_response_error",
+                "api_key": "must-not-log",
+                "raw_output": "must-not-log",
+                "attempts": [
+                    {
+                        "stage": "initial",
+                        "http_status": 401,
+                        "outcome": "request_or_response_error",
+                        "provider_error_code": 401,
+                        "provider_message": "must-not-log",
+                    }
+                ],
+            }
+
+        service = type("Service", (), {"answer_client": AnswerClient()})()
+        diagnostic = _safe_provider_failure_diagnostic(service)
+        rendered = json.dumps(diagnostic, sort_keys=True)
+        self.assertIn('"http_status": 401', rendered)
+        self.assertIn('"api_key_prefix_valid": true', rendered)
+        self.assertNotIn("secret-value", rendered)
+        self.assertNotIn("must-not-log", rendered)
+
     def test_invalid_budget_environment_fails_startup_visibly(self):
         with patch.dict("os.environ", {"PROVIDER_CONCURRENCY_LIMIT": "typo"}):
             with self.assertRaisesRegex(ValueError, "PROVIDER_CONCURRENCY_LIMIT"):
