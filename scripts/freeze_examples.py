@@ -46,7 +46,7 @@ TOPICS: tuple[dict[str, Any], ...] = (
         "name": "GHK-Cu",
         "subtitle": "Copper tripeptide",
         "questions": (
-            ("Does GHK or GHK-Cu help regrow hair?", ("27489425", "26236730")),
+            ("What did the GHK peptide study report about hair growth?", ("27489425", "26236730")),
             ("What does research say about GHK-Cu and wound or skin repair?", ("28370978", "18644225")),
             ("How did GHK-Cu affect ACL graft healing in rats?", ("25731775",)),
         ),
@@ -58,7 +58,7 @@ TOPICS: tuple[dict[str, Any], ...] = (
         "questions": (
             ("Does TB-500 help injuries or wounds heal?", ("42542926", "41476424")),
             ("What peptide is the key ingredient in TB-500, and how is it related to thymosin beta-4?", ("23084823",)),
-            ("What does preclinical research report about thymosin beta-4 and heart repair?", ("31333080", "22019445")),
+            ("What role does thymosin beta-4 play in cardiac repair?", ("31333080", "22019445")),
         ),
     },
     {
@@ -155,6 +155,10 @@ def build(corpus_path: Path, config_path: Path) -> dict[str, Any]:
                 raise ExampleFreezeError(f"supporting PMIDs absent from the frozen corpus: {sorted(missing)}")
             ranked = [hit.doc_id for hit in rank_bm25(index, text, k=VERIFY_TOP_K, config=config)]
             hits = [pmid for pmid in supporting if pmid in ranked]
+            if not hits:
+                raise ExampleFreezeError(
+                    f"question has no supporting PMID in the frozen BM25 top {VERIFY_TOP_K}: {text}"
+                )
             total += 1
             if hits:
                 confirmed += 1

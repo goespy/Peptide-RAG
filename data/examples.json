@@ -8,7 +8,7 @@
   "verification": {
     "method": "frozen BM25 top-5 over the frozen corpus",
     "questions_total": 24,
-    "questions_with_supporting_record_in_lexical_top_5": 22,
+    "questions_with_supporting_record_in_lexical_top_5": 24,
     "hybrid_verified": false,
     "hybrid_verification_note": "Hybrid and semantic retrieval embed the query at request time and need a live provider key, so they were not exercised offline. Only corpus membership and frozen-BM25 top-5 placement are recorded here."
   },
@@ -75,7 +75,7 @@
       "subtitle": "Copper tripeptide",
       "questions": [
         {
-          "text": "Does GHK or GHK-Cu help regrow hair?",
+          "text": "What did the GHK peptide study report about hair growth?",
           "supporting_pmids": [
             "27489425",
             "26236730"
@@ -83,7 +83,9 @@
           "verification": {
             "in_corpus": true,
             "lexical_top_k": 5,
-            "lexical_top_k_hits": [],
+            "lexical_top_k_hits": [
+              "27489425"
+            ],
             "semantic_or_hybrid_confirmed": false
           }
         },
@@ -154,7 +156,7 @@
           }
         },
         {
-          "text": "What does preclinical research report about thymosin beta-4 and heart repair?",
+          "text": "What role does thymosin beta-4 play in cardiac repair?",
           "supporting_pmids": [
             "31333080",
             "22019445"
@@ -162,7 +164,9 @@
           "verification": {
             "in_corpus": true,
             "lexical_top_k": 5,
-            "lexical_top_k_hits": [],
+            "lexical_top_k_hits": [
+              "31333080"
+            ],
             "semantic_or_hybrid_confirmed": false
           }
         }

@@ -16,6 +16,7 @@ from src.examples import (
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT = ROOT / "data" / "examples.json"
 CORPUS = ROOT / "data" / "corpus.jsonl"
+LEXICAL_CONFIG = ROOT / "data" / "lexical_config.json"
 FROZEN_CORPUS_SHA256 = "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C"
 
 
@@ -60,6 +61,10 @@ class ExampleArtifactTests(unittest.TestCase):
                     self.assertIn(pmid, known, f"{topic['id']}: PMID {pmid} is not in the frozen corpus")
 
     def test_lexical_verification_is_recorded_per_question(self):
+        self.assertEqual(
+            self.payload["verification"]["questions_with_supporting_record_in_lexical_top_5"],
+            24,
+        )
         for topic in self.payload["topics"]:
             for question in topic["questions"]:
                 verification = question["verification"]
@@ -69,6 +74,10 @@ class ExampleArtifactTests(unittest.TestCase):
                 self.assertLessEqual(
                     set(verification["lexical_top_k_hits"]),
                     set(question["supporting_pmids"]),
+                )
+                self.assertTrue(
+                    verification["lexical_top_k_hits"],
+                    f"{topic['id']} has no supporting PMID in the frozen top five",
                 )
 
     def test_hybrid_verification_is_not_claimed(self):
@@ -97,6 +106,26 @@ class ExampleLoaderTests(unittest.TestCase):
             other = Path(directory) / "corpus.jsonl"
             other.write_text('{"id": "1", "title": "t", "text": "x"}\n', encoding="utf-8")
             self.assertIsNone(load_examples(ARTIFACT, corpus_path=other))
+
+    def test_loader_refuses_a_lexical_config_hash_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            other = Path(directory) / "lexical_config.json"
+            other.write_text('{"bm25": {"k1": 9}}\n', encoding="utf-8")
+            self.assertIsNone(
+                load_examples(
+                    ARTIFACT,
+                    corpus_path=CORPUS,
+                    lexical_config_path=other,
+                )
+            )
+
+        self.assertIsNotNone(
+            load_examples(
+                ARTIFACT,
+                corpus_path=CORPUS,
+                lexical_config_path=LEXICAL_CONFIG,
+            )
+        )
 
     def test_loader_refuses_a_wrong_version_or_topic_count(self):
         original = json.loads(ARTIFACT.read_text(encoding="utf-8"))

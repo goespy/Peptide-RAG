@@ -52,7 +52,12 @@ def _clean_topic(raw: object) -> dict[str, Any] | None:
     return {"id": identifier, "name": name, "subtitle": subtitle, "questions": cleaned}
 
 
-def load_examples(path: Path, *, corpus_path: Path) -> dict[str, Any] | None:
+def load_examples(
+    path: Path,
+    *,
+    corpus_path: Path,
+    lexical_config_path: Path | None = None,
+) -> dict[str, Any] | None:
     """Return browser-safe example topics, or None when the artifact is unusable.
 
     Only fields the page renders are returned. Supporting PMIDs and verification
@@ -75,6 +80,13 @@ def load_examples(path: Path, *, corpus_path: Path) -> dict[str, Any] | None:
         return None
     if payload.get("corpus_sha256") != corpus_hash:
         return None
+    if lexical_config_path is not None:
+        try:
+            lexical_config_hash = _sha256(lexical_config_path)
+        except OSError:
+            return None
+        if payload.get("lexical_config_sha256") != lexical_config_hash:
+            return None
 
     raw_topics = payload.get("topics")
     if not isinstance(raw_topics, list) or len(raw_topics) != EXPECTED_TOPICS:

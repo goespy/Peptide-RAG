@@ -157,6 +157,12 @@ class StaticMarkupTests(unittest.TestCase):
         self.assertIn("National Center for Biotechnology Information (NCBI)", INDEX)
         self.assertIn("abstracts only", INDEX)
 
+    def test_trust_strip_uses_only_supported_project_facts(self):
+        self.assertIn('class="trust-strip"', INDEX)
+        for claim in ("2,000", "8", "Human-reviewed", "PubMed citations"):
+            self.assertIn(claim, INDEX)
+        self.assertIn("retrieved passages from a frozen corpus", INDEX)
+
     def test_local_favicon_and_social_metadata(self):
         self.assertIn('href="/static/favicon.svg"', INDEX)
         self.assertTrue((STATIC / "favicon.svg").is_file())
@@ -257,8 +263,10 @@ class ScriptSafetyTests(unittest.TestCase):
         self.assertIn("return no records rather than falling back", SCRIPT)
 
     def test_previous_answer_is_dropped_before_a_new_request(self):
-        self.assertIn('$("answer-tools").hidden = true;', SCRIPT)
-        self.assertIn("failed rerun can never emit answer A under question B", SCRIPT)
+        self.assertIn("function resetResultForRequest()", SCRIPT)
+        self.assertIn('$("result").hidden = true;', SCRIPT)
+        self.assertIn("resetResultForRequest();", SCRIPT)
+        self.assertIn("failed rerun must never leave answer A visible", SCRIPT)
 
     def test_question_is_bound_to_the_result_not_the_request(self):
         self.assertIn("function showResult(question)", SCRIPT)
@@ -285,6 +293,17 @@ class ScriptSafetyTests(unittest.TestCase):
         self.assertIn("function groupCitations", SCRIPT)
         self.assertIn("state.sources = groupCitations(citations)", SCRIPT)
         self.assertIn('numbers.join(", ")', SCRIPT)
+
+    def test_retrieved_chunks_are_counted_as_passages_and_grouped_by_pmid(self):
+        self.assertIn("function groupRetrievedSources", SCRIPT)
+        self.assertIn("function evidenceScope", SCRIPT)
+        self.assertIn("retrieved passage", SCRIPT)
+        self.assertNotIn("of 2,000 records consulted", SCRIPT)
+
+    def test_medical_safety_suggestions_keep_the_detected_peptide(self):
+        self.assertIn("PEPTIDE_MENTIONS", SCRIPT)
+        self.assertIn('"What dose of " + mention.label', SCRIPT)
+        self.assertIn('"What adverse effects of " + mention.label', SCRIPT)
 
     def test_source_badge_accommodates_multiple_markers(self):
         self.assertIn(".source-number { flex-shrink: 0; min-width: 23px;", STYLES)

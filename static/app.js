@@ -10,6 +10,17 @@
   const SNIPPET_MARKER = /\[\[([^\]]+)\]\]/g;
   const MAX_QUESTION = 500;
 
+  const PEPTIDE_MENTIONS = Object.freeze([
+    { pattern: /\bbpc[-\s]?157\b|body protection compound/i, label: "BPC-157" },
+    { pattern: /\bghk(?:-cu)?\b/i, label: "GHK-Cu" },
+    { pattern: /\btb[-\s]?500\b|\bthymosin\s+(?:beta|β)[-\s]?4\b/i, label: "TB-500 / thymosin beta-4" },
+    { pattern: /\bipamorelin\b/i, label: "ipamorelin" },
+    { pattern: /\btesamorelin\b/i, label: "tesamorelin" },
+    { pattern: /\bepit(?:al|hal)on\b/i, label: "Epitalon" },
+    { pattern: /\bmots[-\s]?c\b/i, label: "MOTS-c" },
+    { pattern: /\bpt[-\s]?141\b|\bbremelanotide\b/i, label: "PT-141 / bremelanotide" },
+  ]);
+
   const REFUSALS = Object.freeze({
     medical_safety: { label: "Medical-safety boundary", tone: "boundary", icon: "shield" },
     insufficient_evidence: { label: "Insufficient evidence", tone: "boundary", icon: "search" },
@@ -174,6 +185,43 @@
     });
   }
 
+  function groupRetrievedSources(items) {
+    const order = [];
+    const byRecord = new Map();
+    items.forEach((item, index) => {
+      if (!item || typeof item !== "object") return;
+      const pmid = String(item.pmid || "");
+      const key = pmid || "result-" + index;
+      if (!byRecord.has(key)) {
+        byRecord.set(key, {
+          numbers: [],
+          title: item.title || (pmid ? "PubMed record " + pmid : "Untitled record"),
+          pmid: pmid,
+          url: item.pubmed_url || (pmid ? PUBMED + pmid + "/" : ""),
+        });
+        order.push(key);
+      }
+      const rank = Number.isInteger(item.rank) && item.rank > 0 ? item.rank : index + 1;
+      byRecord.get(key).numbers.push(rank);
+    });
+    return order.map((key) => {
+      const entry = byRecord.get(key);
+      return { n: entry.numbers.join(", "), title: entry.title, pmid: entry.pmid, url: entry.url };
+    });
+  }
+
+  function evidenceScope(items) {
+    const passages = items.length;
+    const pmids = new Set(items.map((item) => String((item && item.pmid) || "")).filter(Boolean));
+    const records = pmids.size || passages;
+    const containsChunks = items.some((item) => item && item.chunk_id);
+    if (containsChunks) {
+      return { passages, records, label: passages + " retrieved passage" + (passages === 1 ? "" : "s") +
+        " from " + records + " PubMed record" + (records === 1 ? "" : "s") };
+    }
+    return { passages, records, label: records + " PubMed record" + (records === 1 ? "" : "s") + " retrieved" };
+  }
+
   function renderSnippet(node, value) {
     const source = value == null ? "" : String(value);
     let cursor = 0;
@@ -273,12 +321,25 @@
     const help = el("div", "refusal-help");
     if (data.refusal_reason === "medical_safety") {
       help.append(el("p", null, "Questions this corpus can answer"));
-      ["What doses are reported in published studies?", "What adverse effects have been reported?"].forEach((text) => {
-        const button = el("button", null, text);
-        button.type = "button";
-        button.addEventListener("click", () => { $("question").value = text; refreshCounter(); submit(); });
-        help.append(button);
-      });
+      const mention = PEPTIDE_MENTIONS.find((entry) => entry.pattern.test(state.question));
+      if (mention) {
+        [
+          "What dose of " + mention.label + " was administered in the reported study?",
+          "What adverse effects of " + mention.label + " have been reported?",
+        ].forEach((text) => {
+          const button = el("button", null, text);
+          button.type = "button";
+          button.addEventListener("click", () => { $("question").value = text; refreshCounter(); submit(); });
+          help.append(button);
+        });
+      } else {
+        help.append(el("p", "refusal-guidance",
+          "Keep the peptide name in your question and ask what a named study reported, rather than what you should take."));
+        const edit = el("button", null, "Edit the question");
+        edit.type = "button";
+        edit.addEventListener("click", () => { $("question").focus(); });
+        help.append(edit);
+      }
       container.append(help);
     } else if (data.refusal_reason === "insufficient_evidence") {
       help.append(el("p", null, "Try widening the search"));
@@ -388,12 +449,27 @@
     $("asked-question").textContent = question;
   }
 
-  function setMeta(kind, mode, count) {
+  function setMeta(kind, mode, items) {
     const meta = $("result-meta");
     clear(meta);
     const chip = el("span", "mode-chip", kind + " · " + (MODE_LABELS[mode] || mode));
     meta.append(chip);
-    meta.append(el("span", null, count + " of 2,000 records consulted"));
+    meta.append(el("span", null, evidenceScope(items).label));
+  }
+
+  function resetResultForRequest() {
+    state.question = "";
+    state.answerText = "";
+    state.sources = [];
+    $("answer-tools").hidden = true;
+    $("result").hidden = true;
+    clear($("answer-block"));
+    clear($("result-meta"));
+    clear($("fallback-notice"));
+    clear($("sources-list"));
+    clear($("evidence-body"));
+    $("asked-question").textContent = "";
+    $("evidence-details").open = false;
   }
 
   async function runAnswer(question) {
@@ -405,7 +481,7 @@
     const evidence = Array.isArray(data.evidence) ? data.evidence : [];
     const served = data.retrieval_mode || requested;
     showResult(question);
-    setMeta("Evidence answer", served, evidence.length);
+    setMeta("Evidence answer", served, evidence);
     renderFallback(data.requested_mode || requested, served, data.retrieval_fallback);
     const gapAnswer = renderRetrievalGap(requested, evidence.length);
 
@@ -426,12 +502,7 @@
       state.sources = groupCitations(citations);
       renderSources(state.sources, "Cited sources");
     } else {
-      state.sources = evidence.map((item, index) => ({
-        n: Number.isInteger(item.rank) && item.rank > 0 ? item.rank : index + 1,
-        title: item.title || ("PubMed record " + item.pmid),
-        pmid: item.pmid,
-        url: item.pubmed_url || (item.pmid ? PUBMED + item.pmid + "/" : ""),
-      }));
+      state.sources = groupRetrievedSources(evidence);
       renderSources(state.sources, "Retrieved sources");
     }
 
@@ -439,7 +510,7 @@
     $("evidence-details").open = false;
 
     if (data.answer) {
-      setStatus("Answer ready, drawn from " + evidence.length + " retrieved records.");
+      setStatus("Answer ready. " + evidenceScope(evidence).label + ".");
     } else if (gapAnswer) {
       setStatus((MODE_LABELS[requested] || requested) + " retrieval is not enabled here, so no records were retrieved.");
     } else {
@@ -457,7 +528,7 @@
     const results = Array.isArray(data.results) ? data.results : [];
     const served = data.mode || requested;
     showResult(question);
-    setMeta("Literature results", served, results.length);
+    setMeta("Literature results", served, results);
     renderFallback(data.requested_mode || requested, served, data.fallback_reason);
     renderRetrievalGap(requested, results.length);
 
@@ -488,16 +559,11 @@
 
     state.answerText = "";
     $("answer-tools").hidden = true;
-    state.sources = results.map((item, index) => ({
-      n: Number.isInteger(item.rank) && item.rank > 0 ? item.rank : index + 1,
-      title: item.title || ("PubMed record " + item.pmid),
-      pmid: item.pmid,
-      url: item.pubmed_url || (item.pmid ? PUBMED + item.pmid + "/" : ""),
-    }));
+    state.sources = groupRetrievedSources(results);
     renderSources(state.sources, "Ranked records");
     renderEvidence(results);
     $("evidence-details").open = false;
-    setStatus(results.length + (results.length === 1 ? " record found." : " records found."));
+    setStatus(evidenceScope(results).label + ".");
   }
 
   async function submit() {
@@ -510,11 +576,8 @@
     }
     state.pending = true;
     $("ask-button").disabled = true;
-    // Drop the previous answer's copy/share payload before the new request so a
-    // failed rerun can never emit answer A under question B.
-    state.answerText = "";
-    state.sources = [];
-    $("answer-tools").hidden = true;
+    // A failed rerun must never leave answer A visible under question B's input.
+    resetResultForRequest();
     const literature = intent() === "literature";
     setStatus(literature ? "Searching 2,000 records…" : "Searching 2,000 records, then reading the retrieved abstracts…");
     try {

@@ -34,6 +34,7 @@ STATIC_DIR = Path(__file__).with_name("static")
 DATA_DIR = Path(__file__).with_name("data")
 EXAMPLES_PATH = DATA_DIR / "examples.json"
 CORPUS_PATH = DATA_DIR / "corpus.jsonl"
+LEXICAL_CONFIG_PATH = DATA_DIR / "lexical_config.json"
 LOGGER = logging.getLogger(__name__)
 SAFE_PROVIDER_ATTEMPT_FIELDS = (
     "stage",
@@ -255,7 +256,11 @@ def create_app(
     try:
         from src.examples import load_examples
 
-        app.state.examples = load_examples(EXAMPLES_PATH, corpus_path=CORPUS_PATH)
+        app.state.examples = load_examples(
+            EXAMPLES_PATH,
+            corpus_path=CORPUS_PATH,
+            lexical_config_path=LEXICAL_CONFIG_PATH,
+        )
     except (ImportError, OSError, ValueError):
         app.state.examples = None
     app.state.limiter = SlidingRateLimiter()
