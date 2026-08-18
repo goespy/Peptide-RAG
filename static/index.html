@@ -1,23 +1,261 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Peptide Literature Explorer</title><link rel="stylesheet" href="/static/styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peptide Evidence — ask what peptide research actually shows</title>
+<meta name="description" content="Search 2,000 PubMed records and receive a concise answer linked directly to the supporting research. Research use only; not medical advice.">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Peptide Evidence">
+<meta property="og:title" content="Peptide Evidence">
+<meta property="og:description" content="Ask what peptide research actually shows. Answers grounded in retrieved passages from a frozen corpus of 2,000 PubMed records.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Peptide Evidence">
+<meta name="twitter:description" content="Ask what peptide research actually shows. Research use only; not medical advice.">
+<link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <main class="shell">
-    <header><p class="eyebrow">Peptide-RAG</p><h1>Peptide literature explorer</h1><p class="notice">Research use only. This tool does not provide medical advice.</p></header>
-    <section class="controls" aria-label="Research query">
-      <label for="query">Question or search terms</label>
-      <textarea id="query" maxlength="500" rows="3" placeholder="e.g., antimicrobial peptide mechanisms"></textarea>
-      <div class="control-row"><label for="mode">Retrieval mode</label><select id="mode"><option value="bm25">BM25</option><option value="boolean">Boolean</option><option value="hybrid">Hybrid (validated cache required)</option><option value="semantic">Semantic (validated cache required)</option></select><button id="search" type="button">Search literature</button></div>
-    </section>
-    <nav class="tabs" aria-label="Views"><button class="tab active" data-tab="results">Results</button><button class="tab" data-tab="answer">Evidence-based answer</button><button class="tab" data-tab="metrics">Metrics</button></nav>
-    <p id="status" class="status" role="status"></p>
-    <section id="results" class="panel active"><div id="result-list"></div></section>
-    <section id="answer" class="panel"><button id="answer-button" type="button">Draft from evidence</button><article id="answer-content"></article><div id="answer-evidence"></div></section>
-    <section id="metrics" class="panel"><button id="metrics-button" type="button">Load metrics</button><pre id="metrics-content"></pre></section>
-    <footer>Literature records and PubMed links are attributed to the National Center for Biotechnology Information (NCBI).</footer>
-  </main><script src="/static/app.js"></script>
+<a class="skip-link" href="#question">Skip to the question box</a>
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <p class="brand"><span class="brand-name">Peptide Evidence</span> <span class="brand-tech">Powered by Peptide-RAG</span></p>
+    <nav aria-label="Sections">
+      <a href="#how-it-works">How it works</a>
+      <a href="#measured">Measured results</a>
+    </nav>
+  </div>
+</header>
+
+<p class="disclaimer-strip">
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16.5v.01"></path></svg>
+  Research use only. This tool does not provide medical advice.
+</p>
+
+<main class="shell">
+
+  <section class="hero" aria-labelledby="hero-heading">
+    <h1 id="hero-heading">Ask what peptide research actually shows.</h1>
+    <p class="lead">Search 2,000 PubMed records and receive a concise answer linked directly to the supporting research.</p>
+
+    <form id="ask-form" novalidate>
+      <div class="ask-card">
+        <label class="visually-hidden" for="question">Your question about peptide research</label>
+        <textarea id="question" name="question" rows="3" maxlength="500" placeholder="Ask a question about peptide research&hellip;" aria-describedby="question-counter"></textarea>
+        <div class="ask-actions">
+          <span id="question-counter" class="counter">0 / 500</span>
+          <button type="submit" id="ask-button" class="button-primary">
+            <span id="ask-button-label">Ask Peptide Evidence</span>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h13"></path><path d="M12 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <details class="advanced" id="advanced">
+        <summary>
+          <svg class="icon chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6"></path></svg>
+          Advanced options
+          <span class="summary-state" id="advanced-summary">Evidence answer &middot; Hybrid &middot; 5 records</span>
+        </summary>
+
+        <div class="advanced-body">
+          <fieldset class="field">
+            <legend>What comes back</legend>
+            <p class="field-note">Two different requests. An evidence answer is the default.</p>
+            <div class="option-grid option-grid-2">
+              <label class="option">
+                <input type="radio" name="intent" value="answer" checked>
+                <span class="option-body">
+                  <span class="option-title">Evidence answer <span class="badge">Default</span></span>
+                  <span class="option-note">A written answer with inline citations, drafted only from retrieved abstracts.</span>
+                  <code>POST /api/answer</code>
+                </span>
+              </label>
+              <label class="option">
+                <input type="radio" name="intent" value="literature">
+                <span class="option-body">
+                  <span class="option-title">Literature results</span>
+                  <span class="option-note">Ranked records only, with no generated answer.</span>
+                  <code>POST /api/search</code>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field" id="answer-modes">
+            <legend>Retrieval for the evidence answer</legend>
+            <div class="option-grid option-grid-3">
+              <label class="option">
+                <input type="radio" name="answer-mode" value="hybrid" checked>
+                <span class="option-body"><span class="option-title">Hybrid</span><span class="option-note">Best overall</span></span>
+              </label>
+              <label class="option">
+                <input type="radio" name="answer-mode" value="semantic">
+                <span class="option-body"><span class="option-title">Semantic</span><span class="option-note">Meaning-based</span></span>
+              </label>
+              <label class="option">
+                <input type="radio" name="answer-mode" value="lexical">
+                <span class="option-body"><span class="option-title">Keyword</span><span class="option-note">BM25 keyword matching</span></span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field" id="literature-modes" hidden>
+            <legend>Retrieval for literature results</legend>
+            <div class="option-grid option-grid-4">
+              <label class="option">
+                <input type="radio" name="literature-mode" value="hybrid" checked>
+                <span class="option-body"><span class="option-title">Hybrid</span></span>
+              </label>
+              <label class="option">
+                <input type="radio" name="literature-mode" value="semantic">
+                <span class="option-body"><span class="option-title">Semantic</span></span>
+              </label>
+              <label class="option">
+                <input type="radio" name="literature-mode" value="bm25">
+                <span class="option-body"><span class="option-title">BM25</span></span>
+              </label>
+              <label class="option">
+                <input type="radio" name="literature-mode" value="boolean">
+                <span class="option-body"><span class="option-title">Boolean</span></span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field" id="records-field">
+            <label class="field-label" for="records">Records consulted <output id="records-output" for="records">5</output></label>
+            <p class="field-note">More records widen coverage; fewer keep the answer tightly sourced.</p>
+            <input type="range" id="records" name="records" min="1" max="8" step="1" value="5">
+            <div class="range-ends"><span>1</span><span>8</span></div>
+          </div>
+
+          <p class="callout callout-caution">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4l9 16H3z"></path><path d="M12 10v4"></path><path d="M12 17.5v.01"></path></svg>
+            BM25 and Boolean return records only — they never ground a generated answer. Choosing either switches this page to literature results, and the page says so.
+          </p>
+        </div>
+      </details>
+    </form>
+
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="trust-strip" aria-label="Research coverage and validation">
+    <p><strong>2,000</strong><span>PubMed records</span></p>
+    <p><strong>8</strong><span>Peptide topics</span></p>
+    <p><strong>Human-reviewed</strong><span>Evaluation</span></p>
+    <p><strong>Direct</strong><span>PubMed citations</span></p>
+  </section>
+
+  <section id="result" class="result" aria-labelledby="result-heading" hidden>
+    <h2 id="result-heading" class="visually-hidden" tabindex="-1">Response</h2>
+    <div class="result-head">
+      <p class="asked" id="asked-question"></p>
+      <button type="button" id="edit-button" class="button-secondary">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h4l10-10a2.8 2.8 0 10-4-4L4 16v4z"></path></svg>
+        Edit and rerun
+      </button>
+    </div>
+    <p class="result-meta" id="result-meta"></p>
+    <div id="fallback-notice"></div>
+
+    <div class="result-split">
+      <div class="answer-column">
+        <div id="answer-block" class="answer-block"></div>
+        <div class="answer-tools" id="answer-tools" hidden>
+          <button type="button" id="copy-button" class="button-secondary">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15V6a2 2 0 012-2h9"></path></svg>
+            Copy answer with citations
+          </button>
+          <button type="button" id="share-button" class="button-secondary">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="18" cy="6" r="2.6"></circle><circle cx="6" cy="12" r="2.6"></circle><circle cx="18" cy="18" r="2.6"></circle><path d="M8.4 10.8l7.2-3.6"></path><path d="M8.4 13.2l7.2 3.6"></path></svg>
+            Share question
+          </button>
+        </div>
+
+        <details class="evidence" id="evidence-details">
+          <summary>
+            <svg class="icon chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6"></path></svg>
+            View supporting evidence
+            <span class="summary-state">Full retrieved excerpts, scores and ranking detail</span>
+          </summary>
+          <div class="evidence-body" id="evidence-body"></div>
+        </details>
+
+        <button type="button" id="back-to-topics" class="button-quiet">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 6l-6 6 6 6"></path></svg>
+          Return to example topics
+        </button>
+      </div>
+
+      <aside class="sources-column" id="sources-column" aria-labelledby="sources-heading">
+        <div class="sources-head">
+          <h3 id="sources-heading">Cited sources</h3>
+          <span id="sources-count"></span>
+        </div>
+        <div id="sources-list"></div>
+        <p class="callout callout-quiet">
+          Evidence is drawn from abstracts, not full texts. Open a record on PubMed for methods, limitations and dose detail.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="explorer" class="explorer" aria-labelledby="explorer-heading">
+    <div class="section-head">
+      <h2 id="explorer-heading">Start from a peptide</h2>
+      <p class="section-note">Open a topic to see questions built for this corpus. Selecting one fills the box above and runs it.</p>
+    </div>
+    <div id="topic-grid" class="topic-grid"></div>
+    <p id="explorer-empty" class="callout callout-quiet" hidden>Example topics are unavailable for this corpus build.</p>
+  </section>
+
+  <section id="how-it-works" class="how" aria-labelledby="how-heading">
+    <h2 id="how-heading">How it works</h2>
+    <ol class="how-steps">
+      <li>
+        <h3><span class="step-number" aria-hidden="true">1</span> Retrieve relevant research</h3>
+        <p>Your question is matched against 2,000 PubMed records using keyword and meaning-based search together.</p>
+      </li>
+      <li>
+        <h3><span class="step-number" aria-hidden="true">2</span> Compare the evidence</h3>
+        <p>The top-ranked passages from PubMed abstracts are compared side by side, and the ranking each method produced is kept visible.</p>
+      </li>
+      <li>
+        <h3><span class="step-number" aria-hidden="true">3</span> Generate a cited summary</h3>
+        <p>An answer is drafted only from those retrieved passages, with every factual sentence linked to the record it came from.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="measured" class="measured" aria-labelledby="measured-heading">
+    <div class="section-head">
+      <h2 id="measured-heading">Measured, not claimed</h2>
+      <p class="section-note">Retrieval quality scored against relevance judgments frozen before any tuning. These values are read from the running service, including where the system is weak.</p>
+    </div>
+    <div id="metrics-grid" class="metrics-grid"></div>
+    <p id="metrics-note" class="callout callout-quiet"></p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <div>
+      <p class="footer-brand">Peptide Evidence</p>
+      <p>A research-literature tool. Not medical advice, not a supplement retailer, and not a substitute for a clinician.</p>
+      <p class="footer-tech">Powered by Peptide-RAG</p>
+    </div>
+    <div>
+      <p class="footer-label">Attribution &amp; limits</p>
+      <p>Literature records and PubMed links are attributed to the National Center for Biotechnology Information (NCBI). NCBI does not endorse this project.</p>
+      <p>Answers are generated from abstracts only. An abstract can omit limitations, dose details, and negative findings reported in the full paper.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/static/app.js"></script>
 </body>
 </html>

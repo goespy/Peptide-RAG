@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "status": "frozen_presentation_data",
+  "corpus_sha256": "231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C",
+  "lexical_config_sha256": "D3A3002D0ECB1E141BA9FD73843880E01FE268AB8AEF9770E32466003D34E4D0",
+  "topic_count": 8,
+  "questions_per_topic": 3,
+  "verification": {
+    "method": "frozen BM25 top-5 over the frozen corpus",
+    "questions_total": 24,
+    "questions_with_supporting_record_in_lexical_top_5": 24,
+    "hybrid_verified": false,
+    "hybrid_verification_note": "Hybrid and semantic retrieval embed the query at request time and need a live provider key, so they were not exercised offline. Only corpus membership and frozen-BM25 top-5 placement are recorded here."
+  },
+  "separation_note": "Presentation data only. Not used by qrels, IR metrics, or the QA oracle.",
+  "topics": [
+    {
+      "id": "bpc-157",
+      "name": "BPC-157",
+      "subtitle": "Body protection compound",
+      "questions": [
+        {
+          "text": "Does BPC-157 help tissue repair?",
+          "supporting_pmids": [
+            "41898733",
+            "41476424"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "41898733",
+              "41476424"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What did studies report about BPC-157 and liver injury?",
+          "supporting_pmids": [
+            "36228773",
+            "40005408"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "36228773",
+              "40005408"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What did rat studies find in experimental stomach and duodenal ulcer models?",
+          "supporting_pmids": [
+            "7904712",
+            "14512101"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "7904712",
+              "14512101"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "ghk-cu",
+      "name": "GHK-Cu",
+      "subtitle": "Copper tripeptide",
+      "questions": [
+        {
+          "text": "What did the GHK peptide study report about hair growth?",
+          "supporting_pmids": [
+            "27489425",
+            "26236730"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "27489425"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What does research say about GHK-Cu and wound or skin repair?",
+          "supporting_pmids": [
+            "28370978",
+            "18644225"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "18644225"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "How did GHK-Cu affect ACL graft healing in rats?",
+          "supporting_pmids": [
+            "25731775"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "25731775"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "tb-500",
+      "name": "TB-500",
+      "subtitle": "Thymosin beta-4",
+      "questions": [
+        {
+          "text": "Does TB-500 help injuries or wounds heal?",
+          "supporting_pmids": [
+            "42542926",
+            "41476424"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "42542926",
+              "41476424"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What peptide is the key ingredient in TB-500, and how is it related to thymosin beta-4?",
+          "supporting_pmids": [
+            "23084823"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "23084823"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What role does thymosin beta-4 play in cardiac repair?",
+          "supporting_pmids": [
+            "31333080",
+            "22019445"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "31333080"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "ipamorelin",
+      "name": "Ipamorelin",
+      "subtitle": "GH secretagogue",
+      "questions": [
+        {
+          "text": "Does ipamorelin increase growth hormone?",
+          "supporting_pmids": [
+            "9849822",
+            "9733495"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "9733495"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "Does ipamorelin reduce body fat?",
+          "supporting_pmids": [
+            "11162489"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "11162489"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What did studies report about ipamorelin's selectivity and its effects on ACTH and cortisol?",
+          "supporting_pmids": [
+            "9849822"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "9849822"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "tesamorelin",
+      "name": "Tesamorelin",
+      "subtitle": "GHRH analogue",
+      "questions": [
+        {
+          "text": "Does tesamorelin reduce belly fat?",
+          "supporting_pmids": [
+            "20101189",
+            "30764032"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "20101189",
+              "30764032"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What effects did tesamorelin have on visceral fat and triglycerides in the HIV trial?",
+          "supporting_pmids": [
+            "18057338",
+            "30764032"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "18057338",
+              "30764032"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "Does tesamorelin reduce liver fat in people with HIV?",
+          "supporting_pmids": [
+            "31611038",
+            "25038357"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "31611038"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "epitalon",
+      "name": "Epitalon",
+      "subtitle": "Pineal tetrapeptide",
+      "questions": [
+        {
+          "text": "How did developmental exposure to Epitalon affect adult fruit-fly lifespan?",
+          "supporting_pmids": [
+            "11087911"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "11087911"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "How did Epitalon affect melatonin and cortisol rhythms in older monkeys?",
+          "supporting_pmids": [
+            "11550036",
+            "11524632"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "11550036",
+              "11524632"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What did human-cell studies report about Epitalon and telomere length?",
+          "supporting_pmids": [
+            "40908429",
+            "12937682"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "40908429",
+              "12937682"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "mots-c",
+      "name": "MOTS-c",
+      "subtitle": "Mitochondrial peptide",
+      "questions": [
+        {
+          "text": "Does MOTS-c help with weight loss or metabolism?",
+          "supporting_pmids": [
+            "41551324",
+            "28574175"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "41551324",
+              "28574175"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What do animal studies report about MOTS-c, exercise, and insulin sensitivity?",
+          "supporting_pmids": [
+            "31293078",
+            "39077591"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "31293078",
+              "39077591"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What hypothesis connects the MOTS-c m.1382A>C variant with Japanese longevity?",
+          "supporting_pmids": [
+            "26289118",
+            "33468709"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "26289118",
+              "33468709"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "pt-141",
+      "name": "PT-141",
+      "subtitle": "Bremelanotide",
+      "questions": [
+        {
+          "text": "Does PT-141 help with erectile dysfunction?",
+          "supporting_pmids": [
+            "12851303",
+            "14963471"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "12851303",
+              "14963471"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "What did studies report about PT-141 in women with sexual arousal disorder?",
+          "supporting_pmids": [
+            "16839319"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "16839319"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        },
+        {
+          "text": "How is PT-141 thought to work through melanocortin receptors?",
+          "supporting_pmids": [
+            "12851303",
+            "17584130"
+          ],
+          "verification": {
+            "in_corpus": true,
+            "lexical_top_k": 5,
+            "lexical_top_k_hits": [
+              "12851303",
+              "17584130"
+            ],
+            "semantic_or_hybrid_confirmed": false
+          }
+        }
+      ]
+    }
+  ]
+}
