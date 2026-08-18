@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+import json
+import logging
 import math
 import os
 from pathlib import Path
@@ -29,6 +31,56 @@ from src.refusals import (
 RESEARCH_DISCLAIMER = "Research use only. This tool does not provide medical advice."
 NCBI_ATTRIBUTION = "Literature records and PubMed links are attributed to the National Center for Biotechnology Information (NCBI)."
 STATIC_DIR = Path(__file__).with_name("static")
+LOGGER = logging.getLogger(__name__)
+SAFE_PROVIDER_ATTEMPT_FIELDS = (
+    "stage",
+    "retry_index",
+    "http_status",
+    "finish_reason",
+    "native_finish_reason",
+    "outcome",
+    "error_type",
+    "provider_error_code",
+    "provider_error_type",
+    "response_json_available",
+    "response_top_level_keys",
+    "response_choice_count",
+    "response_choice_keys",
+    "response_message_keys",
+    "raw_output_characters",
+    "validation_error",
+)
+
+
+def _safe_provider_failure_diagnostic(service: object) -> dict[str, object] | None:
+    """Return allowlisted provider metadata without keys, prompts, or content."""
+
+    answer_client = getattr(service, "answer_client", None)
+    metadata = getattr(answer_client, "last_metadata", None)
+    if answer_client is None or not isinstance(metadata, dict):
+        return None
+    api_key = getattr(answer_client, "api_key", None)
+    attempts: list[dict[str, object]] = []
+    for attempt in metadata.get("attempts", []):
+        if isinstance(attempt, dict):
+            attempts.append(
+                {
+                    field: attempt[field]
+                    for field in SAFE_PROVIDER_ATTEMPT_FIELDS
+                    if field in attempt
+                }
+            )
+    return {
+        "model": getattr(answer_client, "model", None),
+        "api_key_present": isinstance(api_key, str) and bool(api_key),
+        "api_key_prefix_valid": isinstance(api_key, str) and api_key.startswith("sk-or-"),
+        "api_key_whitespace_clean": isinstance(api_key, str) and api_key == api_key.strip(),
+        "provider_calls": metadata.get("provider_calls"),
+        "provider": metadata.get("provider"),
+        "final_outcome": metadata.get("final_outcome"),
+        "failure_reason": metadata.get("failure_reason"),
+        "attempts": attempts,
+    }
 
 
 class SearchRequest(BaseModel):
@@ -391,6 +443,13 @@ def create_app(
                 "refusal_reason": reason,
                 "refusal_source": source,
             }
+        if not value.get("answer") and value.get("refusal_source") == "failed_closed":
+            diagnostic = _safe_provider_failure_diagnostic(app.state.service)
+            if diagnostic is not None:
+                LOGGER.warning(
+                    "answer_generation_failed %s",
+                    json.dumps(diagnostic, ensure_ascii=True, sort_keys=True),
+                )
         return {
             **value,
             "retrieval_only": not bool(value.get("answer")),
