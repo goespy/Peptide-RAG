@@ -31,6 +31,9 @@ from src.refusals import (
 RESEARCH_DISCLAIMER = "Research use only. This tool does not provide medical advice."
 NCBI_ATTRIBUTION = "Literature records and PubMed links are attributed to the National Center for Biotechnology Information (NCBI)."
 STATIC_DIR = Path(__file__).with_name("static")
+DATA_DIR = Path(__file__).with_name("data")
+EXAMPLES_PATH = DATA_DIR / "examples.json"
+CORPUS_PATH = DATA_DIR / "corpus.jsonl"
 LOGGER = logging.getLogger(__name__)
 SAFE_PROVIDER_ATTEMPT_FIELDS = (
     "stage",
@@ -85,7 +88,8 @@ def _safe_provider_failure_diagnostic(service: object) -> dict[str, object] | No
 
 class SearchRequest(BaseModel):
     query: str = Field(..., max_length=500)
-    mode: Literal["boolean", "bm25", "semantic", "hybrid"] = "bm25"
+    # Hybrid matches AnswerRequest so both endpoints default to the same retrieval.
+    mode: Literal["boolean", "bm25", "semantic", "hybrid"] = "hybrid"
     k: int = Field(5, ge=1, le=20)
 
 
@@ -246,6 +250,14 @@ def create_app(
         except (OSError, ValueError):
             service = LocalOnlyService()
     app.state.service = service
+    # Presentation data only; a corpus-hash mismatch disables the explorer
+    # rather than offering questions whose supporting records may be gone.
+    try:
+        from src.examples import load_examples
+
+        app.state.examples = load_examples(EXAMPLES_PATH, corpus_path=CORPUS_PATH)
+    except (ImportError, OSError, ValueError):
+        app.state.examples = None
     app.state.limiter = SlidingRateLimiter()
     app.state.answer_count = 0
     app.state.answer_day = _utc_day()
@@ -342,6 +354,13 @@ def create_app(
     @app.get("/healthz")
     async def healthz() -> dict[str, str]:
         return {"status": "ok"}
+
+    @app.get("/api/examples")
+    async def examples() -> dict[str, Any]:
+        payload = app.state.examples
+        if not payload:
+            return {"available": False, "topics": []}
+        return {"available": True, **payload}
 
     @app.get("/api/metrics")
     async def metrics() -> Any:

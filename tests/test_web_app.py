@@ -91,7 +91,7 @@ class WebAppTests(unittest.TestCase):
     def test_health_static_metrics_and_search_contract(self):
         client = TestClient(create_app(FakeService()))
         self.assertEqual(client.get("/healthz").json(), {"status": "ok"})
-        self.assertIn("Peptide literature explorer", client.get("/").text)
+        self.assertIn("Peptide Evidence", client.get("/").text)
         self.assertEqual(client.get("/api/metrics").json()["metrics"], {"mrr": 0.5})
         response = client.post("/api/search", json={"query": "peptide", "mode": "bm25", "k": 2})
         body = response.json()
@@ -102,10 +102,12 @@ class WebAppTests(unittest.TestCase):
         self.assertIn("medical advice", body["disclaimer"])
         self.assertNotIn("access-control-allow-origin", response.headers)
         script = client.get("/static/app.js").text
-        self.assertIn('details.push(`Rank ${item.rank}`)', script)
-        self.assertIn('details.push(`Score ${item.score.toFixed(6)}`)', script)
-        self.assertIn('medical_safety: "Medical-safety refusal"', script)
-        self.assertIn('service_unavailable: "Service unavailable"', script)
+        # Rank and score stay available, but inside the expanded evidence detail
+        # rather than the compact source card.
+        self.assertIn('"score " + item.score.toFixed(3)', script)
+        self.assertIn('"Lexical #" + item.lexical_rank', script)
+        self.assertIn('medical_safety: { label: "Medical-safety boundary"', script)
+        self.assertIn('service_unavailable: { label: "Service unavailable"', script)
 
     def test_validation_and_answer_fallback_preserve_evidence(self):
         class Failing(FakeService):
