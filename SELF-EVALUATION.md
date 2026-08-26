@@ -19,9 +19,9 @@
 | Independent implementation review | `artifacts/section6/claude_opus_review.md` | Opus re-review passed after fixes |
 | Generator-v2.5 independent review | `artifacts/section5/claude_generator_v2_5_review.md`; `artifacts/section5/claude_generator_v2_5_judge_review.md` | Opus passed the prompt-only experiment and corrected judge-v2 evidence chain before paid calls |
 | Final release audit | `artifacts/section6/claude_opus_release_review.md` | Pass: blind-safe Opus review resolved all High/Medium findings; final focused verdict `PASS` |
-| Final documentation/evidence audit | `artifacts/section6/claude_opus_final_docs_review.md` | Initial Opus verdict `CHANGES_REQUIRED`; eight repository findings corrected; credential rotation and follow-up verdict remain open |
-| Deployment smoke and owner handoff audit | `scripts/smoke_deployment.py`; `tests/test_smoke_deployment.py`; `artifacts/section6/deployment_smoke.json`; public UI captures | Pass: deployed-runtime CI run 32071964692 passed 307 tests; current release branch passes 312 locally; offline runner, public smoke, and controlled rate-limit smoke (HTTP 429 exactly at probe 30) pass; `qa17` validates the model-originated refusal |
-| Public deployment | `app.py`; `railway.json`; `DEPLOYMENT.md`; `artifacts/section6/railway_release_measurement.json`; service-memory artifact | Pass: https://peptide-rag-production.up.railway.app deployed from `4c709558dd0796a416022eeebf7436259927e0de`; early Railway hour reported 0 5xx and p95 3 ms |
+| Final documentation/evidence audit | `artifacts/section6/claude_opus_final_docs_review.md` | Initial Opus verdict `CHANGES_REQUIRED`; eight repository findings corrected; the owner subsequently reported completing credential rotation |
+| Deployment smoke and owner handoff audit | `scripts/smoke_deployment.py`; `tests/test_smoke_deployment.py`; `artifacts/section6/deployment_smoke.json`; public UI captures | Pass: recorded deployed-runtime CI run 32071964692 passed 307 tests; current release passes 313 locally; offline runner, public smoke, and controlled rate-limit smoke (HTTP 429 exactly at probe 30) pass; `qa17` validates the model-originated refusal |
+| Public deployment | `app.py`; `railway.json`; `DEPLOYMENT.md`; `artifacts/section6/railway_release_measurement.json`; service-memory artifact | Pass: https://peptide-rag-production.up.railway.app tracks `main`; the retained early Railway snapshot reported 0 5xx and p95 3 ms |
 | Cost report | `COST-REPORT.md`; `artifacts/section6/cost_projection.json`; frozen provider catalog and usage ledgers | Pass for evaluation evidence; holdout cost $0.06478416 plus $0.0000027 context embedding; Railway early-window usage $0.0019362454475925924, not a monthly forecast |
 | Demo and social evidence | `DEMO-SCRIPT.md`; `SOCIAL-POST.md`; `docs/architecture-overview.svg`; `artifacts/section6/search-results.jpg` | Release facts and draft complete; recording and publication remain owner actions |
 
@@ -43,5 +43,5 @@
 ## Production limitations and remaining owner actions
 
 - Deployment is live. Railway has supplied only a short timestamped early measurement, not a monthly resource/billing forecast; the local sizing figure is also not a production measurement.
-- Rotate the OpenRouter key: Railway CLI diagnostics unexpectedly echoed it into private task output. It is not reproduced in this report.
+- The owner reported rotating the OpenRouter key after Railway CLI diagnostics unexpectedly echoed the former credential into private task output. No credential value is reproduced in this report or stored in the repository.
 - Demo recording and social publication remain owner actions. See [DEPLOYMENT.md](DEPLOYMENT.md) for operational limitations.

@@ -46,10 +46,10 @@ Approximately **100% of source/test code was AI-generated or AI-edited** and **0
 ## Final release evidence
 
 - Public service: https://peptide-rag-production.up.railway.app (Railway project `cb2e8529-ebca-4a99-9f36-9811e5bdede1`, service `bcd52c1e-5128-40db-8823-77ff9180b42b`, deployment `37dcb82b-a1cd-4524-ae52-ecc5481c34c3`: `SUCCESS`).
-- Deployed `main` commit: `4c709558dd0796a416022eeebf7436259927e0de`; its 307-test CI run `32071964692` passed. The current release branch passes 312 tests locally, and the offline runner passes every gate.
+- Railway tracks `main`; the retained deployment snapshot at `4c709558dd0796a416022eeebf7436259927e0de` and its 307-test CI run `32071964692` are historical evidence. The current release passes 313 tests locally, and the offline runner passes every gate.
 - Blind owner validation achieved 10/10 raw agreement; kappa is undefined because the labels had no variation. GPT-OSS was accepted as generator and Claude Sonnet 4.6 as judge.
 - The untouched seven-case QA holdout answered all 5 answerable cases, correctly refused both unanswerable cases, and met 7/7 structural checks. Measured faithfulness, relevancy, citation, correct-answer, and correct-refusal rates were all 1.0; p95 latency was 8,445.535 ms and model/judge cost was $0.06478416.
-- Public smoke passed health, metrics, same-origin behavior, BM25, a grounded answer with two citations, and the model-originated `qa17` refusal. Controlled rate-limit smoke returned HTTP 429 exactly at probe 30. Live UI evidence is captured in `artifacts/section6/cited-answer.png` and `artifacts/section6/evidence-refusal.png`. During Railway diagnostics the CLI unexpectedly printed the OpenRouter secret into private task output; rotate that key after release and never reproduce it in artifacts.
+- Public smoke passed health, metrics, same-origin behavior, BM25, a grounded answer with two citations, and the model-originated `qa17` refusal. Controlled rate-limit smoke returned HTTP 429 exactly at probe 30. Live UI evidence is captured in `artifacts/section6/cited-answer.png` and `artifacts/section6/evidence-refusal.png`. During Railway diagnostics the CLI unexpectedly printed the former OpenRouter secret into private task output; the owner reported completing rotation, and no credential value is stored in repository evidence.
 
 ## Key Learnings
 
