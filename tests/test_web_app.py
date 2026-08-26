@@ -91,7 +91,10 @@ class WebAppTests(unittest.TestCase):
     def test_health_static_metrics_and_search_contract(self):
         client = TestClient(create_app(FakeService()))
         self.assertEqual(client.get("/healthz").json(), {"status": "ok"})
-        self.assertIn("Peptide Evidence", client.get("/").text)
+        home = client.get("/").text
+        self.assertIn("Peptide Evidence", home)
+        self.assertIn("NCBI policies and copyright notice", home)
+        self.assertIn('rel="noopener noreferrer"', home)
         self.assertEqual(client.get("/api/metrics").json()["metrics"], {"mrr": 0.5})
         response = client.post("/api/search", json={"query": "peptide", "mode": "bm25", "k": 2})
         body = response.json()

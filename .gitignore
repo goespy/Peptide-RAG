@@ -23,6 +23,10 @@ dist/
 .codex-artifacts/
 outputs/
 
+# Local, superseded planning exports (the current architecture SVG is tracked)
+Project-Master-Plan.excalidraw
+Project-Master-Plan.png
+
 # Temporary corpus writes (the completed corpus remains trackable)
 data/.*.tmp
 data/*.tmp

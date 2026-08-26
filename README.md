@@ -4,7 +4,7 @@
 
 A from-scratch relevance engine over a custom corpus of therapeutic-peptide research from PubMed. The project follows the Gauntlet AI rule **measured, not vibed**: freeze human relevance judgments before tuning retrieval, calculate metrics ourselves, and do not add an LLM until lexical retrieval is objectively evaluated.
 
-Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 3](Post-Stack%20Refinement.md) · [Architecture](ARCHITECTURE.md) · [Project master plan](Project-Master-Plan.md)
+Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 3](Post-Stack%20Refinement.md) · [Architecture](ARCHITECTURE.md) · [Project master plan](Project-Master-Plan.md) · [Third-party data notice](DATA-NOTICE.md)
 
 ## Project status
 
@@ -32,7 +32,7 @@ Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 
 - [x] Blind, evidence-bound 10-output owner validation: 10/10 agreement with Claude; kappa undefined because labels had no variation
 - [x] Untouched QA holdout: 5/5 answerable, 2/2 correct refusals, 7/7 structural; faithfulness, relevancy, citation correctness, correct answer, and correct refusal all 1.0
 - [x] Accepted generator `openai/gpt-oss-20b` with judge `anthropic/claude-sonnet-4.6`
-- [x] Section 6 release evidence: `run_project.py` passes all gates; deployed-runtime CI run `32071964692` passed 307 tests, and the current release branch passes 312 tests locally
+- [x] Section 6 release evidence: `run_project.py` passes all gates; the current release passes 313 tests locally, including the reference BM25 differential
 - [x] Public Railway deployment: [peptide-rag-production.up.railway.app](https://peptide-rag-production.up.railway.app)
 
 The Day 1 baseline and strengthened evaluation are measured separately below. Version 1 remains the untouched known-item baseline; version 2 contains 75 pooled judgments with documented `0`/`1`/`2` rationales.
@@ -130,7 +130,7 @@ This produces `data/qrels_v2.json` while leaving the version-1 `data/qrels.json`
 
 This project uses the [NCBI E-utilities](https://www.ncbi.nlm.nih.gov/books/NBK25501/) and follows the [usage guidance](https://www.ncbi.nlm.nih.gov/books/NBK25497/) to identify the tool and developer email, batch requests, and stay below three requests per second without relying on an API key. For a full 3,000-record job, NCBI recommends large jobs run on weekends or between 9:00 PM and 5:00 AM Eastern time.
 
-NCBI does not endorse this project. PubMed records and abstracts may contain material protected by copyright. Users are responsible for following the [NCBI disclaimer and copyright notice](https://www.ncbi.nlm.nih.gov/home/about/policies/).
+NCBI does not endorse this project. PubMed records and abstracts may contain material protected by copyright. The repository's MIT license covers the original software, not third-party literature content. Users are responsible for following the [NCBI disclaimer and copyright notice](https://www.ncbi.nlm.nih.gov/home/about/policies/) and the repository's [third-party data notice](DATA-NOTICE.md).
 
 ## One-command contract
 
@@ -313,8 +313,10 @@ is server-side only.
 
 The public Railway deployment is
 [https://peptide-rag-production.up.railway.app](https://peptide-rag-production.up.railway.app)
-from main commit `4c709558dd0796a416022eeebf7436259927e0de` (deployment
-`37dcb82b-a1cd-4524-ae52-ecc5481c34c3`, status `SUCCESS`). `railway.json` pins
+and automatically deploys the repository's `main` branch. The retained release
+snapshot records deployment `37dcb82b-a1cd-4524-ae52-ecc5481c34c3` at commit
+`4c709558dd0796a416022eeebf7436259927e0de`; it is historical evidence rather
+than a claim that production remains pinned to that revision. `railway.json` pins
 Railpack, the `$PORT` start command, `/healthz`, and a bounded restart policy.
 Public smoke passed health, metrics, same-origin behavior, BM25, a grounded
 answer with two citations, a model-originated `qa17` refusal, and controlled
