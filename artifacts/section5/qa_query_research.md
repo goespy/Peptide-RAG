@@ -73,4 +73,4 @@ The 15 answerable cases intentionally combine two levels of difficulty:
 
 The five unanswerable cases use realistic claim-style wording. This mix keeps
 the oracle representative of the public search experience without discarding
-the assignment's harder evidence-comprehension tests.
+the project's harder evidence-comprehension tests.

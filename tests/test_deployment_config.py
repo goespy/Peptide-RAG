@@ -32,7 +32,7 @@ class DeploymentConfigTests(unittest.TestCase):
         self.assertNotIn("OPENROUTER_GENERATION_MODEL", example)
         self.assertNotIn("OPENROUTER_JUDGE_MODEL", example)
 
-    def test_submission_architecture_asset_is_valid_and_gate_accurate(self):
+    def test_release_architecture_asset_is_valid_and_gate_accurate(self):
         asset = ROOT / "docs/architecture-overview.svg"
         ET.parse(asset)
         svg = asset.read_text(encoding="utf-8")
@@ -48,7 +48,7 @@ class DeploymentConfigTests(unittest.TestCase):
         self.assertNotIn("QA holdout remains untouched", svg)
         self.assertNotIn("Sections 1–2 complete", svg)
 
-    def test_ranked_search_screenshot_is_a_real_jpeg_submission_asset(self):
+    def test_ranked_search_screenshot_is_a_real_jpeg_release_asset(self):
         screenshot = ROOT / "artifacts/section6/search-results.jpg"
         payload = screenshot.read_bytes()
         self.assertTrue(payload.startswith(b"\xff\xd8\xff"))
