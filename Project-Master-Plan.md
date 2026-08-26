@@ -1,6 +1,6 @@
 # Peptide-RAG Project Master Plan
 
-This roadmap implements the Gauntlet AI Relevance Engine assignment in six measurable sections. Sections 1–5 and the Section 6 technical release gates are complete; demo recording and social publication remain owner actions. The detailed contracts and retained negative results remain below.
+This roadmap tracks Peptide-RAG from corpus construction through a measured public release in six sections. Sections 1–5 and the Section 6 technical release gates are complete; demo recording and social publication remain optional owner actions. The detailed contracts and retained negative results remain below.
 
 ```mermaid
 flowchart LR
@@ -20,7 +20,7 @@ flowchart LR
 | 3. BM25 and full IR evaluation | Complete |
 | 4. Retrieval tuning and hardening | Complete |
 | 5. RAG and hybrid retrieval | Complete: accepted `openai/gpt-oss-20b` with `anthropic/claude-sonnet-4.6`; blind owner validation was 10/10 agreement and the untouched holdout passed all gates |
-| 6. Final evaluation and submission | Technical release gates complete: deployed CI run `32071964692` and `run_project.py` pass, Railway deployment `37dcb82b-a1cd-4524-ae52-ecc5481c34c3` is `SUCCESS`, and a timestamped Railway usage snapshot is saved; demo recording and social posting remain owner actions |
+| 6. Final evaluation and release | Technical release gates complete: deployed CI run `32071964692` and `run_project.py` pass, Railway deployment `37dcb82b-a1cd-4524-ae52-ecc5481c34c3` is `SUCCESS`, and a timestamped Railway usage snapshot is saved; demo recording and social posting remain optional owner actions |
 
 The frozen corpus contains 2,000 PubMed records and has SHA-256 `231E048971C34EF9203ED3BB20587DDE4C95141AC7EFD2746C85C078A844212C`. The frozen qrels v2 contains 75 graded judgments across 15 queries. Neither artifact may be silently changed.
 
@@ -38,7 +38,7 @@ The frozen corpus contains 2,000 PubMed records and has SHA-256 `231E048971C34EF
 
 ## 1. Project Foundation and Corpus — Complete
 
-- Assignment constraints, Pre-Search, and architecture documented.
+- Project scope, early design exploration, and architecture documented.
 - PubMed fetch pipeline implemented and tested.
 - 2,000-document corpus downloaded, validated, and frozen.
 - Shared NFKC/casefold/Unicode-alphanumeric analysis pipeline established.
@@ -389,7 +389,7 @@ The app is deployed at [peptide-rag-production.up.railway.app](https://peptide-r
 - Generator bake-off, human judge validation, and final holdout are recorded.
 - The public app demonstrates grounded answers, valid citations, refusal, and retrieval-only budget fallback.
 
-# 6. Final Evaluation and Submission
+# 6. Final Evaluation and Release
 
 ## 6.1 One-command offline evaluation
 
@@ -447,11 +447,11 @@ Release steps:
 4. Confirmed the public deployment URL.
 5. Demo recording and social posting remain pending.
 
-## 6.5 Demo and social deliverables
+## 6.5 Optional demo and project sharing
 
 The three-to-five-minute demo covers the problem, frozen oracle, Boolean failure, BM25/hybrid metrics, live search, cited Q&A, refusal, architecture, tests, AI workflow, cost, and limitations.
 
-Prepare architecture, search, and cited-answer/refusal screenshots plus an X or LinkedIn post tagging `@GauntletAI`.
+Prepare architecture, search, and cited-answer/refusal screenshots plus an optional X or LinkedIn project post.
 
 ## 6.6 Completion gate
 
@@ -460,16 +460,16 @@ Prepare architecture, search, and cited-answer/refusal screenshots plus an X or 
 - Holdout results remain free of post-hoc tuning.
 - Every reported number comes from a saved artifact.
 - The judge is checked against 10 project-owner labels.
-- The public app demonstrates every required RAG behavior within budget controls.
-- GitHub contains every assignment deliverable.
+- The public app demonstrates every documented RAG behavior within budget controls.
+- GitHub contains the code, evidence, documentation, and release artifacts needed to reproduce the project.
 - Known failures remain visible.
 
 The completed technical release meets the first four evidence gates: the owner validation
 was 10/10 agreement (kappa undefined because labels had no variation), the
 holdout passed its pre-registered thresholds without retuning, and the public
 smoke checks passed. A short Railway billing/resource snapshot is saved but is
-not a monthly forecast. The remaining owner publication deliverables are the
-demo recording and social post.
+not a monthly forecast. The remaining optional publication steps are the demo
+recording and social post.
 
 ## Explicit non-goals
 

@@ -16,7 +16,7 @@ content are responsible for determining and following the applicable rights and
 restrictions. See the [NCBI website and data usage policies and
 disclaimers](https://www.ncbi.nlm.nih.gov/home/about/policies/).
 
-The included corpus exists to make the assignment's frozen judgments, measured
+The included corpus exists to make the project's frozen judgments, measured
 retrieval results, and offline evaluation reproducible. Each search result links
 back to its PubMed record. To build a fresh corpus directly from NCBI instead,
 run `scripts/fetch_pubmed.py` as documented in [`README.md`](README.md) and

@@ -1,8 +1,8 @@
 # Post-Stack Refinement
 
-This completes Phase 3 of the assignment's Pre-Search checklist. It records the
-implemented stack accurately; earlier proposed tools that were not adopted are
-not presented as work performed.
+This is the third and final pass over the project's initial architecture
+decisions. It records the implemented stack accurately; earlier proposed tools
+that were not adopted are not presented as work performed.
 
 ## 12. Security vulnerabilities and controls
 
@@ -25,7 +25,7 @@ data/                  Frozen corpus, qrels, QA, and saved model evidence
 artifacts/section3/    Untuned Boolean/BM25 baseline
 artifacts/section4/    Tuning grid, lexical holdout, benchmark, review
 artifacts/section5/    Chunks, caches, RAG configs, diagnostics, reviews
-artifacts/section6/    Cost/memory reports and submission visuals
+artifacts/section6/    Cost/memory reports and release visuals
 docs/                  Current architecture visual
 scripts/               Reproducible acquisition/evaluation/freeze commands
 src/                   Production analysis, index, retrieval, RAG, service
@@ -61,7 +61,7 @@ are separated by directory and bound by hashes.
   separation, saved-output replay, cost ceilings, blind worksheet invariants,
   FastAPI fallback/rate behavior, and cross-platform source hashing.
 - **User-surface evidence:** The in-app Browser MCP exercises the rendered local
-  app; submission-asset tests verify the current architecture SVG and ranked
+  app; release-asset tests verify the current architecture SVG and ranked
   screenshot signature.
 - **Release commands:** `python -m unittest discover -s tests` and
   `python run_project.py`. The latter is offline, read-only, and makes no paid

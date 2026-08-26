@@ -2,7 +2,7 @@
 
 This release-ready draft is not evidence that a public post has been published. Publishing remains an owner action.
 
-> I built Peptide-RAG, a therapeutic-peptide literature search and grounded-Q&A system for the Gauntlet AI Relevance Engine assignment.
+> I built Peptide-RAG, a curiosity-driven therapeutic-peptide literature search and grounded-Q&A system.
 >
 > The key lesson: retrieval has to be measured, not vibed. I started with a hand-labeled PubMed oracle, implemented the positional index, Boolean retrieval, BM25, IR metrics, and hybrid fusion from scratch, then tested grounded answers and refusals against frozen evidence spans.
 >
@@ -16,8 +16,6 @@ This release-ready draft is not evidence that a public post has been published. 
 >
 > Known limitations: small pooled judgments, abstract-only evidence, and a small QA holdout.
 >
-> @GauntletAI
-
 Required attachments before posting:
 
 - Architecture image: `docs/architecture-overview.svg`

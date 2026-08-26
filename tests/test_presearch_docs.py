@@ -1,4 +1,4 @@
-"""Submission-contract checks for the assignment's three Pre-Search phases."""
+"""Checks for the project's three architecture-discovery phases."""
 
 import re
 import unittest
@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class PreSearchDocumentationTests(unittest.TestCase):
-    def test_all_sixteen_assignment_topics_are_documented(self):
+    def test_all_sixteen_design_topics_are_documented(self):
         phases_one_two = (ROOT / "Presearch.md").read_text(encoding="utf-8")
         phase_three = (ROOT / "Post-Stack Refinement.md").read_text(encoding="utf-8")
         combined = f"{phases_one_two}\n{phase_three}"

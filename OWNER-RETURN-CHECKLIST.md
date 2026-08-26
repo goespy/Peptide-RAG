@@ -1,10 +1,10 @@
-# Owner Return Checklist
+# Owner Validation Procedure (Completed)
 
-This is the remaining human-only gate. Do not open `data/qa.json`, the judged
-output JSON, or any holdout artifact while labeling; doing so would weaken the
-blind comparison.
+This preserves the human-only validation procedure that was used before the
+holdout and public release. The resulting approved labels and reports are now
+frozen project evidence.
 
-## 1. Label the ten blind development outputs
+## 1. Blind development-output labeling
 
 Read only [`JUDGE-VALIDATION-REVIEW.md`](JUDGE-VALIDATION-REVIEW.md). For each
 opaque `review-*` case, edit the matching `owner_label` object in
@@ -35,7 +35,7 @@ python run_project.py
 Do not continue if the validation report fails. Review the rubric and preserve
 the failed report as evidence before creating a disjoint validation version.
 
-## 2. Open the untouched holdout only after owner validation passes
+## 2. Holdout opening after owner validation
 
 Run these commands in order. The two paid commands shown with `--max-cost-usd`
 print and enforce their hard ceilings. The holdout runner also reserves a
@@ -57,13 +57,13 @@ is refused before a call if cumulative conservative reservations would exceed
 the original approved cap. If all seven output rows exist but summary creation
 was interrupted, run `python scripts/run_rag_holdout.py --finalize-saved`.
 
-## 3. Release only after the offline runner passes the holdout
+## 3. Release after the offline runner passes the holdout
 
 Deploy the exact passing commit to Railway, configure the environment from
 `.env.example`, and run the smoke checklist in [`DEPLOYMENT.md`](DEPLOYMENT.md)
 using development QA cases only (never the untouched holdout questions). The
 smoke command checks this mechanically against the frozen QA split. Then
 capture the cited-answer/refusal screenshot, record the 3–5 minute demo, and
-replace the remaining submission placeholders where applicable in `README.md`,
+replace the remaining publication placeholders where applicable in `README.md`,
 `DEMO-SCRIPT.md`, `SOCIAL-POST.md`, and `SELF-EVALUATION.md` with
 artifact-backed values and URLs.

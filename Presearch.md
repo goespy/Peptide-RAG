@@ -9,7 +9,7 @@ pretend that later results were known in advance.
 
 ### 1. Scale and load profile
 
-- **Initial decision:** Optimize first for a solo assignment review and a
+- **Initial decision:** Optimize first for solo development and review over a
   few-thousand-document corpus. Index construction may happen at startup;
   retrieval must be interactive once the index is loaded.
 - **Public-app envelope:** One Railway process, 30 searches/minute/IP, five
@@ -94,7 +94,7 @@ pretend that later results were known in advance.
   document frequency, documents, lengths, and title boundaries. NumPy performs
   brute-force cosine similarity over a normalized, hash-bound embedding cache.
 - **Why:** At 2,000 documents this is auditable, reproducible, inexpensive, and
-  avoids infrastructure that would obscure the assignment's search mechanics.
+  avoids infrastructure that would obscure the project's search mechanics.
 
 ### 9. Backend and API architecture
 

@@ -20,7 +20,7 @@ DEFAULT_CORPUS = Path("data/corpus.jsonl")
 DEFAULT_OUTPUT = Path("data/qrels_candidates.json")
 DEFAULT_COUNT = 15
 
-# Ordered exactly as the assignment's PubMed query. These are selection aliases,
+# Ordered exactly as the project's frozen PubMed query. These are selection aliases,
 # not an attempt to expand the medical vocabulary or judge relevance.
 FAMILY_ALIASES: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("BPC-157", ("BPC-157", "Body Protection Compound-157")),

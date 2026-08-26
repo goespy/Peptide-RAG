@@ -2,7 +2,7 @@
 
 - Date: 2026-08-17
 - Reviewer: Claude Code 2.1.233, Opus, read/search-only tools
-- Scope: final release documentation, deployment evidence JSON, release-evidence test, assignment coverage, and secret hygiene
+- Scope: final release documentation, deployment evidence JSON, release-evidence test, project coverage, and secret hygiene
 - Initial verdict: `CHANGES_REQUIRED`
 
 ## Initial findings

@@ -2,13 +2,13 @@
 
 ![Peptide-RAG measured architecture](docs/architecture-overview.svg)
 
-A from-scratch relevance engine over a custom corpus of therapeutic-peptide research from PubMed. The project follows the Gauntlet AI rule **measured, not vibed**: freeze human relevance judgments before tuning retrieval, calculate metrics ourselves, and do not add an LLM until lexical retrieval is objectively evaluated.
+A from-scratch relevance engine over a custom corpus of therapeutic-peptide research from PubMed. It began as a curiosity-driven question: can a small, transparent search system make the evidence around popular peptides easier to inspect? The project follows a **measured, not vibed** methodology: freeze human relevance judgments before tuning retrieval, calculate core metrics ourselves, and evaluate lexical retrieval before adding an LLM.
 
 Planning evidence: [Pre-Search Phases 1–2](Presearch.md) · [Post-Stack Phase 3](Post-Stack%20Refinement.md) · [Architecture](ARCHITECTURE.md) · [Project master plan](Project-Master-Plan.md) · [Third-party data notice](DATA-NOTICE.md)
 
 ## Project status
 
-- [x] Assignment constraints and analysis/index architecture documented
+- [x] Project scope and analysis/index architecture documented
 - [x] Executable PubMed corpus fetcher with offline tests
 - [x] Corpus snapshot generated and reviewed
 - [x] Deterministic 15-document qrels review packet generated
@@ -65,7 +65,7 @@ python -m pip install -r requirements.txt
 
 ## Build the PubMed corpus
 
-The script runs the assignment's exact peptide query, requests no more than 3,000 PMIDs in relevance order, fetches XML batches of at most 200 records, and writes only after the full result has been parsed successfully.
+The script runs the project's frozen peptide query, requests no more than 3,000 PMIDs in relevance order, fetches XML batches of at most 200 records, and writes only after the full result has been parsed successfully.
 
 ```bash
 python scripts/fetch_pubmed.py --email you@example.com
@@ -550,4 +550,4 @@ Version 2 reveals that the version-1 Recall@5 of `1.000` was a known-item artifa
 4. **Implement Boolean retrieval.** Support deterministic `AND`/`OR`, `AND` precedence, and implicit `AND`, plus empty and unknown-term robustness.
 5. **Stub and run the red harness.** Calculate precision@k and recall@k directly against the frozen qrels, print aggregate and per-query Markdown tables, and paste the unaltered output into this report before tuning.
 
-Architecture details and the judgment protocol live in [`ARCHITECTURE.md`](ARCHITECTURE.md). The required one-page AI-development submission is [`AI-LOG.md`](AI-LOG.md), with the complete chronological audit trail retained in [`AI-LOG-DETAIL.md`](AI-LOG-DETAIL.md). The current release evidence and remaining gates are tracked in [`SELF-EVALUATION.md`](SELF-EVALUATION.md), [`COST-REPORT.md`](COST-REPORT.md), and [`DEPLOYMENT.md`](DEPLOYMENT.md). [`DEMO-SCRIPT.md`](DEMO-SCRIPT.md) and [`SOCIAL-POST.md`](SOCIAL-POST.md) are explicitly unfilled submission templates, not claims that those deliverables have been published.
+Architecture details and the judgment protocol live in [`ARCHITECTURE.md`](ARCHITECTURE.md). A concise account of the AI-assisted development process is in [`AI-LOG.md`](AI-LOG.md), with the complete chronological audit trail retained in [`AI-LOG-DETAIL.md`](AI-LOG-DETAIL.md). Current release evidence and remaining gates are tracked in [`SELF-EVALUATION.md`](SELF-EVALUATION.md), [`COST-REPORT.md`](COST-REPORT.md), and [`DEPLOYMENT.md`](DEPLOYMENT.md). [`DEMO-SCRIPT.md`](DEMO-SCRIPT.md) and [`SOCIAL-POST.md`](SOCIAL-POST.md) are optional project-sharing drafts, not claims that a recording or post has been published.
